@@ -1269,6 +1269,110 @@ else:
 
 
 
+## 1425A. Arena of Greed
+
+games, greedy, 1400, https://codeforces.com/problemset/problem/1425/A
+
+Lately, Mr. Chanek frequently plays the game **Arena of Greed**. As the name implies, the game's goal is to find the greediest of them all, who will then be crowned king of Compfestnesia.
+
+The game is played by two people taking turns, where Mr. Chanek takes the first turn. Initially, there is a treasure chest containing N gold coins. The game ends if there are no more gold coins in the chest. In each turn, the players can make one of the following moves:
+
+- Take one gold coin from the chest.
+- Take half of the gold coins on the chest. This move is only available if the number of coins in the chest is even.
+
+Both players will try to maximize the number of coins they have. Mr. Chanek asks your help to find the maximum number of coins he can get at the end of the game if both he and the opponent plays optimally.
+
+**Input**
+
+The first line contains a single integer T (1≤T≤10^5^) denotes the number of test cases.
+
+The next TT lines each contain a single integer N (1≤N≤10^18^).
+
+**Output**
+
+TT lines, each line is the answer requested by Mr. Chanek.
+
+Example
+
+input
+
+```
+2
+5
+6
+```
+
+output
+
+```
+2
+4
+```
+
+**Note**
+
+For the first case, the game is as follows:
+
+1. Mr. Chanek takes one coin.
+2. The opponent takes two coins.
+3. Mr. Chanek takes one coin.
+4. The opponent takes one coin.
+
+For the second case, the game is as follows:
+
+1. Mr. Chanek takes three coins.
+2. The opponent takes one coin.
+3. Mr. Chanek takes one coin.
+4. The opponent takes one coin.
+
+
+
+PyPy3 AC
+
+```python
+ans = []
+def solve(n):
+    
+    f = s = 0 # To distinguish between first and second hands.
+    fs = True
+    
+    if n & 1:
+        n -= 1
+        fs = False
+        
+    while n:
+        if n == 4:
+            f += 3
+            s += 1
+            n = 0   # Specia lJudge
+        elif (n//2) & 1: # The First Situation
+            f += n//2
+            s += 1
+            n = (n//2) - 1;
+        else:                   #The Second Situation
+            f += 1
+            s += 1
+            n -= 2
+    #print( [s+1, f][fs] )
+    ans.append( [s+1, f][fs] )
+ 
+ 
+coins = []
+for _ in range(int(input())):
+    coins.append(int(input()))
+ 
+for i in coins:
+    if i==1:
+        ans.append(1)
+        #print(1)
+    else:
+        solve(i)
+ 
+print('\n'.join(map(str, ans)))
+```
+
+
+
 ## 580C. Kefa and Park
 
 dfs and similar/graphs/trees, 1500,  https://codeforces.com/contest/580/problem/C
@@ -1283,11 +1387,11 @@ Your task is to help Kefa count the number of restaurants where he can go.
 
 Input
 
-The first line contains two integers, *n* and *m* (2 ≤ *n* ≤ 105, 1 ≤ *m* ≤ *n*) — the number of vertices of the tree and the maximum number of consecutive vertices with cats that is still ok for Kefa.
+The first line contains two integers, *n* and *m* (2 ≤ *n* ≤ 10^5^, 1 ≤ *m* ≤ *n*) — the number of vertices of the tree and the maximum number of consecutive vertices with cats that is still ok for Kefa.
 
-The second line contains *n* integers *a*1, *a*2, ..., *a**n*, where each *a**i* either equals to 0 (then vertex *i* has no cat), or equals to 1 (then vertex *i* has a cat).
+The second line contains *n* integers a~1~, a~2~, ..., a~n~, where each a~i~ either equals to 0 (then vertex *i* has no cat), or equals to 1 (then vertex *i* has a cat).
 
-Next *n* - 1 lines contains the edges of the tree in the format "*x**i* *y**i*" (without the quotes) (1 ≤ *x**i*, *y**i* ≤ *n*, *x**i* ≠ *y**i*), where *x**i* and *y**i* are the vertices of the tree, connected by an edge.
+Next *n* - 1 lines contains the edges of the tree in the format "x~i~ y~i~" (without the quotes) (1 ≤ x~i~, y~i~ ≤ *n*, x~i~ ≠ y~i~), where x~i~ and y~i~ are the vertices of the tree, connected by an edge.
 
 It is guaranteed that the given set of edges specifies a tree.
 
@@ -1299,8 +1403,6 @@ Examples
 
 input
 
-Copy
-
 ```
 4 1
 1 1 0 0
@@ -1311,15 +1413,11 @@ Copy
 
 output
 
-Copy
-
 ```
 2
 ```
 
 input
-
-Copy
 
 ```
 7 1
@@ -1333,8 +1431,6 @@ Copy
 ```
 
 output
-
-Copy
 
 ```
 2
