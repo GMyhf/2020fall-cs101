@@ -1286,11 +1286,11 @@ Both players will try to maximize the number of coins they have. Mr. Chanek asks
 
 The first line contains a single integer T (1≤T≤10^5^) denotes the number of test cases.
 
-The next TT lines each contain a single integer N (1≤N≤10^18^).
+The next T lines each contain a single integer N (1≤N≤10^18^).
 
 **Output**
 
-TT lines, each line is the answer requested by Mr. Chanek.
+T lines, each line is the answer requested by Mr. Chanek.
 
 Example
 
@@ -1344,7 +1344,7 @@ def solve(n):
         if n == 4:
             f += 3
             s += 1
-            n = 0   # Specia lJudge
+            n = 0   # Special Judge
         elif (n//2) & 1: # The First Situation
             f += n//2
             s += 1
