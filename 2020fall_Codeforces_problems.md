@@ -2,7 +2,7 @@
 
 
 
-# 100 Problems in Codeforces.com
+# Problems in Codeforces.com
 
 2020 fall, Complied by Hongfei Yan
 
