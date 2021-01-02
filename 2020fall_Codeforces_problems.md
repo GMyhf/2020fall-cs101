@@ -2,7 +2,7 @@
 
 
 
-# 100 Problems in Codeforces.com
+# Problems in Codeforces.com
 
 2020 fall, Complied by Hongfei Yan
 
@@ -1373,6 +1373,32 @@ for i in coins:
         solve(i)
  
 print('\n'.join(map(str, ans)))
+```
+
+
+
+2020fall-cs101，李元锋。
+
+思路：了解过博弈论的经典游戏的人应该可以很快写出代码。此游戏为完全信息博弈，故如果存在最优解，则所有玩家采取的策略是一样的，策略为让对方为奇数>让自己拿偶数，这里只有 4为特例，要注意，剩下的很简单就写出来了，麻烦在于超时，改了很多次才 AC，这里顺便学了一下异或运算来区别是谁的回合。
+
+```python
+output = []
+for i in range(int(input())):
+    n=int(input())
+    ans, flag = 0, 1
+    while n:
+        test = 0
+        if n%2==0 and n//2%2 or n==4:
+            n //= 2
+            test = n
+        else:
+            n -= 1
+            test = 1
+        if flag:
+            ans += test
+        flag ^= 1
+    output.append(ans)
+print('\n'.join(map(str,output)))
 ```
 
 
