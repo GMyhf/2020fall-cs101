@@ -1484,6 +1484,47 @@ Note to the second sample test:
 
 The restaurants are located at vertices 4, 5, 6, 7. Kefa can't go to restaurants 6, 7.
 
+2020fall-cs101，林逸云
+
+```python
+# 580C
+# 2020fall-cs101, Yiyun LIN
+cat = dict()
+graph = dict()
+visited = set()
+queue = [1]
+res = 0
+n,m = map(int, input().split())
+a = list(map(int, input().split()))
+for _ in range(n-1):
+    x,y = map(int, input().split())
+    if x not in graph.keys():
+        graph[x] = []
+    if y not in graph.keys():
+        graph[y] = []
+    graph[x].append(y)
+    graph[y].append(x)
+    
+cat[1] = a[0]
+while len(queue)>0:
+    x = queue.pop(0)
+    visited.add(x)
+    if cat[x]>m:
+        continue
+    b=0
+    for k in graph[x]:
+        if k not in visited:
+            if a[k-1]==1:
+                cat[k] = cat[x] + 1
+            else:
+                cat[k] = 0
+            queue.append(k)
+            b=1
+    if b==0:
+        res+=1
+print(res)
+```
+
 
 
 ```python
