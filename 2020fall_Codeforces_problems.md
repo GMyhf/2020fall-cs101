@@ -40,6 +40,26 @@ The first (and the only) input line contains integer number *w* (1 ≤ *w*�
 
 Print YES, if the boys can divide the watermelon into two parts, each of them weighing even number of kilos; and NO in the opposite case.
 
+Examples
+
+input
+
+```
+8
+```
+
+output
+
+```
+YES
+```
+
+Note
+
+For example, the boys can divide the watermelon into two parts of 2 and 6 kilos respectively (another variant — two parts of 4 and 4 kilos)
+
+
+
 将一个数分成两个偶数
 
 ```Python
@@ -81,6 +101,22 @@ The input contains three positive integer numbers in the first line: *n*,  *
 
 Write the needed number of flagstones.
 
+Examples
+
+input
+
+```
+6 6 4
+```
+
+output
+
+```
+4
+```
+
+
+
 用边长为a的正方形瓷砖铺满 m*n的广场，按长和宽算个数
 
 ```Python
@@ -108,11 +144,11 @@ greedy/strings, 1000, http://codeforces.com/problemset/problem/58/A
 
 Vasya has recently learned to type and log on to the Internet. He immediately entered a chat room and decided to say hello to everybody. Vasya typed the word *s*. It is considered that Vasya managed to say hello if several letters can be deleted from the typed word so that it resulted in the word "hello". For example, if Vasya types the word "ahhellllloou", it will be considered that he said hello, and if he types "hlelo", it will be considered that Vasya got misunderstood and he didn't manage to say hello. Determine whether Vasya managed to say hello by the given word *s*.
 
-Input
+**Input**
 
 The first and only line contains the word *s*, which Vasya typed. This word consisits of small Latin letters, its length is no less that 1 and no more than 100 letters.
 
-Output
+**Output**
 
 If Vasya managed to say hello, print "YES", otherwise print "NO".
 
@@ -199,6 +235,29 @@ The first line contains an integer *n* (1 ≤ *n* ≤ 100). Each of the 
 
 Print *n* lines. The *i*-th line should contain the result of replacing of the *i*-th word from the input data.
 
+Examples
+
+input
+
+```
+4
+word
+localization
+internationalization
+pneumonoultramicroscopicsilicovolcanoconiosis
+```
+
+output
+
+```
+word
+l10n
+i18n
+p43s
+```
+
+
+
 长度大于10 的单词缩写为首字母+中间字母数+尾字母
 
 ```Python
@@ -241,6 +300,45 @@ The first input line contains a single integer *n* (1 ≤ *n* ≤ 1000) 
 
 Print a single integer — the number of problems the friends will implement on the contest.
 
+Examples
+
+input
+
+```
+3
+1 1 0
+1 1 1
+1 0 0
+```
+
+output
+
+```
+2
+```
+
+input
+
+```
+2
+1 0 0
+0 1 1
+```
+
+output
+
+```
+1
+```
+
+Note
+
+In the first sample Petya and Vasya are sure that they know how to solve the first problem and all three of them know how to solve the second problem. That means that they will write solutions for these problems. Only Petya is sure about the solution for the third problem, but that isn't enough, so the friends won't take it.
+
+In the second sample the friends will only implement the second problem, as Vasya and Tonya are sure about the solution.
+
+
+
 三人小队，至少两个人会才能答出问题
 
 ```python
@@ -280,6 +378,42 @@ The second line contains *n* space-separated integers *a*~1~, *a*~2~, ...,�
 **Output**
 
 Output the number of participants who advance to the next round.
+
+Examples
+
+input
+
+```
+8 5
+10 9 8 7 7 7 5 5
+```
+
+output
+
+```
+6
+```
+
+input
+
+```
+4 2
+0 0 0 0
+```
+
+output
+
+```
+0
+```
+
+Note
+
+In the first example the participant on the 5th place earned 7 points. As the participant on the 6th place also earned 7 points, there are 6 advancers.
+
+In the second example nobody got a positive score.
+
+
 
 统计不小于第k位选手得分的人数
 
@@ -330,6 +464,46 @@ The first line represents input string of Petya's program. This string only cons
 
 Print the resulting string. It is guaranteed that this string is not empty.
 
+Examples
+
+input
+
+```
+tour
+```
+
+output
+
+```
+.t.r
+```
+
+input
+
+```
+Codeforces
+```
+
+output
+
+```
+.c.d.f.r.c.s
+```
+
+input
+
+```
+aBAcAba
+```
+
+output
+
+```
+.b.c.b
+```
+
+
+
 去掉元音，并用.来连接剩余字母的小写
 
 ```python
@@ -373,6 +547,34 @@ In a single line you are given two integers *M* and *N* — board sizes in squar
 **Output**
 
 Output one number — the maximal number of dominoes, which can be placed.
+
+Examples
+
+input
+
+```
+2 4
+```
+
+output
+
+```
+4
+```
+
+input
+
+```
+3 3
+```
+
+output
+
+```
+4
+```
+
+
 
 不同 于 Theatre Square，多米诺骨牌可以横放或竖放，可以不铺满（其实最多空一格）可直接按面积相除取整
 
@@ -418,6 +620,37 @@ Next *n* lines contain a statement each. Each statement contains exactly one ope
 
 Print a single integer — the final value of *x*.
 
+Examples
+
+input
+
+```
+1
+++X
+```
+
+output
+
+```
+1
+```
+
+input
+
+```
+2
+X++
+--X
+```
+
+output
+
+```
+0
+```
+
+
+
 定义两种运算，++表示 +1，，--表示 -1 x的值不断更新
 
 ```python
@@ -447,14 +680,6 @@ implementation/strings, 800, http://codeforces.com/problemset/problem/112/A
 
 Little Petya loves presents. His mum bought him two strings of the same size for his birthday. The strings consist of uppercase and lowercase Latin letters. Now Petya wants to compare those two strings lexicographically. The letters' case does not matter, that is an uppercase letter is considered equivalent to the corresponding lowercase letter. Help Petya perform the comparison.
 
-Input
-
-Each of the first two lines contains a bought string. The strings' lengths range from 1 to 100 inclusive. It is guaranteed that the strings are of the same length and also consist of uppercase and lowercase Latin letters.
-
-Output
-
-If the first string is less than the second one, print "-1". If the second string is less than the first one, print "1". If the strings are equal, print "0". Note that the letters' case is not taken into consideration when the strings are compared.
-
 **Input**
 
 Each of the first two lines contains a bought string. The strings' lengths range from 1 to 100 inclusive. It is guaranteed that the strings are of the same length and also consist of uppercase and lowercase Latin letters.
@@ -462,6 +687,55 @@ Each of the first two lines contains a bought string. The strings' lengths range
 **Output**
 
 If the first string is less than the second one, print "-1". If the second string is less than the first one, print "1". If the strings are equal, print "0". Note that the letters' case is not taken into consideration when the strings are compared.
+
+Examples
+
+input
+
+```
+aaaa
+aaaA
+```
+
+output
+
+```
+0
+```
+
+input
+
+```
+abs
+Abz
+```
+
+output
+
+```
+-1
+```
+
+input
+
+```
+abcdefg
+AbCdEfF
+```
+
+output
+
+```
+1
+```
+
+Note
+
+If you want more formal information about the lexicographical order (also known as the "dictionary order" or "alphabetical order"), you can visit the following site:
+
+- http://en.wikipedia.org/wiki/Lexicographical_order
+
+
 
 按字典方式排序，不考虑大小写。一个个字母比即可
 
@@ -524,6 +798,42 @@ The input consists of five lines, each line contains five integers: the *j*-th i
 **Output**
 
 Print a single integer — the minimum number of moves needed to make the matrix beautiful.
+
+Examples
+
+input
+
+```
+0 0 0 0 0
+0 0 0 0 1
+0 0 0 0 0
+0 0 0 0 0
+0 0 0 0 0
+```
+
+output
+
+```
+3
+```
+
+input
+
+```
+0 0 0 0 0
+0 0 0 0 0
+0 1 0 0 0
+0 0 0 0 0
+0 0 0 0 0
+```
+
+output
+
+```
+1
+```
+
+
 
 ```python
 for i in range(5):
@@ -637,6 +947,44 @@ The first line contains a non-empty string *s* — the sum Xenia needs to count.
 
 Print the new sum that Xenia can count.
 
+Examples
+
+input
+
+```
+3+2+1
+```
+
+output
+
+```
+1+2+3
+```
+
+input
+
+```
+1+1+3+1+3
+```
+
+output
+
+```
+1+1+1+3+3
+```
+
+input
+
+```
+2
+```
+
+output
+
+```
+2
+```
+
 ```python
 s = input()
 fq = 4*[0] # the first is no use.
@@ -681,6 +1029,34 @@ A single line contains a non-empty word. This word consists of lowercase and upp
 
 Output the given word after capitalization.
 
+Examples
+
+input
+
+```
+ApPLe
+```
+
+output
+
+```
+ApPLe
+```
+
+input
+
+```
+konjac
+```
+
+output
+
+```
+Konjac
+```
+
+
+
 ```python
 line = input()
 print(line[0].upper() + line[1:])
@@ -703,6 +1079,49 @@ The next line contains string *s*, which represents the colors of the stones. We
 **Output**
 
 Print a single integer — the answer to the problem.
+
+Examples
+
+input
+
+```
+3
+RRG
+```
+
+output
+
+```
+1
+```
+
+input
+
+```
+5
+RRRRR
+```
+
+output
+
+```
+4
+```
+
+input
+
+```
+4
+BRBG
+```
+
+output
+
+```
+0
+```
+
+
 
 ```python
 n = int(input())
@@ -734,6 +1153,34 @@ Petya loves football very much. One day, as he was watching a football match, he
 **Output**
 
 Print "YES" if the situation is dangerous. Otherwise, print "NO".
+
+Examples
+
+input
+
+```
+001001
+```
+
+output
+
+```
+NO
+```
+
+input
+
+```
+1000000001
+```
+
+output
+
+```
+YES
+```
+
+
 
 ```python
 l = input()
@@ -783,6 +1230,44 @@ Each of the next *n* lines contains *x~i~* (0 ≤ *x~i~*≤ *m*) — the n
 
 If it's possible to turn on all *m* bulbs print "YES", otherwise print "NO".
 
+Examples
+
+input
+
+```
+3 4
+2 1 4
+3 1 3 1
+1 2
+```
+
+output
+
+```
+YES
+```
+
+input
+
+```
+3 3
+1 1
+1 2
+1 1
+```
+
+output
+
+```
+NO
+```
+
+Note
+
+In the first sample you can press each button once and turn on all the bulbs. In the 2 sample it is impossible to turn on the 3-rd lamp.
+
+
+
 ```python
 n, m = map(int, input().split())
 s = set()
@@ -809,6 +1294,50 @@ The first line contains a non-empty string, that contains only lowercase English
 **Output**
 
 If it is a female by our hero's method, print "CHAT WITH HER!" (without the quotes), otherwise, print "IGNORE HIM!" (without the quotes).
+
+Examples
+
+input
+
+```
+wjmzbmr
+```
+
+output
+
+```
+CHAT WITH HER!
+```
+
+input
+
+```
+xiaodao
+```
+
+output
+
+```
+IGNORE HIM!
+```
+
+input
+
+```
+sevenkplus
+```
+
+output
+
+```
+CHAT WITH HER!
+```
+
+Note
+
+For the first example. There are 6 distinct characters in "wjmzbmr". These characters are: "w", "j", "m", "z", "b", "r". So wjmzbmr is a female and you should print "CHAT WITH HER!".
+
+
 
 ```python
 s = input()
@@ -859,6 +1388,38 @@ The first line contains a positive integer *n* (1 ≤ *n* ≤ 100), then
 
 Print the word "YES" if the body is in equilibrium, or the word "NO" if it is not.
 
+Examples
+
+input
+
+```
+3
+4 1 7
+-2 4 -1
+1 -5 -3
+```
+
+output
+
+```
+NO
+```
+
+input
+
+```
+3
+3 -1 7
+-5 2 -4
+2 -1 -3
+```
+
+output
+
+```
+YES
+```
+
 ```python
 n = int(input())
 x = 0
@@ -890,6 +1451,34 @@ The first line contains integer *n* (3 ≤ *n* ≤ 100) — amount of nu
 **Output**
 
 Output index of number that differs from the others in evenness. Numbers are numbered from 1 in the input order.
+
+Examples
+
+input
+
+```
+5
+2 4 7 8 10
+```
+
+output
+
+```
+3
+```
+
+input
+
+```
+4
+1 2 1 1
+```
+
+output
+
+```
+2
+```
 
 ```python
 n = int(input())
@@ -955,6 +1544,52 @@ The single line contains an integer *n* (1 ≤ *n* ≤ 1000) — the num
 **Output**
 
 In the only line print "YES" (without the quotes), if number *n* is almost lucky. Otherwise, print "NO" (without the quotes).
+
+Examples
+
+input
+
+```
+47
+```
+
+output
+
+```
+YES
+```
+
+input
+
+```
+16
+```
+
+output
+
+```
+YES
+```
+
+input
+
+```
+78
+```
+
+output
+
+```
+NO
+```
+
+Note
+
+Note that all lucky numbers are almost lucky as any number is evenly divisible by itself.
+
+In the first sample 47 is a lucky number. In the second sample 16 is divisible by 4.
+
+
 
 ```python
 n = int(input())
@@ -1042,6 +1677,38 @@ The first line of the input contains three **distinct** integers $x_{1}$, $x_{2}
 
 Print one integer — the minimum total distance the friends need to travel in order to meet together.
 
+Examples
+
+input
+
+```
+7 1 4
+```
+
+output
+
+```
+6
+```
+
+input
+
+```
+30 20 10
+```
+
+output
+
+```
+20
+```
+
+Note
+
+In the first sample, friends should meet at the point 4. Thus, the first friend has to travel the distance of 3 (from the point 7 to the point 4), the second friend also has to travel the distance of 3 (from the point 1 to the point 4), while the third friend should not go anywhere because he lives at the point 4.
+
+
+
 ```python
 x = list(map(int, input().split()))
 x.sort()
@@ -1067,6 +1734,44 @@ The only line of the input contains a single integer *n* (1 ≤ *n* ≤ 
 **Output**
 
 Print Dr.Banner's feeling in one line.
+
+Examples
+
+input
+
+```
+1
+```
+
+output
+
+```
+I hate it
+```
+
+input
+
+```
+2
+```
+
+output
+
+```
+I hate that I love it
+```
+
+input
+
+```
+3
+```
+
+output
+
+```
+I hate that I love that I hate it
+```
 
 
 
@@ -1136,6 +1841,40 @@ The first input line contains a single integer *n* (1 ≤ *n* ≤ 100) �
 
 Print the volume fraction in percent of orange juice in Vasya's cocktail. The answer will be considered correct if the absolute or relative error does not exceed 10^-4^.
 
+Examples
+
+input
+
+```
+3
+50 50 100
+```
+
+output
+
+```
+66.666666666667
+```
+
+input
+
+```
+4
+0 25 50 75
+```
+
+output
+
+```
+37.500000000000
+```
+
+Note
+
+Note to the first sample: let's assume that Vasya takes *x* milliliters of each drink from the fridge. Then the volume of pure juice in the cocktail will equal ![img](https://espresso.codeforces.com/c1fac6e64d3a8ee6a5ac138cbe51e60039b22473.png) milliliters. The total cocktail's volume equals 3·*x* milliliters, so the volume fraction of the juice in the cocktail equals ![img](https://espresso.codeforces.com/ceb0664e55a1f9f5fa1243ec74680a4665a4d58d.png), that is, 66.(6) percent.
+
+
+
 ```Python
 n=int(input())
 p = list(map(int,input().split()))
@@ -1160,6 +1899,40 @@ The next line contains *n* integers *a~i~* (0 ≤ *a~i~* ≤ $l$). Multi
 
 Print the minimum light radius $d$, needed to light the whole street. The answer will be considered correct if its absolute or relative error doesn't exceed 10^-9^.
 
+Examples
+
+input
+
+```
+7 15
+15 5 3 7 9 14 0
+```
+
+output
+
+```
+2.5000000000
+```
+
+input
+
+```
+2 5
+2 5
+```
+
+output
+
+```
+2.0000000000
+```
+
+Note
+
+Consider the second sample. At *d* = 2 the first lantern will light the segment [0, 4] of the street, and the second lantern will light segment [3, 5]. Thus, the whole street will be lit.
+
+
+
 ```python
 n,l=map(int,input().split())
 a=list(map(int,input().split()))
@@ -1182,17 +1955,72 @@ Pasha has made a plan of *k* moves, according to which he will paint pixels. Eac
 
 Determine whether Pasha loses if he acts in accordance with his plan, and if he does, on what move the 2 × 2 square consisting of black pixels is formed.
 
-Input
+**Input**
 
 The first line of the input contains three integers *n*, *m*, *k* (1 ≤ *n*, *m* ≤ 1000, 1 ≤ *k* ≤ 10^5^) — the number of rows, the number of columns and the number of moves that Pasha is going to perform.
 
 The next *k* lines contain Pasha's moves in the order he makes them. Each line contains two integers *i* and *j* (1 ≤ *i* ≤ *n*, 1 ≤ *j* ≤ *m*), representing the row number and column number of the pixel that was painted during a move.
 
-Output
+**Output**
 
 If Pasha loses, print the number of the move when the 2 × 2 square consisting of black pixels is formed.
 
 If Pasha doesn't lose, that is, no 2 × 2 square consisting of black pixels is formed during the given *k* moves, print 0.
+
+Examples
+
+input
+
+```
+2 2 4
+1 1
+1 2
+2 1
+2 2
+```
+
+output
+
+```
+4
+```
+
+input
+
+```
+2 3 6
+2 3
+2 2
+1 3
+2 2
+1 2
+1 1
+```
+
+output
+
+```
+5
+```
+
+input
+
+```
+5 3 7
+2 3
+1 2
+1 1
+4 1
+3 1
+5 3
+3 2
+```
+
+output
+
+```
+0
+```
 
 
 
@@ -1247,6 +2075,24 @@ All *a~i~* are distinct. All *b~i~* are distinct.
 **Output**
 
 If Alex is correct, print "Happy Alex", otherwise print "Poor Alex" (without the quotes). 
+
+Examples
+
+input
+
+```
+2
+1 2
+2 1
+```
+
+output
+
+```
+Happy Alex
+```
+
+
 
 ```python
 n = int(input())
@@ -1794,7 +2640,7 @@ The first line contains string *s* of length *n* (2 ≤ *n* ≤ 10^5^). 
 
 The next line contains integer *m* (1 ≤ *m* ≤ 10^5^) — the number of queries. Each of the next *m* lines contains the description of the corresponding query. The *i*-th line contains integers $l_i, r_i (1 ≤ l_i < r_i ≤ n)$.
 
-Output
+**Output**
 
 Print *m* integers — the answers to the queries in the order in which they are given in the input.
 
@@ -2079,6 +2925,39 @@ The next T lines each contain a single integer N (1≤N≤10^18^).
 
 T lines, each line is the answer requested by Mr. Chanek.
 
+Example
+
+input
+
+```
+2
+5
+6
+```
+
+output
+
+```
+2
+4
+```
+
+Note
+
+For the first case, the game is as follows:
+
+1. Mr. Chanek takes one coin.
+2. The opponent takes two coins.
+3. Mr. Chanek takes one coin.
+4. The opponent takes one coin.
+
+For the second case, the game is as follows:
+
+1. Mr. Chanek takes three coins.
+2. The opponent takes one coin.
+3. Mr. Chanek takes one coin.
+4. The opponent takes one coin.
+
 
 
 思路：为了获取最多的石子数量：
@@ -2171,6 +3050,37 @@ The sum of nn over all test cases does not exceed 2⋅10^5^.
 **Output**
 
 For each test case output one integer — the minimum time after which all dishes can be at Petya's home.
+
+Example
+
+input
+
+```
+4
+4
+3 7 4 5
+2 1 2 4
+4
+1 2 3 4
+3 3 3 3
+2
+1 2
+10 10
+2
+10 10
+1 2
+```
+
+output
+
+```
+5
+3
+2
+3
+```
+
+
 
 2020fall-cs101-张聪，思路：由于 delivery是并行的，pick 是串行的，很自然地想到 delivery 应该优先。所以构建二维数组并对其根据 delivery 时间排序，然后用 greedy 算法思想，找到最小的并行时间，要求其能够覆盖delivery 时间更长的 dish 的串行时间之和。
 
@@ -2506,6 +3416,63 @@ It is guaranteed that the given set of edges specifies a tree.
 
 A single integer — the number of distinct leaves of a tree the path to which from Kefa's home contains at most *m* consecutive vertices with cats.
 
+Examples
+
+input
+
+```
+4 1
+1 1 0 0
+1 2
+1 3
+1 4
+```
+
+output
+
+```
+2
+```
+
+input
+
+```
+7 1
+1 0 1 1 0 0 0
+1 2
+1 3
+2 4
+2 5
+3 6
+3 7
+```
+
+output
+
+```
+2
+```
+
+Note
+
+Let us remind you that a *tree* is a connected graph on *n* vertices and *n* - 1 edge. A *rooted* tree is a tree with a special vertex called *root*. In a rooted tree among any two vertices connected by an edge, one vertex is a parent (the one closer to the root), and the other one is a child. A vertex is called a *leaf*, if it has no children.
+
+
+
+Note to the first sample test:
+
+![img](https://espresso.codeforces.com/785114b4b3f5336f02078c25750f87c5a1d0b4be.png)
+
+The vertices containing cats are marked red. The restaurants are at vertices 2, 3, 4. Kefa can't go only to the restaurant located at vertex 2.
+
+Note to the second sample test:
+
+![img](https://espresso.codeforces.com/e5c07640680c837aec99126d94287872e69aa09a.png)
+
+The restaurants are located at vertices 4, 5, 6, 7. Kefa can't go to restaurants 6, 7.
+
+
+
 常规做法应该是图的遍历。可以参考bfs：https://www.codespeedy.com/breadth-first-search-algorithm-in-python/
 
 ```python
@@ -2563,6 +3530,47 @@ The first line contains integer *n* (1 ≤ *n* ≤ 5·10^5^), showing ho
 **Output**
 
 Print a single integer — the number of ways to split the array into three parts with the same sum.
+
+Examples
+
+input
+
+```
+5
+1 2 3 0 3
+```
+
+output
+
+```
+2
+```
+
+input
+
+```
+4
+0 1 -1 0
+```
+
+output
+
+```
+1
+```
+
+input
+
+```
+2
+4 1
+```
+
+output
+
+```
+0
+```
 
 
 
@@ -2712,6 +3720,53 @@ The second line contains *n* integers *a*~1~, *a*~2~, ..., *a~n~* (1 ≤ *a~
 
 Print a single integer — the maximum number of points that Alex can earn.
 
+Examples
+
+input
+
+```
+2
+1 2
+```
+
+output
+
+```
+2
+```
+
+input
+
+```
+3
+1 2 3
+```
+
+output
+
+```
+4
+```
+
+input
+
+```
+9
+1 2 1 3 2 2 2 2 3
+```
+
+output
+
+```
+10
+```
+
+Note
+
+Consider the third test example. At first step we need to choose any element equal to 2. After that step our sequence looks like this [2, 2, 2, 2]. Then we do 4 steps, on each step we choose any element equals to 2. In total we earn 10 points.
+
+
+
 2020fall-cs101，王康安，思路：预处理做个桶。状态转移方程：dp[i] = max(dp[i-1], dp[i-2]+cnt[i]*i)。
 
 ```python
@@ -2822,6 +3877,56 @@ The pairs are given in the order of ascending *x~i~*. No two trees are located a
 
 Print a single number — the maximum number of trees that you can cut down by the given rules.
 
+Examples
+
+input
+
+```
+5
+1 2
+2 1
+5 10
+10 9
+19 1
+```
+
+output
+
+```
+3
+```
+
+input
+
+```
+5
+1 2
+2 1
+5 10
+10 9
+20 1
+```
+
+output
+
+```
+4
+```
+
+Note
+
+In the first sample you can fell the trees like that:
+
+- fell the 1-st tree to the left — now it occupies segment [ - 1;1]
+- fell the 2-nd tree to the right — now it occupies segment [2;3]
+- leave the 3-rd tree — it occupies point 5
+- leave the 4-th tree — it occupies point 10
+- fell the 5-th tree to the right — now it occupies segment [19;20]
+
+In the second sample you can also fell 4-th tree to the right, after that it will occupy segment [10;19].
+
+
+
 2020fall-cs101-陈彦如
 
 因为要让更多的树被砍到，而一棵树是否被砍倒只与临近的两颗树相关，所以能倒就倒，不能往左就往右，所以直接暴力判断了。（向右倒会占用下一棵树左边的空间，所以要比向左边倒的情况多考虑一点！）
@@ -2927,6 +4032,55 @@ Second line contains n space separated integers a~1~,a~2~,…,a~n~(0<a~1~<a~2~<�
 
 Print the only integer — maximum possible total time when the lamp is lit.
 
+Examples
+
+input
+
+```
+3 10
+4 6 7
+```
+
+output
+
+```
+8
+```
+
+input
+
+```
+2 12
+1 10
+```
+
+output
+
+```
+9
+```
+
+input
+
+```
+2 7
+3 4
+```
+
+output
+
+```
+6
+```
+
+Note
+
+In the first example, one of possible optimal solutions is to insert value x=3x=3 before a1a1, so program will be [3,4,6,7][3,4,6,7] and time of lamp being lit equals (3−0)+(6−4)+(10−7)=8(3−0)+(6−4)+(10−7)=8. Other possible solution is to insert x=5x=5 in appropriate place.
+
+In the second example, there is only one optimal solution: to insert x=2x=2 between a1a1 and a2a2. Program will become [1,2,10][1,2,10], and answer will be (1−0)+(10−2)=9(1−0)+(10−2)=9.
+
+In the third example, optimal answer is to leave program untouched, so answer will be (3−0)+(7−4)=6(3−0)+(7−4)=6.
+
 
 
 ```python
@@ -3023,6 +4177,52 @@ The only line of the test case contains one integer *n* (1≤n≤10^9^).
 
 For each test case, print the answer — the minimum number of moves needed to obtain 1 from *n* if it's possible to do that or -1 if it's impossible to obtain 1 from *n*.
 
+Example
+
+input
+
+```
+7
+1
+2
+3
+12
+12345
+15116544
+387420489
+```
+
+output
+
+```
+0
+-1
+2
+-1
+-1
+12
+36
+```
+
+Note
+
+Consider the sixth test case of the example. The answer can be obtained by the following sequence of moves from the given integer 1511654415116544:
+
+1. Divide by 66 and get 25194242519424;
+2. divide by 66 and get 419904419904;
+3. divide by 66 and get 6998469984;
+4. divide by 66 and get 1166411664;
+5. multiply by 22 and get 2332823328;
+6. divide by 66 and get 38883888;
+7. divide by 66 and get 648648;
+8. divide by 66 and get 108108;
+9. multiply by 22 and get 216216;
+10. divide by 66 and get 3636;
+11. divide by 66 and get 66;
+12. divide by 66 and get 11.
+
+
+
 ```python
 for _ in range(int(input())):
     t = int(input())
@@ -3103,6 +4303,29 @@ Please, do not use the %lld specifier to read or write 64-bit integers in С++. 
 **Output**
 
 Print *n* lines: the *i*-th line should contain "YES" (without the quotes), if number *x~i~* is Т-prime, and "NO" (without the quotes), if it isn't.
+
+Examples
+
+input
+
+```
+3
+4 5 6
+```
+
+output
+
+```
+YES
+NO
+NO
+```
+
+Note
+
+The given test has three numbers. The first number 4 has exactly three divisors — 1, 2 and 4, thus the answer for this number is "YES". The second number 5 has two divisors (1 and 5), and the third number 6 has four divisors (1, 2, 3, 6), hence the answer for them is "NO".
+
+
 
 数论是有趣和优美的数学分支。欧几里得对于素数无穷性的证明在今天看来仍和两千年前一样清晰和优雅。长久以来，计算机都被用来辅助数论研究，有很多精妙的算法能够帮上忙。
 
@@ -3259,6 +4482,31 @@ The first line of input contains an integer *t* (0 < *t* < 180) — the 
 
 For each test, output on a single line "YES" (without quotes), if the robot can build a fence Emuskald wants, and "NO" (without quotes), if it is impossible.
 
+Examples
+
+input
+
+```
+3
+30
+60
+90
+```
+
+output
+
+```
+NO
+YES
+YES
+```
+
+Note
+
+In the first test case, it is impossible to build the fence, since there is no regular polygon with angle ![img](https://espresso.codeforces.com/df5f4b07dd5316fde165b43657b2696e2919e791.png).
+
+In the second test case, the fence is a regular triangle, and in the last test case — a square.
+
 
 
 2020fall-cs101-黄旭：对于 n边形，其内角和为（n-2）*180°，内角为x度，有(n-2)\*180=n\*x。 则可以得到 n的表达式为 n=360/（180-x），若 n为整数，则可行，反之不可行。
@@ -3317,6 +4565,45 @@ The second line of each query contains n integers s~1~,s~2~,…,s~n~ (1≤s~i~�
 For each query print YES if it is possible to obtain the number 2048 in your multiset, and NO otherwise.
 
 You may print every letter in any case you want (so, for example, the strings yEs, yes, Yes and YES will all be recognized as positive answer).
+
+Example
+
+input
+
+```
+6
+4
+1024 512 64 512
+1
+2048
+3
+64 512 2
+2
+4096 4
+7
+2048 2 2048 2048 2048 2048 2048
+2
+2048 4096
+```
+
+output
+
+```
+YES
+YES
+NO
+NO
+YES
+YES
+```
+
+Note
+
+In the first query you can win as follows: choose 512 and 512, and ss turns into {1024,64,1024}. Then choose 1024 and 1024, and ss turns into {2048,64} and you win.
+
+In the second query s contains 2048 initially.
+
+
 
 ```python
 # SHEN Tianfang, 2020/10/13
@@ -3418,6 +4705,55 @@ It is guaranteed that the sum of n over all testcases does not exceed 200,000.
 **Output**
 
 For each testcase, print a single integer – the maximum score you can get by cheating in the optimal way.
+
+Example
+
+input
+
+```
+8
+5 2
+WLWLL
+6 5
+LLLWWL
+7 1
+LWLWLWL
+15 5
+WWWLLLWWWLLLWWW
+40 7
+LLWLWLWWWLWLLWLWWWLWLLWLLWLLLLWLLWWWLWWL
+1 0
+L
+1 1
+L
+6 1
+WLLWLW
+```
+
+output
+
+```
+7
+11
+6
+26
+46
+0
+1
+6
+```
+
+Note
+
+**Explanation of the first testcase.** Before changing any outcome, the score is 2. Indeed, you won the first game, so you got 1 point, and you won also the third, so you got another 1 point (and not 2 because you lost the second game).
+
+An optimal way to cheat is to change the outcomes of the second and fourth game. Doing so, you end up winning the first four games (the string of the outcomes becomes WWWWL). Hence, the new score is 7=1+2+2+2: 1 point for the first game and 2 points for the second, third and fourth game.
+
+**Explanation of the second testcase.** Before changing any outcome, the score is 3. Indeed, you won the fourth game, so you got 1 point, and you won also the fifth game, so you got 2 more points (since you won also the previous game).
+
+An optimal way to cheat is to change the outcomes of the first, second, third and sixth game. Doing so, you end up winning all games (the string of the outcomes becomes WWWWWW). Hence, the new score is 11=1+2+2+2+2+2: 1 point for the first game and 2 points for all the other games.
+
+
 
 **思路：**https://www.bbsmax.com/A/WpdKEVpmJV/
 
