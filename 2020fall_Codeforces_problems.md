@@ -2383,6 +2383,24 @@ In the second example Polycarpus can cut the ribbon in such way: the first piece
 
 
 
+思路：就是一个需要刚好装满的完全背包问题，只有三种商品a, b, c，能取无限件物品，每件物品价值是1，求最大价值。
+
+```python
+inf = 1e9 + 7
+n,a,b,c = map(int,input().split())
+dp = [0]+[-inf]*n
+
+for i in range(1,n+1):
+    for j in (a,b,c):
+        if i >= j:
+            #dp[i] = max(dp[i-j], dp[i-j] + 1, dp[i])
+            dp[i] = max(dp[i-j] + 1, dp[i])
+
+print(dp[n])
+```
+
+
+
 2020fall-cs101，王君宇。这道题状态转移方程就是 d[i]=max(d[i-a],d[i-b],d[i-c])+1，其中初始量是 0.到达一个新节点的方法有三种：+a、+b、+c，选取最大增量即可，思路十分精巧。
 
 2020fall-cs101，黄旭。找到递推公式 dp[i] = max(dp[i-a], dp[i-b], dp[i-c]) + 1就好了。
