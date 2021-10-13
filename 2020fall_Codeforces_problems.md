@@ -4282,7 +4282,24 @@ for i in range(int(input())):
     print([a,-1][x!=1])
 ```
 
+2021fall-cs101-吉祥瑞，解题思路：先一直将除以6，直至不能除尽。再一直将乘以2后除以6，即将除以3，直至不能除尽。若此时不是1，则说明无法实现。
 
+```python
+t = int(input())
+for _ in range(t):
+    n = int(input())
+    s = 0
+    while n%6 == 0:
+        n = int(n/6)
+        s += 1
+    while n%3 == 0:
+        n = int(n/3)
+        s += 2
+    if n == 1:
+        print(s)
+    else:
+        print(-1)
+```
 
 
 
