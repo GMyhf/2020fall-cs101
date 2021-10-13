@@ -4157,7 +4157,7 @@ print(ans)
 
 
 
-## 134B. Multiply by 2, divide by 6
+## 1374B. Multiply by 2, divide by 6
 
 math, 900, http://codeforces.com/problemset/problem/1374/B
 
@@ -4605,6 +4605,10 @@ In the second query s contains 2048 initially.
 
 
 
+这个题目特别契合我们课程的教学目的——锻炼计算思维。2）计算思维包括 数学思维 和 计算机思维。3）CF1221A可以一题两做，数学思维是不大于2048项求和，判断是否能不小于2048。2021fall-cs101 黄钧霆 同学思路：把这些数看成二进制数，累加过程是进位，而且不会跳过2048。计算机思维。2021fall-cs101 张凌睿 同学思路：排序不大于2048项降序排，用2048逐个减，判断是否可以减到0.
+
+
+
 ```python
 # SHEN Tianfang, 2020/10/13
 q=int(input())
@@ -4887,3 +4891,6 @@ for _ in range(int(input())):
 [2]. Student assignments, fall 2020.
 
 [3]. https://csrgxtu.github.io/2015/03/20/Writing-Mathematic-Fomulars-in-Markdown/
+
+[TOC]
+
