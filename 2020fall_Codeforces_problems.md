@@ -4392,6 +4392,8 @@ for i in x:
     #    print('NO')
 ```
 
+小优化（原因如下，下面用到集合实现），第15行可以写成 **for** i **in** range(p * p, n+1, p):  则998ms可以AC. 
+
 
 
 埃氏筛法，时间复杂度为：O(n\*loglogn)。Python3, Accepted, 1558ms
