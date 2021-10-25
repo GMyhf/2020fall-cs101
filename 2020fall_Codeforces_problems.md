@@ -4098,20 +4098,20 @@ In the third example, optimal answer is to leave program untouched, so answer wi
 f = 1 #switch
 n, M = map(int, input().split())
 a = [0] + [int(x) for x in input().split()] + [M]
-
+ 
 b = [0]*(n+2)
-for i in range(1,n+1):
+
+for i in range(1,n+2):
     b[i] = b[i-1] + f*(a[i]-a[i-1])
     f ^= 1 #0->1 or 1->0
-
-b[n+1] = b[n] + f*(M-a[n])
     
 ans = b[n+1] #untouched
 
 for i in range(1,n+2):
     if (a[i]-a[i-1]>1):
         if i&1:
-            ans = max(ans, b[i]+M-a[i]-(b[n+1]-b[i])-1)
+            # ans = max(ans, b[i]+M-a[i]-(b[n+1]-b[i])-1)
+            pass
         else:
             ans = max(ans, b[i]+a[i]-a[i-1]-1+M-a[i]-(b[n+1]-b[i]))
 
