@@ -1823,6 +1823,48 @@ else:
 
 
 
+2021fall-cs101，黄靖涵。https://codeforces.com/problemset/problem/705/A
+
+```python
+n = int(input())
+
+def f(n):
+    if n==1:
+        return "I hate it"
+    if n%2 == 1:
+        return f(n-1)[:-2] + "that I hate it"
+    if n%2 == 0:
+        return f(n-1)[:-2] + "that I love it"
+
+print(f(n))
+```
+
+思考： 
+
+1）递归
+
+2）异或操作（异或也叫半加运算，其运算法则相当于不带进位的二进制加法）：二进制下用1 表示真，0 表示假。则异或的运算法则为：0⊕0=0，1⊕0=1，0⊕1=1，1⊕1=0（即，同为 0，异为 1）
+
+```python
+n = int(input())
+f = 1
+str = 'I hate it'
+
+for x in range(1, n):
+    if f^1:
+        str = str.replace('it', 'that I hate it')
+    else:
+        str = str.replace('it', 'that I love it')
+    
+    f ^= 1
+
+print(str)
+```
+
+
+
+
+
 ## 200B. Drinks
 
 implementation, math, 800, https://codeforces.com/problemset/problem/200/B
