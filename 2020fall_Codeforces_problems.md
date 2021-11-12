@@ -3157,6 +3157,10 @@ for i in range(n):
 print('\n'.join(map(str, ans)))
 ```
 
+1443C. 整体输出，相当于利用了output buffer。print()函数每次执行会清空buffer，相当于disable buffer，所以慢。
+What Is Python Output Buffering and How to Disable It?
+https://blog.finxter.com/what-is-python-output-buffering-and-how-to-disable-it/
+
 
 
 ```python
