@@ -2668,7 +2668,7 @@ for i in range(m):
 
 ## 313B. Ilya and Queries
 
-dp, 1300,  https://codeforces.com/contest/313/problem/B
+dp/implementation, 1100 ,  https://codeforces.com/contest/313/problem/B
 
 Ilya the Lion wants to help all his friends with passing exams. They need to solve the following problem to pass the IT exam.
 
