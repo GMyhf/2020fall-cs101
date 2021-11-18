@@ -3432,6 +3432,30 @@ maxcuts = [0] + [-1000000]*l
 print( dpcut( lengthlist, l, maxcuts ) )
 ```
 
+2021fall-cs101，唐浴歌
+
+经验总结的一点是，dp的题好像一般都只需两次遍历就能解决了：
+
+1）第一次遍历（初始化）：首先要保证dp列表项数足够充裕。如求的是可及性的话，dp列表里的能被目标数整除的项都+1。2.第二次遍历（特殊化处理）：根据题目要求对完成初始化的dp作处理。由于有最优目标，每一次处理都会判断大小关系来迭代掉之前的结果。
+
+闫老师批注：两遍处理的思路挺好。第一遍是数据预处理，这样第二遍就很清楚了。充实的寒假生活（http://cs101.openjudge.cn/practice/16528/），也可以如法炮制。
+
+```python
+# 2021fall-cs101, TAN Yuge
+n, *m = map(int, input().split())
+dp = [0] * (n + 1) 
+for i in m:     
+    for j in range(1, n + 1):         
+        if j % i == 0:             
+            dp[j] = max(j // i, dp[j])
+            
+for i in range(1, n +  1):    
+    for j in m:         
+        if i > j and dp[i - j]:             
+            dp[i] = max(dp[i - j] + 1, dp[i])
+print(dp[n])
+```
+
 
 
 ## 580C. Kefa and Park
