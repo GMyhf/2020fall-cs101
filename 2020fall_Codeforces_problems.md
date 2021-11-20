@@ -2827,6 +2827,35 @@ Finally, on the last day Vasiliy can buy a drink in any shop.
 
 
 
+2021fall-cs101，刘佳霖，implementation
+
+①用defaultdict 函数把字典默认值设为n，这样如果钱特别多就都给他买了，之后循环可以少点；
+②需要考虑多家店同一价格的情况，这样加一块钱，能买的店会可能多好几家。
+
+```python
+from collections import defaultdict
+n = int(input())
+*x, = map(int, input().split())
+x.sort()
+
+d = defaultdict(lambda : n)
+cnt = 0
+for i in range(x[-1]):
+    if i >= x[cnt]:
+        while i >= x[cnt]:
+            cnt += 1
+            
+    d[i] = cnt
+
+ans = []
+for _ in range(int(input())):
+    i = int(input())
+    ans.append(d[i])
+print(*ans, sep='\n')
+```
+
+
+
 **要求二分实现一次，dp实现一次**
 
 binary search实现
