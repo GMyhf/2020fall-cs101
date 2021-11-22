@@ -3400,6 +3400,21 @@ print(dp[n])
 
 
 
+https://python-forum.io/thread-23120.html
+
+At the beginning of the procedure, the indexes `i-a, i-b, i-c` can be negative, which means that python is going to take values at the end of the array, because for example `d[-4]` is the 4th value from the right. Initializing the array to a large negative value in each cell is intended as giving the cell a "negative infinite" value for the `max` algorithm. At
+every step, an increment of 1 is added, so the number is chosen large enough so that `-1e9 + 4000 < 0`
+
+```python
+n, a, b, c = map(int, input().split())
+d = [0] + [-1e9] * 4000
+for i in range(1, n + 1):
+    d[i] = max(d[i - a], d[i - b], d[i - c]) + 1
+print(d[n])
+```
+
+
+
 2020fall-cs101，赵春源。这是一个简单的DP思想，我们让f~i~等于把i按题意切开所得的最大段数，我们让$f_{0}=0$，其他的位置为负无穷，表示这个长度没法按题目的要求切开，我们考虑如何用较小的f推出较大的f，当然是把a,b,c三种切法都试一遍，最大长度就是$max(f[i-a], f[i-b], f[i-c])+1$
 
 ```python
