@@ -2,9 +2,9 @@
 
 2021 fall, Complied by Hongfei Yan
 
+
+
 对我们cs101课程中涉及的题目，按照 Easy/Medium/Difficult 级别分类。
-
-
 
 Easy_Level1 -> Easy_Level2 -> Medium_Level1 -> Medium_Level2 -> Level1_difficult -> Level2_difficult
 
@@ -12,7 +12,7 @@ Easy_Level1 -> Easy_Level2 -> Medium_Level1 -> Medium_Level2 -> Level1_difficult
 
 # Easy_Level1
 
-Tags: math, strings, number theory
+Tags: math, number theory, strings
 
 02733: 判断闰年, math
 
@@ -24,7 +24,7 @@ Tags: math, strings, number theory
 
 # Easy_Level2
 
-Tags: implementation, matrices, math, strings, greedy
+Tags: brute force, greedy, implementation, matrices, math, strings 
 
 02808: 校门外的树, implementation
 
@@ -40,11 +40,13 @@ Tags: implementation, matrices, math, strings, greedy
 
 18223: 24点, brute force
 
+21532: 数学秘密, brute force
+
 
 
 # Medium_Level1
 
-Tags: matrices, greedy, dp, physics, recursion, implementation
+Tags: dp, greedy, implementation, matrices, physics, recursion, 
 
 01852: Ants, physics/greedy
 
@@ -76,13 +78,9 @@ Tags: matrices, greedy, dp, physics, recursion, implementation
 
 
 
-
-
 # Medium_Level2
 
-Tags: greedy, dp, stack, dfs, strings, implementation, dict, two pointers, number theory 
-
-逻辑清楚，递归，字符串处理，dfs, 数据结构（如dict），双指针，
+Tags: dfs, dict, dp, greedy, implementation, number theory, stack , strings, two pointers
 
 01017: 装箱问题, greedy
 
@@ -114,7 +112,7 @@ CF230B. T-Primes, number theory/dp
 
 # Difficult_Level1
 
-tags: dfs, dp, binary search, matrices, two pointers
+Tags: binary search, dfs, dp, matrices, two pointers
 
 02698: 八皇后问题解输出, dfs
 
@@ -144,7 +142,7 @@ CF466C. Number of Ways, two pointers
 
 # Difficult_Level2
 
-greedy, dp, dfs, bfs, dp, graph/tree
+Tags: bfs, dfs, dp, graph, greedy , tree
 
 01661: Help Jimmy, dfs/dp
 
