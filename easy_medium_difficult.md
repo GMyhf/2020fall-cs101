@@ -12,39 +12,45 @@ Easy_Level1 -> Easy_Level2 -> Medium_Level1 -> Medium_Level2 -> Level1_difficult
 
 # Easy_Level1
 
-语法题目
+Tags: math, strings, number theory
 
 02733: 判断闰年, math
 
-02981: 大整数加法, math
+02981: 大整数加法, math/strings
 
-
+03143: 验证“哥德巴赫猜想”, math
 
 
 
 # Easy_Level2
 
-需要一点逻辑的 语法题目
+Tags: implementation, matrices, math, strings, greedy
 
-02808: 校门外的树
+02808: 校门外的树, implementation
 
 19943: 图的拉普拉斯矩阵, matrices
 
 19944: 这一天星期几, math
 
-19949: 提取实体, string
+19949: 提取实体, strings
 
+03670: 计算鞍点, matrice
 
+04110: 圣诞老人的礼物, greedy
+
+18223: 24点, brute force
 
 
 
 # Medium_Level1
 
-tags: matrices, greedy, dp
+Tags: matrices, greedy, dp, physics, recursion, implementation
 
-01852: Ants, physics
+01852: Ants, physics/greedy
 
-02746: 约斯夫问题
+02694: 逆波兰表达式, recursion/strings
+
+02746: 约斯夫问题, implementation
 
 02757: 最长上升子序列, dp
 
@@ -52,21 +58,17 @@ tags: matrices, greedy, dp
 
 02806: 公共子序列, dp
 
-03143: 验证“哥德巴赫猜想”
+03087: 邮箱验证, strings
 
-03670: 计算鞍点, matrices
+03532: 最大上升子序列和, dp
 
-04110: 圣诞老人的礼物, greedy
-
-12558: 岛屿周长, matrices
+12558: 岛屿周长, matrice
 
 12560: 生存游戏, matrices
 
-18106: 螺旋矩阵, matrices
+18106: 螺旋矩阵, matrice
 
-18223: 24点, math
-
-18186: 矩阵运算, matrices
+18161: 矩阵运算, matrices
 
 19942: 二维矩阵上的卷积运算, matrices
 
@@ -78,15 +80,13 @@ tags: matrices, greedy, dp
 
 # Medium_Level2
 
+Tags: greedy, dp, stack, dfs, strings, implementation, dict, two pointers, number theory 
+
 逻辑清楚，递归，字符串处理，dfs, 数据结构（如dict），双指针，
 
-01017: 装箱问题, implementation
+01017: 装箱问题, greedy
 
-02694: 逆波兰表达式, recursion
-
-03087: 邮箱验证, string
-
-03532: 最大上升子序列和, dp
+02773: 采药, dp
 
 03704: 括号匹配, stack
 
@@ -104,15 +104,17 @@ tags: matrices, greedy, dp
 
 18160: 最大连通域面积, dfs
 
-18211: 军备竞赛, tow pointers
+18211: 军备竞赛, greedy/two pointers
 
-CF230B: T-Primes, number theory/dp
+23421: 小偷背包, dp
+
+CF230B. T-Primes, number theory/dp
 
 
 
 # Difficult_Level1
 
-tags: dfs, dp, binary search, matrices
+tags: dfs, dp, binary search, matrices, two pointers
 
 02698: 八皇后问题解输出, dfs
 
@@ -130,9 +132,13 @@ tags: dfs, dp, binary search, matrices
 
 19948: 因材施教, greedy
 
-21577: 护林员盖房子, 
+21577: 护林员盖房子, matices
 
 21608: 你和你比较熟悉的同学, bfs/dfs
+
+CF455A. Boredom, dp
+
+CF466C. Number of Ways, two pointers
 
 
 
