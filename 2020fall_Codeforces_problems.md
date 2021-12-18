@@ -2619,6 +2619,51 @@ print(len(ans))
 
 
 
+2021fall-cs101，和沛淼。
+
+这道题dfs 和bfs 我都试过了，都可以通过，代码的写法也不难。难的地方在于时间复杂度的控制。一开始超时怎么也不行，最后把储存访问过的点的列表（visited）改成集合立马就过了。（这要是考试还不把人坑死）
+
+```python
+# https://codeforces.com/contest/580/problem/C 
+n,m=map(int,input().split())
+L=list(map(int,input().split()))
+s=dict()
+
+for i in range(n):
+    s.update({i+1:[]})
+    
+for _ in range(n-1):
+    a,b=map(int,input().split())
+    s[a].append(b)
+    s[b].append(a)
+    
+ans=0
+def dfs(q=list):
+    visited=set()
+    global ans
+    while q!=[]:
+        g=q.pop()
+        now=g[0]
+        t=g[1]
+        if now not in visited:
+            visited.add(now)
+            if L[now-1]==1:
+                t-=1
+            else:
+                t=m
+            if t>=0:
+                if now!=1 and len(s[now])==1:
+                    ans+=1
+                else:
+                    for i in s[now]:
+                        q.append([i,t])
+    return
+dfs([[1,m]])
+print(ans)
+```
+
+
+
 ## 368B. Sereja and Suffixes
 
 data structures/dp, 1100,  https://codeforces.com/problemset/problem/368/B
