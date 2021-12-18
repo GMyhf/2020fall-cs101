@@ -2535,6 +2535,90 @@ print(go_child(0, 0, -1))
 
 
 
+常规做法应该是图的遍历。可以参考bfs：https://www.codespeedy.com/breadth-first-search-algorithm-in-python/
+
+```python
+n,m = [int(i) for i in input().split()]
+cat = [0]+[int(i) for i in input().split()]
+d = {}
+t = 1
+for i in range(n-1):
+    x,y = [int(_) for _ in input().split()]
+    # d.setdefault(x,[]).append(y)
+    try:
+        d[x].append(y)
+    except:
+        d[x] = [y]
+    # d.setdefault(y,[]).append(x)    
+    try:
+        d[y].append(x)
+    except:
+        d[y] = [x]
+
+rec = [(1,0,1)]
+cnt = 0
+while len(rec) != 0:
+    i,c,prev = rec.pop()
+    if cat[i]:
+        c += 1
+    else:
+        c = 0
+    if c > m:
+        continue
+    if i != 1 and len(d[i]) == 1:
+        cnt += 1
+        continue
+    for j in d[i]:
+        if j == prev:
+            continue
+        rec.append((j,c,i))
+print(cnt)    
+```
+
+
+
+2021fall-cs101，李博熙。这题需要手工建栈/队列dfs/bfs。
+
+```python
+# 2021fall-cs101，LI Boxi, manually construct stack
+n,m=map(int,input().split())
+cat=[-1]+list(map(int,input().split()))
+dict0={}
+for i in range(1,n+1):
+    dict0[i]=[]
+for i in range(n-1):
+    x,y=map(int,input().split())
+    dict0[x].append(y)
+    dict0[y].append(x)
+ans=set()
+def dfs():
+    stack=[]
+    stack.append([1,0,[True]*(n+1)])#(position,cat0,status)
+    while len(stack)>0:
+        a=stack.pop()
+        position=a[0]
+        cat0=a[1]
+        prev_status=a[2]
+        prev_status[position]=False
+        if cat[position]==1:
+            cat0+=1
+        else:
+            cat0=0
+        if cat0>m:
+            continue
+        if len(dict0[position])==1 and position!=1:
+            ans.add(position)
+            continue
+        for w in dict0[position]:
+            if prev_status[w]==True:
+                stack.append([w,cat0,prev_status])
+                
+dfs()
+print(len(ans))
+```
+
+
+
 ## 368B. Sereja and Suffixes
 
 data structures/dp, 1100,  https://codeforces.com/problemset/problem/368/B
@@ -3498,133 +3582,6 @@ for i in range(1, n +  1):
         if i > j and dp[i - j]:             
             dp[i] = max(dp[i - j] + 1, dp[i])
 print(dp[n])
-```
-
-
-
-## 580C. Kefa and Park
-
-
-
-dfs and similar/graphs/trees, 1500, http://codeforces.com/problemset/problem/580/C
-
-Kefa decided to celebrate his first big salary by going to the restaurant.
-
-He lives by an unusual park. The park is a rooted tree consisting of *n* vertices with the root at vertex 1. Vertex 1 also contains Kefa's house. Unfortunaely for our hero, the park also contains cats. Kefa has already found out what are the vertices with cats in them.
-
-The leaf vertices of the park contain restaurants. Kefa wants to choose a restaurant where he will go, but unfortunately he is very afraid of cats, so there is no way he will go to the restaurant if the path from the restaurant to his house contains more than *m* **consecutive** vertices with cats.
-
-Your task is to help Kefa count the number of restaurants where he can go.
-
-**Input**
-
-The first line contains two integers, *n* and *m* (2 ≤ *n* ≤ 10^5^, 1 ≤ *m* ≤ *n*) — the number of vertices of the tree and the maximum number of consecutive vertices with cats that is still ok for Kefa.
-
-The second line contains *n* integers *a*~1~, *a*~2~, ..., *a~n~*, where each *a~i~* either equals to 0 (then vertex *i* has no cat), or equals to 1 (then vertex *i* has a cat).
-
-Next *n* - 1 lines contains the edges of the tree in the format "*x~i~* *y~i~*" (without the quotes) (1 ≤ *x~i~*, *y~i~* ≤ *n*, *x~i~* ≠ *y~i~*), where *x~i~* and *y~i~* are the vertices of the tree, connected by an edge.
-
-It is guaranteed that the given set of edges specifies a tree.
-
-**Output**
-
-A single integer — the number of distinct leaves of a tree the path to which from Kefa's home contains at most *m* consecutive vertices with cats.
-
-Examples
-
-input
-
-```
-4 1
-1 1 0 0
-1 2
-1 3
-1 4
-```
-
-output
-
-```
-2
-```
-
-input
-
-```
-7 1
-1 0 1 1 0 0 0
-1 2
-1 3
-2 4
-2 5
-3 6
-3 7
-```
-
-output
-
-```
-2
-```
-
-Note
-
-Let us remind you that a *tree* is a connected graph on *n* vertices and *n* - 1 edge. A *rooted* tree is a tree with a special vertex called *root*. In a rooted tree among any two vertices connected by an edge, one vertex is a parent (the one closer to the root), and the other one is a child. A vertex is called a *leaf*, if it has no children.
-
-
-
-Note to the first sample test:
-
-![img](https://espresso.codeforces.com/785114b4b3f5336f02078c25750f87c5a1d0b4be.png)
-
-The vertices containing cats are marked red. The restaurants are at vertices 2, 3, 4. Kefa can't go only to the restaurant located at vertex 2.
-
-Note to the second sample test:
-
-![img](https://espresso.codeforces.com/e5c07640680c837aec99126d94287872e69aa09a.png)
-
-The restaurants are located at vertices 4, 5, 6, 7. Kefa can't go to restaurants 6, 7.
-
-
-
-常规做法应该是图的遍历。可以参考bfs：https://www.codespeedy.com/breadth-first-search-algorithm-in-python/
-
-```python
-n,m = [int(i) for i in input().split()]
-cat = [0]+[int(i) for i in input().split()]
-d = {}
-t = 1
-for i in range(n-1):
-    x,y = [int(_) for _ in input().split()]
-    # d.setdefault(x,[]).append(y)
-    try:
-        d[x].append(y)
-    except:
-        d[x] = [y]
-    # d.setdefault(y,[]).append(x)    
-    try:
-        d[y].append(x)
-    except:
-        d[y] = [x]
-
-rec = [(1,0,1)]
-cnt = 0
-while len(rec) != 0:
-    i,c,prev = rec.pop()
-    if cat[i]:
-        c += 1
-    else:
-        c = 0
-    if c > m:
-        continue
-    if i != 1 and len(d[i]) == 1:
-        cnt += 1
-        continue
-    for j in d[i]:
-        if j == prev:
-            continue
-        rec.append((j,c,i))
-print(cnt)    
 ```
 
 
