@@ -2375,7 +2375,7 @@ The restaurants are located at vertices 4, 5, 6, 7. Kefa can't go to restaurants
 2020fall-cs101，林逸云
 
 ```python
-# 580C
+# https://codeforces.com/contest/580/problem/C
 # 2020fall-cs101, Yiyun LIN
 cat = dict()
 graph = dict()
@@ -2415,22 +2415,27 @@ print(res)
 
 
 
+常规做法应该是图的遍历。可以参考bfs：https://www.codespeedy.com/breadth-first-search-algorithm-in-python/
+
 ```python
+# https://codeforces.com/contest/580/problem/C
 n,m = [int(i) for i in input().split()]
 cat = [0]+[int(i) for i in input().split()]
 d = {}
 t = 1
 for i in range(n-1):
     x,y = [int(_) for _ in input().split()]
+    # d.setdefault(x,[]).append(y)
     try:
         d[x].append(y)
     except:
         d[x] = [y]
+    # d.setdefault(y,[]).append(x)    
     try:
         d[y].append(x)
     except:
         d[y] = [x]
- 
+
 rec = [(1,0,1)]
 cnt = 0
 while len(rec) != 0:
@@ -2535,52 +2540,11 @@ print(go_child(0, 0, -1))
 
 
 
-常规做法应该是图的遍历。可以参考bfs：https://www.codespeedy.com/breadth-first-search-algorithm-in-python/
-
-```python
-n,m = [int(i) for i in input().split()]
-cat = [0]+[int(i) for i in input().split()]
-d = {}
-t = 1
-for i in range(n-1):
-    x,y = [int(_) for _ in input().split()]
-    # d.setdefault(x,[]).append(y)
-    try:
-        d[x].append(y)
-    except:
-        d[x] = [y]
-    # d.setdefault(y,[]).append(x)    
-    try:
-        d[y].append(x)
-    except:
-        d[y] = [x]
-
-rec = [(1,0,1)]
-cnt = 0
-while len(rec) != 0:
-    i,c,prev = rec.pop()
-    if cat[i]:
-        c += 1
-    else:
-        c = 0
-    if c > m:
-        continue
-    if i != 1 and len(d[i]) == 1:
-        cnt += 1
-        continue
-    for j in d[i]:
-        if j == prev:
-            continue
-        rec.append((j,c,i))
-print(cnt)    
-```
-
-
-
 2021fall-cs101，李博熙。这题需要手工建栈/队列dfs/bfs。
 
 ```python
 # 2021fall-cs101，LI Boxi, manually construct stack
+# https://codeforces.com/contest/580/problem/C
 n,m=map(int,input().split())
 cat=[-1]+list(map(int,input().split()))
 dict0={}
@@ -2659,6 +2623,44 @@ def dfs(q=list):
                         q.append([i,t])
     return
 dfs([[1,m]])
+print(ans)
+```
+
+
+
+2021fall-cs101，刘宇堃。这个题一开始没有注意到保证是树，按图来写的，然后就算 visited 了也有可能可以再走一次（如果从新的路上遇见更少的猫）
+
+```python
+# https://codeforces.com/contest/580/problem/C
+n, m = map(int, input().split())
+*l0, = map(int, input().split())
+l1 = [0 for i in range(n)]
+ans = 0
+graph = {}
+for _ in range(n-1):
+    a, b = map(int, input().split())
+    if a not in graph:
+        graph[a] = [b]
+    else:
+        graph[a].append(b)
+    if b not in graph:
+        graph[b] = [a]
+    else:
+        graph[b].append(a)
+queue = [1]
+l1[0] = l0[0]
+vis = {1}
+while queue:
+    vertex = queue.pop(0)
+    if len(graph[vertex]) > 1 or vertex == 1:
+        for x in graph[vertex]:
+            a = [0, l1[vertex-1]+1][l0[x-1]]
+            if x not in vis and a <= m:
+                queue.append(x)
+                vis.add(x)
+                l1[x-1] = a
+    else:
+        ans += 1
 print(ans)
 ```
 
