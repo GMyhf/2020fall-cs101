@@ -46,11 +46,11 @@ Tags: brute force, greedy, implementation, matrices, math, strings
 
 # Medium_Level1
 
-Tags: dp, greedy, implementation, matrices, physics, recursion, 
+Tags: dp, greedy, implementation, matrices, physics, recursion, stack, strings
 
 01852: Ants, physics/greedy
 
-02694: 逆波兰表达式, recursion/strings
+02694: 波兰表达式, recursion/strings/stack
 
 02746: 约斯夫问题, implementation
 
@@ -112,7 +112,7 @@ CF230B. T-Primes, number theory/dp
 
 # Difficult_Level1
 
-Tags: binary search, dfs, dp, matrices, two pointers
+Tags: binary search, dfs, dp, implementation, matrices, two pointers
 
 02698: 八皇后问题解输出, dfs
 
@@ -130,7 +130,7 @@ Tags: binary search, dfs, dp, matrices, two pointers
 
 19948: 因材施教, greedy
 
-21577: 护林员盖房子, matices
+21577: 护林员盖房子, matrix/implementation
 
 21608: 你和你比较熟悉的同学, bfs/dfs
 
@@ -151,5 +151,7 @@ Tags: bfs, dfs, dp, graph, greedy , tree
 02287: Tian Ji -- The Horse Racing, greedy
 
 04129: 变换的迷宫, bfs
+
+18164: 剪绳子, greedy
 
 CF580C: Kefa and Park, bfs/dfs
