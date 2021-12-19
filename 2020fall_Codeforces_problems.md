@@ -2666,6 +2666,94 @@ print(ans)
 
 
 
+2021fall-cs101，潘逸阳。
+
+```python
+n, m = map(int, input().split())
+cat = [int(x) for x in input().split()]
+cats = [cat[0]] + [0] * (n - 1)
+link = [[] for _ in range(n)]
+visit = [False] * n
+for j in range(n - 1):
+    a, b = (int(x) - 1 for x in input().split())
+    link[b].append(a)
+    link[a].append(b)
+out = 0
+queue = [0]
+while queue:
+    i = queue.pop(0)
+    visit[i] = True
+    if cats[i] > m: continue
+    if len(link[i]) == 1:
+        out += 1
+        continue
+    for j in link[i]:
+        if visit[j]: continue
+        if cat[j]: cats[j] = cats[i] + 1
+        queue.append(j)
+print(out)
+```
+
+广度优先搜索。事实上，将13行的pop(0)改为pop()后就是深度优先搜索，当然这个是在写了dfs在test35爆栈之后改了挺久才悟出来的，这个是改良之前的dfs.
+
+```python
+def dfs(x, cats, no):
+    global out
+    if cats > m:
+        return
+    if x and len(link[x]) == 1:
+              out += 1
+        return
+    for y in link[x] - no:
+        if cat[y] == 0: dfs(y, 0, {x})
+        else: dfs(y, cats + 1, {x})
+n, m = map(int, input().split())
+cat = [int(x) for x in input().split()]
+link = [set() for _ in range(n)]
+for j in range(n - 1):
+    a, b = (int(x) - 1 for x in input().split())
+    link[b].add(a)
+    link[a].add(b)
+out = 0
+dfs(0, cat[0], set())
+print(out)
+```
+
+然后听到老师说需要自己建栈之后就开始改，改着改着就变成了这个样子
+
+```python
+n, m = map(int, input().split())
+cat = [int(x) for x in input().split()]
+cats = [cat[0]] + [0] * (n - 1)
+link = [set() for _ in range(n)]
+visit = set()
+for j in range(n - 1):
+    a, b = (int(x) - 1 for x in input().split())
+    link[b].add(a)
+    link[a].add(b)
+out = 0
+stack = [0]
+while stack:
+    i = stack.pop()
+    visit.add(i)
+    if cats[i] > m: continue
+    if i and len(link[i]) == 1:
+        out += 1
+        continue
+    for j in link[i] - visit:
+        stack.append(j)
+        if cat[j]: cats[j] = cats[i] + 1
+print(out)
+```
+
+真的是一模一样。现在感觉写完自建stack才真正理解了回溯的含义，还有广搜和深搜之间的关系。而且dfs还比bfs要快，不知道为什么?
+
+https://stackoverflow.com/questions/47222855/in-what-sense-is-dfs-faster-than-bfs
+Memory requirements: The stack size is bound by the depth whereas the queue size is bound by the width. For a balanced binary tree with n nodes, that means the stack size would be log(n) but the queue size would b O(n). Note that an explicit queue might not be needed for a BFS in all cases -- for instance, in an array embedded binary tree, it should be possible to compute the next index instead.
+Speed: I don't think that's true. For a full search, both cases visit all the nodes without significant extra overhead. If the search can be aborted when a matching element is found, BFS should typically be faster if the searched element is typically higher up in the search tree because it goes level by level. DFS might be faster if the searched element is typically relatively deep and finding one of many is sufficient.
+
+
+
 ## 368B. Sereja and Suffixes
 
 data structures/dp, 1100,  https://codeforces.com/problemset/problem/368/B
