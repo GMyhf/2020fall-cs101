@@ -2374,6 +2374,8 @@ Note to the second sample test:
 
 The restaurants are located at vertices 4, 5, 6, 7. Kefa can't go to restaurants 6, 7.
 
+
+
 2020fall-cs101，林逸云
 
 ```python
@@ -2753,6 +2755,58 @@ print(out)
 https://stackoverflow.com/questions/47222855/in-what-sense-is-dfs-faster-than-bfs
 Memory requirements: The stack size is bound by the depth whereas the queue size is bound by the width. For a balanced binary tree with n nodes, that means the stack size would be log(n) but the queue size would b O(n). Note that an explicit queue might not be needed for a BFS in all cases -- for instance, in an array embedded binary tree, it should be possible to compute the next index instead.
 Speed: I don't think that's true. For a full search, both cases visit all the nodes without significant extra overhead. If the search can be aborted when a matching element is found, BFS should typically be faster if the searched element is typically higher up in the search tree because it goes level by level. DFS might be faster if the searched element is typically relatively deep and finding one of many is sufficient.
+
+
+
+2021fall-cs101，欧阳韵妍。
+
+解题思路：如注释所示。关键点：（1）输入的数据有反向连接，所以输入一条链接后正反方向都要储存；（2）bfs 使用的 while，要预先建立一个队列，这个队列储存的就是一个水平内的信息（储存广度），这个水平走完了才走下一个水平。比如这张图：
+
+![img](https://espresso.codeforces.com/e5c07640680c837aec99126d94287872e69aa09a.png)
+
+
+
+3 个队列依次为：[1],[2,3],[4,5,6,7]，通过找队列中父节点的所有子节点方法找出下一水平的子节点。还要注意生成一个 visited 的 set 判断这个节点是不是已经走过了（比如已经算过了 2-1，就不能再算 1-2），这个 visited 也是用来看是不是已经走到终点的关键。Visited 要用 set（），不能用 list（），不然会超时！！！（记得很久之前的作业也有一道是用 list（）超时，改成 set（）就 AC 了）
+
+```python
+# https://codeforces.com/contest/580/problem/C
+# 带注解版。注意在CF提交时候，不能有中文注释。
+n,m = map(int,input().split())
+cat1 = list(map(int,input().split()))
+tree = {}
+cat2 = [0]*(n+1) #连续多少只猫
+cat2[1]=cat1[0] #要先把 1 这个点是否有猫记下来，后面的猫数以此为基础计算
+for i in range(n-1):
+    x,y = map(int,input().split())
+    if x in tree.keys():
+        tree[x].append(y)
+    else:
+        tree[x]=[y]
+    if y in tree.keys(): #输入的数据有反向连接（比如 test8 中有且仅有的一条连线“2 1”）
+        tree[y].append(x)
+    else:
+        tree[y]=[x] 
+queue = [1] #从 1 开始看它子节点
+restaurant = 0
+visited = set() #如果用 list 就会超时
+while queue!=[]:
+    a = queue.pop() #a 是父节点
+    visited.add(a)
+    if cat2[a]>m: #猫数太多了，该父节点连带的所有树枝都丢弃
+        continue
+    flag = 1
+    for i in tree[a]: #i 是子节点
+        if i not in visited: #表明这个节点没有走过
+            flag = 0
+            if cat1[i-1]==1:
+                cat2[i]=cat2[a]+1
+            queue.append(i)
+    if flag: #到达终点父节点时，它的子节点应该都走过了，flag 没有被标记为 0
+        restaurant+=1
+print(restaurant) 
+```
+
+
 
 
 
