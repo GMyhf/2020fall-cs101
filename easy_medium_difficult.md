@@ -12,7 +12,7 @@ Easy_Level1 -> Easy_Level2 -> Medium_Level1 -> Medium_Level2 -> Difficult_Level1
 
 # Easy_Level1
 
-Tags: math, number theory, strings
+Tags: brute force, math, number theory, strings
 
 OJ02733. 判断闰年, math
 
@@ -20,11 +20,13 @@ OJ02981. 大整数加法, math/strings
 
 OJ03143. 验证“哥德巴赫猜想”, math
 
+CF122A. Lucky Division, brute force, number theory, 1000
+
 
 
 # Easy_Level2
 
-Tags: brute force, greedy, implementation, matrices, math, strings 
+Tags: binary search, brute force, greedy, implementation, matrices, math, strings, sorting
 
 OJ02808. 校门外的树, implementation
 
@@ -41,6 +43,8 @@ OJ04110. 圣诞老人的礼物, greedy
 OJ18223. 24点, brute force
 
 OJ21532. 数学秘密, brute force
+
+CF492B. Vanya and Lanterns, binary search/implementation/math/sortings, 1200
 
 
 
@@ -76,6 +80,10 @@ OJ19942. 二维矩阵上的卷积运算, matrices
 
 OJ21554. 排队做实验, greedy
 
+CF313B. Ilya and Queries, dp/implementation, 1100
+
+CF545C. Woodcutters, dp/greedy, 1500
+
 
 
 # Medium_Level2
@@ -106,13 +114,17 @@ OJ18211. 军备竞赛, greedy/two pointers
 
 OJ23421. 小偷背包, dp
 
-CF230B. T-Primes, number theory/dp
+CF189A. Cut Ribbon, brute force/dp, 1300
+
+CF230B. T-Primes, binary search/implementation/math/number theory, 1300
+
+CF368B. Sereja and Suffixes, data structures/dp, 1100
 
 
 
 # Difficult_Level1
 
-Tags: binary search, dfs, dp, implementation, matrices, two pointers
+Tags: binary search, brute force, data structures, dfs, dp, implementation, matrices, two pointers
 
 OJ02698. 八皇后问题解输出, dfs
 
@@ -130,13 +142,15 @@ OJ16531. 上机考试, matrices
 
 OJ19948. 因材施教, greedy
 
-OJ21577 护林员盖房子, matrix/implementation
+OJ21577. 护林员盖房子, matrix/implementation
 
 OJ21608. 你和你比较熟悉的同学, bfs/dfs
 
-CF455A. Boredom, dp
+CF455A. Boredom, dp, 1500
 
-CF466C. Number of Ways, two pointers
+CF466C. Number of Ways, binary search/brute force/data structures/dp/two pointers, 1700
+
+CF1443C. The Delivery Dilemma, binary search/greedy/sortings, 1400
 
 
 
