@@ -6,7 +6,7 @@
 
 对我们cs101课程中涉及的题目，按照 Easy/Medium/Difficult 级别分类。
 
-Easy_Level1 -> Easy_Level2 -> Medium_Level1 -> Medium_Level2 -> Level1_difficult -> Level2_difficult
+Easy_Level1 -> Easy_Level2 -> Medium_Level1 -> Medium_Level2 -> Difficult_Level1 -> Difficult_Level2
 
 
 
@@ -14,11 +14,11 @@ Easy_Level1 -> Easy_Level2 -> Medium_Level1 -> Medium_Level2 -> Level1_difficult
 
 Tags: math, number theory, strings
 
-02733: 判断闰年, math
+OJ02733. 判断闰年, math
 
-02981: 大整数加法, math/strings
+OJ02981. 大整数加法, math/strings
 
-03143: 验证“哥德巴赫猜想”, math
+OJ03143. 验证“哥德巴赫猜想”, math
 
 
 
@@ -26,21 +26,21 @@ Tags: math, number theory, strings
 
 Tags: brute force, greedy, implementation, matrices, math, strings 
 
-02808: 校门外的树, implementation
+OJ02808. 校门外的树, implementation
 
-19943: 图的拉普拉斯矩阵, matrices
+OJ19943. 图的拉普拉斯矩阵, matrices
 
-19944: 这一天星期几, math
+OJ19944. 这一天星期几, math
 
-19949: 提取实体, strings
+OJ19949. 提取实体, strings
 
-03670: 计算鞍点, matrice
+OJ03670. 计算鞍点, matrice
 
-04110: 圣诞老人的礼物, greedy
+OJ04110. 圣诞老人的礼物, greedy
 
-18223: 24点, brute force
+OJ18223. 24点, brute force
 
-21532: 数学秘密, brute force
+OJ21532. 数学秘密, brute force
 
 
 
@@ -48,33 +48,33 @@ Tags: brute force, greedy, implementation, matrices, math, strings
 
 Tags: dp, greedy, implementation, matrices, physics, recursion, stack, strings
 
-01852: Ants, physics/greedy
+OJ01852. Ants, physics/greedy
 
-02694: 波兰表达式, recursion/strings/stack
+OJ02694. 波兰表达式, recursion/strings/stack
 
-02746: 约斯夫问题, implementation
+OJ02746. 约斯夫问题, implementation
 
-02757: 最长上升子序列, dp
+OJ02757. 最长上升子序列, dp
 
-02760: 数字三角形, dp
+OJ02760. 数字三角形, dp
 
-02806: 公共子序列, dp
+OJ02806. 公共子序列, dp
 
-03087: 邮箱验证, strings
+OJ03087. 邮箱验证, strings
 
-03532: 最大上升子序列和, dp
+OJ03532. 最大上升子序列和, dp
 
-12558: 岛屿周长, matrice
+OJ12558. 岛屿周长, matrice
 
-12560: 生存游戏, matrices
+OJ12560. 生存游戏, matrices
 
-18106: 螺旋矩阵, matrice
+OJ18106. 螺旋矩阵, matrice
 
-18161: 矩阵运算, matrices
+OJ18161. 矩阵运算, matrices
 
-19942: 二维矩阵上的卷积运算, matrices
+OJ19942. 二维矩阵上的卷积运算, matrices
 
-21554: 排队做实验, greedy
+OJ21554. 排队做实验, greedy
 
 
 
@@ -82,29 +82,29 @@ Tags: dp, greedy, implementation, matrices, physics, recursion, stack, strings
 
 Tags: dfs, dict, dp, greedy, implementation, number theory, stack , strings, two pointers
 
-01017: 装箱问题, greedy
+OJ01017. 装箱问题, greedy
 
-02773: 采药, dp
+OJ02773. 采药, dp
 
-03704: 括号匹配, stack
+OJ03704. 括号匹配, stack
 
-05585: 晶矿的个数, dfs
+OJ05585. 晶矿的个数, dfs
 
-12559: 最大最小整数, strings
+OJ12559. 最大最小整数, strings
 
-12757: 阿尔法星人翻译官, implementation
+OJ12757. 阿尔法星人翻译官, implementation
 
-16528: 充实的寒假生活, greedy
+OJ16528. 充实的寒假生活, greedy
 
-18108: 池塘数目, dfs
+OJ18108. 池塘数目, dfs
 
-18182: 打怪兽, dict
+OJ18182. 打怪兽, dict
 
-18160: 最大连通域面积, dfs
+OJ18160. 最大连通域面积, dfs
 
-18211: 军备竞赛, greedy/two pointers
+OJ18211. 军备竞赛, greedy/two pointers
 
-23421: 小偷背包, dp
+OJ23421. 小偷背包, dp
 
 CF230B. T-Primes, number theory/dp
 
@@ -114,25 +114,25 @@ CF230B. T-Primes, number theory/dp
 
 Tags: binary search, dfs, dp, implementation, matrices, two pointers
 
-02698: 八皇后问题解输出, dfs
+OJ02698. 八皇后问题解输出, dfs
 
-02754: 八皇后, dfs
+OJ02754. 八皇后, dfs
 
-02995: 登山, dp
+OJ02995. 登山, dp
 
-04123: 马走日, dfs
+OJ04123. 马走日, dfs
 
-04135: 月度开销, binary search
+OJ04135. 月度开销, binary search
 
-08210: 河中跳房子, binary search
+OJ08210. 河中跳房子, binary search
 
-16531: 上机考试, matrices
+OJ16531. 上机考试, matrices
 
-19948: 因材施教, greedy
+OJ19948. 因材施教, greedy
 
-21577: 护林员盖房子, matrix/implementation
+OJ21577 护林员盖房子, matrix/implementation
 
-21608: 你和你比较熟悉的同学, bfs/dfs
+OJ21608. 你和你比较熟悉的同学, bfs/dfs
 
 CF455A. Boredom, dp
 
@@ -144,14 +144,14 @@ CF466C. Number of Ways, two pointers
 
 Tags: bfs, dfs, dp, graph, greedy , tree
 
-01661: Help Jimmy, dfs/dp
+OJ01661. Help Jimmy, dfs/dp
 
-01088: 滑雪, dfs/dp
+OJ01088. 滑雪, dfs/dp
 
-02287: Tian Ji -- The Horse Racing, greedy
+OJ02287. Tian Ji -- The Horse Racing, greedy
 
-04129: 变换的迷宫, bfs
+OJ04129. 变换的迷宫, bfs
 
-18164: 剪绳子, greedy
+OJ18164. 剪绳子, greedy
 
-CF580C: Kefa and Park, bfs/dfs
+CF580C. Kefa and Park, bfs/dfs
