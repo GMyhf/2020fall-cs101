@@ -4,7 +4,9 @@
 
 # Problems in Codeforces.com
 
-2021 fall updated
+Updated 0018 GMT+8 May 23, 2022
+
+
 
 2020 fall, Complied by Hongfei Yan
 
@@ -2305,7 +2307,7 @@ The leaf vertices of the park contain restaurants. Kefa wants to choose a restau
 
 Your task is to help Kefa count the number of restaurants where he can go.
 
-Input
+**Input**
 
 The first line contains two integers, *n* and *m* (2 ≤ *n* ≤ 10^5^, 1 ≤ *m* ≤ *n*) — the number of vertices of the tree and the maximum number of consecutive vertices with cats that is still ok for Kefa.
 
@@ -2315,7 +2317,7 @@ Next *n* - 1 lines contains the edges of the tree in the format "x~i~ y~i~" 
 
 It is guaranteed that the given set of edges specifies a tree.
 
-Output
+**Output**
 
 A single integer — the number of distinct leaves of a tree the path to which from Kefa's home contains at most *m* consecutive vertices with cats.
 
