@@ -4399,9 +4399,9 @@ output
 
 Note
 
-In the first example, one of possible optimal solutions is to insert value x=3x=3 before a1a1, so program will be [3,4,6,7][3,4,6,7] and time of lamp being lit equals (3−0)+(6−4)+(10−7)=8(3−0)+(6−4)+(10−7)=8. Other possible solution is to insert x=5x=5 in appropriate place.
+In the first example, one of possible optimal solutions is to insert value x=3x=3 before a1a1, so program will be 3,4,6,7 and time of lamp being lit equals (3−0)+(6−4)+(10−7)=8(3−0)+(6−4)+(10−7)=8. Other possible solution is to insert x=5x=5 in appropriate place.
 
-In the second example, there is only one optimal solution: to insert x=2x=2 between a1a1 and a2a2. Program will become [1,2,10][1,2,10], and answer will be (1−0)+(10−2)=9(1−0)+(10−2)=9.
+In the second example, there is only one optimal solution: to insert x=2x=2 between a1a1 and a2a2. Program will become 1,2,10, and answer will be (1−0)+(10−2)=9(1−0)+(10−2)=9.
 
 In the third example, optimal answer is to leave program untouched, so answer will be (3−0)+(7−4)=6(3−0)+(7−4)=6.
 
