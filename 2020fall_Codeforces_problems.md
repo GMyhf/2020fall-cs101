@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 1648 GMT+8 May 29, 2022
+Updated 1937 GMT+8 May 29, 2022
 
 
 
@@ -741,7 +741,7 @@ If you want more formal information about the lexicographical order (also known 
 
 
 
-按字典方式排序，不考虑大小写。一个个字母比即可
+按字典方式排序，不考虑大小写。一个个字母比即可。
 
 ```python
 s1 = input().lower()
@@ -762,7 +762,7 @@ if num == len(s1):
 
 
 
-可以直接比较字符串的大小，不用一个一个比较（比较字符串大小本来就是一个一个比较的，这样代码会比较简） ）（来自江雨翔
+可以直接比较字符串的大小，不用一个一个比较（比较字符串大小本来就是一个一个比较的，这样代码会比较简） （来自江雨翔）
 
 ```python
 line1 = input()
@@ -783,6 +783,8 @@ print((a>b)-(a<b))
 ```
 
 ==()表 判断，返回布尔值，加减运算 True是 1 False是 0==
+
+
 
 ## 263A. Beautiful Matrix
 
@@ -1442,6 +1444,8 @@ else:
         print('NO')
 ```
 
+
+
 ## 25A. IQ test
 
 brute force, 1300, http://codeforces.com/problemset/problem/25/A
@@ -1665,6 +1669,8 @@ n = int(input())
 print('NO' if all([n%i for i in (4,7,47,74,447,474,477,747,774)]) else 'YES')
 ```
 
+
+
 ## 723A. The New Year: Meeting Friends
 
 implementation, math, sorting, 800, https://codeforces.com/problemset/problem/723/A
@@ -1718,6 +1724,8 @@ x = list(map(int, input().split()))
 x.sort()
 print(x[-1] - x[0])
 ```
+
+
 
 ## 705A. Hulk
 
@@ -1867,8 +1875,6 @@ print(str)
 
 
 
-
-
 ## 200B. Drinks
 
 implementation, math, 800, https://codeforces.com/problemset/problem/200/B
@@ -1926,6 +1932,8 @@ n=int(input())
 p = list(map(int,input().split()))
 print(sum(p)/n)
 ```
+
+
 
 ## 492B. Vanya and Lanterns
 
@@ -2104,6 +2112,8 @@ else:
     print(0)
 ```
 
+
+
 ## 456A. Laptops
 
 sortings, 1100, https://codeforces.com/problemset/problem/456/A
@@ -2165,7 +2175,7 @@ else:
 
 ## 1425A. Arena of Greed
 
-games, greedy, 1400, https://codeforces.com/problemset/problem/1425/A
+games/greedy, 1400, https://codeforces.com/problemset/problem/1425/A
 
 Lately, Mr. Chanek frequently plays the game **Arena of Greed**. As the name implies, the game's goal is to find the greediest of them all, who will then be crowned king of Compfestnesia.
 
@@ -2218,6 +2228,62 @@ For the second case, the game is as follows:
 2. The opponent takes one coin.
 3. Mr. Chanek takes one coin.
 4. The opponent takes one coin.
+
+
+
+思路：为了获取最多的石子数量：
+
+1. 数量为奇数时：只能取1个，然后对手进入情况2，我们只能取剩下的；
+2. 数量为偶数时：为了尽可能最大化所能取的石子数量，我们尽可能使得对手只能取1个，即使得对手取时数量为奇数；同时使得我们取石子时数量为偶数。
+   为了实现这个情况，判断一下当前石子数量的一半是否为奇数，如果是，我们就取一半；如果不是，我们就取一个，对应的，对手也只能取一个，之后所得到的偶数的一般必然是个奇数。证明略。
+3. 此外1和4是特殊情况，需要特判一下。
+
+
+
+PyPy 3 AC. Python 3 Time limit exceeded on Test2.
+
+```python
+#input=__import__('sys').stdin.readline
+ans = []
+def solve(n):
+    
+    f = s = 0 # To distinguish between first and second hands.
+    fs = True
+    
+    if n & 1:
+        n -= 1
+        fs = False
+        
+    while n:
+        if n == 4:
+            f += 3
+            s += 1
+            n = 0   # Specia lJudge
+        elif (n//2) & 1: # The First Situation
+            f += n//2
+            s += 1
+            n = (n//2) - 1;
+        else:                   #The Second Situation
+            f += 1
+            s += 1
+            n -= 2
+    #print( [s+1, f][fs] )
+    ans.append( [s+1, f][fs] )
+ 
+ 
+coins = []
+for _ in range(int(input())):
+    coins.append(int(input()))
+ 
+for i in coins:
+    if i==1:
+        ans.append(1)
+        #print(1)
+    else:
+        solve(i)
+ 
+print('\n'.join(map(str, ans)))
+```
 
 
 
@@ -3254,124 +3320,6 @@ for i in range(q):
 
 
 
-
-
-## 1425A. Arena of Greed
-
-games/greedy, 1400, https://codeforces.com/problemset/problem/1425/A
-
-Lately, Mr. Chanek frequently plays the game **Arena of Greed**. As the name implies, the game's goal is to find the greediest of them all, who will then be crowned king of Compfestnesia.
-
-The game is played by two people taking turns, where Mr. Chanek takes the first turn. Initially, there is a treasure chest containing N gold coins. The game ends if there are no more gold coins in the chest. In each turn, the players can make one of the following moves:
-
-- Take one gold coin from the chest.
-- Take half of the gold coins on the chest. This move is only available if the number of coins in the chest is even.
-
-Both players will try to maximize the number of coins they have. Mr. Chanek asks your help to find the maximum number of coins he can get at the end of the game if both he and the opponent plays optimally.
-
-**Input**
-
-The first line contains a single integer T (1≤T≤10^5^) denotes the number of test cases.
-
-The next T lines each contain a single integer N (1≤N≤10^18^).
-
-**Output**
-
-T lines, each line is the answer requested by Mr. Chanek.
-
-Example
-
-input
-
-```
-2
-5
-6
-```
-
-output
-
-```
-2
-4
-```
-
-Note
-
-For the first case, the game is as follows:
-
-1. Mr. Chanek takes one coin.
-2. The opponent takes two coins.
-3. Mr. Chanek takes one coin.
-4. The opponent takes one coin.
-
-For the second case, the game is as follows:
-
-1. Mr. Chanek takes three coins.
-2. The opponent takes one coin.
-3. Mr. Chanek takes one coin.
-4. The opponent takes one coin.
-
-
-
-思路：为了获取最多的石子数量：
-
-1. 数量为奇数时：只能取1个，然后对手进入情况2，我们只能取剩下的；
-2. 数量为偶数时：为了尽可能最大化所能取的石子数量，我们尽可能使得对手只能取1个，即使得对手取时数量为奇数；同时使得我们取石子时数量为偶数。
-为了实现这个情况，判断一下当前石子数量的一半是否为奇数，如果是，我们就取一半；如果不是，我们就取一个，对应的，对手也只能取一个，之后所得到的偶数的一般必然是个奇数。证明略。
-3. 此外1和4是特殊情况，需要特判一下。
-
-
-
-PyPy 3 AC. Python 3 Time limit exceeded on Test2.
-
-```python
-#input=__import__('sys').stdin.readline
-ans = []
-def solve(n):
-    
-    f = s = 0 # To distinguish between first and second hands.
-    fs = True
-    
-    if n & 1:
-        n -= 1
-        fs = False
-        
-    while n:
-        if n == 4:
-            f += 3
-            s += 1
-            n = 0   # Specia lJudge
-        elif (n//2) & 1: # The First Situation
-            f += n//2
-            s += 1
-            n = (n//2) - 1;
-        else:                   #The Second Situation
-            f += 1
-            s += 1
-            n -= 2
-    #print( [s+1, f][fs] )
-    ans.append( [s+1, f][fs] )
- 
- 
-coins = []
-for _ in range(int(input())):
-    coins.append(int(input()))
- 
-for i in coins:
-    if i==1:
-        ans.append(1)
-        #print(1)
-    else:
-        solve(i)
- 
-print('\n'.join(map(str, ans)))
-```
-
-
-
-
-
 ## 1443C. The Delivery Dilemma
 
 binary search/greedy/sortings, 1400, https://codeforces.com/problemset/problem/1443/C
@@ -3438,13 +3386,13 @@ output
 
 > 【张聪，2020年秋】由于 delivery是并行的，pick 是串行的，很自然地想到 delivery 应该优先。所以构建二维数组并对其根据 delivery 时间排序，然后用 greedy 算法思想，找到最小的并行时间，要求其能够覆盖delivery 时间更长的 dish 的串行时间之和。
 >
-> 【施惟明，2020年秋】1）听闻此题 tle主要来源于读入数据的耗时，便考虑采用空间换时间的策略，先一波读入所有数据，再进行处理。2）处理部分仍然是 greedy，尽量自己取耗时长的外卖，当自己取的时长和外卖送到的最慢时长相等时为最佳。复杂度 O(nlogn)（上一次好像忘记考虑 sort的复杂度了...）。
+> 【施惟明，2020年秋】1）听闻此题 TLE 主要来源于读入数据的耗时，便考虑采用空间换时间的策略，先一波读入所有数据，再进行处理。2）处理部分仍然是 greedy，尽量自己取耗时长的外卖，当自己取的时长和外卖送到的最慢时长相等时为最佳。复杂度 O(nlogn)（上一次好像忘记考虑 sort 的复杂度了...）。
 >
-> 【成泽凯，2020年秋】首先将每个菜的配送用时a~i~和自取用时b~i~配对，然后按配送用时a~i~降序排。因为配送时每个餐馆同时送，所以实际上配送用时短的会被配送用时长的覆盖掉。从前向后遍历，并求自取用时的前缀和sum[j]，当自取用时的前缀和比配送用时a~j~大。
+> 【成泽凯，2020年秋】首先将每个菜的配送用时a~i~和自取用时b~i~配对，然后按配送用时a~i~降序排。因为配送时每个餐馆同时送，所以实际上配送用时短的会被配送用时长的覆盖掉。从前向后遍历，并求自取用时的前缀和 sum[j]，当自取用时的前缀和比配送用时 a~j~ 大。
 >
-> （某同学感谢：由于Test9有 200000个输入，所以一个一个输出处理会超时，经施惟明，成泽恺等同学提醒后，修改了Python代码，使得只输出一次，成功 ac 了。）
+> （某同学感谢：由于 Test9 有 200000 个输入，所以一个一个输出处理会超时，经施惟明，成泽恺等同学提醒后，修改了Python代码，使得只输出一次，成功 AC 了。）
 >
-> 【王君宇，2020年秋】当我写完高数作业看群，群里的大佬说 python常规方法可以 AC！！我们平时做这种多组 test问题都是直接循环每次 print，但是也可以将每次结果存到一个列表中，最后一起print，这样能大大加快速度。确实我对于 python中各个函数的运行速度还不够了解，这道题锻炼了我的程序思维，更让我加深了对 print函数的理解。当我看到自己的代码 AC的那一刻，这个下午的失败值得了！！！
+> 【王君宇，2020年秋】当我写完高数作业看群，群里的大佬说 python常规方法可以 AC ！！我们平时做这种多组 test问题都是直接循环每次 print，但是也可以将每次结果存到一个列表中，最后一起 print，这样能大大加快速度。确实我对于 python 中各个函数的运行速度还不够了解，这道题锻炼了我的程序思维，更让我加深了对 print 函数的理解。当我看到自己的代码 AC 的那一刻，这个下午的失败值得了！！！
 
 ```python
 n = int(input())
@@ -4479,8 +4427,6 @@ print(ans)
 
 
 
-
-
 ## 1374B. Multiply by 2, divide by 6
 
 math, 900, http://codeforces.com/problemset/problem/1374/B
@@ -4566,9 +4512,9 @@ for _ in range(int(input())):
 
 
 
-2020fall-cs101-顾臻宜的解题思路：只要𝑛=2^x^3^y^且𝑦≥𝑥,𝑥,𝑦∈𝑁即可，且最多进行2𝑙𝑜𝑔~3~𝑛步。
+2020fall-cs101-顾臻宜的解题思路：只要 $𝑛=2^x 3^y$ 且 $𝑦≥𝑥,\ 𝑥,𝑦∈𝑁$ 即可，且最多进行 $2𝑙𝑜𝑔_3 𝑛$ 步。
 
-小知识：import math之后math.log（真数N，底数a）就是𝑙𝑜𝑔~a~𝑁。
+小知识：import math之后math.log（真数N，底数a）就是 $𝑙𝑜𝑔_a 𝑁$。
 
 ```python
 import math
@@ -4667,6 +4613,8 @@ Note
 The given test has three numbers. The first number 4 has exactly three divisors — 1, 2 and 4, thus the answer for this number is "YES". The second number 5 has two divisors (1 and 5), and the third number 6 has four divisors (1, 2, 3, 6), hence the answer for them is "NO".
 
 
+
+这个题目实际上是DP思路。
 
 数论是有趣和优美的数学分支。欧几里得对于素数无穷性的证明在今天看来仍和两千年前一样清晰和优雅。长久以来，计算机都被用来辅助数论研究，有很多精妙的算法能够帮上忙。
 
@@ -4880,7 +4828,7 @@ for i in range(n):
 
 ## 1221A. 2048 Game
 
-brute force/greedy/math, 1000, x11647, http://codeforces.com/problemset/problem/1221/A
+brute force/greedy/math, 1000, http://codeforces.com/problemset/problem/1221/A
 
 You are playing a variation of game 2048. Initially you have a multiset s of n integers. Every integer in this multiset is a power of two.
 
@@ -4949,7 +4897,9 @@ In the second query s contains 2048 initially.
 
 
 
-这个题目特别契合我们课程的教学目的——锻炼计算思维。2）计算思维包括 数学思维 和 计算机思维。3）CF1221A可以一题两做，数学思维是不大于2048项求和，判断是否能不小于2048。2021fall-cs101 黄钧霆 同学思路：把这些数看成二进制数，累加过程是进位，而且不会跳过2048。计算机思维。2021fall-cs101 张凌睿 同学思路：排序不大于2048项降序排，用2048逐个减，判断是否可以减到0.
+这个题目特别契合我们课程的教学目的——锻炼计算思维。计算思维包括 数学思维 和 计算机思维。
+
+CF1221A 可以一题两做。数学思维是不大于2048项求和，判断是否能不小于2048。计算机思维是：1）2021fall-cs101 黄钧霆 同学思路：把这些数看成二进制数，累加过程是进位，而且不会跳过2048。2）2021fall-cs101 张凌睿 同学思路：排序不大于2048项降序排，用2048逐个减，判断是否可以减到0.
 
 
 
@@ -5028,7 +4978,7 @@ for i in range(0, q):
 
 ## 1427B. Chess Cheater
 
-greedy/implementation/sortings, 1400, x5683, https://codeforces.com/problemset/problem/1427/B
+greedy/implementation/sortings, 1400, https://codeforces.com/problemset/problem/1427/B
 
 You like playing chess tournaments online.
 
@@ -5119,7 +5069,7 @@ An optimal way to cheat is to change the outcomes of the first, second, third an
 
 \[2⋅（k +＃\{wins\}）−＃\{winning\_streaks\} +＃\{gaps\_we\_can\_fill\}\]
 
-解决方案的复杂度为 \(O(log(n))\)。
+解决方案的复杂度为 $O(log(n))$。
 
 
 
