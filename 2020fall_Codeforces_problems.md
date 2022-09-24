@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 2207 GMT+8 May 29, 2022
+Updated 2246 GMT+8 Sep 24, 2022
 
 
 
@@ -678,6 +678,37 @@ print(sum('+'in f() or -1 for i in range(int(f()))))
 
 
 
+C++，陆宸
+
+```c++
+#include <iostream>
+#include <cstring>
+using namespace std;
+int main (){
+        short n;
+        int x = 0;
+        cin >> n;
+        string a[n];
+        for (short i = 0; i < n; i++){
+                a[i] = "0";
+        }
+        for (short j = 0; j < n; j++){
+                cin >> a[j];
+        }
+        for (short w = 0; w < n; w++){
+                if (a[w] == "++X" || a[w] == "X++"){
+                        x++;
+                }else{
+                        x--;
+                }
+        }
+        cout << x;
+        return 0;
+}
+```
+
+
+
 ## 112A. Petya and Strings
 
 implementation/strings, 800, http://codeforces.com/problemset/problem/112/A
@@ -783,6 +814,44 @@ print((a>b)-(a<b))
 ```
 
 ==()表 判断，返回布尔值，加减运算 True是 1 False是 0==
+
+
+
+C++，陆宸
+
+```c++
+#include <iostream>
+#include <cstring>
+using namespace std;
+int main (){
+        string str1, str2;
+        int len;
+        int cnt1, cnt2;
+        cnt1 = 0;
+        cnt2 = 0;
+        cin >> str1 >> str2;
+        len = str1.size();
+        for (int i = 0; i < len; i++){
+                if (str1[i] < 97){
+                        str1[i] += 32;
+                }
+                if (str2[i] < 97){
+                        str2[i] += 32;
+                }
+                if (str1[i] > str2[i]){
+                        cout << 1;
+                        break;
+                }else if (str1[i] < str2[i]){
+                        cout << -1;
+                        break;
+                }else if (str1[i] == str2[i] && i == len - 1){
+                        cout << 0;
+                        break;
+                }
+        }
+        return 0;
+}
+```
 
 
 
@@ -935,6 +1004,40 @@ for i in l:
 
 
 
+C++，陆宸
+
+```c++
+#include <iostream>
+#include <cmath>
+using namespace std;
+int main (){
+        int x[5][5];
+        int r, c;
+        for (int i = 0; i < 5; i++){
+                for (int j = 0; j < 5; j++){
+                        x[i][j] = 0;
+                }
+        }
+        for (int w = 0; w < 5; w++){
+                for (int t = 0; t < 5; t++){
+                        cin >> x[w][t];
+                }
+        }
+        for (int a = 0; a < 5; a++){
+                for (int b = 0; b < 5; b++){
+                        if (x[a][b] != 0){
+                                r = a;
+                                c = b;
+                        }
+                }
+        }
+        cout << abs (r-2) + abs (c-2);
+        return 0;
+}
+```
+
+
+
 ## 339A. Helpful Maths
 
 greedy/implementation/sortings/strings, 800, http://codeforces.com/problemset/problem/339/A
@@ -1015,6 +1118,37 @@ s = [int(n) for n in input().split('+')]
 s.sort()
 
 print('+'.join(str(i) for i in s))
+```
+
+
+
+C++，陆宸
+
+```c++
+#include <iostream>
+#include <cstring>
+#include <vector>
+#include <algorithm>
+using namespace std;
+int main (){
+        string str;
+        int len;
+        int a;
+        cin >> str;
+        len = str.size();
+        a = (len + 1)/2;
+
+        vector<int> num(a, 0);
+        for (int i = 0; i < len; i+= 2){
+                num[i/2] = str[i]-48;
+        }
+        sort (num.begin(), num.end());
+        for (int j = 0; j < a - 1; j++){
+                cout << num[j] << "+";
+        }
+        cout << num[a-1];
+        return 0;
+}
 ```
 
 
