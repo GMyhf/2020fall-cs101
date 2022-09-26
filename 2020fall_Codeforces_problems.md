@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 1645 GMT+8 Sep 26, 2022
+Updated 2252 GMT+8 Sep 26, 2022
 
 
 
@@ -576,6 +576,22 @@ output
 
 ```
 4
+```
+
+
+
+2022fall-cs101，杨文可，哲学系。
+
+首先竖着铺。如果n是偶数，就完成了。如果n是奇数，再在剩下来的一行里面横着铺。
+
+```python
+m, n = map(int, input().split())  
+ 
+num = n // 2 * m  
+if n % 2 != 0:  
+    num += m // 2  
+ 
+print(num)
 ```
 
 
