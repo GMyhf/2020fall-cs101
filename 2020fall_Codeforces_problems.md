@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 2246 GMT+8 Sep 24, 2022
+Updated 1645 GMT+8 Sep 26, 2022
 
 
 
@@ -2303,7 +2303,73 @@ else:
 
 
 
+
+
 # ==OPTIONAL PROBLEMS==
+
+## 158B. Taxi
+
+*special problem/greedy/mplementation, 1100, https://codeforces.com/problemset/problem/158/B
+
+
+After the lessons *n* groups of schoolchildren went outside and decided to visit Polycarpus to celebrate his birthday. We know that the *i*-th group consists of s~i~ friends (1 ≤ s~i~ ≤ 4), and they want to go to Polycarpus together. They decided to get there by taxi. Each car can carry at most four passengers. What minimum number of cars will the children need if all members of each group should ride in the same taxi (but one taxi can take more than one group)?
+
+**Input**
+
+The first line contains integer *n* (1 ≤ *n* ≤ 10^5^) — the number of groups of schoolchildren. The second line contains a sequence of integers $s_1, s_2, ..., s_n (1 ≤ s_i ≤ 4)$. The integers are separated by a space, s~i~ is the number of children in the *i*-th group.
+
+**Output**
+
+Print the single number — the minimum number of taxis necessary to drive all children to Polycarpus.
+
+Examples
+
+input
+
+```
+5
+1 2 4 3 3
+```
+
+output
+
+```
+4
+```
+
+input
+
+```
+8
+2 3 4 4 2 1 3 1
+```
+
+output
+
+```
+5
+```
+
+Note
+
+In the first test we can sort the children into four cars like this:
+
+- the third group (consisting of four children), 
+- the fourth group (consisting of three children), 
+- the fifth group (consisting of three children), 
+- the first and the second group (consisting of one and two children, correspondingly). 
+
+There are other ways to sort the groups into four cars.
+
+
+
+```python
+input()
+ 
+a,b,c,d=map(input().count,('1','2','3','4'))
+ 
+print(d+c+(b*2+max(0,a-c)+3)//4)
+```
 
 
 
@@ -5308,6 +5374,105 @@ for _ in range(int(input())):
         winning_steaks_cnt -= 1
 
     print(2*wins - winning_steaks_cnt)
+```
+
+
+
+## 1529C. Jumping on Tiles
+
+constructive algorithms/strings, 1100, https://codeforces.com/problemset/problem/1529/C
+
+Polycarp was given a row of tiles. Each tile contains one lowercase letter of the Latin alphabet. The entire sequence of tiles forms the string 𝑠s.
+
+In other words, you are given a string 𝑠s consisting of lowercase Latin letters.
+
+Initially, Polycarp is on the **first** tile of the row and wants to get to the **last** tile by jumping on the tiles. Jumping from 𝑖i-th tile to 𝑗j-th tile has a cost equal to $|𝑖𝑛𝑑𝑒𝑥(𝑠_𝑖)−𝑖𝑛𝑑𝑒𝑥(𝑠_𝑗)|$, where 𝑖𝑛𝑑𝑒𝑥(𝑐) is the index of the letter 𝑐c in the alphabet (for example, 𝑖𝑛𝑑𝑒𝑥('a')=1, 𝑖𝑛𝑑𝑒𝑥('b')=2, ..., 𝑖𝑛𝑑𝑒𝑥('z')=26) .
+
+Polycarp wants to get to the 𝑛n-th tile for the minimum total cost, but at the same time make **maximum** number of jumps.
+
+In other words, among all possible ways to get to the last tile for the **minimum** total cost, he will choose the one with the **maximum**number of jumps.
+
+Polycarp can visit each tile **at most once**.
+
+Polycarp asks you to help — print the sequence of indices of string 𝑠s on which he should jump.
+
+Input
+
+The first line of the input contains an integer $𝑡 (1≤𝑡≤10^4)$ — the number of test cases in the test.
+
+Each test case is given by the string $𝑠 (2≤|𝑠|≤2⋅10^5)$, where |𝑠|— is the length of string 𝑠. The string 𝑠 consists of lowercase Latin letters.
+
+It is guaranteed that the sum of string lengths 𝑠 over all test cases does not exceed 2⋅10^5^.
+
+Output
+
+The answer to each test case consists of two lines.
+
+In the first line print two integers 𝑐𝑜𝑠𝑡, 𝑚, where 𝑐𝑜𝑠𝑡 is the minimum total cost of the path, and 𝑚 is the maximum number of visited tiles Polycarp can make to get to 𝑛n-th tiles for the minimum total cost 𝑐𝑜𝑠𝑡 (i.e. the number of jumps is 𝑚−1).
+
+In the next line print 𝑚 different numbers $𝑗_1,𝑗_2,…,𝑗_𝑚 (1≤𝑗_𝑖≤|𝑠|) $— the sequence of indices of the tiles Polycarp will jump on. The first number in the sequence must be 1 (that is, 𝑗~1~=1) and the last number must be the value of |𝑠| (that is, 𝑗~𝑚~=|𝑠|).
+
+If there are multiple answers, print any of them.
+
+Example
+
+**input**
+
+```
+6
+logic
+codeforces
+bca
+aaaaaaaaaaa
+adbaadabad
+to
+```
+
+**output**
+
+```
+9 4
+1 4 3 5
+16 10
+1 8 3 4 9 5 2 6 7 10
+1 2
+1 3
+0 11
+1 8 10 4 3 5 7 2 9 6 11
+3 10
+1 9 5 4 7 3 8 6 2 10
+5 2
+1 2
+```
+
+Note
+
+In the first test case, the required path corresponds to the picture:
+
+![img](https://tva1.sinaimg.cn/large/e6c9d24ely1h6jsrynn9rj206a03iq2v.jpg)
+
+In this case, the minimum possible total cost of the path is achieved. Since 𝑖𝑛𝑑𝑒𝑥('l')=12, 𝑖𝑛𝑑𝑒𝑥('o')=15, 𝑖𝑛𝑑𝑒𝑥('g')=7, 𝑖𝑛𝑑𝑒𝑥('i')=9, 𝑖𝑛𝑑𝑒𝑥('c')=3, then the total cost of the path is |12−9|+|9−7|+|7−3|=3+2+4=9.
+
+
+
+```python
+for _ in range(int(input())):
+    s = input()
+    n=len(s)
+    a=[]
+    l, h = ord(s[0])-96, ord(s[-1])-96
+    for i in range(1, n-1):
+        a.append([ord(s[i])-96, i+1])
+    a.sort()
+    if l>h:a.reverse()
+    res=[1]
+    low, high = min(l, h), max(l, h)
+    for v in a:
+        if low<=v[0]<=high:
+            res.append(v[1])
+    res.append(n)
+    print(high-low, len(res))
+    print(*res)
 ```
 
 
