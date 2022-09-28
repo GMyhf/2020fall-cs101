@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 2252 GMT+8 Sep 26, 2022
+Updated 1527 GMT+8 Sep 28, 2022
 
 
 
@@ -1216,6 +1216,19 @@ Konjac
 ```python
 line = input()
 print(line[0].upper() + line[1:])
+```
+
+
+
+练习ASCII的转化
+
+```python
+a = input()
+b = ord(a[0])
+if b >= 97:
+    b -= 32
+print (chr(b),end = '')
+print(a[1:])
 ```
 
 
