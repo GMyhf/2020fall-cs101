@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 1527 GMT+8 Sep 28, 2022
+Updated 2315 GMT+8 Sep 29, 2022
 
 
 
@@ -526,6 +526,20 @@ short code
 
 ```python
 print(''.join('.'+l for l in input().lower() if l not in 'aeiouy'))
+```
+
+
+
+C++
+
+```c++
+#include <bits/stdc++.h>
+char a[]="aoyeui",c;
+int main(){
+        while(std::cin>>c)
+                if(!strchr(a,c|=32))
+                        std::cout<<'.'<<c;
+}
 ```
 
 
@@ -1233,6 +1247,27 @@ print(a[1:])
 
 
 
+C++
+
+```c++
+#include <iostream>
+#include <cstring>
+using namespace std;
+int main(){
+        string a;
+        cin >> a;
+        if (a[0] <= 90){
+                cout << a;
+        }else{
+                a[0] -= 32;
+                cout << a;
+        }
+        return 0;
+}
+```
+
+
+
 ## 266A. Stones on the Table
 
 implementation, 800, http://codeforces.com/problemset/problem/266/A
@@ -1540,6 +1575,21 @@ else:
 update Method:
 
 This method is used to return the union of a set and the set of elements from one or more iterable like string, list, set. It is very similar to **union()** method, with difference is that where union() method create and return a new set, containing all the elements ( distinct ) present in all the iterables, update() method updates the set on which this method is called with all the distinct elements present in all the iterables.
+
+
+
+C++
+
+```c++
+#include <bits/stdc++.h>
+using namespace std;
+int main(){
+        set<char> s; char c;
+        while(cin>>c)
+                s.insert(c);
+        cout<<(s.size()&1?"IGNORE HIM!":"CHAT WITH HER!");
+}
+```
 
 
 
