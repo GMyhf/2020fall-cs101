@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 2315 GMT+8 Sep 29, 2022
+Updated 1340 GMT+8 Oct 4, 2022
 
 
 
@@ -809,10 +809,10 @@ s1 = input().lower()
 s2 = input().lower()
 num = 0
 for i in range(len(s1)):
-	if ord(s1[i])<ord(s2[i]):
+	if ord(s1[i]) < ord(s2[i]):
 		print('-1')
 		break
-	elif ord(s1[i])>ord(s2[i]):
+	elif ord(s1[i]) > ord(s2[i]):
 		print('1')
 		break
 	else:
@@ -840,7 +840,7 @@ short code
 
 ```python
 i=input;a=i().lower();b=i().lower()
-print((a>b)-(a<b))
+print((a>b) - (a<b))
 ```
 
 ==()表 判断，返回布尔值，加减运算 True是 1 False是 0==
