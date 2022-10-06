@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 1626 GMT+8 Oct 6, 2022
+Updated 0044 GMT+8 Oct 7, 2022
 
 
 
@@ -455,6 +455,20 @@ if x==y==z==0:
         print('YES')
 else:
         print('NO')
+```
+
+
+
+```python
+n = int(input())
+suma = [0]*3
+for i in range(n):
+    s = list(map(int,input().split()))
+    suma = list(map(lambda x, y: x + y, s, suma))
+if suma == [0,0,0]:
+    print('YES')
+else:
+    print('NO')
 ```
 
 
