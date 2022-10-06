@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 1132 GMT+8 Oct 6, 2022
+Updated 1626 GMT+8 Oct 6, 2022
 
 
 
@@ -1148,6 +1148,23 @@ for i in range(1,fq[stop_value]+1):
                 break
  
 print(n_coin)
+```
+
+
+
+```python
+n = int(input())
+a = list(map(int, input().split()))
+a.sort(reverse=True)
+b = 0
+c = sum(a)
+k = 0
+for i in a:
+    b += i
+    k += 1
+    if b > c/2:
+        break
+print(k)
 ```
 
 
