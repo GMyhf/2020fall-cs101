@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 1340 GMT+8 Oct 4, 2022
+Updated 1132 GMT+8 Oct 6, 2022
 
 
 
@@ -25,6 +25,61 @@ http://codeforces.com/problemset/status/580/problem/C
 # ==Basic Programming Exercises==
 
 #. title, algorithm, ==difficulty==, link
+
+
+
+## 1A. Theatre Square
+
+math, 1000, http://codeforces.com/problemset/problem/1/A
+
+Theatre Square in the capital city of Berland has a rectangular shape with the size *n* × *m* meters. On the occasion of the city's anniversary, a decision was taken to pave the Square with square granite flagstones. Each flagstone is of the size *a* × *a*.
+
+What is the least number of flagstones needed to pave the Square? It's allowed to cover the surface larger than the Theatre Square, but the Square has to be covered. It's not allowed to break the flagstones. The sides of flagstones should be parallel to the sides of the Square.
+
+**Input**
+
+The input contains three positive integer numbers in the first line: *n*,  *m* and *a* (1 ≤  *n*, *m*, *a* ≤ 109).
+
+**Output**
+
+Write the needed number of flagstones.
+
+Examples
+
+input
+
+```
+6 6 4
+```
+
+output
+
+```
+4
+```
+
+
+
+用边长为a的正方形瓷砖铺满 m*n的广场，按长和宽算个数
+
+```Python
+import math
+n, m, a = [int(x) for x in input().split()]
+l = math.ceil(n/a)
+w = math.ceil(m/a)
+print(l*w)
+```
+
+short code
+
+```Python
+n,m,a=map(int,input().split())
+print(-n//a*(-m//a))
+```
+
+==不用math.ceil，-5//4=-2，运算顺序相当于 (-n//a)*(-m//a)==
+
+
 
 ## 4A. Watermelon
 
@@ -89,457 +144,93 @@ print("YNEOS"[2**int(input())%24<9::2])
 
 
 
-## 1A. Theatre Square
+## 25A. IQ test
 
-math, 1000, http://codeforces.com/problemset/problem/1/A
+brute force, 1300, http://codeforces.com/problemset/problem/25/A
 
-Theatre Square in the capital city of Berland has a rectangular shape with the size *n* × *m* meters. On the occasion of the city's anniversary, a decision was taken to pave the Square with square granite flagstones. Each flagstone is of the size *a* × *a*.
-
-What is the least number of flagstones needed to pave the Square? It's allowed to cover the surface larger than the Theatre Square, but the Square has to be covered. It's not allowed to break the flagstones. The sides of flagstones should be parallel to the sides of the Square.
+Bob is preparing to pass IQ test. The most frequent task in this test is to find out which one of the given *n* numbers differs from the others. Bob observed that one number usually differs from the others in evenness. Help Bob — to check his answers, he needs a program that among the given *n* numbers finds one that is different in evenness.
 
 **Input**
 
-The input contains three positive integer numbers in the first line: *n*,  *m* and *a* (1 ≤  *n*, *m*, *a* ≤ 109).
+The first line contains integer *n* (3 ≤ *n* ≤ 100) — amount of numbers in the task. The second line contains *n* space-separated natural numbers, not exceeding 100. It is guaranteed, that exactly one of these numbers differs from the others in evenness.
 
 **Output**
 
-Write the needed number of flagstones.
+Output index of number that differs from the others in evenness. Numbers are numbered from 1 in the input order.
 
 Examples
 
 input
 
 ```
-6 6 4
+5
+2 4 7 8 10
 ```
 
 output
-
-```
-4
-```
-
-
-
-用边长为a的正方形瓷砖铺满 m*n的广场，按长和宽算个数
-
-```Python
-import math
-n, m, a = [int(x) for x in input().split()]
-l = math.ceil(n/a)
-w = math.ceil(m/a)
-print(l*w)
-```
-
-short code
-
-```Python
-n,m,a=map(int,input().split())
-print(-n//a*(-m//a))
-```
-
-==不用math.ceil，-5//4=-2，运算顺序相当于 (-n//a)*(-m//a)==
-
-
-
-## 58A. Chat room
-
-greedy/strings, 1000, http://codeforces.com/problemset/problem/58/A
-
-Vasya has recently learned to type and log on to the Internet. He immediately entered a chat room and decided to say hello to everybody. Vasya typed the word *s*. It is considered that Vasya managed to say hello if several letters can be deleted from the typed word so that it resulted in the word "hello". For example, if Vasya types the word "ahhellllloou", it will be considered that he said hello, and if he types "hlelo", it will be considered that Vasya got misunderstood and he didn't manage to say hello. Determine whether Vasya managed to say hello by the given word *s*.
-
-**Input**
-
-The first and only line contains the word *s*, which Vasya typed. This word consisits of small Latin letters, its length is no less that 1 and no more than 100 letters.
-
-**Output**
-
-If Vasya managed to say hello, print "YES", otherwise print "NO".
-
-Examples
-
-input
-
-```
-ahhellllloou
-```
-
-output
-
-```
-YES
-```
-
-input
-
-```
-hlelo
-```
-
-output
-
-```
-NO
-```
-
-2020fall-cs101，李受禧
-
-```python
-s = input()
-s = s.lower()
-
-dp = [0]*5
-data = 'hello'
-cnt = 0
-
-for c in s:
-    if c == data[cnt]:
-        dp[cnt] += 1
-        cnt += 1
-    
-    if cnt == 5:
-        break
-
-if sum(dp) == 5:
-    print('YES')
-else:
-    print('NO')
-```
-
-
-
-```python
-import re
-s = input()
-r = re.search('h.*e.*l.*l.*o', s)
-print(['YES', 'NO'][r==None])
-```
-
-
-
-## 71A. Way Too Long Words
-
-strings, 1000, http://codeforces.com/problemset/problem/71/A
-
-Sometimes some words like "*localization*" or "*internationalization*" are so long that writing them many times in one text is quite tiresome.
-
-Let's consider a word *too long*, if its length is **strictly more** than 10 characters. All too long words should be replaced with a special abbreviation.
-
-This abbreviation is made like this: we write down the first and the last letter of a word and between them we write the number of letters between the first and the last letters. That number is in decimal system and doesn't contain any leading zeroes.
-
-Thus, "*localization*" will be spelt as "*l10n*", and "*internationalization*" will be spelt as "i18n".
-
-You are suggested to automatize the process of changing the words with abbreviations. At that all too long words should be replaced by the abbreviation and the words that are not too long should not undergo any changes.
-
-**Input**
-
-The first line contains an integer *n* (1 ≤ *n* ≤ 100). Each of the following *n* lines contains one word. All the words consist of lowercase Latin letters and possess the lengths of from 1 to 100 characters.
-
-**Output**
-
-Print *n* lines. The *i*-th line should contain the result of replacing of the *i*-th word from the input data.
-
-Examples
-
-input
-
-```
-4
-word
-localization
-internationalization
-pneumonoultramicroscopicsilicovolcanoconiosis
-```
-
-output
-
-```
-word
-l10n
-i18n
-p43s
-```
-
-
-
-长度大于10 的单词缩写为首字母+中间字母数+尾字母
-
-```Python
-n = int(input())
-for i in range(n):
-	word = input()
-	length = len(word)
-	if length >10:
-		num = str(length-2)
-		short = word[0]+num+word[-1]
-		print(short)
-	else:
-		print(word)
-```
-
-==选择性输出，可以 在 print里 完成==
-
-```python
-for _ in range(int(input())):
-	a = input()
-	l = len(a)
-	print(a if l<11 else a[0]+str(l-2)+a[l-1])
-```
-
-
-
-## 231A. Team
-
-bruteforce/greedy, 800, http://codeforces.com/problemset/problem/231/A
-
-One day three best friends Petya, Vasya and Tonya decided to form a team and take part in programming contests. Participants are usually offered several problems during programming contests. Long before the start the friends decided that they will implement a problem if at least two of them are sure about the solution. Otherwise, the friends won't write the problem's solution.
-
-This contest offers *n* problems to the participants. For each problem we know, which friend is sure about the solution. Help the friends find the number of problems for which they will write a solution.
-
-**Input**
-
-The first input line contains a single integer *n* (1 ≤ *n* ≤ 1000) — the number of problems in the contest. Then *n* lines contain three integers each, each integer is either 0 or 1. If the first number in the line equals 1, then Petya is sure about the problem's solution, otherwise he isn't sure. The second number shows Vasya's view on the solution, the third number shows Tonya's view. The numbers on the lines are separated by spaces.
-
-**Output**
-
-Print a single integer — the number of problems the friends will implement on the contest.
-
-Examples
-
-input
 
 ```
 3
-1 1 0
-1 1 1
-1 0 0
-```
-
-output
-
-```
-2
 ```
 
 input
 
 ```
-2
-1 0 0
-0 1 1
+4
+1 2 1 1
 ```
 
 output
 
 ```
-1
+2
 ```
-
-Note
-
-In the first sample Petya and Vasya are sure that they know how to solve the first problem and all three of them know how to solve the second problem. That means that they will write solutions for these problems. Only Petya is sure about the solution for the third problem, but that isn't enough, so the friends won't take it.
-
-In the second sample the friends will only implement the second problem, as Vasya and Tonya are sure about the solution.
-
-
-
-三人小队，至少两个人会才能答出问题
 
 ```python
 n = int(input())
-num = 0
+l = [int(x) for x in input().split()]
+
+cnt_even = 0
+
 for i in range(n):
-	a, b, c = [int(x) for x in input().split()]
-	if a + b + c >1:
-		num += 1
-print(num)
+    if l[i]%2==0:
+        cnt_even += 1
+
+if cnt_even == 1:
+    for i in range(n):
+        if l[i]%2==0:
+            print(i+1)
+            break
+else:
+    for i in range(n):
+        if l[i]%2 != 0:
+            print(i+1)
+            break
 ```
 
-short code
+
 
 ```python
-print(sum(input().count('1')>1 for x in range(int(input()))))
-```
-
-==print()也 很 耗 时间，如果 要多次输出，可以在 print()里套循环，减少调用次数==
-
-
-
-## 158A. Next Round
-
-*special problem/implementation, 800, http://codeforces.com/problemset/problem/158/A
-
-"Contestant who earns a score equal to or greater than the *k*-th place finisher's score will advance to the next round, as long as the contestant earns a positive score..." — an excerpt from contest rules.
-
-A total of *n* participants took part in the contest (*n* ≥ *k*), and you already know their scores. Calculate how many participants will advance to the next round.
-
-**Input**
-
-The first line of the input contains two integers *n* and *k* (1 ≤ *k* ≤ *n* ≤ 50) separated by a single space.
-
-The second line contains *n* space-separated integers *a*~1~, *a*~2~, ..., a~n~ (0 ≤ a~i~ ≤ 100), where a~i~ is the score earned by the participant who got the *i*-th place. The given sequence is non-increasing (that is, for all *i* from 1 to *n* - 1 the following condition is fulfilled: a~i~ ≥ a~i~ + 1).
-
-**Output**
-
-Output the number of participants who advance to the next round.
-
-Examples
-
-input
-
-```
-8 5
-10 9 8 7 7 7 5 5
-```
-
-output
-
-```
-6
-```
-
-input
-
-```
-4 2
-0 0 0 0
-```
-
-output
-
-```
-0
-```
-
-Note
-
-In the first example the participant on the 5th place earned 7 points. As the participant on the 6th place also earned 7 points, there are 6 advancers.
-
-In the second example nobody got a positive score.
-
-
-
-统计不小于第k位选手得分的人数
-
-```python
-n, k = map(int, input().split())
-score = [int(x) for x in input().split()]
-num = 0
-k_score = score[k-1]
+n = int(input())
+l = input().split()
+m = ''
 for i in range(n):
-	s = score[i]
-	if s >= k_score and s>0:
-		num += 1
-print(num)
+    m = m + str(int(l[i])%2)
+
+if m.count('1')==1:
+    print(int(m.index('1'))+1)
+else:
+    print(int(m.index('0'))+1)
 ```
 
-short code
+
+
+周晋飞
 
 ```python
-i=lambda:map(int,input().split())
-n,k=i()
-a=list(i())
-print(sum([x>=(a[k-1] or 1) for x in a]))
-```
-
-==用or不能 用 and==
-
-
-
-## 118A. String Task
-
-implementation/strings, 1000, http://codeforces.com/problemset/problem/118/A
-
-Petya started to attend programming lessons. On the first lesson his task was to write a simple program. The program was supposed to do the following: in the given string, consisting if uppercase and lowercase Latin letters, it:
-
-- deletes all the vowels,
-- inserts a character "." before each consonant,
-- replaces all uppercase consonants with corresponding lowercase ones.
-
-Vowels are letters "A", "O", "Y", "E", "U", "I", and the rest are consonants. The program's input is exactly one string, it should return the output as a single string, resulting after the program's processing the initial string.
-
-Help Petya cope with this easy task.
-
-**Input**
-
-The first line represents input string of Petya's program. This string only consists of uppercase and lowercase Latin letters and its length is from 1 to 100, inclusive.
-
-**Output**
-
-Print the resulting string. It is guaranteed that this string is not empty.
-
-Examples
-
-input
-
-```
-tour
-```
-
-output
-
-```
-.t.r
-```
-
-input
-
-```
-Codeforces
-```
-
-output
-
-```
-.c.d.f.r.c.s
-```
-
-input
-
-```
-aBAcAba
-```
-
-output
-
-```
-.b.c.b
-```
-
-
-
-去掉元音，并用.来连接剩余字母的小写
-
-```python
-str = input()
-word = str.lower()
-output = []
-vowel = ['a','e','i','o','u','y']
-for char in word:
-	if char not in vowel:
-		output.append('.')
-		output.append(char)
-print(''.join(output))
-```
-
-short code
-
-```python
-print(''.join('.'+l for l in input().lower() if l not in 'aeiouy'))
-```
-
-
-
-C++
-
-```c++
-#include <bits/stdc++.h>
-char a[]="aoyeui",c;
-int main(){
-        while(std::cin>>c)
-                if(!strchr(a,c|=32))
-                        std::cout<<'.'<<c;
-}
+useless = input()
+a = [int(x)%2 for x in input().split()]
+print(a.index(sum(a)==1)+1)
 ```
 
 
@@ -627,114 +318,286 @@ print(eval('*'.join(input().split()))//2)
 
 
 
-## 282A. Bit++
+## 58A. Chat room
 
-implementation, 800, http://codeforces.com/problemset/problem/282/A
+greedy/strings, 1000, http://codeforces.com/problemset/problem/58/A
 
-The classic programming language of Bitland is Bit++. This language is so peculiar and complicated.
-
-The language is that peculiar as it has exactly one variable, called *x*. Also, there are two operations:
-
-- Operation ++ increases the value of variable *x* by 1.
-- Operation -- decreases the value of variable *x* by 1.
-
-A statement in language Bit++ is a sequence, consisting of exactly one operation and one variable *x*. The statement is written without spaces, that is, it can only contain characters "+", "-", "X". Executing a statement means applying the operation it contains.
-
-A programme in Bit++ is a sequence of statements, each of them needs to be executed. Executing a programme means executing all the statements it contains.
-
-You're given a programme in language Bit++. The initial value of *x* is 0. Execute the programme and find its final value (the value of the variable when this programme is executed).
+Vasya has recently learned to type and log on to the Internet. He immediately entered a chat room and decided to say hello to everybody. Vasya typed the word *s*. It is considered that Vasya managed to say hello if several letters can be deleted from the typed word so that it resulted in the word "hello". For example, if Vasya types the word "ahhellllloou", it will be considered that he said hello, and if he types "hlelo", it will be considered that Vasya got misunderstood and he didn't manage to say hello. Determine whether Vasya managed to say hello by the given word *s*.
 
 **Input**
 
-The first line contains a single integer *n* (1 ≤ *n* ≤ 150) — the number of statements in the programme.
-
-Next *n* lines contain a statement each. Each statement contains exactly one operation (++ or --) and exactly one variable *x* (denoted as letter «X»). Thus, there are no empty statements. The operation and the variable can be written in any order.
+The first and only line contains the word *s*, which Vasya typed. This word consisits of small Latin letters, its length is no less that 1 and no more than 100 letters.
 
 **Output**
 
-Print a single integer — the final value of *x*.
+If Vasya managed to say hello, print "YES", otherwise print "NO".
 
 Examples
 
 input
 
 ```
-1
-++X
+ahhellllloou
 ```
 
 output
 
 ```
-1
+YES
 ```
 
 input
 
 ```
-2
-X++
---X
+hlelo
 ```
 
 output
 
 ```
-0
+NO
+```
+
+2020fall-cs101，李受禧
+
+```python
+s = input()
+s = s.lower()
+
+dp = [0]*5
+data = 'hello'
+cnt = 0
+
+for c in s:
+    if c == data[cnt]:
+        dp[cnt] += 1
+        cnt += 1
+    
+    if cnt == 5:
+        break
+
+if sum(dp) == 5:
+    print('YES')
+else:
+    print('NO')
 ```
 
 
 
-定义两种运算，++表示 +1，，--表示 -1 x的值不断更新
+```python
+import re
+s = input()
+r = re.search('h.*e.*l.*l.*o', s)
+print(['YES', 'NO'][r==None])
+```
+
+
+
+## 69A. Young Physicist
+
+implementation/math, 1000, https://codeforces.com/problemset/problem/69/A
+
+A guy named Vasya attends the final grade of a high school. One day Vasya decided to watch a match of his favorite hockey team. And, as the boy loves hockey very much, even more than physics, he forgot to do the homework. Specifically, he forgot to complete his physics tasks. Next day the teacher got very angry at Vasya and decided to teach him a lesson. He gave the lazy student a seemingly easy task: You are given an idle body in space and the forces that affect it. The body can be considered as a material point with coordinates (0; 0; 0). Vasya had only to answer whether it is in equilibrium. "Piece of cake" — thought Vasya, we need only to check if the sum of all vectors is equal to 0. So, Vasya began to solve the problem. But later it turned out that there can be lots and lots of these forces, and Vasya can not cope without your help. Help him. Write a program that determines whether a body is idle or is moving by the given vectors of forces.
+
+**Input**
+
+The first line contains a positive integer *n* (1 ≤ *n* ≤ 100), then follow *n* lines containing three integers each: the *x~i~* coordinate, the *y~i~* coordinate and the *z~i~* coordinate of the force vector, applied to the body ( - 100 ≤ *x~i~*, *y~i~*, *z~i~* ≤ 100).
+
+**Output**
+
+Print the word "YES" if the body is in equilibrium, or the word "NO" if it is not.
+
+Examples
+
+input
+
+```
+3
+4 1 7
+-2 4 -1
+1 -5 -3
+```
+
+output
+
+```
+NO
+```
+
+input
+
+```
+3
+3 -1 7
+-5 2 -4
+2 -1 -3
+```
+
+output
+
+```
+YES
+```
 
 ```python
 n = int(input())
 x = 0
-for i in range(n):
-	statement = input()
-	if '++' in statement:
-		x += 1
-	else:
-		x -= 1
-print(x)
+y = 0
+z = 0
+while n>0:
+        n -= 1
+        f = [int(i) for i in input().split()]
+        x += f[0]
+        y += f[1]
+        z += f[2]
+
+if x==y==z==0:
+        print('YES')
+else:
+        print('NO')
 ```
 
-short code
+
+
+## 71A. Way Too Long Words
+
+strings, 1000, http://codeforces.com/problemset/problem/71/A
+
+Sometimes some words like "*localization*" or "*internationalization*" are so long that writing them many times in one text is quite tiresome.
+
+Let's consider a word *too long*, if its length is **strictly more** than 10 characters. All too long words should be replaced with a special abbreviation.
+
+This abbreviation is made like this: we write down the first and the last letter of a word and between them we write the number of letters between the first and the last letters. That number is in decimal system and doesn't contain any leading zeroes.
+
+Thus, "*localization*" will be spelt as "*l10n*", and "*internationalization*" will be spelt as "i18n".
+
+You are suggested to automatize the process of changing the words with abbreviations. At that all too long words should be replaced by the abbreviation and the words that are not too long should not undergo any changes.
+
+**Input**
+
+The first line contains an integer *n* (1 ≤ *n* ≤ 100). Each of the following *n* lines contains one word. All the words consist of lowercase Latin letters and possess the lengths of from 1 to 100 characters.
+
+**Output**
+
+Print *n* lines. The *i*-th line should contain the result of replacing of the *i*-th word from the input data.
+
+Examples
+
+input
+
+```
+4
+word
+localization
+internationalization
+pneumonoultramicroscopicsilicovolcanoconiosis
+```
+
+output
+
+```
+word
+l10n
+i18n
+p43s
+```
+
+
+
+长度大于10 的单词缩写为首字母+中间字母数+尾字母
+
+```Python
+n = int(input())
+for i in range(n):
+	word = input()
+	length = len(word)
+	if length >10:
+		num = str(length-2)
+		short = word[0]+num+word[-1]
+		print(short)
+	else:
+		print(word)
+```
+
+==选择性输出，可以 在 print里 完成==
 
 ```python
-f=input
-print(sum('+'in f() or -1 for i in range(int(f()))))
+for _ in range(int(input())):
+	a = input()
+	l = len(a)
+	print(a if l<11 else a[0]+str(l-2)+a[l-1])
 ```
 
 
 
-C++，陆宸
+## 96A. Football
 
-```c++
-#include <iostream>
-#include <cstring>
-using namespace std;
-int main (){
-        short n;
-        int x = 0;
-        cin >> n;
-        string a[n];
-        for (short i = 0; i < n; i++){
-                a[i] = "0";
-        }
-        for (short j = 0; j < n; j++){
-                cin >> a[j];
-        }
-        for (short w = 0; w < n; w++){
-                if (a[w] == "++X" || a[w] == "X++"){
-                        x++;
-                }else{
-                        x--;
-                }
-        }
-        cout << x;
-        return 0;
-}
+implementation/strings, 900, http://codeforces.com/problemset/problem/96/A
+
+Petya loves football very much. One day, as he was watching a football match, he was writing the players' current positions on a piece of paper. To simplify the situation he depicted it as a string consisting of zeroes and ones. A zero corresponds to players of one team; a one corresponds to players of another team. If there are at least 7 players of some team standing one after another, then the situation is considered dangerous. For example, the situation 00100110111111101 is dangerous and 11110111011101 is not. You are given the current situation. Determine whether it is dangerous or not.
+
+**Input**
+
+**The first input lin**e contains a non-empty string consisting of characters "0" and "1", which represents players. The length of the string does not exceed 100 characters. There's at least one player from each team present on the field.
+
+**Output**
+
+Print "YES" if the situation is dangerous. Otherwise, print "NO".
+
+Examples
+
+input
+
+```
+001001
+```
+
+output
+
+```
+NO
+```
+
+input
+
+```
+1000000001
+```
+
+output
+
+```
+YES
+```
+
+
+
+```python
+l = input()
+
+n_0 = 0
+n_1 = 0
+for c in l:
+        if c=='0':
+                n_0 += 1
+                if n_0==7: break
+                n_1 = 0
+        else:
+                n_1 += 1
+                if n_1==7: break
+                n_0 = 0
+                
+if n_0==7 or n_1==7:
+        print('YES')
+else:
+        print('NO')
+```
+
+
+
+```python
+s=input()
+print(['NO','YES']['0'*7 in s or '1'*7 in s])
 ```
 
 
@@ -885,696 +748,87 @@ int main (){
 
 
 
-## 263A. Beautiful Matrix
+## 118A. String Task
 
-implementation, 800, http://codeforces.com/problemset/problem/263/A
+implementation/strings, 1000, http://codeforces.com/problemset/problem/118/A
 
-You've got a 5 × 5 matrix, consisting of 24 zeroes and a single number one. Let's index the matrix rows by numbers from 1 to 5 from top to bottom, let's index the matrix columns by numbers from 1 to 5 from left to right. In one move, you are allowed to apply one of the two following transformations to the matrix:
+Petya started to attend programming lessons. On the first lesson his task was to write a simple program. The program was supposed to do the following: in the given string, consisting if uppercase and lowercase Latin letters, it:
 
-1. Swap two neighboring matrix rows, that is, rows with indexes *i* and *i* + 1 for some integer *i* (1 ≤ *i* < 5).
-2. Swap two neighboring matrix columns, that is, columns with indexes *j* and *j* + 1 for some integer *j* (1 ≤ *j* < 5).
+- deletes all the vowels,
+- inserts a character "." before each consonant,
+- replaces all uppercase consonants with corresponding lowercase ones.
 
-You think that a matrix looks *beautiful*, if the single number one of the matrix is located in its middle (in the cell that is on the intersection of the third row and the third column). Count the minimum number of moves needed to make the matrix beautiful.
+Vowels are letters "A", "O", "Y", "E", "U", "I", and the rest are consonants. The program's input is exactly one string, it should return the output as a single string, resulting after the program's processing the initial string.
+
+Help Petya cope with this easy task.
 
 **Input**
 
-The input consists of five lines, each line contains five integers: the *j*-th integer in the *i*-th line of the input represents the element of the matrix that is located on the intersection of the *i*-th row and the *j*-th column. It is guaranteed that the matrix consists of 24 zeroes and a single number one.
+The first line represents input string of Petya's program. This string only consists of uppercase and lowercase Latin letters and its length is from 1 to 100, inclusive.
 
 **Output**
 
-Print a single integer — the minimum number of moves needed to make the matrix beautiful.
+Print the resulting string. It is guaranteed that this string is not empty.
 
 Examples
 
 input
 
 ```
-0 0 0 0 0
-0 0 0 0 1
-0 0 0 0 0
-0 0 0 0 0
-0 0 0 0 0
+tour
 ```
 
 output
 
 ```
-3
+.t.r
 ```
 
 input
 
 ```
-0 0 0 0 0
-0 0 0 0 0
-0 1 0 0 0
-0 0 0 0 0
-0 0 0 0 0
+Codeforces
 ```
 
 output
 
 ```
-1
-```
-
-
-
-```python
-for i in range(5):
-    s = input().split()
-    if "1" in s:
-        print(abs(i-2)+abs(s.index("1")-2))
-        break
-```
-
-周晋飞
-
-```python
-matrix = [[int(x) for x in input().split()] for i in range(5)]
-
-for i in range(5):
-    if 1 in matrix[i]:
-        j = matrix[i].index(1)
-        print(abs(i-2)+abs(j-2))
-        break
-```
-
-马玉娇，代码容易看懂
-
-```python
-a = input().split()
-b = input().split()
-c = input().split()
-d = input().split()
-e = input().split()
-if '1' in a:
-    print(abs(a.index('1')-2) +2)
-if '1' in b:
-    print(abs(b.index('1')-2) +1)
-if '1' in c:
-    print(abs(c.index('1')-2))
-if '1' in d:
-    print(abs(d.index('1')-2) +1)
-if '1' in e:
-    print(abs(e.index('1')-2) +2)
-```
-
-韩无极，代码容易看懂
-
-```Python
-for i in range(5):
-    lis = list(map(int,input().split()))
-    if 1 in lis:
-        r = i
-        break
-for j in range(5):
-    if lis[j]==1:
-        c = j
-print(abs(c-2)+abs(r-2))
-```
-
-庞翔升，代码不容易看懂
-
-```python
-c = 0
-for i in range(5):
-    exec('a%s=list(input().split())'%i)
-for i in range(5):
-    for o in range(5):
-        exec('c=(a%s[o])'%i)
-        if c=='1':
-            print(abs(i-2)+abs(o-2))
-```
-
-
-
-```python
-mx = [ [0]*5 for row in range(5) ]
-
-for row in range(5):
-    line = [int(j) for j in input().split()]
-    if max(line)==1:
-        for column in range(5):
-            if line[column]==1:
-                mx[row][column]=1
-                break
-	print(abs(row-2) + abs(column-2))
-    break
-```
-short code
-
-```python
-l = [2,1,0,1,2]
-for i in l:
-    s = input()
-    if "1" in s: 
-        print(i + l[s.find("1")//2])
-```
-
-
-
-C++，陆宸
-
-```c++
-#include <iostream>
-#include <cmath>
-using namespace std;
-int main (){
-        int x[5][5];
-        int r, c;
-        for (int i = 0; i < 5; i++){
-                for (int j = 0; j < 5; j++){
-                        x[i][j] = 0;
-                }
-        }
-        for (int w = 0; w < 5; w++){
-                for (int t = 0; t < 5; t++){
-                        cin >> x[w][t];
-                }
-        }
-        for (int a = 0; a < 5; a++){
-                for (int b = 0; b < 5; b++){
-                        if (x[a][b] != 0){
-                                r = a;
-                                c = b;
-                        }
-                }
-        }
-        cout << abs (r-2) + abs (c-2);
-        return 0;
-}
-```
-
-
-
-## 339A. Helpful Maths
-
-greedy/implementation/sortings/strings, 800, http://codeforces.com/problemset/problem/339/A
-
-Xenia the beginner mathematician is a third year student at elementary school. She is now learning the addition operation.
-
-The teacher has written down the sum of multiple numbers. Pupils should calculate the sum. To make the calculation easier, the sum only contains numbers 1, 2 and 3. Still, that isn't enough for Xenia. She is only beginning to count, so she can calculate a sum only if the summands follow in non-decreasing order. For example, she can't calculate sum 1+3+2+1 but she can calculate sums 1+1+2 and 3+3.
-
-You've got the sum that was written on the board. Rearrange the summans and print the sum in such a way that Xenia can calculate the sum.
-
-**Input**
-
-The first line contains a non-empty string *s* — the sum Xenia needs to count. String *s* contains no spaces. It only contains digits and characters "+". Besides, string *s* is a correct sum of numbers 1, 2 and 3. String *s* is at most 100 characters long.
-
-**Output**
-
-Print the new sum that Xenia can count.
-
-Examples
-
-input
-
-```
-3+2+1
-```
-
-output
-
-```
-1+2+3
+.c.d.f.r.c.s
 ```
 
 input
 
 ```
-1+1+3+1+3
+aBAcAba
 ```
 
 output
 
 ```
-1+1+1+3+3
+.b.c.b
 ```
 
-input
 
-```
-2
-```
 
-output
-
-```
-2
-```
+去掉元音，并用.来连接剩余字母的小写
 
 ```python
-s = input()
-fq = 4*[0] # the first is no use.
-
-for i in range(0, len(s), 2):
-        fq[int(s[i])] += 1
-
-ns = ''
-for i in range(1,4) :
-       while fq[i]>0 :
-               fq[i] -= 1
-               ns += str(i)
-
-print('+'.join(ns))
+str = input()
+word = str.lower()
+output = []
+vowel = ['a','e','i','o','u','y']
+for char in word:
+	if char not in vowel:
+		output.append('.')
+		output.append(char)
+print(''.join(output))
 ```
 
 short code
 
 ```python
-s = [int(n) for n in input().split('+')]
-
-s.sort()
-
-print('+'.join(str(i) for i in s))
+print(''.join('.'+l for l in input().lower() if l not in 'aeiouy'))
 ```
-
-
-
-C++，陆宸
-
-```c++
-#include <iostream>
-#include <cstring>
-#include <vector>
-#include <algorithm>
-using namespace std;
-int main (){
-        string str;
-        int len;
-        int a;
-        cin >> str;
-        len = str.size();
-        a = (len + 1)/2;
-
-        vector<int> num(a, 0);
-        for (int i = 0; i < len; i+= 2){
-                num[i/2] = str[i]-48;
-        }
-        sort (num.begin(), num.end());
-        for (int j = 0; j < a - 1; j++){
-                cout << num[j] << "+";
-        }
-        cout << num[a-1];
-        return 0;
-}
-```
-
-
-
-## 281A. Word Capitalization
-
-implementation/strings, 800, http://codeforces.com/problemset/problem/281/A
-
-Capitalization is writing a word with its first letter as a capital letter. Your task is to capitalize the given word.
-
-Note, that during capitalization all the letters except the first one remains unchanged.
-
-**Input**
-
-A single line contains a non-empty word. This word consists of lowercase and uppercase English letters. The length of the word will not exceed 10^3^.
-
-**Output**
-
-Output the given word after capitalization.
-
-Examples
-
-input
-
-```
-ApPLe
-```
-
-output
-
-```
-ApPLe
-```
-
-input
-
-```
-konjac
-```
-
-output
-
-```
-Konjac
-```
-
-
-
-```python
-line = input()
-print(line[0].upper() + line[1:])
-```
-
-
-
-练习ASCII的转化
-
-```python
-a = input()
-b = ord(a[0])
-if b >= 97:
-    b -= 32
-print (chr(b),end = '')
-print(a[1:])
-```
-
-
-
-C++
-
-```c++
-#include <iostream>
-#include <cstring>
-using namespace std;
-int main(){
-        string a;
-        cin >> a;
-        if (a[0] <= 90){
-                cout << a;
-        }else{
-                a[0] -= 32;
-                cout << a;
-        }
-        return 0;
-}
-```
-
-
-
-## 266A. Stones on the Table
-
-implementation, 800, http://codeforces.com/problemset/problem/266/A
-
-There are *n* stones on the table in a row, each of them can be red, green or blue. Count the minimum number of stones to take from the table so that any two neighboring stones had different colors. Stones in a row are considered neighboring if there are no other stones between them.
-
-**Input**
-
-The first line contains integer *n* (1 ≤ *n* ≤ 50) — the number of stones on the table.
-
-The next line contains string *s*, which represents the colors of the stones. We'll consider the stones in the row numbered from 1 to *n* from left to right. Then the *i*-th character *s* equals "R", if the *i*-th stone is red, "G", if it's green and "B", if it's blue.
-
-**Output**
-
-Print a single integer — the answer to the problem.
-
-Examples
-
-input
-
-```
-3
-RRG
-```
-
-output
-
-```
-1
-```
-
-input
-
-```
-5
-RRRRR
-```
-
-output
-
-```
-4
-```
-
-input
-
-```
-4
-BRBG
-```
-
-output
-
-```
-0
-```
-
-
-
-```python
-n = int(input())
-l = input()
-
-nCount = 0
-p = l[0]
-for i in range(1,n):
-        if l[i]==p:
-                nCount += 1
-        else:
-                p = l[i]
-
-print(nCount)
-```
-
-
-
-## 96A. Football
-
-implementation/strings, 900, http://codeforces.com/problemset/problem/96/A
-
-Petya loves football very much. One day, as he was watching a football match, he was writing the players' current positions on a piece of paper. To simplify the situation he depicted it as a string consisting of zeroes and ones. A zero corresponds to players of one team; a one corresponds to players of another team. If there are at least 7 players of some team standing one after another, then the situation is considered dangerous. For example, the situation 00100110111111101 is dangerous and 11110111011101 is not. You are given the current situation. Determine whether it is dangerous or not.
-
-**Input**
-
-**The first input lin**e contains a non-empty string consisting of characters "0" and "1", which represents players. The length of the string does not exceed 100 characters. There's at least one player from each team present on the field.
-
-**Output**
-
-Print "YES" if the situation is dangerous. Otherwise, print "NO".
-
-Examples
-
-input
-
-```
-001001
-```
-
-output
-
-```
-NO
-```
-
-input
-
-```
-1000000001
-```
-
-output
-
-```
-YES
-```
-
-
-
-```python
-l = input()
-
-n_0 = 0
-n_1 = 0
-for c in l:
-        if c=='0':
-                n_0 += 1
-                if n_0==7: break
-                n_1 = 0
-        else:
-                n_1 += 1
-                if n_1==7: break
-                n_0 = 0
-                
-if n_0==7 or n_1==7:
-        print('YES')
-else:
-        print('NO')
-```
-
-
-
-```python
-s=input()
-print(['NO','YES']['0'*7 in s or '1'*7 in s])
-```
-
-
-
-## 615A. Bulbs
-
-implementation, 800, http://codeforces.com/contest/615/problem/A 
-
-Vasya wants to turn on Christmas lights consisting of *m* bulbs. Initially, all bulbs are turned off. There are *n* buttons, each of them is connected to some set of bulbs. Vasya can press any of these buttons. When the button is pressed, it turns on all the bulbs it's connected to. Can Vasya light up all the bulbs?
-
-If Vasya presses the button such that some bulbs connected to it are already turned on, they do not change their state, i.e. remain turned on.
-
-**Input**
-
-The first line of the input contains integers *n* and *m* (1 ≤ *n*, *m* ≤ 100) — the number of buttons and the number of bulbs respectively.
-
-Each of the next *n* lines contains *x~i~* (0 ≤ *x~i~*≤ *m*) — the number of bulbs that are turned on by the *i*-th button, and then *x~i~* numbers *y~ij~* (1 ≤ *y~ij~* ≤ *m*) — the numbers of these bulbs.
-
-**Output**
-
-If it's possible to turn on all *m* bulbs print "YES", otherwise print "NO".
-
-Examples
-
-input
-
-```
-3 4
-2 1 4
-3 1 3 1
-1 2
-```
-
-output
-
-```
-YES
-```
-
-input
-
-```
-3 3
-1 1
-1 2
-1 1
-```
-
-output
-
-```
-NO
-```
-
-Note
-
-In the first sample you can press each button once and turn on all the bulbs. In the 2 sample it is impossible to turn on the 3-rd lamp.
-
-
-
-```python
-n, m = map(int, input().split())
-s = set()
-for _ in range(n):
-    s.update(input().split()[1:])
-
-print(['NO','YES'][len(s)==m])
-```
-
-## 236A. Boy or Girl
-
-brute force/implementation/strings, 800, https://codeforces.com/problemset/problem/236/A
-
-Those days, many boys use beautiful girls' photos as avatars in forums. So it is pretty hard to tell the gender of a user at the first glance. Last year, our hero went to a forum and had a nice chat with a beauty (he thought so). After that they talked very often and eventually they became a couple in the network.
-
-But yesterday, he came to see "her" in the real world and found out "she" is actually a very strong man! Our hero is very sad and he is too tired to love again now. So he came up with a way to recognize users' genders by their user names.
-
-This is his method: if the number of distinct characters in one's user name is odd, then he is a male, otherwise she is a female. You are given the string that denotes the user name, please help our hero to determine the gender of this user by his method.
-
-**Input**
-
-The first line contains a non-empty string, that contains only lowercase English letters — the user name. This string contains at most 100 letters.
-
-**Output**
-
-If it is a female by our hero's method, print "CHAT WITH HER!" (without the quotes), otherwise, print "IGNORE HIM!" (without the quotes).
-
-Examples
-
-input
-
-```
-wjmzbmr
-```
-
-output
-
-```
-CHAT WITH HER!
-```
-
-input
-
-```
-xiaodao
-```
-
-output
-
-```
-IGNORE HIM!
-```
-
-input
-
-```
-sevenkplus
-```
-
-output
-
-```
-CHAT WITH HER!
-```
-
-Note
-
-For the first example. There are 6 distinct characters in "wjmzbmr". These characters are: "w", "j", "m", "z", "b", "r". So wjmzbmr is a female and you should print "CHAT WITH HER!".
-
-
-
-```python
-s = input()
-fq = 26*[0]
-
-for c in s:
-        fq[ord(c) - ord('a')] += 1
-
-nCount = 0
-for i in range(26):
-        if fq[i]!=0 :
-                nCount += 1
-
-if nCount%2 == 1:
-        print('IGNORE HIM!')
-else:
-        print('CHAT WITH HER!')
-```
-
-
-
-```python
-s = set()
-s.update(input())
-if len(s)%2 == 1:
-    print('IGNORE HIM!')
-else:
-    print('CHAT WITH HER!')
-```
-
-update Method:
-
-This method is used to return the union of a set and the set of elements from one or more iterable like string, list, set. It is very similar to **union()** method, with difference is that where union() method create and return a new set, containing all the elements ( distinct ) present in all the iterables, update() method updates the set on which this method is called with all the distinct elements present in all the iterables.
 
 
 
@@ -1582,170 +836,12 @@ C++
 
 ```c++
 #include <bits/stdc++.h>
-using namespace std;
+char a[]="aoyeui",c;
 int main(){
-        set<char> s; char c;
-        while(cin>>c)
-                s.insert(c);
-        cout<<(s.size()&1?"IGNORE HIM!":"CHAT WITH HER!");
+        while(std::cin>>c)
+                if(!strchr(a,c|=32))
+                        std::cout<<'.'<<c;
 }
-```
-
-
-
-## 69A. Young Physicist
-
-implementation/math, 1000, https://codeforces.com/problemset/problem/69/A
-
-A guy named Vasya attends the final grade of a high school. One day Vasya decided to watch a match of his favorite hockey team. And, as the boy loves hockey very much, even more than physics, he forgot to do the homework. Specifically, he forgot to complete his physics tasks. Next day the teacher got very angry at Vasya and decided to teach him a lesson. He gave the lazy student a seemingly easy task: You are given an idle body in space and the forces that affect it. The body can be considered as a material point with coordinates (0; 0; 0). Vasya had only to answer whether it is in equilibrium. "Piece of cake" — thought Vasya, we need only to check if the sum of all vectors is equal to 0. So, Vasya began to solve the problem. But later it turned out that there can be lots and lots of these forces, and Vasya can not cope without your help. Help him. Write a program that determines whether a body is idle or is moving by the given vectors of forces.
-
-**Input**
-
-The first line contains a positive integer *n* (1 ≤ *n* ≤ 100), then follow *n* lines containing three integers each: the *x~i~* coordinate, the *y~i~* coordinate and the *z~i~* coordinate of the force vector, applied to the body ( - 100 ≤ *x~i~*, *y~i~*, *z~i~* ≤ 100).
-
-**Output**
-
-Print the word "YES" if the body is in equilibrium, or the word "NO" if it is not.
-
-Examples
-
-input
-
-```
-3
-4 1 7
--2 4 -1
-1 -5 -3
-```
-
-output
-
-```
-NO
-```
-
-input
-
-```
-3
-3 -1 7
--5 2 -4
-2 -1 -3
-```
-
-output
-
-```
-YES
-```
-
-```python
-n = int(input())
-x = 0
-y = 0
-z = 0
-while n>0:
-        n -= 1
-        f = [int(i) for i in input().split()]
-        x += f[0]
-        y += f[1]
-        z += f[2]
-
-if x==y==z==0:
-        print('YES')
-else:
-        print('NO')
-```
-
-
-
-## 25A. IQ test
-
-brute force, 1300, http://codeforces.com/problemset/problem/25/A
-
-Bob is preparing to pass IQ test. The most frequent task in this test is to find out which one of the given *n* numbers differs from the others. Bob observed that one number usually differs from the others in evenness. Help Bob — to check his answers, he needs a program that among the given *n* numbers finds one that is different in evenness.
-
-**Input**
-
-The first line contains integer *n* (3 ≤ *n* ≤ 100) — amount of numbers in the task. The second line contains *n* space-separated natural numbers, not exceeding 100. It is guaranteed, that exactly one of these numbers differs from the others in evenness.
-
-**Output**
-
-Output index of number that differs from the others in evenness. Numbers are numbered from 1 in the input order.
-
-Examples
-
-input
-
-```
-5
-2 4 7 8 10
-```
-
-output
-
-```
-3
-```
-
-input
-
-```
-4
-1 2 1 1
-```
-
-output
-
-```
-2
-```
-
-```python
-n = int(input())
-l = [int(x) for x in input().split()]
-
-cnt_even = 0
-
-for i in range(n):
-    if l[i]%2==0:
-        cnt_even += 1
-
-if cnt_even == 1:
-    for i in range(n):
-        if l[i]%2==0:
-            print(i+1)
-            break
-else:
-    for i in range(n):
-        if l[i]%2 != 0:
-            print(i+1)
-            break
-```
-
-
-
-```python
-n = int(input())
-l = input().split()
-m = ''
-for i in range(n):
-    m = m + str(int(l[i])%2)
-
-if m.count('1')==1:
-    print(int(m.index('1'))+1)
-else:
-    print(int(m.index('0'))+1)
-```
-
-
-
-周晋飞
-
-```python
-useless = input()
-a = [int(x)%2 for x in input().split()]
-print(a.index(sum(a)==1)+1)
 ```
 
 
@@ -1884,28 +980,31 @@ print('NO' if all([n%i for i in (4,7,47,74,447,474,477,747,774)]) else 'YES')
 
 
 
-## 723A. The New Year: Meeting Friends
+## 158A. Next Round
 
-implementation, math, sorting, 800, https://codeforces.com/problemset/problem/723/A
+*special problem/implementation, 800, http://codeforces.com/problemset/problem/158/A
 
-There are three friend living on the straight line *Ox* in Lineland. The first friend lives at the point $x_{1}$, the second friend lives at the point $x_{2}$, and the third friend lives at the point $x_{3}$. They plan to celebrate the New Year together, so they need to meet at one point. What is the minimum total distance they have to travel in order to meet at some point and celebrate the New Year?
+"Contestant who earns a score equal to or greater than the *k*-th place finisher's score will advance to the next round, as long as the contestant earns a positive score..." — an excerpt from contest rules.
 
-It's guaranteed that the optimal answer is always integer.
+A total of *n* participants took part in the contest (*n* ≥ *k*), and you already know their scores. Calculate how many participants will advance to the next round.
 
 **Input**
 
-The first line of the input contains three **distinct** integers $x_{1}$, $x_{2}$ and $x_{3}$ (1 ≤ $x_{1}$, $x_{2}$,$x_{3}$  ≤ 100) — the coordinates of the houses of the first, the second and the third friends respectively.
+The first line of the input contains two integers *n* and *k* (1 ≤ *k* ≤ *n* ≤ 50) separated by a single space.
+
+The second line contains *n* space-separated integers *a*~1~, *a*~2~, ..., a~n~ (0 ≤ a~i~ ≤ 100), where a~i~ is the score earned by the participant who got the *i*-th place. The given sequence is non-increasing (that is, for all *i* from 1 to *n* - 1 the following condition is fulfilled: a~i~ ≥ a~i~ + 1).
 
 **Output**
 
-Print one integer — the minimum total distance the friends need to travel in order to meet together.
+Output the number of participants who advance to the next round.
 
 Examples
 
 input
 
 ```
-7 1 4
+8 5
+10 9 8 7 7 7 5 5
 ```
 
 output
@@ -1917,173 +1016,138 @@ output
 input
 
 ```
-30 20 10
+4 2
+0 0 0 0
 ```
 
 output
 
 ```
-20
+0
 ```
 
 Note
 
-In the first sample, friends should meet at the point 4. Thus, the first friend has to travel the distance of 3 (from the point 7 to the point 4), the second friend also has to travel the distance of 3 (from the point 1 to the point 4), while the third friend should not go anywhere because he lives at the point 4.
+In the first example the participant on the 5th place earned 7 points. As the participant on the 6th place also earned 7 points, there are 6 advancers.
+
+In the second example nobody got a positive score.
 
 
+
+统计不小于第k位选手得分的人数
 
 ```python
-x = list(map(int, input().split()))
-x.sort()
-print(x[-1] - x[0])
+n, k = map(int, input().split())
+score = [int(x) for x in input().split()]
+num = 0
+k_score = score[k-1]
+for i in range(n):
+	s = score[i]
+	if s >= k_score and s>0:
+		num += 1
+print(num)
 ```
 
+short code
+
+```python
+i=lambda:map(int,input().split())
+n,k=i()
+a=list(i())
+print(sum([x>=(a[k-1] or 1) for x in a]))
+```
+
+==用or不能 用 and==
 
 
-## 705A. Hulk
 
-implementation, 800, https://codeforces.com/problemset/problem/705/A
+## 160A. Twins
 
-Dr. Bruce Banner hates his enemies (like others don't). As we all know, he can barely talk when he turns into the incredible Hulk. That's why he asked you to help him to express his feelings.
+greedy, sortings, 900, https://codeforces.com/problemset/problem/160/A
 
-Hulk likes the Inception so much, and like that his feelings are complicated. They have *n* layers. The first layer is hate, second one is love, third one is hate and so on...
 
-For example if *n* = 1, then his feeling is "I hate it" or if *n* = 2 it's "I hate that I love it", and if *n* = 3 it's "I hate that I love that I hate it" and so on.
+Imagine that you have a twin brother or sister. Having another person that looks exactly like you seems very unusual. It's hard to say if having something of an alter ego is good or bad. And if you do have a twin, then you very well know what it's like.
 
-Please help Dr. Banner.
+Now let's imagine a typical morning in your family. You haven't woken up yet, and Mom is already going to work. She has been so hasty that she has nearly forgotten to leave the two of her darling children some money to buy lunches in the school cafeteria. She fished in the purse and found some number of coins, or to be exact, *n* coins of arbitrary values $a_1, a_2, ..., a_n$. But as Mom was running out of time, she didn't split the coins for you two. So she scribbled a note asking you to split the money equally.
+
+As you woke up, you found Mom's coins and read her note. "But why split the money equally?" — you thought. After all, your twin is sleeping and he won't know anything. So you decided to act like that: pick for yourself some subset of coins so that the sum of values of your coins is **strictly larger** than the sum of values of the remaining coins that your twin will have. However, you correctly thought that if you take too many coins, the twin will suspect the deception. So, you've decided to stick to the following strategy to avoid suspicions: you take the **minimum number of coins**, whose sum of values is strictly more than the sum of values of the remaining coins. On this basis, determine what **minimum** number of coins you need to take to divide them in the described manner.
 
 **Input**
 
-The only line of the input contains a single integer *n* (1 ≤ *n* ≤ 100) — the number of layers of love and hate.
+The first line contains integer *n* (1 ≤ *n* ≤ 100) — the number of coins. The second line contains a sequence of *n* integers $a_1, a_2, ..., a_n (1 ≤ a_i ≤ 100) $ — the coins' values. All numbers are separated with spaces.
 
 **Output**
 
-Print Dr.Banner's feeling in one line.
+In the single line print the single number — the minimum needed number of coins.
 
 Examples
 
 input
 
 ```
-1
+2
+3 3
 ```
 
 output
-
-```
-I hate it
-```
-
-input
 
 ```
 2
-```
-
-output
-
-```
-I hate that I love it
 ```
 
 input
 
 ```
 3
+2 1 2
 ```
 
 output
 
 ```
-I hate that I love that I hate it
+2
 ```
 
+Note
 
+In the first sample you will have to take 2 coins (you and your twin have sums equal to 6, 0 correspondingly). If you take 1 coin, you get sums 3, 3. If you take 0 coins, you get sums 0, 6. Those variants do not satisfy you as your sum should be strictly more that your twins' sum.
 
-2020fall-cs101-郭冠廷，
-
-```python
-say = []
-for i in range(int(input())):
-    say.append(['I hate', 'I love'][i % 2])
-print(" that ".join(say), end=" it\n")
-```
+In the second sample one coin isn't enough for us, too. You can pick coins with values 1, 2 or 2, 2. In any case, the minimum number of coins equals 2.
 
 
 
 ```python
 n = int(input())
+coins = [int(i) for i in input().split()]
+fq = 101*[0]    #skip index 0
  
-l = ""
-for i in range(1,n):
-    if i%2 == 0:
-        l += " that I hate"
-    else:
-        l += " that I love"
+nSum = 0
+for i in range(n):
+        nSum += coins[i]
+        fq[int(coins[i])] += 1
  
-print("I hate" + l + " it")
-```
-
-
-
-2020fall-cs101-成泽凯，解题思路：
-
-”I hate that”和”I love that”用 while来输出，最后根据 n的奇偶来判断输出”I love it”还是”I hate it”
-
-```python
-n = int(input())
-a = n
-while n > 1:
-    print("I hate that", end=" ")
-    n -= 1
-    if n > 1:
-        print("I love that", end=" ")
-        n -= 1
-
-if a%2 == 0:
-    print("I love it")
-else:
-    print("I hate it")
-```
-
-
-
-2021fall-cs101，黄靖涵。https://codeforces.com/problemset/problem/705/A
-
-```python
-n = int(input())
-
-def f(n):
-    if n==1:
-        return "I hate it"
-    if n%2 == 1:
-        return f(n-1)[:-2] + "that I hate it"
-    if n%2 == 0:
-        return f(n-1)[:-2] + "that I love it"
-
-print(f(n))
-```
-
-思考： 
-
-1）递归
-
-2）异或操作（异或也叫半加运算，其运算法则相当于不带进位的二进制加法）：二进制下用1 表示真，0 表示假。则异或的运算法则为：0⊕0=0，1⊕0=1，0⊕1=1，1⊕1=0（即，同为 0，异为 1）
-
-```python
-n = int(input())
-f = 1
-str = 'I hate it'
-
-for x in range(1, n):
-    if f^1:
-        str = str.replace('it', 'that I hate it')
-    else:
-        str = str.replace('it', 'that I love it')
-    
-    f ^= 1
-
-print(str)
+avg = nSum//2
+ 
+n_coin = 0
+value_n_coin = 0
+ 
+stop_value = 0
+for value in range(100,0,-1):
+        if fq[value]==0: continue
+ 
+        if fq[value]*value + value_n_coin > avg :
+                stop_value = value
+                break
+ 
+        value_n_coin += fq[value]*value
+        n_coin += fq[value]
+ 
+for i in range(1,fq[stop_value]+1):
+        if i*stop_value + value_n_coin > avg :
+                n_coin += i
+                break
+ 
+print(n_coin)
 ```
 
 
@@ -2144,6 +1208,822 @@ Note to the first sample: let's assume that Vasya takes *x* milliliters of each 
 n=int(input())
 p = list(map(int,input().split()))
 print(sum(p)/n)
+```
+
+
+
+## 231A. Team
+
+bruteforce/greedy, 800, http://codeforces.com/problemset/problem/231/A
+
+One day three best friends Petya, Vasya and Tonya decided to form a team and take part in programming contests. Participants are usually offered several problems during programming contests. Long before the start the friends decided that they will implement a problem if at least two of them are sure about the solution. Otherwise, the friends won't write the problem's solution.
+
+This contest offers *n* problems to the participants. For each problem we know, which friend is sure about the solution. Help the friends find the number of problems for which they will write a solution.
+
+**Input**
+
+The first input line contains a single integer *n* (1 ≤ *n* ≤ 1000) — the number of problems in the contest. Then *n* lines contain three integers each, each integer is either 0 or 1. If the first number in the line equals 1, then Petya is sure about the problem's solution, otherwise he isn't sure. The second number shows Vasya's view on the solution, the third number shows Tonya's view. The numbers on the lines are separated by spaces.
+
+**Output**
+
+Print a single integer — the number of problems the friends will implement on the contest.
+
+Examples
+
+input
+
+```
+3
+1 1 0
+1 1 1
+1 0 0
+```
+
+output
+
+```
+2
+```
+
+input
+
+```
+2
+1 0 0
+0 1 1
+```
+
+output
+
+```
+1
+```
+
+Note
+
+In the first sample Petya and Vasya are sure that they know how to solve the first problem and all three of them know how to solve the second problem. That means that they will write solutions for these problems. Only Petya is sure about the solution for the third problem, but that isn't enough, so the friends won't take it.
+
+In the second sample the friends will only implement the second problem, as Vasya and Tonya are sure about the solution.
+
+
+
+三人小队，至少两个人会才能答出问题
+
+```python
+n = int(input())
+num = 0
+for i in range(n):
+	a, b, c = [int(x) for x in input().split()]
+	if a + b + c >1:
+		num += 1
+print(num)
+```
+
+short code
+
+```python
+print(sum(input().count('1')>1 for x in range(int(input()))))
+```
+
+==print()也 很 耗 时间，如果 要多次输出，可以在 print()里套循环，减少调用次数==
+
+
+
+## 236A. Boy or Girl
+
+brute force/implementation/strings, 800, https://codeforces.com/problemset/problem/236/A
+
+Those days, many boys use beautiful girls' photos as avatars in forums. So it is pretty hard to tell the gender of a user at the first glance. Last year, our hero went to a forum and had a nice chat with a beauty (he thought so). After that they talked very often and eventually they became a couple in the network.
+
+But yesterday, he came to see "her" in the real world and found out "she" is actually a very strong man! Our hero is very sad and he is too tired to love again now. So he came up with a way to recognize users' genders by their user names.
+
+This is his method: if the number of distinct characters in one's user name is odd, then he is a male, otherwise she is a female. You are given the string that denotes the user name, please help our hero to determine the gender of this user by his method.
+
+**Input**
+
+The first line contains a non-empty string, that contains only lowercase English letters — the user name. This string contains at most 100 letters.
+
+**Output**
+
+If it is a female by our hero's method, print "CHAT WITH HER!" (without the quotes), otherwise, print "IGNORE HIM!" (without the quotes).
+
+Examples
+
+input
+
+```
+wjmzbmr
+```
+
+output
+
+```
+CHAT WITH HER!
+```
+
+input
+
+```
+xiaodao
+```
+
+output
+
+```
+IGNORE HIM!
+```
+
+input
+
+```
+sevenkplus
+```
+
+output
+
+```
+CHAT WITH HER!
+```
+
+Note
+
+For the first example. There are 6 distinct characters in "wjmzbmr". These characters are: "w", "j", "m", "z", "b", "r". So wjmzbmr is a female and you should print "CHAT WITH HER!".
+
+
+
+```python
+s = input()
+fq = 26*[0]
+
+for c in s:
+        fq[ord(c) - ord('a')] += 1
+
+nCount = 0
+for i in range(26):
+        if fq[i]!=0 :
+                nCount += 1
+
+if nCount%2 == 1:
+        print('IGNORE HIM!')
+else:
+        print('CHAT WITH HER!')
+```
+
+
+
+```python
+s = set()
+s.update(input())
+if len(s)%2 == 1:
+    print('IGNORE HIM!')
+else:
+    print('CHAT WITH HER!')
+```
+
+update Method:
+
+This method is used to return the union of a set and the set of elements from one or more iterable like string, list, set. It is very similar to **union()** method, with difference is that where union() method create and return a new set, containing all the elements ( distinct ) present in all the iterables, update() method updates the set on which this method is called with all the distinct elements present in all the iterables.
+
+
+
+C++
+
+```c++
+#include <bits/stdc++.h>
+using namespace std;
+int main(){
+        set<char> s; char c;
+        while(cin>>c)
+                s.insert(c);
+        cout<<(s.size()&1?"IGNORE HIM!":"CHAT WITH HER!");
+}
+```
+
+
+
+## 263A. Beautiful Matrix
+
+implementation, 800, http://codeforces.com/problemset/problem/263/A
+
+You've got a 5 × 5 matrix, consisting of 24 zeroes and a single number one. Let's index the matrix rows by numbers from 1 to 5 from top to bottom, let's index the matrix columns by numbers from 1 to 5 from left to right. In one move, you are allowed to apply one of the two following transformations to the matrix:
+
+1. Swap two neighboring matrix rows, that is, rows with indexes *i* and *i* + 1 for some integer *i* (1 ≤ *i* < 5).
+2. Swap two neighboring matrix columns, that is, columns with indexes *j* and *j* + 1 for some integer *j* (1 ≤ *j* < 5).
+
+You think that a matrix looks *beautiful*, if the single number one of the matrix is located in its middle (in the cell that is on the intersection of the third row and the third column). Count the minimum number of moves needed to make the matrix beautiful.
+
+**Input**
+
+The input consists of five lines, each line contains five integers: the *j*-th integer in the *i*-th line of the input represents the element of the matrix that is located on the intersection of the *i*-th row and the *j*-th column. It is guaranteed that the matrix consists of 24 zeroes and a single number one.
+
+**Output**
+
+Print a single integer — the minimum number of moves needed to make the matrix beautiful.
+
+Examples
+
+input
+
+```
+0 0 0 0 0
+0 0 0 0 1
+0 0 0 0 0
+0 0 0 0 0
+0 0 0 0 0
+```
+
+output
+
+```
+3
+```
+
+input
+
+```
+0 0 0 0 0
+0 0 0 0 0
+0 1 0 0 0
+0 0 0 0 0
+0 0 0 0 0
+```
+
+output
+
+```
+1
+```
+
+
+
+```python
+for i in range(5):
+    s = input().split()
+    if "1" in s:
+        print(abs(i-2)+abs(s.index("1")-2))
+        break
+```
+
+周晋飞
+
+```python
+matrix = [[int(x) for x in input().split()] for i in range(5)]
+
+for i in range(5):
+    if 1 in matrix[i]:
+        j = matrix[i].index(1)
+        print(abs(i-2)+abs(j-2))
+        break
+```
+
+马玉娇，代码容易看懂
+
+```python
+a = input().split()
+b = input().split()
+c = input().split()
+d = input().split()
+e = input().split()
+if '1' in a:
+    print(abs(a.index('1')-2) +2)
+if '1' in b:
+    print(abs(b.index('1')-2) +1)
+if '1' in c:
+    print(abs(c.index('1')-2))
+if '1' in d:
+    print(abs(d.index('1')-2) +1)
+if '1' in e:
+    print(abs(e.index('1')-2) +2)
+```
+
+韩无极，代码容易看懂
+
+```Python
+for i in range(5):
+    lis = list(map(int,input().split()))
+    if 1 in lis:
+        r = i
+        break
+for j in range(5):
+    if lis[j]==1:
+        c = j
+print(abs(c-2)+abs(r-2))
+```
+
+庞翔升，代码不容易看懂
+
+```python
+c = 0
+for i in range(5):
+    exec('a%s=list(input().split())'%i)
+for i in range(5):
+    for o in range(5):
+        exec('c=(a%s[o])'%i)
+        if c=='1':
+            print(abs(i-2)+abs(o-2))
+```
+
+
+
+```python
+mx = [ [0]*5 for row in range(5) ]
+
+for row in range(5):
+    line = [int(j) for j in input().split()]
+    if max(line)==1:
+        for column in range(5):
+            if line[column]==1:
+                mx[row][column]=1
+                break
+	print(abs(row-2) + abs(column-2))
+    break
+```
+
+short code
+
+```python
+l = [2,1,0,1,2]
+for i in l:
+    s = input()
+    if "1" in s: 
+        print(i + l[s.find("1")//2])
+```
+
+
+
+C++，陆宸
+
+```c++
+#include <iostream>
+#include <cmath>
+using namespace std;
+int main (){
+        int x[5][5];
+        int r, c;
+        for (int i = 0; i < 5; i++){
+                for (int j = 0; j < 5; j++){
+                        x[i][j] = 0;
+                }
+        }
+        for (int w = 0; w < 5; w++){
+                for (int t = 0; t < 5; t++){
+                        cin >> x[w][t];
+                }
+        }
+        for (int a = 0; a < 5; a++){
+                for (int b = 0; b < 5; b++){
+                        if (x[a][b] != 0){
+                                r = a;
+                                c = b;
+                        }
+                }
+        }
+        cout << abs (r-2) + abs (c-2);
+        return 0;
+}
+```
+
+
+
+## 266A. Stones on the Table
+
+implementation, 800, http://codeforces.com/problemset/problem/266/A
+
+There are *n* stones on the table in a row, each of them can be red, green or blue. Count the minimum number of stones to take from the table so that any two neighboring stones had different colors. Stones in a row are considered neighboring if there are no other stones between them.
+
+**Input**
+
+The first line contains integer *n* (1 ≤ *n* ≤ 50) — the number of stones on the table.
+
+The next line contains string *s*, which represents the colors of the stones. We'll consider the stones in the row numbered from 1 to *n* from left to right. Then the *i*-th character *s* equals "R", if the *i*-th stone is red, "G", if it's green and "B", if it's blue.
+
+**Output**
+
+Print a single integer — the answer to the problem.
+
+Examples
+
+input
+
+```
+3
+RRG
+```
+
+output
+
+```
+1
+```
+
+input
+
+```
+5
+RRRRR
+```
+
+output
+
+```
+4
+```
+
+input
+
+```
+4
+BRBG
+```
+
+output
+
+```
+0
+```
+
+
+
+```python
+n = int(input())
+l = input()
+
+nCount = 0
+p = l[0]
+for i in range(1,n):
+        if l[i]==p:
+                nCount += 1
+        else:
+                p = l[i]
+
+print(nCount)
+```
+
+
+
+## 281A. Word Capitalization
+
+implementation/strings, 800, http://codeforces.com/problemset/problem/281/A
+
+Capitalization is writing a word with its first letter as a capital letter. Your task is to capitalize the given word.
+
+Note, that during capitalization all the letters except the first one remains unchanged.
+
+**Input**
+
+A single line contains a non-empty word. This word consists of lowercase and uppercase English letters. The length of the word will not exceed 10^3^.
+
+**Output**
+
+Output the given word after capitalization.
+
+Examples
+
+input
+
+```
+ApPLe
+```
+
+output
+
+```
+ApPLe
+```
+
+input
+
+```
+konjac
+```
+
+output
+
+```
+Konjac
+```
+
+
+
+```python
+line = input()
+print(line[0].upper() + line[1:])
+```
+
+
+
+练习ASCII的转化
+
+```python
+a = input()
+b = ord(a[0])
+if b >= 97:
+    b -= 32
+print (chr(b),end = '')
+print(a[1:])
+```
+
+
+
+C++
+
+```c++
+#include <iostream>
+#include <cstring>
+using namespace std;
+int main(){
+        string a;
+        cin >> a;
+        if (a[0] <= 90){
+                cout << a;
+        }else{
+                a[0] -= 32;
+                cout << a;
+        }
+        return 0;
+}
+```
+
+
+
+## 282A. Bit++
+
+implementation, 800, http://codeforces.com/problemset/problem/282/A
+
+The classic programming language of Bitland is Bit++. This language is so peculiar and complicated.
+
+The language is that peculiar as it has exactly one variable, called *x*. Also, there are two operations:
+
+- Operation ++ increases the value of variable *x* by 1.
+- Operation -- decreases the value of variable *x* by 1.
+
+A statement in language Bit++ is a sequence, consisting of exactly one operation and one variable *x*. The statement is written without spaces, that is, it can only contain characters "+", "-", "X". Executing a statement means applying the operation it contains.
+
+A programme in Bit++ is a sequence of statements, each of them needs to be executed. Executing a programme means executing all the statements it contains.
+
+You're given a programme in language Bit++. The initial value of *x* is 0. Execute the programme and find its final value (the value of the variable when this programme is executed).
+
+**Input**
+
+The first line contains a single integer *n* (1 ≤ *n* ≤ 150) — the number of statements in the programme.
+
+Next *n* lines contain a statement each. Each statement contains exactly one operation (++ or --) and exactly one variable *x* (denoted as letter «X»). Thus, there are no empty statements. The operation and the variable can be written in any order.
+
+**Output**
+
+Print a single integer — the final value of *x*.
+
+Examples
+
+input
+
+```
+1
+++X
+```
+
+output
+
+```
+1
+```
+
+input
+
+```
+2
+X++
+--X
+```
+
+output
+
+```
+0
+```
+
+
+
+定义两种运算，++表示 +1，，--表示 -1 x的值不断更新
+
+```python
+n = int(input())
+x = 0
+for i in range(n):
+	statement = input()
+	if '++' in statement:
+		x += 1
+	else:
+		x -= 1
+print(x)
+```
+
+short code
+
+```python
+f=input
+print(sum('+'in f() or -1 for i in range(int(f()))))
+```
+
+
+
+C++，陆宸
+
+```c++
+#include <iostream>
+#include <cstring>
+using namespace std;
+int main (){
+        short n;
+        int x = 0;
+        cin >> n;
+        string a[n];
+        for (short i = 0; i < n; i++){
+                a[i] = "0";
+        }
+        for (short j = 0; j < n; j++){
+                cin >> a[j];
+        }
+        for (short w = 0; w < n; w++){
+                if (a[w] == "++X" || a[w] == "X++"){
+                        x++;
+                }else{
+                        x--;
+                }
+        }
+        cout << x;
+        return 0;
+}
+```
+
+
+
+## 339A. Helpful Maths
+
+greedy/implementation/sortings/strings, 800, http://codeforces.com/problemset/problem/339/A
+
+Xenia the beginner mathematician is a third year student at elementary school. She is now learning the addition operation.
+
+The teacher has written down the sum of multiple numbers. Pupils should calculate the sum. To make the calculation easier, the sum only contains numbers 1, 2 and 3. Still, that isn't enough for Xenia. She is only beginning to count, so she can calculate a sum only if the summands follow in non-decreasing order. For example, she can't calculate sum 1+3+2+1 but she can calculate sums 1+1+2 and 3+3.
+
+You've got the sum that was written on the board. Rearrange the summans and print the sum in such a way that Xenia can calculate the sum.
+
+**Input**
+
+The first line contains a non-empty string *s* — the sum Xenia needs to count. String *s* contains no spaces. It only contains digits and characters "+". Besides, string *s* is a correct sum of numbers 1, 2 and 3. String *s* is at most 100 characters long.
+
+**Output**
+
+Print the new sum that Xenia can count.
+
+Examples
+
+input
+
+```
+3+2+1
+```
+
+output
+
+```
+1+2+3
+```
+
+input
+
+```
+1+1+3+1+3
+```
+
+output
+
+```
+1+1+1+3+3
+```
+
+input
+
+```
+2
+```
+
+output
+
+```
+2
+```
+
+```python
+s = input()
+fq = 4*[0] # the first is no use.
+
+for i in range(0, len(s), 2):
+        fq[int(s[i])] += 1
+
+ns = ''
+for i in range(1,4) :
+       while fq[i]>0 :
+               fq[i] -= 1
+               ns += str(i)
+
+print('+'.join(ns))
+```
+
+short code
+
+```python
+s = [int(n) for n in input().split('+')]
+
+s.sort()
+
+print('+'.join(str(i) for i in s))
+```
+
+
+
+C++，陆宸
+
+```c++
+#include <iostream>
+#include <cstring>
+#include <vector>
+#include <algorithm>
+using namespace std;
+int main (){
+        string str;
+        int len;
+        int a;
+        cin >> str;
+        len = str.size();
+        a = (len + 1)/2;
+
+        vector<int> num(a, 0);
+        for (int i = 0; i < len; i+= 2){
+                num[i/2] = str[i]-48;
+        }
+        sort (num.begin(), num.end());
+        for (int j = 0; j < a - 1; j++){
+                cout << num[j] << "+";
+        }
+        cout << num[a-1];
+        return 0;
+}
+```
+
+
+
+## 456A. Laptops
+
+sortings, 1100, https://codeforces.com/problemset/problem/456/A
+
+One day Dima and Alex had an argument about the price and quality of laptops. Dima thinks that the more expensive a laptop is, the better it is. Alex disagrees. Alex thinks that there are two laptops, such that the price of the first laptop is less (strictly smaller) than the price of the second laptop but the quality of the first laptop is higher (strictly greater) than the quality of the second laptop.
+
+Please, check the guess of Alex. You are given descriptions of *n* laptops. Determine whether two described above laptops exist.
+
+**Input**
+
+The first line contains an integer *n* (1 ≤ *n* ≤ 10^5^) — the number of laptops.
+
+Next *n* lines contain two integers each, *a~i~* and *b~i~* (1 ≤ *a~i~*, *b~i~* ≤ *n*), where *a~i~* is the price of the *i*-th laptop, and *b~i~* is the number that represents the quality of the *i*-th laptop (the larger the number is, the higher is the quality).
+
+All *a~i~* are distinct. All *b~i~* are distinct.
+
+**Output**
+
+If Alex is correct, print "Happy Alex", otherwise print "Poor Alex" (without the quotes). 
+
+Examples
+
+input
+
+```
+2
+1 2
+2 1
+```
+
+output
+
+```
+Happy Alex
+```
+
+
+
+```python
+n = int(input())
+s = [[int(x) for x in input().split()] for _ in range(n)]
+s.sort(reverse=True)
+ 
+for i in s[1:]:
+    if i[1] > s[0][1]:
+        print('Happy Alex')
+        break
+    
+    s[0][1] = i[1] 
+else:
+    print('Poor Alex') 
 ```
 
 
@@ -2327,57 +2207,273 @@ else:
 
 
 
-## 456A. Laptops
+## 615A. Bulbs
 
-sortings, 1100, https://codeforces.com/problemset/problem/456/A
+implementation, 800, http://codeforces.com/contest/615/problem/A 
 
-One day Dima and Alex had an argument about the price and quality of laptops. Dima thinks that the more expensive a laptop is, the better it is. Alex disagrees. Alex thinks that there are two laptops, such that the price of the first laptop is less (strictly smaller) than the price of the second laptop but the quality of the first laptop is higher (strictly greater) than the quality of the second laptop.
+Vasya wants to turn on Christmas lights consisting of *m* bulbs. Initially, all bulbs are turned off. There are *n* buttons, each of them is connected to some set of bulbs. Vasya can press any of these buttons. When the button is pressed, it turns on all the bulbs it's connected to. Can Vasya light up all the bulbs?
 
-Please, check the guess of Alex. You are given descriptions of *n* laptops. Determine whether two described above laptops exist.
+If Vasya presses the button such that some bulbs connected to it are already turned on, they do not change their state, i.e. remain turned on.
 
 **Input**
 
-The first line contains an integer *n* (1 ≤ *n* ≤ 10^5^) — the number of laptops.
+The first line of the input contains integers *n* and *m* (1 ≤ *n*, *m* ≤ 100) — the number of buttons and the number of bulbs respectively.
 
-Next *n* lines contain two integers each, *a~i~* and *b~i~* (1 ≤ *a~i~*, *b~i~* ≤ *n*), where *a~i~* is the price of the *i*-th laptop, and *b~i~* is the number that represents the quality of the *i*-th laptop (the larger the number is, the higher is the quality).
-
-All *a~i~* are distinct. All *b~i~* are distinct.
+Each of the next *n* lines contains *x~i~* (0 ≤ *x~i~*≤ *m*) — the number of bulbs that are turned on by the *i*-th button, and then *x~i~* numbers *y~ij~* (1 ≤ *y~ij~* ≤ *m*) — the numbers of these bulbs.
 
 **Output**
 
-If Alex is correct, print "Happy Alex", otherwise print "Poor Alex" (without the quotes). 
+If it's possible to turn on all *m* bulbs print "YES", otherwise print "NO".
 
 Examples
 
 input
 
 ```
-2
+3 4
+2 1 4
+3 1 3 1
 1 2
-2 1
 ```
 
 output
 
 ```
-Happy Alex
+YES
+```
+
+input
+
+```
+3 3
+1 1
+1 2
+1 1
+```
+
+output
+
+```
+NO
+```
+
+Note
+
+In the first sample you can press each button once and turn on all the bulbs. In the 2 sample it is impossible to turn on the 3-rd lamp.
+
+
+
+```python
+n, m = map(int, input().split())
+s = set()
+for _ in range(n):
+    s.update(input().split()[1:])
+
+print(['NO','YES'][len(s)==m])
+```
+
+
+
+## 705A. Hulk
+
+implementation, 800, https://codeforces.com/problemset/problem/705/A
+
+Dr. Bruce Banner hates his enemies (like others don't). As we all know, he can barely talk when he turns into the incredible Hulk. That's why he asked you to help him to express his feelings.
+
+Hulk likes the Inception so much, and like that his feelings are complicated. They have *n* layers. The first layer is hate, second one is love, third one is hate and so on...
+
+For example if *n* = 1, then his feeling is "I hate it" or if *n* = 2 it's "I hate that I love it", and if *n* = 3 it's "I hate that I love that I hate it" and so on.
+
+Please help Dr. Banner.
+
+**Input**
+
+The only line of the input contains a single integer *n* (1 ≤ *n* ≤ 100) — the number of layers of love and hate.
+
+**Output**
+
+Print Dr.Banner's feeling in one line.
+
+Examples
+
+input
+
+```
+1
+```
+
+output
+
+```
+I hate it
+```
+
+input
+
+```
+2
+```
+
+output
+
+```
+I hate that I love it
+```
+
+input
+
+```
+3
+```
+
+output
+
+```
+I hate that I love that I hate it
+```
+
+
+
+2020fall-cs101-郭冠廷，
+
+```python
+say = []
+for i in range(int(input())):
+    say.append(['I hate', 'I love'][i % 2])
+print(" that ".join(say), end=" it\n")
 ```
 
 
 
 ```python
 n = int(input())
-s = [[int(x) for x in input().split()] for _ in range(n)]
-s.sort(reverse=True)
  
-for i in s[1:]:
-    if i[1] > s[0][1]:
-        print('Happy Alex')
-        break
-    
-    s[0][1] = i[1] 
+l = ""
+for i in range(1,n):
+    if i%2 == 0:
+        l += " that I hate"
+    else:
+        l += " that I love"
+ 
+print("I hate" + l + " it")
+```
+
+
+
+2020fall-cs101-成泽凯，解题思路：
+
+”I hate that”和”I love that”用 while来输出，最后根据 n的奇偶来判断输出”I love it”还是”I hate it”
+
+```python
+n = int(input())
+a = n
+while n > 1:
+    print("I hate that", end=" ")
+    n -= 1
+    if n > 1:
+        print("I love that", end=" ")
+        n -= 1
+
+if a%2 == 0:
+    print("I love it")
 else:
-    print('Poor Alex') 
+    print("I hate it")
+```
+
+
+
+2021fall-cs101，黄靖涵。https://codeforces.com/problemset/problem/705/A
+
+```python
+n = int(input())
+
+def f(n):
+    if n==1:
+        return "I hate it"
+    if n%2 == 1:
+        return f(n-1)[:-2] + "that I hate it"
+    if n%2 == 0:
+        return f(n-1)[:-2] + "that I love it"
+
+print(f(n))
+```
+
+思考： 
+
+1）递归
+
+2）异或操作（异或也叫半加运算，其运算法则相当于不带进位的二进制加法）：二进制下用1 表示真，0 表示假。则异或的运算法则为：0⊕0=0，1⊕0=1，0⊕1=1，1⊕1=0（即，同为 0，异为 1）
+
+```python
+n = int(input())
+f = 1
+str = 'I hate it'
+
+for x in range(1, n):
+    if f^1:
+        str = str.replace('it', 'that I hate it')
+    else:
+        str = str.replace('it', 'that I love it')
+    
+    f ^= 1
+
+print(str)
+```
+
+
+
+## 723A. The New Year: Meeting Friends
+
+implementation, math, sorting, 800, https://codeforces.com/problemset/problem/723/A
+
+There are three friend living on the straight line *Ox* in Lineland. The first friend lives at the point $x_{1}$, the second friend lives at the point $x_{2}$, and the third friend lives at the point $x_{3}$. They plan to celebrate the New Year together, so they need to meet at one point. What is the minimum total distance they have to travel in order to meet at some point and celebrate the New Year?
+
+It's guaranteed that the optimal answer is always integer.
+
+**Input**
+
+The first line of the input contains three **distinct** integers $x_{1}$, $x_{2}$ and $x_{3}$ (1 ≤ $x_{1}$, $x_{2}$,$x_{3}$  ≤ 100) — the coordinates of the houses of the first, the second and the third friends respectively.
+
+**Output**
+
+Print one integer — the minimum total distance the friends need to travel in order to meet together.
+
+Examples
+
+input
+
+```
+7 1 4
+```
+
+output
+
+```
+6
+```
+
+input
+
+```
+30 20 10
+```
+
+output
+
+```
+20
+```
+
+Note
+
+In the first sample, friends should meet at the point 4. Thus, the first friend has to travel the distance of 3 (from the point 7 to the point 4), the second friend also has to travel the distance of 3 (from the point 1 to the point 4), while the third friend should not go anywhere because he lives at the point 4.
+
+
+
+```python
+x = list(map(int, input().split()))
+x.sort()
+print(x[-1] - x[0])
 ```
 
 
