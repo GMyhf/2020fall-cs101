@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 0044 GMT+8 Oct 7, 2022
+Updated 2108 GMT+8 Oct 15, 2022
 
 
 
@@ -5378,6 +5378,50 @@ for i in range(0, q):
         print('YES')
     else:
         print('NO')
+```
+
+
+
+2022fall-cs101-王艾雨
+
+做这道题主要是从 OJ01017.装箱问题（ http://cs101.openjudge.cn/practice/01017/ ）获得了灵感，就是**不要在一开始就对所有数字的个数进行讨论，而是让数字的个数随着一次次的运算进行变化，最终得到结果**。我将两个较小数合在一起获得的较大数的个数加上原本较大数的个数，一步步推导，最终顺利得到了2048的个数。
+
+```python
+a=int(input())
+d=[]
+for i in range(1,a+1):
+    b=int(input())
+    c=list(map(int,input().split()))
+    n1=c.count(1)
+    n2=c.count(2)
+    n4=c.count(4)
+    n8=c.count(8)
+    n16=c.count(16)
+    n32=c.count(32)
+    n64=c.count(64)
+    n128=c.count(128)
+    n256=c.count(256)
+    n512=c.count(512)
+    n1024=c.count(1024)
+    n2048=c.count(2048)
+    
+    n2+=n1//2
+    n4+=n2//2
+    n8+=n4//2
+    n16+=n8//2
+    n32+=n16//2
+    n64+=n32//2
+    n128+=n64//2
+    n256+=n128//2
+    n512+=n256//2
+    n1024+=n512//2
+    n2048+=n1024//2
+    
+    if n2048>=1:
+        d.append("YES")
+    else:
+        d.append("NO")
+print(*d)
 ```
 
 
