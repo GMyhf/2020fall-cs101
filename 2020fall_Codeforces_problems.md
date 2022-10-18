@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 2108 GMT+8 Oct 15, 2022
+Updated 0103 GMT+8 Oct 19, 2022
 
 
 
@@ -4829,6 +4829,32 @@ for i in range(2, len(a), 2):
         t = tot -s					#导出后 n-i 次开灯时间
         ans = max(ans, s + m-a[i-1]-t - 1)	#之前奇数项+之后偶数项-1
 print(ans)
+```
+
+
+
+2022fall-cs101, 姜鑫
+
+思路：算出分割后的时间段，从后往前，用开启时间段减去关闭时间段，取净时间，当净时间最小时，在前面的时间插入一个program，损失一个unit，但是后面的反转了，由净时间知开灯时间变长了，输出原来的开灯时间加上净时间减一即可。
+
+```python
+n,m=map(int,input().split())
+n+=2
+times=[0]+list(map(int,input().split()))+[m,0]
+cha=[]
+out=0
+for i in range(1,n,2):
+    a=times[i]-times[i-1]
+    cha.append(a)
+    out+=a
+    cha.append(times[i]-times[i+1])
+if n%2==0:cha.pop()
+dp=[cha[-1]]
+for i in range(2,n):
+    dp.append(dp[i-2]+cha[-i])
+mi=min(dp)
+if mi <-1:print(out-mi-1)
+else:print(out)
 ```
 
 
