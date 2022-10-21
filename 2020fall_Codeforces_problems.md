@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 0103 GMT+8 Oct 19, 2022
+Updated 1123 GMT+8 Oct 21, 2022
 
 
 
@@ -990,6 +990,38 @@ all(x)如果all(x)参数x对象的所有元素不为0、''、False或者x为空�
 ```python
 n = int(input())
 print('NO' if all([n%i for i in (4,7,47,74,447,474,477,747,774)]) else 'YES')
+```
+
+
+
+2022fall-cs101，刘子芊。分解因数法。
+
+```python
+import re
+#import sys
+n = int(input())
+
+#求因数
+def factor(n):
+    fac = []
+    for i in range(1, (n+1)//2):
+        if n%i == 0:
+            fac.append(i)
+            fac.append(n//i)
+    return list(set(fac))
+
+#分解因数+本身（无1）
+facn = factor(n)
+
+#因数中若出现lucky number则是almost lucky
+pattern = r'^[47]+$'
+for num in facn:
+    if re.match(pattern, str(num)) != None:
+        print('YES')
+        #sys.exit()
+        break
+else:
+    print('NO')
 ```
 
 
