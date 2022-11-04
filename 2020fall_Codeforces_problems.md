@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 1123 GMT+8 Oct 21, 2022
+Updated 1537 GMT+8 Nov 4, 2022
 
 
 
@@ -5781,6 +5781,133 @@ for _ in range(int(input())):
     res.append(n)
     print(high-low, len(res))
     print(*res)
+```
+
+
+
+## 1719C. Number Game
+
+binary search/data structure/games/greedy/implementation, 1400, https://codeforces.com/problemset/problem/1749/C
+
+Alice and Bob are playing a game. They have an array of positive integers 𝑎a of size 𝑛n.
+
+Before starting the game, Alice chooses an integer 𝑘≥0. The game lasts for 𝑘k stages, the stages are numbered from 1 to 𝑘. During the 𝑖-th stage, Alice must remove an element from the array that is less than or equal to $𝑘−𝑖+1$. After that, if the array is not empty, Bob must add $𝑘−𝑖+1$ to an arbitrary element of the array. Note that both Alice's move and Bob's move are two parts of the same stage of the game. If Alice can't delete an element during some stage, she loses. If the 𝑘k-th stage ends and Alice hasn't lost yet, she wins.
+
+Your task is to determine the maximum value of 𝑘 such that Alice can win if both players play optimally. Bob plays against Alice, so he tries to make her lose the game, if it's possible.
+
+Input
+
+The first line contains a single integer 𝑡t (1≤𝑡≤100) — the number of test cases.
+
+The first line of each test case contains a single integer 𝑛n (1≤𝑛≤100) — the size of the array 𝑎a.
+
+The second line contains 𝑛n integers $𝑎_1,𝑎_2,…,𝑎_𝑛 (1≤𝑎_𝑖≤𝑛)$.
+
+Output
+
+For each test case, print one integer — the maximum value of 𝑘k such that Alice can win if both players play optimally.
+
+Example
+
+**input**
+
+```
+4
+3
+1 1 2
+4
+4 4 4 4
+1
+1
+5
+1 3 2 1 1
+```
+
+**output**
+
+```
+2
+0
+1
+3
+```
+
+
+
+1749C - Nubmer Game Tutorial, https://codeforces.com/blog/entry/108269
+
+Note that if Bob has increased some element, then Alice can't remove it on the next stages. Obviously, it is more profitable for Bob to "prohibit" the smallest element of the array. Using this fact, we can iterate over the value of 𝑘, and then simulate the game process. To simulate the game, we can maintain the set of elements that Alice can remove. On the 𝑖i-th stage, Alice removes the maximum element 𝑥x, such that $𝑥≤𝑘−𝑖+1$, if there are no such elements, then Alice lost. Bob always removes the minimum element of the set.
+
+Thus, the complexity of the solution is $𝑂(𝑛^2log𝑛)$ for each test case.
+
+There is another possible solution: we can notice that, if Alice wins, Bob will "prohibit" the elements on positions 1,2,…,𝑘−1 of the sorted array. So, Alice has to delete the next 𝑘k elements. So, if the segment [𝑘…2𝑘−1] of the sorted array can be deleted by Alice during the game phases, she wins with this value of 𝑘k.
+
+
+
+```python
+#from collections import deque
+#from bisect import bisect_left
+ 
+for _ in range(int(input())):
+    n = int(input())
+    *nums, = map(int,input().split())
+    numse = sorted(nums)
+    
+    flag = True
+    if 1 not in nums:
+        print(0)
+        continue
+    
+    for k in range(n+1):
+        nums = numse.copy()
+        for i in range(1,k+1):
+            if len(nums):
+                d = k-i+1
+                j = 0
+                while j<len(nums) and nums[j]<= d:
+                    j+=1
+                if nums[j-1]> d:
+                    flag = False
+                    break
+                else:
+                    nums.pop(j-1)
+                    if len(nums):
+                        nums[0]+=d
+                        nums.sort()
+            else:
+                break
+        if not flag:
+            break
+    print(k-1 if not flag else k)
+```
+
+
+
+```python
+def solve():
+ 
+    n = int(input())
+    a = sorted(map(int, input().split()))
+    ans = 0
+    for i in range(n):
+        l = 0; r = i 
+        c = (i+2)//2
+        chk = 0
+        while l <= r:
+            if a[r] <= c-l:
+                r -= 1 ; l += 1
+               
+            else:
+                chk = 1
+                break
+        if chk == 0:  ans = c
+          
+    print(ans)
+ 
+if __name__ == "__main__":
+    #for i in range(inp()):
+    for i in range(int(input())):
+        solve()
 ```
 
 
