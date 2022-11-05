@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 1537 GMT+8 Nov 4, 2022
+Updated 1731 GMT+8 Nov 5, 2022
 
 
 
@@ -5840,7 +5840,39 @@ Note that if Bob has increased some element, then Alice can't remove it on the n
 
 Thus, the complexity of the solution is $𝑂(𝑛^2log𝑛)$ for each test case.
 
-There is another possible solution: we can notice that, if Alice wins, Bob will "prohibit" the elements on positions 1,2,…,𝑘−1 of the sorted array. So, Alice has to delete the next 𝑘k elements. So, if the segment [𝑘…2𝑘−1] of the sorted array can be deleted by Alice during the game phases, she wins with this value of 𝑘k.
+There is another possible solution: we can notice that, if Alice wins, Bob will "prohibit" the elements on positions 1,2,…,𝑘−1 of the sorted array. So, Alice has to delete the next 𝑘 elements. So, if the segment [𝑘…2𝑘−1] of the sorted array can be deleted by Alice during the game phases, she wins with this value of 𝑘.
+
+
+
+为了采取最优策略，bob尽量从小的数开始增加k-i+1，而增加后的数将无法在以后的步骤中被alice选取，为在后续步骤中能够继续选取，Alice尽量取满足条件的最大数来移除。
+
+```python
+# 2022fall-cs101, 梁力潇
+
+t=int(input())
+for i in range(t):
+    n=int(input())
+    l=list(map(int,input().split()))
+    l.sort()
+    if l.count(1)==0:
+        print(0)
+        continue
+    
+    c=min(l.count(1),(n+1)//2)
+    l.remove(1)
+    for j in range(1,c+1):
+        if l.count(1)==0:
+            print(j)
+            break
+
+        l.remove(1)
+        d=[y for y in l if y<=j+1]
+        if d==[]:
+            print(j)
+            break
+        else:
+            l.remove(max(d))
+```
 
 
 
@@ -5883,6 +5915,10 @@ for _ in range(int(input())):
 
 
 
+
+
+𝑘 至少对应 2𝑘-1 个数字，𝑘 步之后 Alice 要选择 𝑘-i+1 = 1，那么 n 个数中至少需要有 𝑘-1 个1。
+
 ```python
 def solve():
  
@@ -5896,7 +5932,6 @@ def solve():
         while l <= r:
             if a[r] <= c-l:
                 r -= 1 ; l += 1
-               
             else:
                 chk = 1
                 break
