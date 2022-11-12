@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 1145 GMT+8 Nov 12, 2022
+Updated 1617 GMT+8 Nov 12, 2022
 
 
 
@@ -5943,6 +5943,34 @@ if __name__ == "__main__":
     #for i in range(inp()):
     for i in range(int(input())):
         solve()
+```
+
+
+
+2022fall-cs101，朱信霖，物理学院
+
+考虑用贪心算法，k从1逐渐增大。取出前k-1个1后，之后的k个数满足a[i]>i+1。当以上条件不满足时，计算结束。
+运行时间：31ms。时当前CF上使用python3解题的最短耗时。
+
+```python
+t = int(input())
+for _ in range(t):
+    n = int(input())
+    lis = [int(x) for x in input().split()]
+    lis.sort()
+    num = lis.count(1)
+    s = min(num,n//2+n%2)
+    check = False
+    for k in range(1,s+1):
+        lists = lis[k-1:2*k-1]
+        for i in range(k):
+            if lists[i] > i+1:
+                check = True
+                break
+        if check:
+            s = k-1
+            break
+    print(s)
 ```
 
 
