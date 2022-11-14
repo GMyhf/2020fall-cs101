@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 1617 GMT+8 Nov 12, 2022
+Updated 1242 GMT+8 Nov 14, 2022
 
 
 
@@ -5971,6 +5971,40 @@ for _ in range(t):
             s = k-1
             break
     print(s)
+```
+
+
+
+2022fall-cs101，胡靖苑，生命科学学院
+
+思路：这道题比想象中简单，找到两个人采取的策略，根据策略找到需要的条件就行了。
+
+```python
+import bisect
+output=[]
+for _ in range(int(input())):
+	n=int(input())
+	a=sorted(list(map(int,input().split())))
+	k=a.count(1)
+	while k>0:
+		flag=1
+		p=k
+		while p>=1:
+			j=bisect.bisect(a,p)
+			if j<k+p-1:
+				flag=0
+				break
+			else:
+				p-=1
+		if flag==1:
+			output.append(str(k))
+			break
+		else:
+			k-=1
+	if k==0:
+		output.append(str(0))
+
+print('\n'.join(output))
 ```
 
 
