@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 2258 GMT+8 Nov 14, 2022
+Updated 0027 GMT+8 Nov 15, 2022
 
 
 
@@ -6011,6 +6011,23 @@ for _ in range(int(input())):
 		output.append(str(0))
 
 print('\n'.join(output))
+```
+
+
+
+2022fall-cs101，成凌宇，物理学院。
+
+本来是打算期中考试之后再细想这个代码的思路，但是回寝室以后和同学讨论了一下，突然发现这个代码非常妙。下面给出我的看法，首先 Alice 一定从最大的开始去，Bob 一定是从最小的开始加，那么如果最后 Alice 赢，那么 Bob 一定取了前 k −1 个，所以要求 $a[k −1] ≤1, a[k] ≤2, ···, a[2k −2] ≤k$，即 $a[k −1 + i] ≤i + 1$，同时 $k −1 + i < n$。如果是我来做的话，可能想不到这种解法，应该是会按照题目的操作顺序去模拟，我觉得这样
+是可能超时而且写代码可能会比较费劲。
+
+```python
+for _ in range(int(input())):
+	n = int(input())
+	a = sorted(list(map(int, input().split())))
+	for k in range(n, -1, -1):
+		if all(k - 1 + i < n and a[k - 1 + i] <= i + 1 for i in range(k)):
+			print(k)
+			break
 ```
 
 
