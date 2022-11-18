@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 0027 GMT+8 Nov 15, 2022
+Updated 1707 GMT+8 Nov 18, 2022
 
 
 
@@ -4367,7 +4367,7 @@ Alex is a perfectionist, so he decided to get as many points as possible. Help h
 
 **Input**
 
-The first line contains integer *n* (1 ≤ *n* ≤ 105) that shows how many numbers are in Alex's sequence.
+The first line contains integer *n* (1 ≤ *n* ≤ 10^5^) that shows how many numbers are in Alex's sequence.
 
 The second line contains *n* integers *a*~1~, *a*~2~, ..., *a~n~* (1 ≤ *a~i~* ≤ 10^5^).
 
