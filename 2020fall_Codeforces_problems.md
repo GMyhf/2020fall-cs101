@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 1707 GMT+8 Nov 18, 2022
+Updated 2305 GMT+8 Nov 19, 2022
 
 
 
@@ -4099,6 +4099,27 @@ for i in range(1, n+1):
     if i >= c:
         f[i] = max(f[i], f[i - c] + 1)
 print(f[n])
+```
+
+
+
+2022fall-cs101，朱骏豪，工程院
+
+一开始想试着写枚举，竟然就过了
+
+```python
+n,a,b,c=[int(x) for x in input().split()]
+num=[]
+if a==1 or b==1 or c==1:
+    print(n)
+else:
+    for i in range(int(n/a)+1):
+        t=n-i*a
+        for j in range(int(t/b)+1):
+            w=t-j*b
+            if w%c==0:
+                num.append(i+j+int(w/c))
+    print(max(num))
 ```
 
 
