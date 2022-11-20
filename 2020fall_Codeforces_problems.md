@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 2305 GMT+8 Nov 19, 2022
+Updated 1549 GMT+8 Nov 20, 2022
 
 
 
@@ -3684,6 +3684,31 @@ for _ in range(int(input())):
     #ans.append(c[m])
   
 #print('\n'.join(map(str,ans)))
+```
+
+
+
+2022/11/20 说明：CF706B. Interesting drink，可以用二分法AC。但是二分法不容易写对或者写简洁，我们统一下，都按照源码方式来写，这样可以避免错误。https://github.com/python/cpython/blob/main/Lib/bisect.py
+
+这个题目虽然可以用bisect模块来完成，但是二分的写法是需要掌握的，有题目需要自己写二分，因为bisect模块满足不了要求。另外，这种双指针的策略，也是需要掌握的。
+
+<img src="https://raw.githubusercontent.com/GMyhf/img/main/img/image-20221120150542188.png" alt="image-20221120150542188" style="zoom: 33%;" />
+
+```python
+n = int(input())
+a = sorted(list(map(int,input().split())))
+m = int(input())
+for _ in range(m):
+    x = int(input())
+    lo = 0
+    hi = len(a)
+    while lo < hi:
+        mid = (lo + hi) // 2
+        if x < a[mid]:
+            hi = mid
+        else:
+            lo = mid + 1
+    print(lo)
 ```
 
 
