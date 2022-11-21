@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 1549 GMT+8 Nov 20, 2022
+Updated 1915 GMT+8 Nov 21, 2022
 
 
 
@@ -4191,6 +4191,25 @@ maxcuts = [0] + [-1000000]*l
 
 print( dpcut( lengthlist, l, maxcuts ) )
 ```
+
+
+
+2022fall-cs101，杨文可
+
+思路与课件上的找零问题完全一样。不同的是，有一些长度的彩带是剪不了的。要想办法避免这些长度参与递推之后影响最终的结果。单纯把它们赋值成-1不行，因为递推几次以后就变成正的了。所以要赋值成足够大的负数。
+
+max() 的参数要么是一整个可迭代类型, 要么是逗号分隔的多个数值，不能是两者混合。
+
+```python
+n, a, b, c = map(int, input().split()) 
+dp = [0] + [-4000] * n  
+for i in range(n + 1):  
+    dp[i] = max([dp[i - x] + 1 for x in [a, b, c] if x <= i] + 
+[dp[i]])  
+print(dp[-1])
+```
+
+
 
 2021fall-cs101，唐浴歌
 
