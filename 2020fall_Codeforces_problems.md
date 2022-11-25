@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 1915 GMT+8 Nov 21, 2022
+Updated 0308 GMT+8 Nov 26, 2022
 
 
 
@@ -1921,6 +1921,114 @@ int main (){
 
 
 
+## 313B. Ilya and Queries
+
+dp/implementation, 1100 ,  https://codeforces.com/contest/313/problem/B
+
+Ilya the Lion wants to help all his friends with passing exams. They need to solve the following problem to pass the IT exam.
+
+You've got string *s* = s~1~s~2~... s~n~ (*n* is the length of the string), consisting only of characters "." and "#" and *m* queries. Each query is described by a pair of integers $l_i, r_i (1 ≤ l_i < r_i ≤ n)$. The answer to the query $l_i, r_i$ is the number of such integers $i (l_i ≤ i < r_i)$, that $s_i = s_i + 1$.
+
+Ilya the Lion wants to help his friends but is there anyone to help him? Help Ilya, solve the problem.
+
+**Input**
+
+The first line contains string *s* of length *n* (2 ≤ *n* ≤ 10^5^). It is guaranteed that the given string only consists of characters "." and "#".
+
+The next line contains integer *m* (1 ≤ *m* ≤ 10^5^) — the number of queries. Each of the next *m* lines contains the description of the corresponding query. The *i*-th line contains integers $l_i, r_i (1 ≤ l_i < r_i ≤ n)$.
+
+**Output**
+
+Print *m* integers — the answers to the queries in the order in which they are given in the input.
+
+Examples
+
+sample1 input
+
+```
+......
+4
+3 4
+2 3
+1 6
+2 6
+```
+
+sample1 output
+
+```
+1
+1
+5
+4
+```
+
+sample2 input
+
+```
+#..###
+5
+1 3
+5 6
+1 5
+3 6
+3 4
+```
+
+sample2 output
+
+```
+1
+1
+2
+2
+0
+```
+
+
+
+2020fall-cs101, 郭姵妤
+
+```python
+s = input()
+out = 0
+dp = [0]
+for i in range(1,len(s)):
+    if s[i] == s[i-1]:        
+        out +=1    
+    dp.append(out)
+
+m=int(input())
+for i in range(m):    
+    left,right = map(int, input().split())
+    print(dp[right-1] - dp[left-1])
+```
+
+
+
+2020fall-cs101, 李元锋
+
+先把所有长度从 1到 i记录一遍放在 list里，之后对输入值做减法即可。这里也是需要把答案放在一个 list里全部输出，不然会超时。
+
+```python
+s = [str(i) for i in input()]
+ans = [0]
+num = 0
+answer = []
+for i in range(1, len(s)):
+    if s[i]==s[i-1]:
+        num += 1
+    ans.append(num)
+
+for i in range(int(input())):
+    l,r = map(int, input().split())
+    answer.append(str(ans[r-1] - ans[l-1]))
+
+print('\n'.join(answer))   
+```
+
+
+
 ## 339A. Helpful Maths
 
 greedy/implementation/sortings/strings, 800, http://codeforces.com/problemset/problem/339/A
@@ -3449,114 +3557,6 @@ for i in range(m):
 
 
 
-## 313B. Ilya and Queries
-
-dp/implementation, 1100 ,  https://codeforces.com/contest/313/problem/B
-
-Ilya the Lion wants to help all his friends with passing exams. They need to solve the following problem to pass the IT exam.
-
-You've got string *s* = s~1~s~2~... s~n~ (*n* is the length of the string), consisting only of characters "." and "#" and *m* queries. Each query is described by a pair of integers $l_i, r_i (1 ≤ l_i < r_i ≤ n)$. The answer to the query $l_i, r_i$ is the number of such integers $i (l_i ≤ i < r_i)$, that $s_i = s_i + 1$.
-
-Ilya the Lion wants to help his friends but is there anyone to help him? Help Ilya, solve the problem.
-
-**Input**
-
-The first line contains string *s* of length *n* (2 ≤ *n* ≤ 10^5^). It is guaranteed that the given string only consists of characters "." and "#".
-
-The next line contains integer *m* (1 ≤ *m* ≤ 10^5^) — the number of queries. Each of the next *m* lines contains the description of the corresponding query. The *i*-th line contains integers $l_i, r_i (1 ≤ l_i < r_i ≤ n)$.
-
-**Output**
-
-Print *m* integers — the answers to the queries in the order in which they are given in the input.
-
-Examples
-
-sample1 input
-
-```
-......
-4
-3 4
-2 3
-1 6
-2 6
-```
-
-sample1 output
-
-```
-1
-1
-5
-4
-```
-
-sample2 input
-
-```
-#..###
-5
-1 3
-5 6
-1 5
-3 6
-3 4
-```
-
-sample2 output
-
-```
-1
-1
-2
-2
-0
-```
-
-
-
-2020fall-cs101, 郭姵妤
-
-```python
-s = input()
-out = 0
-dp = [0]
-for i in range(1,len(s)):
-    if s[i] == s[i-1]:        
-        out +=1    
-    dp.append(out)
-
-m=int(input())
-for i in range(m):    
-    left,right = map(int, input().split())
-    print(dp[right-1] - dp[left-1])
-```
-
-
-
-2020fall-cs101, 李元锋
-
-先把所有长度从 1到 i记录一遍放在 list里，之后对输入值做减法即可。这里也是需要把答案放在一个 list里全部输出，不然会超时。
-
-```python
-s = [str(i) for i in input()]
-ans = [0]
-num = 0
-answer = []
-for i in range(1, len(s)):
-    if s[i]==s[i-1]:
-        num += 1
-    ans.append(num)
-
-for i in range(int(input())):
-    l,r = map(int, input().split())
-    answer.append(str(ans[r-1] - ans[l-1]))
-
-print('\n'.join(answer))   
-```
-
-
-
 ## 706B. Interesting drink
 
 binary search/dp/implementation, 1100,  https://codeforces.com/problemset/problem/706/B
@@ -4564,6 +4564,8 @@ print(f[max_value])
 
 
 [Python a, b = b, a +b - Stack Overflow](https://stackoverflow.com/questions/21990883/python-a-b-b-a-b)
+
+In `a, b = b, a + b`, the expressions on the right hand side are evaluated before being assigned to the left hand side.
 
 ```python
 n = input()
