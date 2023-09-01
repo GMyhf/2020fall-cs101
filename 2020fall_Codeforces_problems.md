@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 0308 GMT+8 Nov 26, 2022
+Updated 2339 GMT+8 Sep 1, 2023
 
 
 
@@ -1724,6 +1724,74 @@ print(nCount)
 
 
 
+## 270A. Fancy Fence
+
+geometry/implementation/math, 1100, x23265, https://codeforces.com/problemset/problem/270/A
+
+Emuskald needs a fence around his farm, but he is too lazy to build it himself. So he purchased a fence-building robot.
+
+He wants the fence to be a regular polygon. The robot builds the fence along a single path, but it can only make fence corners at a single angle *a*.
+
+Will the robot be able to build the fence Emuskald wants? In other words, is there a regular polygon which angles are equal to *a*?
+
+**Input**
+
+The first line of input contains an integer *t* (0 < *t* < 180) — the number of tests. Each of the following *t* lines contains a single integer *a* (0 < *a* < 180) — the angle the robot can make corners at measured in degrees.
+
+**Output**
+
+For each test, output on a single line "YES" (without quotes), if the robot can build a fence Emuskald wants, and "NO" (without quotes), if it is impossible.
+
+Examples
+
+input
+
+```
+3
+30
+60
+90
+```
+
+output
+
+```
+NO
+YES
+YES
+```
+
+Note
+
+In the first test case, it is impossible to build the fence, since there is no regular polygon with angle ![img](https://espresso.codeforces.com/df5f4b07dd5316fde165b43657b2696e2919e791.png).
+
+In the second test case, the fence is a regular triangle, and in the last test case — a square.
+
+
+
+> 【黄旭，2020年秋】对于 n边形，其内角和为（n-2）*180°，内角为x度，有(n-2)\*180=n\*x。 则可以得到 n的表达式为 n=360/（180-x），若 n为整数，则可行，反之不可行。
+
+```python
+for i in range(int(input())):
+    x=int(input())
+    print(['NO','YES'][360%(180-x)==0])    
+```
+
+```python
+n=int(input())
+def check(x):
+    if 360%(180-x)==0:
+        return"YES"
+    else:
+        return"NO"
+
+for i in range(n):
+    x=int(input())
+    print(check(x))
+```
+
+
+
 ## 281A. Word Capitalization
 
 implementation/strings, 800, http://codeforces.com/problemset/problem/281/A
@@ -2653,6 +2721,126 @@ print(x[-1] - x[0])
 
 # ==OPTIONAL PROBLEMS==
 
+## 1B. Spreadsheets
+
+implementation/math, 1600, https://codeforces.com/problemset/problem/1/B
+
+In the popular spreadsheets systems (for example, in Excel) the following numeration of columns is used. The first column has number A, the second — number B, etc. till column 26 that is marked by Z. Then there are two-letter numbers: column 27 has number AA, 28 — AB, column 52 is marked by AZ. After ZZ there follow three-letter numbers, etc.
+
+The rows are marked by integer numbers starting with 1. The cell name is the concatenation of the column and the row numbers. For example, BC23 is the name for the cell that is in column 55, row 23.
+
+Sometimes another numeration system is used: RXCY, where X and Y are integer numbers, showing the column and the row numbers respectfully. For instance, R23C55 is the cell from the previous example.
+
+Your task is to write a program that reads the given sequence of cell coordinates and produce each item written according to the rules of another numeration system.
+
+Input
+
+The first line of the input contains integer number *n* (1 ≤ *n* ≤ 105), the number of coordinates in the test. Then there follow *n* lines, each of them contains coordinates. All the coordinates are correct, there are no cells with the column and/or the row numbers larger than 106 .
+
+Output
+
+Write *n* lines, each line should contain a cell coordinates in the other numeration system.
+
+Examples
+
+input
+
+```
+2
+R23C55
+BC23
+```
+
+output
+
+```
+BC23
+R23C55
+```
+
+
+
+```python
+import re
+def solve(s):
+    if re.match(r'R\d+C\d+', s):
+        r, c = map(int, s[1:].split('C'))
+        res = ''
+        while c:
+            c, remainder = divmod(c - 1, 26)
+            res = chr(65 + remainder) + res
+        return res + str(r)
+    else:
+        pos = 0
+        while not s[pos].isdigit():
+            pos += 1
+        res = 'R' + s[pos:] + 'C'
+        c = 0
+        for ch in s[:pos]:
+            c = c * 26 + ord(ch) - 64
+        return res + str(c)
+
+n = int(input().strip())
+for _ in range(n):
+    s = input().strip().split('\n')[0]
+    print(solve(s))
+```
+
+
+
+另外，提供**正则表达式**练习的网站https://regex101.com
+
+```python
+import re
+
+#https://regex101.com/r/wxd3I0/1
+r1 = r"(R)([0-9]+)(C)([0-9]+)"
+
+test_str = "R23C55"
+matches = re.finditer(r1, test_str, re.MULTILINE)
+
+for matchNum, match in enumerate(matches, start=1):
+    print("Match {matchNum} was found at {start}-{end}: {match}".format(matchNum=matchNum, start=match.start(),
+                                                                        end=match.end(), match=match.group()))
+
+    for groupNum in range(0, len(match.groups())):
+        groupNum = groupNum + 1
+        print("Group {groupNum} found at {start}-{end}: {group}".format(groupNum=groupNum, start=match.start(groupNum),
+                                                                        end=match.end(groupNum),
+                                                                        group=match.group(groupNum)))
+'''
+Match 1 was found at 0-6: R23C55
+Group 1 found at 0-1: R
+Group 2 found at 1-3: 23
+Group 3 found at 3-4: C
+Group 4 found at 4-6: 55
+'''
+
+r2 = r"([A-Z]+)([0-9]+)"
+test_str = "BC23"
+matches = re.finditer(r2, test_str, re.MULTILINE)
+
+for matchNum, match in enumerate(matches, start=1):
+    print("Match {matchNum} was found at {start}-{end}: {match}".format(matchNum=matchNum, start=match.start(),
+                                                                        end=match.end(), match=match.group()))
+
+    for groupNum in range(0, len(match.groups())):
+        groupNum = groupNum + 1
+        print("Group {groupNum} found at {start}-{end}: {group}".format(groupNum=groupNum, start=match.start(groupNum),
+                                                                        end=match.end(groupNum),
+                                                                        group=match.group(groupNum)))
+'''
+Match 1 was found at 0-4: BC23
+Group 1 found at 0-2: BC
+Group 2 found at 2-4: 23
+'''
+
+```
+
+
+
+
+
 ## 158B. Taxi
 
 *special problem/greedy/mplementation, 1100, https://codeforces.com/problemset/problem/158/B
@@ -2719,193 +2907,1088 @@ print(d+c+(b*2+max(0,a-c)+3)//4)
 
 
 
-## 1425A. Arena of Greed
+## 189A. Cut Ribbon
 
-games/greedy, 1400, https://codeforces.com/problemset/problem/1425/A
+brute force/dp, 1300, https://codeforces.com/problemset/problem/189/A
 
-Lately, Mr. Chanek frequently plays the game **Arena of Greed**. As the name implies, the game's goal is to find the greediest of them all, who will then be crowned king of Compfestnesia.
+Polycarpus has a ribbon, its length is *n*. He wants to cut the ribbon in a way that fulfils the following two conditions:
 
-The game is played by two people taking turns, where Mr. Chanek takes the first turn. Initially, there is a treasure chest containing N gold coins. The game ends if there are no more gold coins in the chest. In each turn, the players can make one of the following moves:
+- After the cutting each ribbon piece should have length *a*, *b* or *c*.
+- After the cutting the number of ribbon pieces should be maximum.
 
-- Take one gold coin from the chest.
-- Take half of the gold coins on the chest. This move is only available if the number of coins in the chest is even.
-
-Both players will try to maximize the number of coins they have. Mr. Chanek asks your help to find the maximum number of coins he can get at the end of the game if both he and the opponent plays optimally.
+Help Polycarpus and find the number of ribbon pieces after the required cutting.
 
 **Input**
 
-The first line contains a single integer T (1≤T≤10^5^) denotes the number of test cases.
-
-The next T lines each contain a single integer N (1≤N≤10^18^).
+The first line contains four space-separated integers *n*, *a*, *b* and *c* (1 ≤ *n*, *a*, *b*, *c* ≤ 4000) — the length of the original ribbon and the acceptable lengths of the ribbon pieces after the cutting, correspondingly. The numbers *a*, *b* and *c* can coincide.
 
 **Output**
 
-T lines, each line is the answer requested by Mr. Chanek.
+Print a single number — the maximum possible number of ribbon pieces. It is guaranteed that at least one correct ribbon cutting exists.
 
-Example
+Examples
 
 input
 
 ```
-2
-5
-6
+5 5 3 2
 ```
 
 output
 
 ```
 2
+```
+
+input
+
+```
+7 5 5 2
+```
+
+output
+
+```
+2
+```
+
+Note
+
+In the first example Polycarpus can cut the ribbon in such way: the first piece has length 2, the second piece has length 3.
+
+In the second example Polycarpus can cut the ribbon in such way: the first piece has length 5, the second piece has length 2.
+
+
+
+思路：就是一个需要刚好装满的完全背包问题，只有三种商品a, b, c，能取无限件物品，每件物品价值是1，求最大价值。
+
+```python
+inf = 1e9 + 7
+n,a,b,c = map(int,input().split())
+dp = [0]+[-inf]*n
+
+for i in range(1,n+1):
+    for j in (a,b,c):
+        if i >= j:
+            #dp[i] = max(dp[i-j], dp[i-j] + 1, dp[i])
+            dp[i] = max(dp[i-j] + 1, dp[i])
+
+print(dp[n])
+```
+
+
+
+2020fall-cs101，王君宇。这道题状态转移方程就是 d[i]=max(d[i-a],d[i-b],d[i-c])+1，其中初始量是 0.到达一个新节点的方法有三种：+a、+b、+c，选取最大增量即可，思路十分精巧。
+
+2020fall-cs101，黄旭。找到递推公式 dp[i] = max(dp[i-a], dp[i-b], dp[i-c]) + 1就好了。
+
+```python
+n,a,b,c = map(int,input().split())
+dp = [0]+[-4000]*4000
+for i in range(1,n+1):
+    dp[i] = max(dp[i-a], dp[i-b], dp[i-c]) + 1
+print(dp[n])
+```
+
+
+
+https://python-forum.io/thread-23120.html
+
+At the beginning of the procedure, the indexes `i-a, i-b, i-c` can be negative, which means that python is going to take values at the end of the array, because for example `d[-4]` is the 4th value from the right. Initializing the array to a large negative value in each cell is intended as giving the cell a "negative infinite" value for the `max` algorithm. At
+every step, an increment of 1 is added, so the number is chosen large enough so that `-1e9 + 4000 < 0`
+
+```python
+n, a, b, c = map(int, input().split())
+d = [0] + [-1e9] * 4000
+for i in range(1, n + 1):
+    d[i] = max(d[i - a], d[i - b], d[i - c]) + 1
+print(d[n])
+```
+
+
+
+2020fall-cs101，赵春源。这是一个简单的DP思想，我们让f~i~等于把i按题意切开所得的最大段数，我们让$f_{0}=0$，其他的位置为负无穷，表示这个长度没法按题目的要求切开，我们考虑如何用较小的f推出较大的f，当然是把a,b,c三种切法都试一遍，最大长度就是$max(f[i-a], f[i-b], f[i-c])+1$
+
+```python
+n, a, b, c = map(int, input().split())
+f = (n+1) * [-10000]
+f[0] = 0
+for i in range(1, n+1):
+    if i >= a:
+        f[i] = max(f[i], f[i - a] + 1)
+    if i >= b:
+        f[i] = max(f[i], f[i - b] + 1)
+    if i >= c:
+        f[i] = max(f[i], f[i - c] + 1)
+print(f[n])
+```
+
+
+
+2022fall-cs101，朱骏豪，工程院
+
+一开始想试着写枚举，竟然就过了
+
+```python
+n,a,b,c=[int(x) for x in input().split()]
+num=[]
+if a==1 or b==1 or c==1:
+    print(n)
+else:
+    for i in range(int(n/a)+1):
+        t=n-i*a
+        for j in range(int(t/b)+1):
+            w=t-j*b
+            if w%c==0:
+                num.append(i+j+int(w/c))
+    print(max(num))
+```
+
+
+
+2020fall-cs101，成泽恺。一开始直接想暴力循环，三个片段a，b，c，一开始假设他可以分成i个a和j个b，i，j初始值都为0，while a~i~和a~i~+b~j~比n小的时候循环判断能不能加c片段进去，如果可以用max函数拿到此刻的片段数目的最大值，直到最后输出num即可，但这样用python3会超时，pypy3可以过。
+
+```python
+n,a,b,c = map(int, input().split())
+num = 0
+i = 0
+j = 0
+while a*i <= n:
+    j = 0
+    while b*j+a*i <= n:
+        d = n - a*i - b*j
+        if d%c==0 and a*i+b*j<=n:
+            num = max(num, i+j+d//c)
+        j += 1
+
+    i += 1
+ 
+print(num)
+```
+
+
+
+题目需要用到动态规划，这个问题相当于一个完全背包，背包容量是n，有重量为a，b，c的物品，物品价值都是1，求取在恰好装满背包的情况下价值最大。因为题目保证有解，开一个长度为n+1的列表，初始值为-9999（避免背包不被恰好装满的情况出现），容量为0的时候价值为0，容量为i的时候判断能不能放下重量为a，b，c的片段，如果能查看背包剩余容量i-a可以放多少，如果i-a不能被恰好填满，由于初始值是很大的负值，在装进去之后仍然是负值，不会影响最终结果。循环n次，最后得到最优解。
+
+
+
+2020fall-cs101，刘安澜。思路：看上去这个题和老师上课讲的dp是一个镜像关系的题目，所以就按照找硬币的dp思路写了最初始的一版。但是不同于找硬币必有一个解，剪丝带对于某些丝带长度是无法分割的，所以这也就造成了在某些不能分割的长度上输出错误的结果。所以对于这种情况需要我们将除0外所有的初始值都赋为一个很大的负数，这样就能很好避免不能分割的长度对于其它可分割长度答案的扰动。
+
+```python
+def dpcut( lengthlist, l, maxcuts ):
+    for i in range( l + 1 ):
+        for j in [ c for c in lengthlist if c <= i ]:
+            if maxcuts[i-j] + 1 > maxcuts[i]:
+                maxcuts[i] = maxcuts[i-j] + 1
+    return maxcuts[l]
+
+l,a,b,c = map(int,input().split())
+lengthlist = [a, b, c]
+maxcuts = [0] + [-1000000]*l
+
+print( dpcut( lengthlist, l, maxcuts ) )
+```
+
+
+
+2022fall-cs101，杨文可
+
+思路与课件上的找零问题完全一样。不同的是，有一些长度的彩带是剪不了的。要想办法避免这些长度参与递推之后影响最终的结果。单纯把它们赋值成-1不行，因为递推几次以后就变成正的了。所以要赋值成足够大的负数。
+
+max() 的参数要么是一整个可迭代类型, 要么是逗号分隔的多个数值，不能是两者混合。
+
+```python
+n, a, b, c = map(int, input().split()) 
+dp = [0] + [-4000] * n  
+for i in range(n + 1):  
+    dp[i] = max([dp[i - x] + 1 for x in [a, b, c] if x <= i] + 
+[dp[i]])  
+print(dp[-1])
+```
+
+
+
+2021fall-cs101，唐浴歌
+
+经验总结的一点是，dp的题好像一般都只需两次遍历就能解决了：
+
+1）第一次遍历（初始化）：首先要保证dp列表项数足够充裕。如求的是可及性的话，dp列表里的能被目标数整除的项都+1。2.第二次遍历（特殊化处理）：根据题目要求对完成初始化的dp作处理。由于有最优目标，每一次处理都会判断大小关系来迭代掉之前的结果。
+
+闫老师批注：两遍处理的思路挺好。第一遍是数据预处理，这样第二遍就很清楚了。充实的寒假生活（http://cs101.openjudge.cn/practice/16528/），也可以如法炮制。
+
+```python
+# 2021fall-cs101, TAN Yuge
+n, *m = map(int, input().split())
+dp = [0] * (n + 1) 
+for i in m:     
+    for j in range(1, n + 1):         
+        if j % i == 0:             
+            dp[j] = max(j // i, dp[j])
+            
+for i in range(1, n +  1):    
+    for j in m:         
+        if i > j and dp[i - j]:             
+            dp[i] = max(dp[i - j] + 1, dp[i])
+print(dp[n])
+```
+
+
+
+## 230B. T-primes
+
+binary search/implementation/math/number theory, 1300, http://codeforces.com/problemset/problem/230/B
+
+We know that prime numbers are positive integers that have exactly two distinct positive divisors. Similarly, we'll call a positive integer *t* Т-prime, if *t* has exactly three distinct positive divisors.
+
+You are given an array of *n* positive integers. For each of them determine whether it is Т-prime or not.
+
+**Input**
+
+The first line contains a single positive integer, *n* (1 ≤ *n* ≤ 10^5^), showing how many numbers are in the array. The next line contains *n* space-separated integers *x~i~* (1 ≤ *x~i~* ≤ 10^12^).
+
+Please, do not use the %lld specifier to read or write 64-bit integers in С++. It is advised to use the cin, cout streams or the %I64d specifier.
+
+**Output**
+
+Print *n* lines: the *i*-th line should contain "YES" (without the quotes), if number *x~i~* is Т-prime, and "NO" (without the quotes), if it isn't.
+
+Examples
+
+input
+
+```
+3
+4 5 6
+```
+
+output
+
+```
+YES
+NO
+NO
+```
+
+Note
+
+The given test has three numbers. The first number 4 has exactly three divisors — 1, 2 and 4, thus the answer for this number is "YES". The second number 5 has two divisors (1 and 5), and the third number 6 has four divisors (1, 2, 3, 6), hence the answer for them is "NO".
+
+
+
+这个题目实际上是DP思路。
+
+数论是有趣和优美的数学分支。欧几里得对于素数无穷性的证明在今天看来仍和两千年前一样清晰和优雅。长久以来，计算机都被用来辅助数论研究，有很多精妙的算法能够帮上忙。
+
+求解素数的三种方法，包括：试除法（trial division）、埃氏筛（Sieve of Eratosthenes）、欧拉筛（Sieve of Euler，线性法），https://blog.dotcpp.com/a/69737
+
+数据类型时间复杂度，https://wiki.python.org/moin/TimeComplexity
+
+埃氏筛法，时间复杂度为：O(n\*logn)。Python3, Accepted, 1154ms
+
+```python
+# http://codeforces.com/problemset/problem/230/B
+
+# https://www.geeksforgeeks.org/python-program-for-sieve-of-eratosthenes/
+# Python program to print all primes smaller than or equal to 
+# n using Sieve of Eratosthenes 
+
+def SieveOfEratosthenes(n, prime): 
+    p = 2
+    while (p * p <= n): 
+      
+    	# If prime[p] is not changed, then it is a prime 
+    	if (prime[p] == True): 
+          
+        	# Update all multiples of p 
+        	for i in range(p * 2, n+1, p): 
+            	prime[i] = False
+    	p += 1
+
+n = int(input())
+x = [int(i) for i in input().split()]
+
+s = [True]*(10**6+1)
+
+SieveOfEratosthenes(10**6, s)
+
+for i in x:
+    if i<4:
+        print('NO')
+        continue
+    elif int(i**0.5)**2 != i:
+        print('NO')
+        continue
+    print(['NO','YES'][s[int(i**0.5)]])
+    #if s[int(i**0.5)]:
+    #    print('YES')
+    #else:
+    #    print('NO')
+```
+
+小优化（原因如下，下面用到集合实现），第15行可以写成 **for** i **in** range(p * p, n+1, p):  则998ms可以AC. 
+
+
+
+埃氏筛法，时间复杂度为：O(n\*loglogn)。Python3, Accepted, 1558ms
+
+这里有一个小优化，j 从 i * i 而不是从 i + i开始，因为 i*(2~ i-1)在 2~i-1时都已经被筛去，所以从i * i开始。
+
+According to [Python wiki: Time complexity](https://wiki.python.org/moin/TimeComplexity), **set** is implemented as a [hash table](https://en.wikipedia.org/wiki/Hash_table). So you can expect to lookup/insert/delete in **O(1)** average.  https://stackoverflow.com/questions/7351459/time-complexity-of-python-set-operations
+
+```python
+n = 1000000
+a = [1] * n
+s = set() 
+
+#directly add the square of prime into a set, then check if num_input is in set.
+for i in range(2,n):
+    if a[i]:
+        s.add(i*i)
+        for j in range(i*i,n,i):
+            a[j] = 0
+
+input()
+for x in map(int,input().split()):
+    print(["NO","YES"][x in s])
+```
+
+
+
+埃氏筛法，by 2020fall-cs101, 汪元正,  Python3, Accepted, 1340ms
+
+```python
+a = [1]*(10**6)
+a[0] = 0
+for i in range(1,10**3,1):
+    if a[i]==1:
+        for j in range(2*i+1,10**6,i+1):
+            a[j]=0
+
+n = int(input())
+l = [int(x) for x in input().split()]
+for i in range(n):
+    m = l[i]
+    if m**0.5%1==0:
+        r = int(m**0.5)
+        if a[r-1]==1:
+            print('YES')
+        else:
+            print('NO')
+    else:
+        print('NO')
+```
+
+线性筛（欧拉筛），时间复杂度为：O(n)。Python3, Accepted, 1808ms。
+
+```Python
+# https://blog.dotcpp.com/a/69737
+# https://blog.csdn.net/xuechen_gemgirl/article/details/79555123
+def euler(r):
+    prime = [0 for i in range(r+1)]
+    common = []
+    for i in range(2, r+1):
+        if prime[i] == 0:
+            common.append(i)
+        for j in common:
+            if i*j > r:
+                break
+            prime[i*j] = 1
+            if i % j == 0:
+                break
+    return prime 
+
+s = euler(1000000)
+#print(s)
+
+input()
+for i in map(int,input().split()):
+    if i<4:
+        print('NO')
+        continue
+    elif int(i**0.5)**2 != i:
+        print('NO')
+        continue
+    if s[int(i**0.5)]==0:
+        print('YES')
+    else:
+        print('NO')
+```
+
+
+
+## 368B. Sereja and Suffixes
+
+data structures/dp, 1100,  https://codeforces.com/problemset/problem/368/B
+
+Sereja has an array *a*, consisting of *n* integers a~1~, a~2~, ..., a~n~. The boy cannot sit and do nothing, he decided to study an array. Sereja took a piece of paper and wrote out *m* integers $l_1, l_2, ..., l_m~$ (1 ≤ $l_i$ ≤ *n*). For each number $l_i$ he wants to know how many distinct numbers are staying on the positions $l_i, l_{i + 1}, ..., n$. Formally, he want to find the number of distinct numbers among $a_{l_i}, a_{l_{i + 1}}, ..., a_n$.?
+
+Sereja wrote out the necessary array elements but the array was so large and the boy was so pressed for time. Help him, find the answer for the described question for each $l_i$.
+
+**Input**
+
+The first line contains two integers *n* and *m* (1 ≤ *n*, *m* ≤ 10^5^). The second line contains *n* integers a~1~, a~2~, ..., a~n~ (1 ≤ a~i~ ≤ 10^5^) — the array elements.
+
+Next *m* lines contain integers $l_1, l_2, ..., l_m$. The *i*-th line contains integer $l_i$ (1 ≤ $l_i$ ≤ *n*).
+
+**Output**
+
+Print *m* lines — on the *i*-th line print the answer to the number $l_i$.
+
+**Examples**
+
+input
+
+```
+10 10
+1 2 3 4 1 2 3 4 100000 99999
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+```
+
+output
+
+```
+6
+6
+6
+6
+6
+5
+4
+3
+2
+1
+```
+
+ 
+
+**要求数据结构实现一次，dp实现一次**
+
+DP方法：
+
+2020fall-cs101，郭冠廷。本题的思路不困难，只需反序 dp即可（甚至看不出 dp）。为了节省时间，应用到了两个窍门：1）将已经读取的数据投入到 set中，这样能避免列表查找的缓速。2）将答案储存在一个列表中，同时输出。二者都是以空间换时间。
+
+```python
+n,m = map(int, input().split())
+nl = [int(x) for x in input().split()]
+
+out = 0
+dp = []
+
+tset = set()
+for i in reversed(nl):
+    if i not in tset:
+        out += 1
+        tset.add(i)
+    dp.append(out)
+
+for _ in range(m):
+    pos = len(nl) - int(input())
+    print(dp[pos])
+```
+
+
+
+2020fall-cs101，王康安。最开始用 in去判断，tle了。于是开一个到一万的桶，空间换时间，成功 AC。
+
+```python
+n,m = map(int,input().split())
+seq = [int(x) for x in input().split()]
+dp = [0]*(n-1)+[1]
+barrel = [False]*(100000+1)
+barrel[seq[n-1]] = True
+for i in reversed(range(n-1)):
+    if barrel[seq[i]]:        
+        dp[i] = dp[i+1]
+    else:        
+        dp[i] = dp[i+1]+1        
+        barrel[seq[i]] = True
+for i in range(m):
+    print(dp[int(input())-1])
+```
+
+
+
+data structures方法：
+
+2020fall-cs101，蓝克轩。解题思路：先用dictionary记录每个元素数量，然后从第一个元素开始，每一个元素从dictionary减一，如果在dictionary对应对应的因素是0就去除，dictionary的长度即是不同元素的数量。
+
+```python
+n, m = map(int,input().split())
+a = list(map(int, input().split()))
+adic = {}
+for i in range(n):
+    if a[i] in adic:
+        adic[a[i]] += 1
+    else:
+        adic[a[i]] = 1
+ 
+ans = [0]*n
+for i in range(n):
+    if a[i] in adic:
+        if adic[a[i]] == 1:
+            adic.pop(a[i])
+            ans[i] += 1
+        else:
+            adic[a[i]] -= 1
+    ans[i] += len(adic)
+ 
+for i in range(m):
+    print(ans[int(input()) - 1])
+```
+
+
+
+## 455A. Boredom
+
+dp, 1500, https://codeforces.com/contest/455/problem/A
+
+Alex doesn't like boredom. That's why whenever he gets bored, he comes up with games. One long winter evening he came up with a game and decided to play it.
+
+Given a sequence *a* consisting of *n* integers. The player can make several steps. In a single step he can choose an element of the sequence (let's denote it *a~k~*) and delete it, at that all elements equal to *a~k~* + 1 and *a~k~* - 1 also must be deleted from the sequence. That step brings *a~k~* points to the player.
+
+Alex is a perfectionist, so he decided to get as many points as possible. Help him.
+
+**Input**
+
+The first line contains integer *n* (1 ≤ *n* ≤ 10^5^) that shows how many numbers are in Alex's sequence.
+
+The second line contains *n* integers *a*~1~, *a*~2~, ..., *a~n~* (1 ≤ *a~i~* ≤ 10^5^).
+
+**Output**
+
+Print a single integer — the maximum number of points that Alex can earn.
+
+Examples
+
+input
+
+```
+2
+1 2
+```
+
+output
+
+```
+2
+```
+
+input
+
+```
+3
+1 2 3
+```
+
+output
+
+```
 4
 ```
 
-**Note**
+input
 
-For the first case, the game is as follows:
+```
+9
+1 2 1 3 2 2 2 2 3
+```
 
-1. Mr. Chanek takes one coin.
-2. The opponent takes two coins.
-3. Mr. Chanek takes one coin.
-4. The opponent takes one coin.
+output
 
-For the second case, the game is as follows:
+```
+10
+```
 
-1. Mr. Chanek takes three coins.
-2. The opponent takes one coin.
-3. Mr. Chanek takes one coin.
-4. The opponent takes one coin.
+Note
 
-
-
-思路：为了获取最多的石子数量：
-
-1. 数量为奇数时：只能取1个，然后对手进入情况2，我们只能取剩下的；
-2. 数量为偶数时：为了尽可能最大化所能取的石子数量，我们尽可能使得对手只能取1个，即使得对手取时数量为奇数；同时使得我们取石子时数量为偶数。
-   为了实现这个情况，判断一下当前石子数量的一半是否为奇数，如果是，我们就取一半；如果不是，我们就取一个，对应的，对手也只能取一个，之后所得到的偶数的一般必然是个奇数。证明略。
-3. 此外1和4是特殊情况，需要特判一下。
+Consider the third test example. At first step we need to choose any element equal to 2. After that step our sequence looks like this [2, 2, 2, 2]. Then we do 4 steps, on each step we choose any element equals to 2. In total we earn 10 points.
 
 
 
-PyPy 3 AC. Python 3 Time limit exceeded on Test2.
+> 【王康安，2020年秋】预处理做个桶。状态转移方程：dp[i] = max(dp[i-1], dp[i-2]+cnt[i]*i)。
 
 ```python
-#input=__import__('sys').stdin.readline
-ans = []
-def solve(n):
-    
-    f = s = 0 # To distinguish between first and second hands.
-    fs = True
-    
-    if n & 1:
-        n -= 1
-        fs = False
-        
-    while n:
-        if n == 4:
-            f += 3
-            s += 1
-            n = 0   # Specia lJudge
-        elif (n//2) & 1: # The First Situation
-            f += n//2
-            s += 1
-            n = (n//2) - 1;
-        else:                   #The Second Situation
-            f += 1
-            s += 1
-            n -= 2
-    #print( [s+1, f][fs] )
-    ans.append( [s+1, f][fs] )
- 
- 
-coins = []
-for _ in range(int(input())):
-    coins.append(int(input()))
- 
-for i in coins:
-    if i==1:
-        ans.append(1)
-        #print(1)
-    else:
-        solve(i)
- 
-print('\n'.join(map(str, ans)))
+n = int(input())
+arr = list(map(int,input().split()))
+dp = [0]*(max(arr) + 1)
+cnt = [0]*(max(arr) + 1)
+for each in arr:    
+    cnt[each] += 1
+
+dp[0] = 0
+dp[1] = cnt[1]
+for i in range( 2, max(arr)+1 ):    
+    dp[i] = max( dp[i-1], dp[i-2] + cnt[i]*i )
+
+print(max(dp))
 ```
 
 
 
-2020fall-cs101，施惟明。
+> 【李思哲，2020年秋】先将相同的数字打包求和，然后在有数的地方从前往后爬，每次只需要考虑是放弃这次还是上一次的数更好即可。这题虽然不难但是确实让我更加明白了动态规划是个怎样的过程。
 
-解题思路：简单试验可得，拿到偶数币时，除 4外，最优解法均为使对方拿到奇数币而只能取走一个；拿到奇数币时无法决策，被对方“控场”，对方获得币数-1的最优解。故据此进行迭代。
-
-PyPy3 AC
+> 【李宗远，2020年秋】以前没用过直接爆开一个大数的方法，然后无脑递归的方法......我听说Python是脚本语言之后一直以为这种方法是C++的专利。学到了学到了，真好用233
 
 ```python
-ans = []
-def solve(n):
+input()
+c = [0]*100001
+for m in map(int, input().split()):
+    c[m] += 1
     
-    f = s = 0 # To distinguish between first and second hands.
-    fs = True
-    
-    if n & 1:	#如果起始硬币数量为奇数，那么先手方能拿到的最多硬币数转化为后手方的情形
-        n -= 1
-        fs = False
-        
-    while n:
-        if n == 4:
-            f += 3
-            s += 1
-            n = 0   # Special Judge
-        elif (n//2) & 1: # The First Situation
-            f += n//2
-            s += 1
-            n = (n//2) - 1;
-        else:                   #The Second Situation
-            f += 1
-            s += 1
-            n -= 2
-    #print( [s+1, f][fs] )
-    ans.append( [s+1, f][fs] )
- 
- 
-coins = []
-for _ in range(int(input())):
-    coins.append(int(input()))
- 
-for i in coins:
-    if i==1:
-        ans.append(1)
-        #print(1)
-    else:
-        solve(i)
- 
-print('\n'.join(map(str, ans)))
+dp = [0]*100001
+for i in range(1, 100001):
+    dp[i] = max( dp[i-1], dp[i-2] + i* c[i] )
+
+print(max(dp))
 ```
 
 
 
-2020fall-cs101，李元锋。
-
-思路：了解过博弈论的经典游戏的人应该可以很快写出代码。此游戏为完全信息博弈，故如果存在最优解，则所有玩家采取的策略是一样的，策略为让对方为奇数 > 让自己拿偶数，这里只有 4为特例，要注意，剩下的很简单就写出来了，麻烦在于超时，改了很多次才 AC，这里顺便学了一下异或运算来区别是谁的回合。
-
 ```python
-output = []
-for i in range(int(input())):
-    n=int(input())
-    ans, flag = 0, 1
-    while n:
-        test = 0
-        if n%2==0 and n//2%2 or n==4:
-            n //= 2
-            test = n
+# ref: http://codeforces.com/blog/entry/13336
+# maximize the sum of numbers that we took. Let precalc array cnt.
+# cnt[x] — number of integers x in array a. Now we can easily calculate the DP:
+# f(i) = max( f(i-1), f(i-2) + cnt[i]*i), 2<=i<=n
+# f(1) = cnt[1]
+# f(0) = 0
+# The answer is f(n). Asymptotics - O(n)
+
+n = int(input())
+a = [int(i) for i in input().split()]
+
+max_value = max(a)
+#print(max_value)
+
+cnt = (max_value+1)*[0]
+for i in range(n):
+        cnt[a[i]] += 1
+
+f = (max_value+1)*[0]
+f[0] = 0
+f[1] = cnt[1]
+
+for i in range(2,max_value+1):
+        if f[i-1] > f[i-2] + cnt[i]*i :
+                f[i] = f[i-1]
         else:
-            n -= 1
-            test = 1
-        if flag:
-            ans += test
-        flag ^= 1
-    output.append(ans)
-print('\n'.join(map(str,output)))
+                f[i] = f[i-2] + cnt[i]*i
+
+print(f[max_value])
 ```
+
+
+
+[Python a, b = b, a +b - Stack Overflow](https://stackoverflow.com/questions/21990883/python-a-b-b-a-b)
+
+In `a, b = b, a + b`, the expressions on the right hand side are evaluated before being assigned to the left hand side.
+
+```python
+n = input()
+s=[0]*100002
+for i in map(int, input().split()):
+    s[i] += i
+
+a=b=0
+for d in s:
+    a,b = max(a,b),a+d
+
+print(a)
+```
+
+
+
+## 466C. Number of Ways
+
+binary search/brute force/data structures/dp/two pointers, 1700, https://codeforces.com/problemset/problem/466/C
+
+You've got array *a*[1], *a*[2], ..., *a*[*n*], consisting of *n* integers. Count the number of ways to split all the elements of the array into three contiguous parts so that the sum of elements in each part is the same.
+
+More formally, you need to find the number of such pairs of indices *i*, *j* (2 ≤ *i* ≤ *j* ≤ *n* - 1), that  $\sum_{k=1}^{i-1} a_k$= $\sum_{k=i}^{j} a_k$ =$\sum_{k=j+1}^{n} a_k$
+
+**Input**
+
+The first line contains integer *n* (1 ≤ *n* ≤ 5·10^5^), showing how many numbers are in the array. The second line contains *n* integers *a*[1], *a*[2], ..., *a*[*n*] (|*a*[*i*]| ≤  10^9^) — the elements of array *a*.
+
+**Output**
+
+Print a single integer — the number of ways to split the array into three parts with the same sum.
+
+Examples
+
+input
+
+```
+5
+1 2 3 0 3
+```
+
+output
+
+```
+2
+```
+
+input
+
+```
+4
+0 1 -1 0
+```
+
+output
+
+```
+1
+```
+
+input
+
+```
+2
+4 1
+```
+
+output
+
+```
+0
+```
+
+
+
+> 【汤建浩，2020年秋】难点在于总和能除以三的部分。由于是分成连续的三部分，每部分一样，只需要对列表一项项地加下去。其中一些节点非常重要，如前缀和达到1/3 和达到2/3，此两项都要满足，且存在前缀和达到1/3先于前缀和达到2/3的情况，才能分成连续三份。出现一次前缀和达到1/3 不能说明什么，但我们要记录下来s++，在它之后出现前缀和2/3，我们就把这个情况ans += s
+>
+> 【王君宇，2020年秋】这道题的最大坑点就是分割是有序的...我因为没认真审题而半天毫无头绪。既然是有序的，我们可以遍历逐个求和。如果总和不是 3的倍数显然不能分割，否则我们先得到sum/3，之后是 2*sum/3. 因此我们可以分成两步。当我们得到第一个分割之后，每得到一种便相应将二级种数加一。得到第二个分割后就将之前分割的总种数加起来。这里运用了类似于乘法原理的分布计数思想。另外，我们求和的终点应当是倒数第二个元素，防止 sum==0时总种数出错。
+>
+> 【黄旭，2020年秋】将列表中的元素进行累加，由于要将其三等分，所以计算总和的三分之一以及三分之二，并应该将能得到三分之一的方法数乘以能得到三分之二的方法数从而得到方法总数，方法能想到就不难，不然可能要想很久很久（比如昨晚做到很晚）
+
+双指针，同向右走，前缀和2/3的指针一定在前缀和1/3的右侧，所以正确。
+
+例如：
+
+5
+
+3		3		-3		3		3
+
+双指针向右走的过程
+
+​	ans=1			ans+=s
+
+​		=>					=>
+
+3		3		-3		3		3
+
+->		->		->
+
+s=1				s=2
+
+
+
+```python
+n = int(input())
+a = [int(i) for i in input().split()]
+s = sum(a)
+x = 0
+if s%3 == 0:
+    d1 = s/3
+    d2 = 2*d1
+    z = t = 0
+    for i in range(n-1):
+        z += a[i]
+
+        if z == d2:
+            x += t
+        if z == d1:
+            t += 1
+print(x)
+```
+
+
+
+
+
+解题思路：前缀和优化。当前缀和达到1/3时s++，达到2/3时候 ans += s
+
+```python
+n = int(input())
+a = [0]
+a.extend([int(x) for x in input().split()])
+
+prefix_sum = [0]*(n+1)
+
+for i in range(1, n+1):
+    prefix_sum[i] = prefix_sum[i-1] + a[i]
+    
+if (prefix_sum[n]%3) != 0:
+    print(0)
+else:
+    s = ans = 0
+    for i in range(1, n+1):         
+        if i>1 and i<n and prefix_sum[i]==(prefix_sum[n]*2//3):
+            ans += s
+        
+        if prefix_sum[i] == (prefix_sum[n]//3):
+            s += 1
+            
+    print(ans)
+```
+
+
+
+解题思路：tutorial, https://codeforces.com/blog/entry/13758 
+
+First of all, notice that if sum of all elements is equal *S* then sum of each of three parts is equal$S/3$
+Therefore, if *S* is not divided by 3 — then answer is 0.
+Otherwise, let’s iterate the end of first part *i* (1 ≤ *i* ≤ *n* - 2) and if sum of 1..i elements is equal $S/3$  then it means that we have to add to the answer the amount of such *j* (*i* + 1 < *j*) that the sum of elements from *j*-th to *n*-tn also equals $S/3$.
+
+Let’s create an array $cnt[]$, where  $cnt[i]$ equals 1, if the sum of elements from *i*-th to *n*-th equals $S/3$ and 0 — otherwise. Now, to calculate the answer we have to find the sum `cnt[j] + cnt[j+1] + ... + cnt[n]` faster then O(n). There are a lot of required ways to do this, but the easiest one is to create a new additional array `sums[]` where in *j*-th element will be `cnt[j] + cnt[j+1] + ... + cnt[n]`. It is easy to calculate in such way: `sums[n] = cnt[n]`, `sums[i] = sums[i+1] + cnt[i] (i < n)`.
+
+Thus, we receive very simple solution: for each prefix of initial array 1..i with the sum that equals $S/3$ we need to add to the answer `sums[i+2]`.
+
+**Complexity**: *O*(*n*)
+
+```python
+n = int(input())
+a = [int(x) for x in input().split()]
+s = sum(a)
+
+if s%3 != 0:
+    print(0)
+else:
+    s = s//3
+    
+    ss = 0
+    cnt = [0]*1000010
+
+    for i in range(n-1,-1,-1):
+        ss += a[i]
+        if ss == s:
+            cnt[i] = 1
+
+    for i in range(n-2,-1,-1):
+        cnt[i] += cnt[i+1]
+
+    ans = 0
+    ss = 0
+    for i in range(n-2):
+        ss += a[i]
+        if ss == s:
+            ans += cnt[i+2]
+
+    print(ans)
+```
+
+
+
+## 545C. Woodcutters
+
+dp/greedy, 1500, https://codeforces.com/problemset/problem/545/C
+
+Little Susie listens to fairy tales before bed every day. Today's fairy tale was about wood cutters and the little girl immediately started imagining the choppers cutting wood. She imagined the situation that is described below.
+
+There are *n* trees located along the road at points with coordinates *x*~1~, *x*~2~, ..., *x~n~*. Each tree has its height *h~i~*. Woodcutters can cut down a tree and fell it to the left or to the right. After that it occupies one of the segments [*x~i~* - *h~i~*, *x~i~*] or [*x~i~*;*x~i~* + *h~i~*]. The tree that is not cut down occupies a single point with coordinate *x~i~*. Woodcutters can fell a tree if the segment to be occupied by the fallen tree doesn't contain any occupied point. The woodcutters want to process as many trees as possible, so Susie wonders, what is the maximum number of trees to fell.
+
+**Input**
+
+The first line contains integer *n* (1 ≤ *n* ≤ 10^5^) — the number of trees.
+
+Next *n* lines contain pairs of integers *x~i~*, *h~i~* (1 ≤ *x~i~*, *h~i~* ≤ 10^9^) — the coordinate and the height of the *і*-th tree.
+
+The pairs are given in the order of ascending *x~i~*. No two trees are located at the point with the same coordinate.
+
+**Output**
+
+Print a single number — the maximum number of trees that you can cut down by the given rules.
+
+Examples
+
+input
+
+```
+5
+1 2
+2 1
+5 10
+10 9
+19 1
+```
+
+output
+
+```
+3
+```
+
+input
+
+```
+5
+1 2
+2 1
+5 10
+10 9
+20 1
+```
+
+output
+
+```
+4
+```
+
+Note
+
+In the first sample you can fell the trees like that:
+
+- fell the 1-st tree to the left — now it occupies segment [ - 1;1]
+- fell the 2-nd tree to the right — now it occupies segment [2;3]
+- leave the 3-rd tree — it occupies point 5
+- leave the 4-th tree — it occupies point 10
+- fell the 5-th tree to the right — now it occupies segment [19;20]
+
+In the second sample you can also fell 4-th tree to the right, after that it will occupy segment [10;19].
+
+
+
+2020fall-cs101-陈彦如
+
+因为要让更多的树被砍到，而一棵树是否被砍倒只与临近的两颗树相关，所以能倒就倒，不能往左就往右，所以直接暴力判断了。（向右倒会占用下一棵树左边的空间，所以要比向左边倒的情况多考虑一点！）
+
+```python
+n = int(input())
+s = [[int(x) for x in input().split()] for i in range(n)]
+count = 2
+if n == 1:
+    print(1)
+else:
+    for i in range(1, n-1):
+        if s[i][0] - s[i-1][0] > s[i][1]:
+            count += 1
+        elif s[i+1][0] - s[i][0] > s[i][1]:
+            count += 1
+            s[i][0] += s[i][1]
+    
+    print(count)
+```
+
+
+
+2020fall-cs101-黄旭
+
+解题思路：先首尾两棵树肯定是可以砍的，接下来中间的树肯定是能砍就尽量砍，然后记录砍树之后的被占用最大值即可。
+
+```python
+x = int(input())
+lt = []
+n = 0
+for i in range(x):
+    lt.append([int(i) for i in input().split()])
+
+for i in range(1,x-1):
+    a, b = lt[i]
+    if a - b > lt[i-1][0]:
+        n += 1
+    elif a+b < lt[i+1][0]:
+        n += 1
+        lt[i][0] = a + b
+print([n+1,n+2][x!=1])
+```
+
+
+
+```python
+n = int(input())
+
+xh_pair = []
+for i in range(n):
+    x,h = map(int,input().split())
+    xh_pair.append((x,h))
+    
+nCount = 1
+pre = xh_pair[0][0]
+for index in range(1,n-1):
+    i = xh_pair[index]
+    j = xh_pair[index+1]
+    if i[0]-pre>i[1]:
+        nCount += 1
+        pre = i[0]
+        #print(i)
+        continue
+    if i[0]+i[1]<j[0]:
+        nCount += 1
+        #print(i)
+        pre = i[0]+i[1]
+        continue
+    
+
+    pre = i[0]
+
+if n==1:
+    print(1)
+else:
+    print(nCount+1)
+```
+
+2021fall-cs101-吉祥瑞
+
+https://codeforces.com/problemset/problem/545/C
+
+解题思路：贪心策略是从左到右遍历每颗树，若能往左倒就往左倒，若不能往左倒但能往右倒就往右倒。原理如下图。
+
+```mermaid
+flowchart LR
+subgraph 程序
+	A{第i颗树能往左倒?}--T-->B[第i颗树往左倒]
+	A--F-->C{第i颗树能往右倒?}
+	C--F-->D[第i颗树不倒]
+	C--T-->E[第i颗树往右倒]
+end
+subgraph 结论
+	J[第i颗树往右倒不会使结果更坏]---R[贪心选择正确]
+	B---F[第i颗树往左倒不会使结果更坏]---R
+	D---Q[第i颗树不倒不会使结果更坏]---R
+end
+subgraph 推理
+	E-->G[j = i+1]-->H{j <= n?}
+	H--F---J
+	H--T-->K{第j颗树能往左倒?}
+	K--T-->L[第j颗树往左倒]---J
+	K--F-->M{第j颗树能往右倒?}
+	M--F-->N[第j颗树不倒]---J
+	M--T-->O[第j颗树往右倒]
+	O-->P[j = j+1]-->H
+end
+```
+
+```python
+n = int(input())
+xh = [[int(a) for a in input().split()] for _ in range(n)]
+s = 1
+r = -xh[0][1]
+for i in range(n-1):
+    if xh[i][0]-xh[i][1] > r:
+        s += 1
+        r = xh[i][0]
+    elif xh[i][0]+xh[i][1] < xh[i+1][0]:
+        s += 1
+        r = xh[i][0]+xh[i][1]
+    else:
+        r = xh[i][0]
+print(s)
+```
+
+注：初始时`s = 1`是算入了最后一颗树。`r`用来标记已倒下的树的最右端，初始时`r = -xh[0][1]`是为了让第一颗树一定能往左倒。
+
+心得：通过写两道选做题的解题思路，我有点体会到了贪心算法的共同模式。（1）把问题按某种顺序分解为一次次选择（“充实的寒假生活”(http://cs101.openjudge.cn/practice/16528/)按结束时间从早到晚遍历每个活动，“Woodcutters”从左到右遍历每颗树）；（2）确定每次做选择的策略（“充实的寒假生活”是”若能参加就参加“，“Woodcutters”是“若能往左倒就往左倒，若不能往左倒但能往右倒就往右倒”），使这种策略不会使结果更坏。这里对于贪心选择正确性的推理是“计算机式”的，需要反复迭代，如果要让推理更“数学”，可以用数学归纳法倒过来说。
 
 
 
@@ -3424,139 +4507,6 @@ print(restaurant)
 
 
 
-
-
-## 368B. Sereja and Suffixes
-
-data structures/dp, 1100,  https://codeforces.com/problemset/problem/368/B
-
-Sereja has an array *a*, consisting of *n* integers a~1~, a~2~, ..., a~n~. The boy cannot sit and do nothing, he decided to study an array. Sereja took a piece of paper and wrote out *m* integers $l_1, l_2, ..., l_m~$ (1 ≤ $l_i$ ≤ *n*). For each number $l_i$ he wants to know how many distinct numbers are staying on the positions $l_i, l_{i + 1}, ..., n$. Formally, he want to find the number of distinct numbers among $a_{l_i}, a_{l_{i + 1}}, ..., a_n$.?
-
-Sereja wrote out the necessary array elements but the array was so large and the boy was so pressed for time. Help him, find the answer for the described question for each $l_i$.
-
-**Input**
-
-The first line contains two integers *n* and *m* (1 ≤ *n*, *m* ≤ 10^5^). The second line contains *n* integers a~1~, a~2~, ..., a~n~ (1 ≤ a~i~ ≤ 10^5^) — the array elements.
-
-Next *m* lines contain integers $l_1, l_2, ..., l_m$. The *i*-th line contains integer $l_i$ (1 ≤ $l_i$ ≤ *n*).
-
-**Output**
-
-Print *m* lines — on the *i*-th line print the answer to the number $l_i$.
-
-**Examples**
-
-input
-
-```
-10 10
-1 2 3 4 1 2 3 4 100000 99999
-1
-2
-3
-4
-5
-6
-7
-8
-9
-10
-```
-
-output
-
-```
-6
-6
-6
-6
-6
-5
-4
-3
-2
-1
-```
-
- 
-
-**要求数据结构实现一次，dp实现一次**
-
-DP方法：
-
-2020fall-cs101，郭冠廷。本题的思路不困难，只需反序 dp即可（甚至看不出 dp）。为了节省时间，应用到了两个窍门：1）将已经读取的数据投入到 set中，这样能避免列表查找的缓速。2）将答案储存在一个列表中，同时输出。二者都是以空间换时间。
-
-```python
-n,m = map(int, input().split())
-nl = [int(x) for x in input().split()]
-
-out = 0
-dp = []
-
-tset = set()
-for i in reversed(nl):
-    if i not in tset:
-        out += 1
-        tset.add(i)
-    dp.append(out)
-
-for _ in range(m):
-    pos = len(nl) - int(input())
-    print(dp[pos])
-```
-
-
-
-2020fall-cs101，王康安。最开始用 in去判断，tle了。于是开一个到一万的桶，空间换时间，成功 AC。
-
-```python
-n,m = map(int,input().split())
-seq = [int(x) for x in input().split()]
-dp = [0]*(n-1)+[1]
-barrel = [False]*(100000+1)
-barrel[seq[n-1]] = True
-for i in reversed(range(n-1)):
-    if barrel[seq[i]]:        
-        dp[i] = dp[i+1]
-    else:        
-        dp[i] = dp[i+1]+1        
-        barrel[seq[i]] = True
-for i in range(m):
-    print(dp[int(input())-1])
-```
-
-
-
-data structures方法：
-
-2020fall-cs101，蓝克轩。解题思路：先用dictionary记录每个元素数量，然后从第一个元素开始，每一个元素从dictionary减一，如果在dictionary对应对应的因素是0就去除，dictionary的长度即是不同元素的数量。
-
-```python
-n, m = map(int,input().split())
-a = list(map(int, input().split()))
-adic = {}
-for i in range(n):
-    if a[i] in adic:
-        adic[a[i]] += 1
-    else:
-        adic[a[i]] = 1
- 
-ans = [0]*n
-for i in range(n):
-    if a[i] in adic:
-        if adic[a[i]] == 1:
-            adic.pop(a[i])
-            ans[i] += 1
-        else:
-            adic[a[i]] -= 1
-    ans[i] += len(adic)
- 
-for i in range(m):
-    print(ans[int(input()) - 1])
-```
-
-
-
 ## 706B. Interesting drink
 
 binary search/dp/implementation, 1100,  https://codeforces.com/problemset/problem/706/B
@@ -3783,1008 +4733,6 @@ for i in range(q):
 
 
 
-## 1443C. The Delivery Dilemma
-
-binary search/greedy/sortings, 1400, https://codeforces.com/problemset/problem/1443/C
-
-Petya is preparing for his birthday. He decided that there would be nn different dishes on the dinner table, numbered from 1 to n. Since Petya doesn't like to cook, he wants to order these dishes in restaurants.
-
-Unfortunately, all dishes are prepared in different restaurants and therefore Petya needs to pick up his orders from nn different places. To speed up this process, he wants to order courier delivery at some restaurants. Thus, for each dish, there are two options for Petya how he can get it:
-
-- the dish will be delivered by a courier from the restaurant ii, in this case the courier will arrive in aiai minutes,
-- Petya goes to the restaurant ii on his own and picks up the dish, he will spend bibi minutes on this.
-
-Each restaurant has its own couriers and they start delivering the order at the moment Petya leaves the house. In other words, all couriers work in parallel. Petya must visit all restaurants in which he has not chosen delivery, he does this consistently.
-
-For example, if Petya wants to order n=4 dishes and a=[3,7,4,5], and b=[2,1,2,4], then he can order delivery from the first and the fourth restaurant, and go to the second and third on your own. Then the courier of the first restaurant will bring the order in 3 minutes, the courier of the fourth restaurant will bring the order in 5 minutes, and Petya will pick up the remaining dishes in 1+2=3 minutes. Thus, in 5 minutes all the dishes will be at Petya's house.
-
-Find the minimum time after which all the dishes can be at Petya's home.
-
-**Input**
-
-The first line contains one positive integer t (1≤t≤2⋅10^5^) — the number of test cases. Then tt test cases follow.
-
-Each test case begins with a line containing one integer n (1≤n≤2⋅10^5^) — the number of dishes that Petya wants to order.
-
-The second line of each test case contains n integers a~1~…a~n~ (1≤a~i~≤10^9^) — the time of courier delivery of the dish with the number ii.
-
-The third line of each test case contains n integers b~1~…b~n~ (1≤bi≤10^9^) — the time during which Petya will pick up the dish with the number ii.
-
-The sum of nn over all test cases does not exceed 2⋅10^5^.
-
-**Output**
-
-For each test case output one integer — the minimum time after which all dishes can be at Petya's home.
-
-Example
-
-input
-
-```
-4
-4
-3 7 4 5
-2 1 2 4
-4
-1 2 3 4
-3 3 3 3
-2
-1 2
-10 10
-2
-10 10
-1 2
-```
-
-output
-
-```
-5
-3
-2
-3
-```
-
-
-
-> 【张聪，2020年秋】由于 delivery是并行的，pick 是串行的，很自然地想到 delivery 应该优先。所以构建二维数组并对其根据 delivery 时间排序，然后用 greedy 算法思想，找到最小的并行时间，要求其能够覆盖delivery 时间更长的 dish 的串行时间之和。
->
-> 【施惟明，2020年秋】1）听闻此题 TLE 主要来源于读入数据的耗时，便考虑采用空间换时间的策略，先一波读入所有数据，再进行处理。2）处理部分仍然是 greedy，尽量自己取耗时长的外卖，当自己取的时长和外卖送到的最慢时长相等时为最佳。复杂度 O(nlogn)（上一次好像忘记考虑 sort 的复杂度了...）。
->
-> 【成泽凯，2020年秋】首先将每个菜的配送用时a~i~和自取用时b~i~配对，然后按配送用时a~i~降序排。因为配送时每个餐馆同时送，所以实际上配送用时短的会被配送用时长的覆盖掉。从前向后遍历，并求自取用时的前缀和 sum[j]，当自取用时的前缀和比配送用时 a~j~ 大。
->
-> （某同学感谢：由于 Test9 有 200000 个输入，所以一个一个输出处理会超时，经施惟明，成泽恺等同学提醒后，修改了Python代码，使得只输出一次，成功 AC 了。）
->
-> 【王君宇，2020年秋】当我写完高数作业看群，群里的大佬说 python常规方法可以 AC ！！我们平时做这种多组 test问题都是直接循环每次 print，但是也可以将每次结果存到一个列表中，最后一起 print，这样能大大加快速度。确实我对于 python 中各个函数的运行速度还不够了解，这道题锻炼了我的程序思维，更让我加深了对 print 函数的理解。当我看到自己的代码 AC 的那一刻，这个下午的失败值得了！！！
-
-```python
-n = int(input())
-ans = []
-for i in range(n):
-    m = int(input())
-    a = list(map(int,input().split()))
-    b = list(map(int,input().split()))
-    c = sorted(list(zip(a,b)),reverse=True)
-    
-    d=0
-    for i in range(m):
-        d += c[i][1]
-        if d >= c[i][0]:
-            d = max(c[i][0],d-c[i][1])
-            break      
-
-    ans.append(d)
-
-print('\n'.join(map(str, ans)))
-```
-
-
-
-1443C. 整体输出，相当于利用了output buffer。print()函数每次执行会清空buffer，相当于disable buffer，所以慢。
-What Is Python Output Buffering and How to Disable It?
-https://blog.finxter.com/what-is-python-output-buffering-and-how-to-disable-it/
-
-
-
-```python
-T = int(input())
-to_print = []
-while T:
-    T -= 1       
-    
-    n = int(input())
-    a = [int(x) for x in input().split()]
-    b = [int(x) for x in input().split()]
-    
-    if n==1:
-        to_print.append( min(a[0], b[0]) )     
-        #print(min(a[0], b[0]))
-        continue
-        
-    ab = list(zip(a,b))
-    ab.sort()
-    
-    k = n - 1
-    suffix_sum = 0
-    while suffix_sum <= ab[k][0] and k>=0:
-        suffix_sum += ab[k][1]
-        k -= 1
-    
-    #print( min(ab[k+1][0], suffix_sum))
-    to_print.append( ( min(ab[k+1][0], suffix_sum)) )
-
-else:
-    print('\n'.join(map(str, to_print)))
-```
-
-
-
-```Python
-T = int(input())
-to_print = []
-while T:
-    T -= 1
-    n = int(input())
-    a = [int(x) for x in input().split()]
-    b = [int(x) for x in input().split()]
-    
-    if n==1:
-        #print(min(a[0], b[0]))
-        to_print.append( min(a[0], b[0]) )
-        continue
-    
-    ab = list(zip(a,b))
-    ab.sort( key = lambda x: (-x[0], x[1]))
-    
-    for i in range(1, n):
-        ab[i] = ab[i][0], (ab[i][1]+ab[i-1][1])
-    
-    #print(ab)
-    
-    #print( max ( map(min, ab) )  )
-    to_print.append( max ( map(min, ab) ) )
-                    
-else:
-    print('\n'.join(map(str, to_print)))
-```
-
-
-
-> 【许浩哲，2020年秋】1443C 可以用Python AC的另外一种方法。就是把nput换成sys.stdin.readline，把print换成sys.stdout.write。https://codeforces.com/problemset/problem/1443/C
->
-
-```python
-import sys
-
-n = int(input())
-#n = int(sys.stdin.readline())
-#ans = []
-for i in range(n):
-    #m = int(input())
-    m = int(sys.stdin.readline())
-    a = list(map(int,sys.stdin.readline().split()))
-    b = list(map(int,sys.stdin.readline().split()))
-    c = sorted(list(zip(a,b)),reverse=True)
-    
-    d=0
-    for i in range(m):
-        d += c[i][1]
-        if d >= c[i][0]:
-            d = max(c[i][0],d-c[i][1])
-            break      
-
-    sys.stdout.write('{}\n'.format(d))
-    #ans.append(d)
-
-#print('\n'.join(map(str, ans)))
-```
-
-
-
-GNU C++17 Accepted
-
-```c++
-#include <bits/stdc++.h>
-using namespace std;
-pair <int,int> a[200001];
-int main(){
-	int t;
-	cin >> t;
-	while(t--){
-		int n;
-		cin>>n;
-		int k=0,sum=0;
-		for(k=1;k<=n;k++)cin>>a[k].first;
-		for(k=1;k<=n;k++)cin>>a[k].second;
-		sort(a+1,a+n+1);
-		k=n;
-		while(sum<=a[k].first &&k >=1){
-			sum += a[k].second;
-			k--;
-		}
-		cout << min(a[k+1].first, sum) << endl;
-	}
-	return 0;
-}
-```
-
-
-
-## 189A. Cut Ribbon
-
-brute force/dp, 1300, https://codeforces.com/problemset/problem/189/A
-
-Polycarpus has a ribbon, its length is *n*. He wants to cut the ribbon in a way that fulfils the following two conditions:
-
-- After the cutting each ribbon piece should have length *a*, *b* or *c*.
-- After the cutting the number of ribbon pieces should be maximum.
-
-Help Polycarpus and find the number of ribbon pieces after the required cutting.
-
-**Input**
-
-The first line contains four space-separated integers *n*, *a*, *b* and *c* (1 ≤ *n*, *a*, *b*, *c* ≤ 4000) — the length of the original ribbon and the acceptable lengths of the ribbon pieces after the cutting, correspondingly. The numbers *a*, *b* and *c* can coincide.
-
-**Output**
-
-Print a single number — the maximum possible number of ribbon pieces. It is guaranteed that at least one correct ribbon cutting exists.
-
-Examples
-
-input
-
-```
-5 5 3 2
-```
-
-output
-
-```
-2
-```
-
-input
-
-```
-7 5 5 2
-```
-
-output
-
-```
-2
-```
-
-Note
-
-In the first example Polycarpus can cut the ribbon in such way: the first piece has length 2, the second piece has length 3.
-
-In the second example Polycarpus can cut the ribbon in such way: the first piece has length 5, the second piece has length 2.
-
-
-
-思路：就是一个需要刚好装满的完全背包问题，只有三种商品a, b, c，能取无限件物品，每件物品价值是1，求最大价值。
-
-```python
-inf = 1e9 + 7
-n,a,b,c = map(int,input().split())
-dp = [0]+[-inf]*n
-
-for i in range(1,n+1):
-    for j in (a,b,c):
-        if i >= j:
-            #dp[i] = max(dp[i-j], dp[i-j] + 1, dp[i])
-            dp[i] = max(dp[i-j] + 1, dp[i])
-
-print(dp[n])
-```
-
-
-
-2020fall-cs101，王君宇。这道题状态转移方程就是 d[i]=max(d[i-a],d[i-b],d[i-c])+1，其中初始量是 0.到达一个新节点的方法有三种：+a、+b、+c，选取最大增量即可，思路十分精巧。
-
-2020fall-cs101，黄旭。找到递推公式 dp[i] = max(dp[i-a], dp[i-b], dp[i-c]) + 1就好了。
-
-```python
-n,a,b,c = map(int,input().split())
-dp = [0]+[-4000]*4000
-for i in range(1,n+1):
-    dp[i] = max(dp[i-a], dp[i-b], dp[i-c]) + 1
-print(dp[n])
-```
-
-
-
-https://python-forum.io/thread-23120.html
-
-At the beginning of the procedure, the indexes `i-a, i-b, i-c` can be negative, which means that python is going to take values at the end of the array, because for example `d[-4]` is the 4th value from the right. Initializing the array to a large negative value in each cell is intended as giving the cell a "negative infinite" value for the `max` algorithm. At
-every step, an increment of 1 is added, so the number is chosen large enough so that `-1e9 + 4000 < 0`
-
-```python
-n, a, b, c = map(int, input().split())
-d = [0] + [-1e9] * 4000
-for i in range(1, n + 1):
-    d[i] = max(d[i - a], d[i - b], d[i - c]) + 1
-print(d[n])
-```
-
-
-
-2020fall-cs101，赵春源。这是一个简单的DP思想，我们让f~i~等于把i按题意切开所得的最大段数，我们让$f_{0}=0$，其他的位置为负无穷，表示这个长度没法按题目的要求切开，我们考虑如何用较小的f推出较大的f，当然是把a,b,c三种切法都试一遍，最大长度就是$max(f[i-a], f[i-b], f[i-c])+1$
-
-```python
-n, a, b, c = map(int, input().split())
-f = (n+1) * [-10000]
-f[0] = 0
-for i in range(1, n+1):
-    if i >= a:
-        f[i] = max(f[i], f[i - a] + 1)
-    if i >= b:
-        f[i] = max(f[i], f[i - b] + 1)
-    if i >= c:
-        f[i] = max(f[i], f[i - c] + 1)
-print(f[n])
-```
-
-
-
-2022fall-cs101，朱骏豪，工程院
-
-一开始想试着写枚举，竟然就过了
-
-```python
-n,a,b,c=[int(x) for x in input().split()]
-num=[]
-if a==1 or b==1 or c==1:
-    print(n)
-else:
-    for i in range(int(n/a)+1):
-        t=n-i*a
-        for j in range(int(t/b)+1):
-            w=t-j*b
-            if w%c==0:
-                num.append(i+j+int(w/c))
-    print(max(num))
-```
-
-
-
-2020fall-cs101，成泽恺。一开始直接想暴力循环，三个片段a，b，c，一开始假设他可以分成i个a和j个b，i，j初始值都为0，while a~i~和a~i~+b~j~比n小的时候循环判断能不能加c片段进去，如果可以用max函数拿到此刻的片段数目的最大值，直到最后输出num即可，但这样用python3会超时，pypy3可以过。
-
-```python
-n,a,b,c = map(int, input().split())
-num = 0
-i = 0
-j = 0
-while a*i <= n:
-    j = 0
-    while b*j+a*i <= n:
-        d = n - a*i - b*j
-        if d%c==0 and a*i+b*j<=n:
-            num = max(num, i+j+d//c)
-        j += 1
-
-    i += 1
- 
-print(num)
-```
-
-
-
-题目需要用到动态规划，这个问题相当于一个完全背包，背包容量是n，有重量为a，b，c的物品，物品价值都是1，求取在恰好装满背包的情况下价值最大。因为题目保证有解，开一个长度为n+1的列表，初始值为-9999（避免背包不被恰好装满的情况出现），容量为0的时候价值为0，容量为i的时候判断能不能放下重量为a，b，c的片段，如果能查看背包剩余容量i-a可以放多少，如果i-a不能被恰好填满，由于初始值是很大的负值，在装进去之后仍然是负值，不会影响最终结果。循环n次，最后得到最优解。
-
-
-
-2020fall-cs101，刘安澜。思路：看上去这个题和老师上课讲的dp是一个镜像关系的题目，所以就按照找硬币的dp思路写了最初始的一版。但是不同于找硬币必有一个解，剪丝带对于某些丝带长度是无法分割的，所以这也就造成了在某些不能分割的长度上输出错误的结果。所以对于这种情况需要我们将除0外所有的初始值都赋为一个很大的负数，这样就能很好避免不能分割的长度对于其它可分割长度答案的扰动。
-
-```python
-def dpcut( lengthlist, l, maxcuts ):
-    for i in range( l + 1 ):
-        for j in [ c for c in lengthlist if c <= i ]:
-            if maxcuts[i-j] + 1 > maxcuts[i]:
-                maxcuts[i] = maxcuts[i-j] + 1
-    return maxcuts[l]
-
-l,a,b,c = map(int,input().split())
-lengthlist = [a, b, c]
-maxcuts = [0] + [-1000000]*l
-
-print( dpcut( lengthlist, l, maxcuts ) )
-```
-
-
-
-2022fall-cs101，杨文可
-
-思路与课件上的找零问题完全一样。不同的是，有一些长度的彩带是剪不了的。要想办法避免这些长度参与递推之后影响最终的结果。单纯把它们赋值成-1不行，因为递推几次以后就变成正的了。所以要赋值成足够大的负数。
-
-max() 的参数要么是一整个可迭代类型, 要么是逗号分隔的多个数值，不能是两者混合。
-
-```python
-n, a, b, c = map(int, input().split()) 
-dp = [0] + [-4000] * n  
-for i in range(n + 1):  
-    dp[i] = max([dp[i - x] + 1 for x in [a, b, c] if x <= i] + 
-[dp[i]])  
-print(dp[-1])
-```
-
-
-
-2021fall-cs101，唐浴歌
-
-经验总结的一点是，dp的题好像一般都只需两次遍历就能解决了：
-
-1）第一次遍历（初始化）：首先要保证dp列表项数足够充裕。如求的是可及性的话，dp列表里的能被目标数整除的项都+1。2.第二次遍历（特殊化处理）：根据题目要求对完成初始化的dp作处理。由于有最优目标，每一次处理都会判断大小关系来迭代掉之前的结果。
-
-闫老师批注：两遍处理的思路挺好。第一遍是数据预处理，这样第二遍就很清楚了。充实的寒假生活（http://cs101.openjudge.cn/practice/16528/），也可以如法炮制。
-
-```python
-# 2021fall-cs101, TAN Yuge
-n, *m = map(int, input().split())
-dp = [0] * (n + 1) 
-for i in m:     
-    for j in range(1, n + 1):         
-        if j % i == 0:             
-            dp[j] = max(j // i, dp[j])
-            
-for i in range(1, n +  1):    
-    for j in m:         
-        if i > j and dp[i - j]:             
-            dp[i] = max(dp[i - j] + 1, dp[i])
-print(dp[n])
-```
-
-
-
-## 466C. Number of Ways
-
-binary search/brute force/data structures/dp/two pointers, 1700, https://codeforces.com/problemset/problem/466/C
-
-You've got array *a*[1], *a*[2], ..., *a*[*n*], consisting of *n* integers. Count the number of ways to split all the elements of the array into three contiguous parts so that the sum of elements in each part is the same.
-
-More formally, you need to find the number of such pairs of indices *i*, *j* (2 ≤ *i* ≤ *j* ≤ *n* - 1), that  $\sum_{k=1}^{i-1} a_k$= $\sum_{k=i}^{j} a_k$ =$\sum_{k=j+1}^{n} a_k$
-
-**Input**
-
-The first line contains integer *n* (1 ≤ *n* ≤ 5·10^5^), showing how many numbers are in the array. The second line contains *n* integers *a*[1], *a*[2], ..., *a*[*n*] (|*a*[*i*]| ≤  10^9^) — the elements of array *a*.
-
-**Output**
-
-Print a single integer — the number of ways to split the array into three parts with the same sum.
-
-Examples
-
-input
-
-```
-5
-1 2 3 0 3
-```
-
-output
-
-```
-2
-```
-
-input
-
-```
-4
-0 1 -1 0
-```
-
-output
-
-```
-1
-```
-
-input
-
-```
-2
-4 1
-```
-
-output
-
-```
-0
-```
-
-
-
-> 【汤建浩，2020年秋】难点在于总和能除以三的部分。由于是分成连续的三部分，每部分一样，只需要对列表一项项地加下去。其中一些节点非常重要，如前缀和达到1/3 和达到2/3，此两项都要满足，且存在前缀和达到1/3先于前缀和达到2/3的情况，才能分成连续三份。出现一次前缀和达到1/3 不能说明什么，但我们要记录下来s++，在它之后出现前缀和2/3，我们就把这个情况ans += s
->
-> 【王君宇，2020年秋】这道题的最大坑点就是分割是有序的...我因为没认真审题而半天毫无头绪。既然是有序的，我们可以遍历逐个求和。如果总和不是 3的倍数显然不能分割，否则我们先得到sum/3，之后是 2*sum/3. 因此我们可以分成两步。当我们得到第一个分割之后，每得到一种便相应将二级种数加一。得到第二个分割后就将之前分割的总种数加起来。这里运用了类似于乘法原理的分布计数思想。另外，我们求和的终点应当是倒数第二个元素，防止 sum==0时总种数出错。
->
-> 【黄旭，2020年秋】将列表中的元素进行累加，由于要将其三等分，所以计算总和的三分之一以及三分之二，并应该将能得到三分之一的方法数乘以能得到三分之二的方法数从而得到方法总数，方法能想到就不难，不然可能要想很久很久（比如昨晚做到很晚）
-
-双指针，同向右走，前缀和2/3的指针一定在前缀和1/3的右侧，所以正确。
-
-例如：
-
-5
-
-3		3		-3		3		3
-
-双指针向右走的过程
-
-​	ans=1			ans+=s
-
-​		=>					=>
-
-3		3		-3		3		3
-
-->		->		->
-
-s=1				s=2
-
-
-
-```python
-n = int(input())
-a = [int(i) for i in input().split()]
-s = sum(a)
-x = 0
-if s%3 == 0:
-    d1 = s/3
-    d2 = 2*d1
-    z = t = 0
-    for i in range(n-1):
-        z += a[i]
-
-        if z == d2:
-            x += t
-        if z == d1:
-            t += 1
-print(x)
-```
-
-
-
-
-
-解题思路：前缀和优化。当前缀和达到1/3时s++，达到2/3时候 ans += s
-
-```python
-n = int(input())
-a = [0]
-a.extend([int(x) for x in input().split()])
-
-prefix_sum = [0]*(n+1)
-
-for i in range(1, n+1):
-    prefix_sum[i] = prefix_sum[i-1] + a[i]
-    
-if (prefix_sum[n]%3) != 0:
-    print(0)
-else:
-    s = ans = 0
-    for i in range(1, n+1):         
-        if i>1 and i<n and prefix_sum[i]==(prefix_sum[n]*2//3):
-            ans += s
-        
-        if prefix_sum[i] == (prefix_sum[n]//3):
-            s += 1
-            
-    print(ans)
-```
-
-
-
-解题思路：tutorial, https://codeforces.com/blog/entry/13758 
-
-First of all, notice that if sum of all elements is equal *S* then sum of each of three parts is equal$S/3$
-Therefore, if *S* is not divided by 3 — then answer is 0.
-Otherwise, let’s iterate the end of first part *i* (1 ≤ *i* ≤ *n* - 2) and if sum of 1..i elements is equal $S/3$  then it means that we have to add to the answer the amount of such *j* (*i* + 1 < *j*) that the sum of elements from *j*-th to *n*-tn also equals $S/3$.
-
-Let’s create an array $cnt[]$, where  $cnt[i]$ equals 1, if the sum of elements from *i*-th to *n*-th equals $S/3$ and 0 — otherwise. Now, to calculate the answer we have to find the sum `cnt[j] + cnt[j+1] + ... + cnt[n]` faster then O(n). There are a lot of required ways to do this, but the easiest one is to create a new additional array `sums[]` where in *j*-th element will be `cnt[j] + cnt[j+1] + ... + cnt[n]`. It is easy to calculate in such way: `sums[n] = cnt[n]`, `sums[i] = sums[i+1] + cnt[i] (i < n)`.
-
-Thus, we receive very simple solution: for each prefix of initial array 1..i with the sum that equals $S/3$ we need to add to the answer `sums[i+2]`.
-
-**Complexity**: *O*(*n*)
-
-```python
-n = int(input())
-a = [int(x) for x in input().split()]
-s = sum(a)
-
-if s%3 != 0:
-    print(0)
-else:
-    s = s//3
-    
-    ss = 0
-    cnt = [0]*1000010
-
-    for i in range(n-1,-1,-1):
-        ss += a[i]
-        if ss == s:
-            cnt[i] = 1
-
-    for i in range(n-2,-1,-1):
-        cnt[i] += cnt[i+1]
-
-    ans = 0
-    ss = 0
-    for i in range(n-2):
-        ss += a[i]
-        if ss == s:
-            ans += cnt[i+2]
-
-    print(ans)
-```
-
-
-
-## 455A. Boredom
-
-dp, 1500, https://codeforces.com/contest/455/problem/A
-
-Alex doesn't like boredom. That's why whenever he gets bored, he comes up with games. One long winter evening he came up with a game and decided to play it.
-
-Given a sequence *a* consisting of *n* integers. The player can make several steps. In a single step he can choose an element of the sequence (let's denote it *a~k~*) and delete it, at that all elements equal to *a~k~* + 1 and *a~k~* - 1 also must be deleted from the sequence. That step brings *a~k~* points to the player.
-
-Alex is a perfectionist, so he decided to get as many points as possible. Help him.
-
-**Input**
-
-The first line contains integer *n* (1 ≤ *n* ≤ 10^5^) that shows how many numbers are in Alex's sequence.
-
-The second line contains *n* integers *a*~1~, *a*~2~, ..., *a~n~* (1 ≤ *a~i~* ≤ 10^5^).
-
-**Output**
-
-Print a single integer — the maximum number of points that Alex can earn.
-
-Examples
-
-input
-
-```
-2
-1 2
-```
-
-output
-
-```
-2
-```
-
-input
-
-```
-3
-1 2 3
-```
-
-output
-
-```
-4
-```
-
-input
-
-```
-9
-1 2 1 3 2 2 2 2 3
-```
-
-output
-
-```
-10
-```
-
-Note
-
-Consider the third test example. At first step we need to choose any element equal to 2. After that step our sequence looks like this [2, 2, 2, 2]. Then we do 4 steps, on each step we choose any element equals to 2. In total we earn 10 points.
-
-
-
-> 【王康安，2020年秋】预处理做个桶。状态转移方程：dp[i] = max(dp[i-1], dp[i-2]+cnt[i]*i)。
->
-
-```python
-n = int(input())
-arr = list(map(int,input().split()))
-dp = [0]*(max(arr) + 1)
-cnt = [0]*(max(arr) + 1)
-for each in arr:    
-    cnt[each] += 1
-
-dp[0] = 0
-dp[1] = cnt[1]
-for i in range( 2, max(arr)+1 ):    
-    dp[i] = max( dp[i-1], dp[i-2] + cnt[i]*i )
-
-print(max(dp))
-```
-
-
-
-> 【李思哲，2020年秋】先将相同的数字打包求和，然后在有数的地方从前往后爬，每次只需要考虑是放弃这次还是上一次的数更好即可。这题虽然不难但是确实让我更加明白了动态规划是个怎样的过程。
->
-
-> 【李宗远，2020年秋】以前没用过直接爆开一个大数的方法，然后无脑递归的方法......我听说Python是脚本语言之后一直以为这种方法是C++的专利。学到了学到了，真好用233
->
-
-```python
-input()
-c = [0]*100001
-for m in map(int, input().split()):
-    c[m] += 1
-    
-dp = [0]*100001
-for i in range(1, 100001):
-    dp[i] = max( dp[i-1], dp[i-2] + i* c[i] )
-
-print(max(dp))
-```
-
-
-
-```python
-# ref: http://codeforces.com/blog/entry/13336
-# maximize the sum of numbers that we took. Let precalc array cnt.
-# cnt[x] — number of integers x in array a. Now we can easily calculate the DP:
-# f(i) = max( f(i-1), f(i-2) + cnt[i]*i), 2<=i<=n
-# f(1) = cnt[1]
-# f(0) = 0
-# The answer is f(n). Asymptotics - O(n)
-
-n = int(input())
-a = [int(i) for i in input().split()]
-
-max_value = max(a)
-#print(max_value)
-
-cnt = (max_value+1)*[0]
-for i in range(n):
-        cnt[a[i]] += 1
-
-f = (max_value+1)*[0]
-f[0] = 0
-f[1] = cnt[1]
-
-for i in range(2,max_value+1):
-        if f[i-1] > f[i-2] + cnt[i]*i :
-                f[i] = f[i-1]
-        else:
-                f[i] = f[i-2] + cnt[i]*i
-
-print(f[max_value])
-```
-
-
-
-[Python a, b = b, a +b - Stack Overflow](https://stackoverflow.com/questions/21990883/python-a-b-b-a-b)
-
-In `a, b = b, a + b`, the expressions on the right hand side are evaluated before being assigned to the left hand side.
-
-```python
-n = input()
-s=[0]*100002
-for i in map(int, input().split()):
-    s[i] += i
-
-a=b=0
-for d in s:
-    a,b = max(a,b),a+d
-
-print(a)
-```
-
-
-
-## 545C. Woodcutters
-
-dp/greedy, 1500, https://codeforces.com/problemset/problem/545/C
-
-Little Susie listens to fairy tales before bed every day. Today's fairy tale was about wood cutters and the little girl immediately started imagining the choppers cutting wood. She imagined the situation that is described below.
-
-There are *n* trees located along the road at points with coordinates *x*~1~, *x*~2~, ..., *x~n~*. Each tree has its height *h~i~*. Woodcutters can cut down a tree and fell it to the left or to the right. After that it occupies one of the segments [*x~i~* - *h~i~*, *x~i~*] or [*x~i~*;*x~i~* + *h~i~*]. The tree that is not cut down occupies a single point with coordinate *x~i~*. Woodcutters can fell a tree if the segment to be occupied by the fallen tree doesn't contain any occupied point. The woodcutters want to process as many trees as possible, so Susie wonders, what is the maximum number of trees to fell.
-
-**Input**
-
-The first line contains integer *n* (1 ≤ *n* ≤ 10^5^) — the number of trees.
-
-Next *n* lines contain pairs of integers *x~i~*, *h~i~* (1 ≤ *x~i~*, *h~i~* ≤ 10^9^) — the coordinate and the height of the *і*-th tree.
-
-The pairs are given in the order of ascending *x~i~*. No two trees are located at the point with the same coordinate.
-
-**Output**
-
-Print a single number — the maximum number of trees that you can cut down by the given rules.
-
-Examples
-
-input
-
-```
-5
-1 2
-2 1
-5 10
-10 9
-19 1
-```
-
-output
-
-```
-3
-```
-
-input
-
-```
-5
-1 2
-2 1
-5 10
-10 9
-20 1
-```
-
-output
-
-```
-4
-```
-
-Note
-
-In the first sample you can fell the trees like that:
-
-- fell the 1-st tree to the left — now it occupies segment [ - 1;1]
-- fell the 2-nd tree to the right — now it occupies segment [2;3]
-- leave the 3-rd tree — it occupies point 5
-- leave the 4-th tree — it occupies point 10
-- fell the 5-th tree to the right — now it occupies segment [19;20]
-
-In the second sample you can also fell 4-th tree to the right, after that it will occupy segment [10;19].
-
-
-
-2020fall-cs101-陈彦如
-
-因为要让更多的树被砍到，而一棵树是否被砍倒只与临近的两颗树相关，所以能倒就倒，不能往左就往右，所以直接暴力判断了。（向右倒会占用下一棵树左边的空间，所以要比向左边倒的情况多考虑一点！）
-
-```python
-n = int(input())
-s = [[int(x) for x in input().split()] for i in range(n)]
-count = 2
-if n == 1:
-    print(1)
-else:
-    for i in range(1, n-1):
-        if s[i][0] - s[i-1][0] > s[i][1]:
-            count += 1
-        elif s[i+1][0] - s[i][0] > s[i][1]:
-            count += 1
-            s[i][0] += s[i][1]
-    
-    print(count)
-```
-
-
-
-2020fall-cs101-黄旭
-
-解题思路：先首尾两棵树肯定是可以砍的，接下来中间的树肯定是能砍就尽量砍，然后记录砍树之后的被占用最大值即可。
-
-```python
-x = int(input())
-lt = []
-n = 0
-for i in range(x):
-    lt.append([int(i) for i in input().split()])
-
-for i in range(1,x-1):
-    a, b = lt[i]
-    if a - b > lt[i-1][0]:
-        n += 1
-    elif a+b < lt[i+1][0]:
-        n += 1
-        lt[i][0] = a + b
-print([n+1,n+2][x!=1])
-```
-
-
-
-```python
-n = int(input())
-
-xh_pair = []
-for i in range(n):
-    x,h = map(int,input().split())
-    xh_pair.append((x,h))
-    
-nCount = 1
-pre = xh_pair[0][0]
-for index in range(1,n-1):
-    i = xh_pair[index]
-    j = xh_pair[index+1]
-    if i[0]-pre>i[1]:
-        nCount += 1
-        pre = i[0]
-        #print(i)
-        continue
-    if i[0]+i[1]<j[0]:
-        nCount += 1
-        #print(i)
-        pre = i[0]+i[1]
-        continue
-    
-
-    pre = i[0]
-
-if n==1:
-    print(1)
-else:
-    print(nCount+1)
-```
-
-2021fall-cs101-吉祥瑞
-
-https://codeforces.com/problemset/problem/545/C
-
-解题思路：贪心策略是从左到右遍历每颗树，若能往左倒就往左倒，若不能往左倒但能往右倒就往右倒。原理如下图。
-
-```mermaid
-flowchart LR
-subgraph 程序
-	A{第i颗树能往左倒?}--T-->B[第i颗树往左倒]
-	A--F-->C{第i颗树能往右倒?}
-	C--F-->D[第i颗树不倒]
-	C--T-->E[第i颗树往右倒]
-end
-subgraph 结论
-	J[第i颗树往右倒不会使结果更坏]---R[贪心选择正确]
-	B---F[第i颗树往左倒不会使结果更坏]---R
-	D---Q[第i颗树不倒不会使结果更坏]---R
-end
-subgraph 推理
-	E-->G[j = i+1]-->H{j <= n?}
-	H--F---J
-	H--T-->K{第j颗树能往左倒?}
-	K--T-->L[第j颗树往左倒]---J
-	K--F-->M{第j颗树能往右倒?}
-	M--F-->N[第j颗树不倒]---J
-	M--T-->O[第j颗树往右倒]
-	O-->P[j = j+1]-->H
-end
-```
-
-```python
-n = int(input())
-xh = [[int(a) for a in input().split()] for _ in range(n)]
-s = 1
-r = -xh[0][1]
-for i in range(n-1):
-    if xh[i][0]-xh[i][1] > r:
-        s += 1
-        r = xh[i][0]
-    elif xh[i][0]+xh[i][1] < xh[i+1][0]:
-        s += 1
-        r = xh[i][0]+xh[i][1]
-    else:
-        r = xh[i][0]
-print(s)
-```
-
-注：初始时`s = 1`是算入了最后一颗树。`r`用来标记已倒下的树的最右端，初始时`r = -xh[0][1]`是为了让第一颗树一定能往左倒。
-
-心得：通过写两道选做题的解题思路，我有点体会到了贪心算法的共同模式。（1）把问题按某种顺序分解为一次次选择（“充实的寒假生活”(http://cs101.openjudge.cn/practice/16528/)按结束时间从早到晚遍历每个活动，“Woodcutters”从左到右遍历每颗树）；（2）确定每次做选择的策略（“充实的寒假生活”是”若能参加就参加“，“Woodcutters”是“若能往左倒就往左倒，若不能往左倒但能往右倒就往右倒”），使这种策略不会使结果更坏。这里对于贪心选择正确性的推理是“计算机式”的，需要反复迭代，如果要让推理更“数学”，可以用数学归纳法倒过来说。
-
-
-
 ## 1000B. Light It Up
 
 greedy, 1500, https://codeforces.com/problemset/problem/1000/B
@@ -4955,405 +4903,6 @@ mi=min(dp)
 if mi <-1:print(out-mi-1)
 else:print(out)
 ```
-
-
-
-## 1374B. Multiply by 2, divide by 6
-
-math, 900, http://codeforces.com/problemset/problem/1374/B
-
-You are given an integer *n*. In one move, you can either multiply *n* by two or divide *n* by *6* (if it is divisible by *6* without the remainder).
-
-Your task is to find the minimum number of moves needed to obtain *1* from *n* or determine if it's impossible to do that.
-
-You have to answer *t* independent test cases.
-
-**Input**
-
-The first line of the input contains one integer *t*(1≤t≤2⋅10^4^) — the number of test cases. Then t test cases follow.
-
-The only line of the test case contains one integer *n* (1≤n≤10^9^).
-
-**Output**
-
-For each test case, print the answer — the minimum number of moves needed to obtain 1 from *n* if it's possible to do that or -1 if it's impossible to obtain 1 from *n*.
-
-Example
-
-input
-
-```
-7
-1
-2
-3
-12
-12345
-15116544
-387420489
-```
-
-output
-
-```
-0
--1
-2
--1
--1
-12
-36
-```
-
-Note
-
-Consider the sixth test case of the example. The answer can be obtained by the following sequence of moves from the given integer 1511654415116544:
-
-1. Divide by 66 and get 25194242519424;
-2. divide by 66 and get 419904419904;
-3. divide by 66 and get 6998469984;
-4. divide by 66 and get 1166411664;
-5. multiply by 22 and get 2332823328;
-6. divide by 66 and get 38883888;
-7. divide by 66 and get 648648;
-8. divide by 66 and get 108108;
-9. multiply by 22 and get 216216;
-10. divide by 66 and get 3636;
-11. divide by 66 and get 66;
-12. divide by 66 and get 11.
-
-
-
-```python
-for _ in range(int(input())):
-    t = int(input())
-    cnt = 0
-    while t!=1:
-        if t%3==0 and t%2==0:
-            t = t//6
-            cnt += 1
-        elif t%3==0 and t%2!=0:
-            t *= 2
-            cnt += 1
-        else:
-            print(-1); break
-    else:
-        print(cnt)
-```
-
-
-
-2020fall-cs101-顾臻宜的解题思路：只要 $𝑛=2^x 3^y$ 且 $𝑦≥𝑥,\ 𝑥,𝑦∈𝑁$ 即可，且最多进行 $2𝑙𝑜𝑔_3 𝑛$ 步。
-
-小知识：import math之后math.log（真数N，底数a）就是 $𝑙𝑜𝑔_a 𝑁$。
-
-```python
-import math
-
-for _ in range(int(input())):
-    n = int(input())
-    x = 0
-    for i in range(2*(1+int(math.log(n,3)))):
-        if n/6 == int(n/6):
-            n /= 6
-            x += 1
-        else:
-            if n/3 == int(n/3):
-                n *= 2
-                x += 1
-    
-print(x if n==1 else -1)
-```
-
-2020fall-cs101-黄旭思路：如果一个数在经过题目所说操作之后可以得到 1，那么一定在每一个步骤中都是 3的倍数，于是在循环中一旦发现该数不是 3的倍数，就跳出循环，反之就一直进行*2或者/6的操作，直到等于一为止，记录操作次数，若结果为 1则输出操作次数，反之输出-1。
-
-```python
-for i in range(int(input())):
-    x = int(input())
-    a = 0
-    while x!=1:
-        if x%3:
-            break
-        elif x%6==0:
-            x=x/6
-            a+=1
-        else:
-            x*=2
-            a+=1
-    print([a,-1][x!=1])
-```
-
-2021fall-cs101-吉祥瑞，解题思路：先一直将除以6，直至不能除尽。再一直将乘以2后除以6，即将除以3，直至不能除尽。若此时不是1，则说明无法实现。
-
-```python
-t = int(input())
-for _ in range(t):
-    n = int(input())
-    s = 0
-    while n%6 == 0:
-        n = int(n/6)
-        s += 1
-    while n%3 == 0:
-        n = int(n/3)
-        s += 2
-    if n == 1:
-        print(s)
-    else:
-        print(-1)
-```
-
-
-
-## 230B. T-primes
-
-binary search/implementation/math/number theory, 1300, http://codeforces.com/problemset/problem/230/B
-
-We know that prime numbers are positive integers that have exactly two distinct positive divisors. Similarly, we'll call a positive integer *t* Т-prime, if *t* has exactly three distinct positive divisors.
-
-You are given an array of *n* positive integers. For each of them determine whether it is Т-prime or not.
-
-**Input**
-
-The first line contains a single positive integer, *n* (1 ≤ *n* ≤ 10^5^), showing how many numbers are in the array. The next line contains *n* space-separated integers *x~i~* (1 ≤ *x~i~* ≤ 10^12^).
-
-Please, do not use the %lld specifier to read or write 64-bit integers in С++. It is advised to use the cin, cout streams or the %I64d specifier.
-
-**Output**
-
-Print *n* lines: the *i*-th line should contain "YES" (without the quotes), if number *x~i~* is Т-prime, and "NO" (without the quotes), if it isn't.
-
-Examples
-
-input
-
-```
-3
-4 5 6
-```
-
-output
-
-```
-YES
-NO
-NO
-```
-
-Note
-
-The given test has three numbers. The first number 4 has exactly three divisors — 1, 2 and 4, thus the answer for this number is "YES". The second number 5 has two divisors (1 and 5), and the third number 6 has four divisors (1, 2, 3, 6), hence the answer for them is "NO".
-
-
-
-这个题目实际上是DP思路。
-
-数论是有趣和优美的数学分支。欧几里得对于素数无穷性的证明在今天看来仍和两千年前一样清晰和优雅。长久以来，计算机都被用来辅助数论研究，有很多精妙的算法能够帮上忙。
-
-求解素数的三种方法，包括：试除法（trial division）、埃氏筛（Sieve of Eratosthenes）、欧拉筛（Sieve of Euler，线性法），https://blog.dotcpp.com/a/69737
-
-数据类型时间复杂度，https://wiki.python.org/moin/TimeComplexity
-
-埃氏筛法，时间复杂度为：O(n\*logn)。Python3, Accepted, 1154ms
-
-```python
-# http://codeforces.com/problemset/problem/230/B
-
-# https://www.geeksforgeeks.org/python-program-for-sieve-of-eratosthenes/
-# Python program to print all primes smaller than or equal to 
-# n using Sieve of Eratosthenes 
-
-def SieveOfEratosthenes(n, prime): 
-    p = 2
-    while (p * p <= n): 
-      
-    	# If prime[p] is not changed, then it is a prime 
-    	if (prime[p] == True): 
-          
-        	# Update all multiples of p 
-        	for i in range(p * 2, n+1, p): 
-            	prime[i] = False
-    	p += 1
-
-n = int(input())
-x = [int(i) for i in input().split()]
-
-s = [True]*(10**6+1)
-
-SieveOfEratosthenes(10**6, s)
-
-for i in x:
-    if i<4:
-        print('NO')
-        continue
-    elif int(i**0.5)**2 != i:
-        print('NO')
-        continue
-    print(['NO','YES'][s[int(i**0.5)]])
-    #if s[int(i**0.5)]:
-    #    print('YES')
-    #else:
-    #    print('NO')
-```
-
-小优化（原因如下，下面用到集合实现），第15行可以写成 **for** i **in** range(p * p, n+1, p):  则998ms可以AC. 
-
-
-
-埃氏筛法，时间复杂度为：O(n\*loglogn)。Python3, Accepted, 1558ms
-
-这里有一个小优化，j 从 i * i 而不是从 i + i开始，因为 i*(2~ i-1)在 2~i-1时都已经被筛去，所以从i * i开始。
-
-According to [Python wiki: Time complexity](https://wiki.python.org/moin/TimeComplexity), **set** is implemented as a [hash table](https://en.wikipedia.org/wiki/Hash_table). So you can expect to lookup/insert/delete in **O(1)** average.  https://stackoverflow.com/questions/7351459/time-complexity-of-python-set-operations
-
-```python
-n = 1000000
-a = [1] * n
-s = set() 
-
-#directly add the square of prime into a set, then check if num_input is in set.
-for i in range(2,n):
-    if a[i]:
-        s.add(i*i)
-        for j in range(i*i,n,i):
-            a[j] = 0
-
-input()
-for x in map(int,input().split()):
-    print(["NO","YES"][x in s])
-```
-
-
-
-埃氏筛法，by 2020fall-cs101, 汪元正,  Python3, Accepted, 1340ms
-
-```python
-a = [1]*(10**6)
-a[0] = 0
-for i in range(1,10**3,1):
-    if a[i]==1:
-        for j in range(2*i+1,10**6,i+1):
-            a[j]=0
-
-n = int(input())
-l = [int(x) for x in input().split()]
-for i in range(n):
-    m = l[i]
-    if m**0.5%1==0:
-        r = int(m**0.5)
-        if a[r-1]==1:
-            print('YES')
-        else:
-            print('NO')
-    else:
-        print('NO')
-```
-
-线性筛（欧拉筛），时间复杂度为：O(n)。Python3, Accepted, 1808ms。
-
-```Python
-# https://blog.dotcpp.com/a/69737
-# https://blog.csdn.net/xuechen_gemgirl/article/details/79555123
-def euler(r):
-    prime = [0 for i in range(r+1)]
-    common = []
-    for i in range(2, r+1):
-        if prime[i] == 0:
-            common.append(i)
-        for j in common:
-            if i*j > r:
-                break
-            prime[i*j] = 1
-            if i % j == 0:
-                break
-    return prime 
-
-s = euler(1000000)
-#print(s)
-
-input()
-for i in map(int,input().split()):
-    if i<4:
-        print('NO')
-        continue
-    elif int(i**0.5)**2 != i:
-        print('NO')
-        continue
-    if s[int(i**0.5)]==0:
-        print('YES')
-    else:
-        print('NO')
-```
-
-
-
-## 270A. Fancy Fence
-
-geometry/implementation/math, 1100, x23265, https://codeforces.com/problemset/problem/270/A
-
-Emuskald needs a fence around his farm, but he is too lazy to build it himself. So he purchased a fence-building robot.
-
-He wants the fence to be a regular polygon. The robot builds the fence along a single path, but it can only make fence corners at a single angle *a*.
-
-Will the robot be able to build the fence Emuskald wants? In other words, is there a regular polygon which angles are equal to *a*?
-
-**Input**
-
-The first line of input contains an integer *t* (0 < *t* < 180) — the number of tests. Each of the following *t* lines contains a single integer *a* (0 < *a* < 180) — the angle the robot can make corners at measured in degrees.
-
-**Output**
-
-For each test, output on a single line "YES" (without quotes), if the robot can build a fence Emuskald wants, and "NO" (without quotes), if it is impossible.
-
-Examples
-
-input
-
-```
-3
-30
-60
-90
-```
-
-output
-
-```
-NO
-YES
-YES
-```
-
-Note
-
-In the first test case, it is impossible to build the fence, since there is no regular polygon with angle ![img](https://espresso.codeforces.com/df5f4b07dd5316fde165b43657b2696e2919e791.png).
-
-In the second test case, the fence is a regular triangle, and in the last test case — a square.
-
-
-
-> 【黄旭，2020年秋】对于 n边形，其内角和为（n-2）*180°，内角为x度，有(n-2)\*180=n\*x。 则可以得到 n的表达式为 n=360/（180-x），若 n为整数，则可行，反之不可行。
->
-
-```python
-for i in range(int(input())):
-    x=int(input())
-    print(['NO','YES'][360%(180-x)==0])    
-```
-
-```python
-n=int(input())
-def check(x):
-    if 360%(180-x)==0:
-        return"YES"
-    else:
-        return"NO"
-
-for i in range(n):
-    x=int(input())
-    print(check(x))
-```
-
-
 
 
 
@@ -5547,6 +5096,342 @@ for i in range(1,a+1):
     else:
         d.append("NO")
 print(*d)
+```
+
+
+
+## 1374B. Multiply by 2, divide by 6
+
+math, 900, http://codeforces.com/problemset/problem/1374/B
+
+You are given an integer *n*. In one move, you can either multiply *n* by two or divide *n* by *6* (if it is divisible by *6* without the remainder).
+
+Your task is to find the minimum number of moves needed to obtain *1* from *n* or determine if it's impossible to do that.
+
+You have to answer *t* independent test cases.
+
+**Input**
+
+The first line of the input contains one integer *t*(1≤t≤2⋅10^4^) — the number of test cases. Then t test cases follow.
+
+The only line of the test case contains one integer *n* (1≤n≤10^9^).
+
+**Output**
+
+For each test case, print the answer — the minimum number of moves needed to obtain 1 from *n* if it's possible to do that or -1 if it's impossible to obtain 1 from *n*.
+
+Example
+
+input
+
+```
+7
+1
+2
+3
+12
+12345
+15116544
+387420489
+```
+
+output
+
+```
+0
+-1
+2
+-1
+-1
+12
+36
+```
+
+Note
+
+Consider the sixth test case of the example. The answer can be obtained by the following sequence of moves from the given integer 1511654415116544:
+
+1. Divide by 66 and get 25194242519424;
+2. divide by 66 and get 419904419904;
+3. divide by 66 and get 6998469984;
+4. divide by 66 and get 1166411664;
+5. multiply by 22 and get 2332823328;
+6. divide by 66 and get 38883888;
+7. divide by 66 and get 648648;
+8. divide by 66 and get 108108;
+9. multiply by 22 and get 216216;
+10. divide by 66 and get 3636;
+11. divide by 66 and get 66;
+12. divide by 66 and get 11.
+
+
+
+```python
+for _ in range(int(input())):
+    t = int(input())
+    cnt = 0
+    while t!=1:
+        if t%3==0 and t%2==0:
+            t = t//6
+            cnt += 1
+        elif t%3==0 and t%2!=0:
+            t *= 2
+            cnt += 1
+        else:
+            print(-1); break
+    else:
+        print(cnt)
+```
+
+
+
+2020fall-cs101-顾臻宜的解题思路：只要 $𝑛=2^x 3^y$ 且 $𝑦≥𝑥,\ 𝑥,𝑦∈𝑁$ 即可，且最多进行 $2𝑙𝑜𝑔_3 𝑛$ 步。
+
+小知识：import math之后math.log（真数N，底数a）就是 $𝑙𝑜𝑔_a 𝑁$。
+
+```python
+import math
+
+for _ in range(int(input())):
+    n = int(input())
+    x = 0
+    for i in range(2*(1+int(math.log(n,3)))):
+        if n/6 == int(n/6):
+            n /= 6
+            x += 1
+        else:
+            if n/3 == int(n/3):
+                n *= 2
+                x += 1
+    
+print(x if n==1 else -1)
+```
+
+2020fall-cs101-黄旭思路：如果一个数在经过题目所说操作之后可以得到 1，那么一定在每一个步骤中都是 3的倍数，于是在循环中一旦发现该数不是 3的倍数，就跳出循环，反之就一直进行*2或者/6的操作，直到等于一为止，记录操作次数，若结果为 1则输出操作次数，反之输出-1。
+
+```python
+for i in range(int(input())):
+    x = int(input())
+    a = 0
+    while x!=1:
+        if x%3:
+            break
+        elif x%6==0:
+            x=x/6
+            a+=1
+        else:
+            x*=2
+            a+=1
+    print([a,-1][x!=1])
+```
+
+2021fall-cs101-吉祥瑞，解题思路：先一直将除以6，直至不能除尽。再一直将乘以2后除以6，即将除以3，直至不能除尽。若此时不是1，则说明无法实现。
+
+```python
+t = int(input())
+for _ in range(t):
+    n = int(input())
+    s = 0
+    while n%6 == 0:
+        n = int(n/6)
+        s += 1
+    while n%3 == 0:
+        n = int(n/3)
+        s += 2
+    if n == 1:
+        print(s)
+    else:
+        print(-1)
+```
+
+
+
+## 1425A. Arena of Greed
+
+games/greedy, 1400, https://codeforces.com/problemset/problem/1425/A
+
+Lately, Mr. Chanek frequently plays the game **Arena of Greed**. As the name implies, the game's goal is to find the greediest of them all, who will then be crowned king of Compfestnesia.
+
+The game is played by two people taking turns, where Mr. Chanek takes the first turn. Initially, there is a treasure chest containing N gold coins. The game ends if there are no more gold coins in the chest. In each turn, the players can make one of the following moves:
+
+- Take one gold coin from the chest.
+- Take half of the gold coins on the chest. This move is only available if the number of coins in the chest is even.
+
+Both players will try to maximize the number of coins they have. Mr. Chanek asks your help to find the maximum number of coins he can get at the end of the game if both he and the opponent plays optimally.
+
+**Input**
+
+The first line contains a single integer T (1≤T≤10^5^) denotes the number of test cases.
+
+The next T lines each contain a single integer N (1≤N≤10^18^).
+
+**Output**
+
+T lines, each line is the answer requested by Mr. Chanek.
+
+Example
+
+input
+
+```
+2
+5
+6
+```
+
+output
+
+```
+2
+4
+```
+
+**Note**
+
+For the first case, the game is as follows:
+
+1. Mr. Chanek takes one coin.
+2. The opponent takes two coins.
+3. Mr. Chanek takes one coin.
+4. The opponent takes one coin.
+
+For the second case, the game is as follows:
+
+1. Mr. Chanek takes three coins.
+2. The opponent takes one coin.
+3. Mr. Chanek takes one coin.
+4. The opponent takes one coin.
+
+
+
+思路：为了获取最多的石子数量：
+
+1. 数量为奇数时：只能取1个，然后对手进入情况2，我们只能取剩下的；
+2. 数量为偶数时：为了尽可能最大化所能取的石子数量，我们尽可能使得对手只能取1个，即使得对手取时数量为奇数；同时使得我们取石子时数量为偶数。
+   为了实现这个情况，判断一下当前石子数量的一半是否为奇数，如果是，我们就取一半；如果不是，我们就取一个，对应的，对手也只能取一个，之后所得到的偶数的一般必然是个奇数。证明略。
+3. 此外1和4是特殊情况，需要特判一下。
+
+
+
+PyPy 3 AC. Python 3 Time limit exceeded on Test2.
+
+```python
+#input=__import__('sys').stdin.readline
+ans = []
+def solve(n):
+    
+    f = s = 0 # To distinguish between first and second hands.
+    fs = True
+    
+    if n & 1:
+        n -= 1
+        fs = False
+        
+    while n:
+        if n == 4:
+            f += 3
+            s += 1
+            n = 0   # Specia lJudge
+        elif (n//2) & 1: # The First Situation
+            f += n//2
+            s += 1
+            n = (n//2) - 1;
+        else:                   #The Second Situation
+            f += 1
+            s += 1
+            n -= 2
+    #print( [s+1, f][fs] )
+    ans.append( [s+1, f][fs] )
+ 
+ 
+coins = []
+for _ in range(int(input())):
+    coins.append(int(input()))
+ 
+for i in coins:
+    if i==1:
+        ans.append(1)
+        #print(1)
+    else:
+        solve(i)
+ 
+print('\n'.join(map(str, ans)))
+```
+
+
+
+2020fall-cs101，施惟明。
+
+解题思路：简单试验可得，拿到偶数币时，除 4外，最优解法均为使对方拿到奇数币而只能取走一个；拿到奇数币时无法决策，被对方“控场”，对方获得币数-1的最优解。故据此进行迭代。
+
+PyPy3 AC
+
+```python
+ans = []
+def solve(n):
+    
+    f = s = 0 # To distinguish between first and second hands.
+    fs = True
+    
+    if n & 1:	#如果起始硬币数量为奇数，那么先手方能拿到的最多硬币数转化为后手方的情形
+        n -= 1
+        fs = False
+        
+    while n:
+        if n == 4:
+            f += 3
+            s += 1
+            n = 0   # Special Judge
+        elif (n//2) & 1: # The First Situation
+            f += n//2
+            s += 1
+            n = (n//2) - 1;
+        else:                   #The Second Situation
+            f += 1
+            s += 1
+            n -= 2
+    #print( [s+1, f][fs] )
+    ans.append( [s+1, f][fs] )
+ 
+ 
+coins = []
+for _ in range(int(input())):
+    coins.append(int(input()))
+ 
+for i in coins:
+    if i==1:
+        ans.append(1)
+        #print(1)
+    else:
+        solve(i)
+ 
+print('\n'.join(map(str, ans)))
+```
+
+
+
+2020fall-cs101，李元锋。
+
+思路：了解过博弈论的经典游戏的人应该可以很快写出代码。此游戏为完全信息博弈，故如果存在最优解，则所有玩家采取的策略是一样的，策略为让对方为奇数 > 让自己拿偶数，这里只有 4为特例，要注意，剩下的很简单就写出来了，麻烦在于超时，改了很多次才 AC，这里顺便学了一下异或运算来区别是谁的回合。
+
+```python
+output = []
+for i in range(int(input())):
+    n=int(input())
+    ans, flag = 0, 1
+    while n:
+        test = 0
+        if n%2==0 and n//2%2 or n==4:
+            n //= 2
+            test = n
+        else:
+            n -= 1
+            test = 1
+        if flag:
+            ans += test
+        flag ^= 1
+    output.append(ans)
+print('\n'.join(map(str,output)))
 ```
 
 
@@ -5749,6 +5634,232 @@ for _ in range(int(input())):
         winning_steaks_cnt -= 1
 
     print(2*wins - winning_steaks_cnt)
+```
+
+
+
+## 1443C. The Delivery Dilemma
+
+binary search/greedy/sortings, 1400, https://codeforces.com/problemset/problem/1443/C
+
+Petya is preparing for his birthday. He decided that there would be nn different dishes on the dinner table, numbered from 1 to n. Since Petya doesn't like to cook, he wants to order these dishes in restaurants.
+
+Unfortunately, all dishes are prepared in different restaurants and therefore Petya needs to pick up his orders from nn different places. To speed up this process, he wants to order courier delivery at some restaurants. Thus, for each dish, there are two options for Petya how he can get it:
+
+- the dish will be delivered by a courier from the restaurant ii, in this case the courier will arrive in aiai minutes,
+- Petya goes to the restaurant ii on his own and picks up the dish, he will spend bibi minutes on this.
+
+Each restaurant has its own couriers and they start delivering the order at the moment Petya leaves the house. In other words, all couriers work in parallel. Petya must visit all restaurants in which he has not chosen delivery, he does this consistently.
+
+For example, if Petya wants to order n=4 dishes and a=[3,7,4,5], and b=[2,1,2,4], then he can order delivery from the first and the fourth restaurant, and go to the second and third on your own. Then the courier of the first restaurant will bring the order in 3 minutes, the courier of the fourth restaurant will bring the order in 5 minutes, and Petya will pick up the remaining dishes in 1+2=3 minutes. Thus, in 5 minutes all the dishes will be at Petya's house.
+
+Find the minimum time after which all the dishes can be at Petya's home.
+
+**Input**
+
+The first line contains one positive integer t (1≤t≤2⋅10^5^) — the number of test cases. Then tt test cases follow.
+
+Each test case begins with a line containing one integer n (1≤n≤2⋅10^5^) — the number of dishes that Petya wants to order.
+
+The second line of each test case contains n integers a~1~…a~n~ (1≤a~i~≤10^9^) — the time of courier delivery of the dish with the number ii.
+
+The third line of each test case contains n integers b~1~…b~n~ (1≤bi≤10^9^) — the time during which Petya will pick up the dish with the number ii.
+
+The sum of nn over all test cases does not exceed 2⋅10^5^.
+
+**Output**
+
+For each test case output one integer — the minimum time after which all dishes can be at Petya's home.
+
+Example
+
+input
+
+```
+4
+4
+3 7 4 5
+2 1 2 4
+4
+1 2 3 4
+3 3 3 3
+2
+1 2
+10 10
+2
+10 10
+1 2
+```
+
+output
+
+```
+5
+3
+2
+3
+```
+
+
+
+> 【张聪，2020年秋】由于 delivery是并行的，pick 是串行的，很自然地想到 delivery 应该优先。所以构建二维数组并对其根据 delivery 时间排序，然后用 greedy 算法思想，找到最小的并行时间，要求其能够覆盖delivery 时间更长的 dish 的串行时间之和。
+>
+> 【施惟明，2020年秋】1）听闻此题 TLE 主要来源于读入数据的耗时，便考虑采用空间换时间的策略，先一波读入所有数据，再进行处理。2）处理部分仍然是 greedy，尽量自己取耗时长的外卖，当自己取的时长和外卖送到的最慢时长相等时为最佳。复杂度 O(nlogn)（上一次好像忘记考虑 sort 的复杂度了...）。
+>
+> 【成泽凯，2020年秋】首先将每个菜的配送用时a~i~和自取用时b~i~配对，然后按配送用时a~i~降序排。因为配送时每个餐馆同时送，所以实际上配送用时短的会被配送用时长的覆盖掉。从前向后遍历，并求自取用时的前缀和 sum[j]，当自取用时的前缀和比配送用时 a~j~ 大。
+>
+> （某同学感谢：由于 Test9 有 200000 个输入，所以一个一个输出处理会超时，经施惟明，成泽恺等同学提醒后，修改了Python代码，使得只输出一次，成功 AC 了。）
+>
+> 【王君宇，2020年秋】当我写完高数作业看群，群里的大佬说 python常规方法可以 AC ！！我们平时做这种多组 test问题都是直接循环每次 print，但是也可以将每次结果存到一个列表中，最后一起 print，这样能大大加快速度。确实我对于 python 中各个函数的运行速度还不够了解，这道题锻炼了我的程序思维，更让我加深了对 print 函数的理解。当我看到自己的代码 AC 的那一刻，这个下午的失败值得了！！！
+
+```python
+n = int(input())
+ans = []
+for i in range(n):
+    m = int(input())
+    a = list(map(int,input().split()))
+    b = list(map(int,input().split()))
+    c = sorted(list(zip(a,b)),reverse=True)
+    
+    d=0
+    for i in range(m):
+        d += c[i][1]
+        if d >= c[i][0]:
+            d = max(c[i][0],d-c[i][1])
+            break      
+
+    ans.append(d)
+
+print('\n'.join(map(str, ans)))
+```
+
+
+
+1443C. 整体输出，相当于利用了output buffer。print()函数每次执行会清空buffer，相当于disable buffer，所以慢。
+What Is Python Output Buffering and How to Disable It?
+https://blog.finxter.com/what-is-python-output-buffering-and-how-to-disable-it/
+
+
+
+```python
+T = int(input())
+to_print = []
+while T:
+    T -= 1       
+    
+    n = int(input())
+    a = [int(x) for x in input().split()]
+    b = [int(x) for x in input().split()]
+    
+    if n==1:
+        to_print.append( min(a[0], b[0]) )     
+        #print(min(a[0], b[0]))
+        continue
+        
+    ab = list(zip(a,b))
+    ab.sort()
+    
+    k = n - 1
+    suffix_sum = 0
+    while suffix_sum <= ab[k][0] and k>=0:
+        suffix_sum += ab[k][1]
+        k -= 1
+    
+    #print( min(ab[k+1][0], suffix_sum))
+    to_print.append( ( min(ab[k+1][0], suffix_sum)) )
+
+else:
+    print('\n'.join(map(str, to_print)))
+```
+
+
+
+```Python
+T = int(input())
+to_print = []
+while T:
+    T -= 1
+    n = int(input())
+    a = [int(x) for x in input().split()]
+    b = [int(x) for x in input().split()]
+    
+    if n==1:
+        #print(min(a[0], b[0]))
+        to_print.append( min(a[0], b[0]) )
+        continue
+    
+    ab = list(zip(a,b))
+    ab.sort( key = lambda x: (-x[0], x[1]))
+    
+    for i in range(1, n):
+        ab[i] = ab[i][0], (ab[i][1]+ab[i-1][1])
+    
+    #print(ab)
+    
+    #print( max ( map(min, ab) )  )
+    to_print.append( max ( map(min, ab) ) )
+                    
+else:
+    print('\n'.join(map(str, to_print)))
+```
+
+
+
+> 【许浩哲，2020年秋】1443C 可以用Python AC的另外一种方法。就是把nput换成sys.stdin.readline，把print换成sys.stdout.write。https://codeforces.com/problemset/problem/1443/C
+
+```python
+import sys
+
+n = int(input())
+#n = int(sys.stdin.readline())
+#ans = []
+for i in range(n):
+    #m = int(input())
+    m = int(sys.stdin.readline())
+    a = list(map(int,sys.stdin.readline().split()))
+    b = list(map(int,sys.stdin.readline().split()))
+    c = sorted(list(zip(a,b)),reverse=True)
+    
+    d=0
+    for i in range(m):
+        d += c[i][1]
+        if d >= c[i][0]:
+            d = max(c[i][0],d-c[i][1])
+            break      
+
+    sys.stdout.write('{}\n'.format(d))
+    #ans.append(d)
+
+#print('\n'.join(map(str, ans)))
+```
+
+
+
+GNU C++17 Accepted
+
+```c++
+#include <bits/stdc++.h>
+using namespace std;
+pair <int,int> a[200001];
+int main(){
+	int t;
+	cin >> t;
+	while(t--){
+		int n;
+		cin>>n;
+		int k=0,sum=0;
+		for(k=1;k<=n;k++)cin>>a[k].first;
+		for(k=1;k<=n;k++)cin>>a[k].second;
+		sort(a+1,a+n+1);
+		k=n;
+		while(sum<=a[k].first &&k >=1){
+			sum += a[k].second;
+			k--;
+		}
+		cout << min(a[k+1].first, sum) << endl;
+	}
+	return 0;
+}
 ```
 
 
