@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 2339 GMT+8 Sep 1, 2023
+Updated 2333 GMT+8 Sep 5, 2023
 
 
 
@@ -5864,105 +5864,6 @@ int main(){
 
 
 
-## 1529C. Jumping on Tiles
-
-constructive algorithms/strings, 1100, https://codeforces.com/problemset/problem/1529/C
-
-Polycarp was given a row of tiles. Each tile contains one lowercase letter of the Latin alphabet. The entire sequence of tiles forms the string 𝑠s.
-
-In other words, you are given a string 𝑠s consisting of lowercase Latin letters.
-
-Initially, Polycarp is on the **first** tile of the row and wants to get to the **last** tile by jumping on the tiles. Jumping from 𝑖i-th tile to 𝑗j-th tile has a cost equal to $|𝑖𝑛𝑑𝑒𝑥(𝑠_𝑖)−𝑖𝑛𝑑𝑒𝑥(𝑠_𝑗)|$, where 𝑖𝑛𝑑𝑒𝑥(𝑐) is the index of the letter 𝑐c in the alphabet (for example, 𝑖𝑛𝑑𝑒𝑥('a')=1, 𝑖𝑛𝑑𝑒𝑥('b')=2, ..., 𝑖𝑛𝑑𝑒𝑥('z')=26) .
-
-Polycarp wants to get to the 𝑛n-th tile for the minimum total cost, but at the same time make **maximum** number of jumps.
-
-In other words, among all possible ways to get to the last tile for the **minimum** total cost, he will choose the one with the **maximum**number of jumps.
-
-Polycarp can visit each tile **at most once**.
-
-Polycarp asks you to help — print the sequence of indices of string 𝑠s on which he should jump.
-
-Input
-
-The first line of the input contains an integer $𝑡 (1≤𝑡≤10^4)$ — the number of test cases in the test.
-
-Each test case is given by the string $𝑠 (2≤|𝑠|≤2⋅10^5)$, where |𝑠|— is the length of string 𝑠. The string 𝑠 consists of lowercase Latin letters.
-
-It is guaranteed that the sum of string lengths 𝑠 over all test cases does not exceed 2⋅10^5^.
-
-Output
-
-The answer to each test case consists of two lines.
-
-In the first line print two integers 𝑐𝑜𝑠𝑡, 𝑚, where 𝑐𝑜𝑠𝑡 is the minimum total cost of the path, and 𝑚 is the maximum number of visited tiles Polycarp can make to get to 𝑛n-th tiles for the minimum total cost 𝑐𝑜𝑠𝑡 (i.e. the number of jumps is 𝑚−1).
-
-In the next line print 𝑚 different numbers $𝑗_1,𝑗_2,…,𝑗_𝑚 (1≤𝑗_𝑖≤|𝑠|) $— the sequence of indices of the tiles Polycarp will jump on. The first number in the sequence must be 1 (that is, 𝑗~1~=1) and the last number must be the value of |𝑠| (that is, 𝑗~𝑚~=|𝑠|).
-
-If there are multiple answers, print any of them.
-
-Example
-
-**input**
-
-```
-6
-logic
-codeforces
-bca
-aaaaaaaaaaa
-adbaadabad
-to
-```
-
-**output**
-
-```
-9 4
-1 4 3 5
-16 10
-1 8 3 4 9 5 2 6 7 10
-1 2
-1 3
-0 11
-1 8 10 4 3 5 7 2 9 6 11
-3 10
-1 9 5 4 7 3 8 6 2 10
-5 2
-1 2
-```
-
-Note
-
-In the first test case, the required path corresponds to the picture:
-
-![img](https://tva1.sinaimg.cn/large/e6c9d24ely1h6jsrynn9rj206a03iq2v.jpg)
-
-In this case, the minimum possible total cost of the path is achieved. Since 𝑖𝑛𝑑𝑒𝑥('l')=12, 𝑖𝑛𝑑𝑒𝑥('o')=15, 𝑖𝑛𝑑𝑒𝑥('g')=7, 𝑖𝑛𝑑𝑒𝑥('i')=9, 𝑖𝑛𝑑𝑒𝑥('c')=3, then the total cost of the path is |12−9|+|9−7|+|7−3|=3+2+4=9.
-
-
-
-```python
-for _ in range(int(input())):
-    s = input()
-    n=len(s)
-    a=[]
-    l, h = ord(s[0])-96, ord(s[-1])-96
-    for i in range(1, n-1):
-        a.append([ord(s[i])-96, i+1])
-    a.sort()
-    if l>h:a.reverse()
-    res=[1]
-    low, high = min(l, h), max(l, h)
-    for v in a:
-        if low<=v[0]<=high:
-            res.append(v[1])
-    res.append(n)
-    print(high-low, len(res))
-    print(*res)
-```
-
-
-
 ## 1719C. Number Game
 
 binary search/data structure/games/greedy/implementation, 1400, https://codeforces.com/problemset/problem/1749/C
@@ -6206,6 +6107,105 @@ for _ in range(int(input())):
 		if all(k - 1 + i < n and a[k - 1 + i] <= i + 1 for i in range(k)):
 			print(k)
 			break
+```
+
+
+
+## 1729C. Jumping on Tiles
+
+constructive algorithms/strings, 1100, https://codeforces.com/problemset/problem/1729/C
+
+Polycarp was given a row of tiles. Each tile contains one lowercase letter of the Latin alphabet. The entire sequence of tiles forms the string 𝑠.
+
+In other words, you are given a string 𝑠 consisting of lowercase Latin letters.
+
+Initially, Polycarp is on the **first** tile of the row and wants to get to the **last** tile by jumping on the tiles. Jumping from 𝑖-th tile to 𝑗-th tile has a cost equal to $|𝑖𝑛𝑑𝑒𝑥(𝑠_𝑖)−𝑖𝑛𝑑𝑒𝑥(𝑠_𝑗)|$, where 𝑖𝑛𝑑𝑒𝑥(𝑐) is the index of the letter 𝑐 in the alphabet (for example, 𝑖𝑛𝑑𝑒𝑥('a')=1, 𝑖𝑛𝑑𝑒𝑥('b')=2, ..., 𝑖𝑛𝑑𝑒𝑥('z')=26) .
+
+Polycarp wants to get to the 𝑛-th tile for the minimum total cost, but at the same time make **maximum** number of jumps.
+
+In other words, among all possible ways to get to the last tile for the **minimum** total cost, he will choose the one with the **maximum** number of jumps.
+
+Polycarp can visit each tile **at most once**.
+
+Polycarp asks you to help — print the sequence of indices of string 𝑠s on which he should jump.
+
+**Input**
+
+The first line of the input contains an integer $𝑡 (1≤𝑡≤10^4)$ — the number of test cases in the test.
+
+Each test case is given by the string $𝑠 (2≤|𝑠|≤2⋅10^5)$, where |𝑠|— is the length of string 𝑠. The string 𝑠 consists of lowercase Latin letters.
+
+It is guaranteed that the sum of string lengths 𝑠 over all test cases does not exceed 2⋅10^5^.
+
+**Output**
+
+The answer to each test case consists of two lines.
+
+In the first line print two integers 𝑐𝑜𝑠𝑡, 𝑚, where 𝑐𝑜𝑠𝑡 is the minimum total cost of the path, and 𝑚 is the maximum number of visited tiles Polycarp can make to get to 𝑛n-th tiles for the minimum total cost 𝑐𝑜𝑠𝑡 (i.e. the number of jumps is 𝑚−1).
+
+In the next line print 𝑚 different numbers $𝑗_1,𝑗_2,…,𝑗_𝑚 (1≤𝑗_𝑖≤|𝑠|) $— the sequence of indices of the tiles Polycarp will jump on. The first number in the sequence must be 1 (that is, 𝑗~1~=1) and the last number must be the value of |𝑠| (that is, 𝑗~𝑚~=|𝑠|).
+
+If there are multiple answers, print any of them.
+
+Example
+
+**input**
+
+```
+6
+logic
+codeforces
+bca
+aaaaaaaaaaa
+adbaadabad
+to
+```
+
+**output**
+
+```
+9 4
+1 4 3 5
+16 10
+1 8 3 4 9 5 2 6 7 10
+1 2
+1 3
+0 11
+1 8 10 4 3 5 7 2 9 6 11
+3 10
+1 9 5 4 7 3 8 6 2 10
+5 2
+1 2
+```
+
+Note
+
+In the first test case, the required path corresponds to the picture:
+
+![img](https://raw.githubusercontent.com/GMyhf/img/main/img/202309052332422.png)
+
+In this case, the minimum possible total cost of the path is achieved. Since 𝑖𝑛𝑑𝑒𝑥('l')=12, 𝑖𝑛𝑑𝑒𝑥('o')=15, 𝑖𝑛𝑑𝑒𝑥('g')=7, 𝑖𝑛𝑑𝑒𝑥('i')=9, 𝑖𝑛𝑑𝑒𝑥('c')=3, then the total cost of the path is |12−9|+|9−7|+|7−3|=3+2+4=9.
+
+
+
+```python
+for _ in range(int(input())):
+    s = input()
+    n=len(s)
+    a=[]
+    l, h = ord(s[0])-96, ord(s[-1])-96
+    for i in range(1, n-1):
+        a.append([ord(s[i])-96, i+1])
+    a.sort()
+    if l>h:a.reverse()
+    res=[1]
+    low, high = min(l, h), max(l, h)
+    for v in a:
+        if low<=v[0]<=high:
+            res.append(v[1])
+    res.append(n)
+    print(high-low, len(res))
+    print(*res)
 ```
 
 
