@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 2347 GMT+8 Sep 10, 2023
+Updated 1559 GMT+8 Oct 5, 2023
 
 
 
@@ -5096,6 +5096,124 @@ for i in range(1,a+1):
     else:
         d.append("NO")
 print(*d)
+```
+
+
+
+## 1364A: A. XXXXX
+
+brute force/data structures/number theory/two pointers, 1200, https://codeforces.com/problemset/problem/1364/A
+
+Ehab loves number theory, but for some reason he hates the number 𝑥. Given an array 𝑎, find the length of its longest subarray such that the sum of its elements **isn't** divisible by 𝑥, or determine that such subarray doesn't exist.
+
+An array 𝑎 is a subarray of an array 𝑏 if 𝑎 can be obtained from 𝑏 by deletion of several (possibly, zero or all) elements from the beginning and several (possibly, zero or all) elements from the end.
+
+**Input**
+
+The first line contains an integer 𝑡 (1≤𝑡≤5) — the number of test cases you need to solve. The description of the test cases follows.
+
+The first line of each test case contains 2 integers 𝑛 and 𝑥 (1≤𝑛≤10^5^, 1≤𝑥≤10^4^) — the number of elements in the array 𝑎 and the number that Ehab hates.
+
+The second line contains 𝑛 space-separated integers $𝑎_1, 𝑎_2, ……, 𝑎_𝑛 (0≤𝑎_𝑖≤10^4)$ — the elements of the array 𝑎.
+
+**Output**
+
+For each testcase, print the length of the longest subarray whose sum isn't divisible by 𝑥. If there's no such subarray, print −1.
+
+Example
+
+input
+
+```
+3
+3 3
+1 2 3
+3 4
+1 2 3
+2 2
+0 6
+```
+
+output
+
+```
+2
+3
+-1
+```
+
+Note
+
+In the first test case, the subarray \[2,3\] has sum of elements 5, which isn't divisible by 3.
+
+In the second test case, the sum of elements of the whole array is 6, which isn't divisible by 4.
+
+In the third test case, all subarrays have an even sum, so the answer is −1.
+
+
+
+```python
+def prefix_sum(nums):
+    prefix = []
+    total = 0
+    for num in nums:
+        total += num
+        prefix.append(total)
+    return prefix
+ 
+def suffix_sum(nums):
+    suffix = []
+    total = 0
+    # 首先将列表反转
+    reversed_nums = nums[::-1]
+    for num in reversed_nums:
+        total += num
+        suffix.append(total)
+    # 将结果反转回来
+    suffix.reverse()
+    return suffix
+ 
+ 
+t = int(input())
+for _ in range(t):
+    N, x = map(int, input().split())
+    a = [int(i) for i in input().split()]
+    aprefix_sum = prefix_sum(a)
+    asuffix_sum = suffix_sum(a)
+ 
+    left = 0
+    right = N - 1
+    if right == 0:
+        if a[0] % x !=0:
+            print(1)
+        else:
+            print(-1)
+        continue
+ 
+    leftmax = 0
+    rightmax = 0
+    while left != right:
+        total = asuffix_sum[left]
+        if total % x != 0:
+            leftmax = right - left + 1
+            break
+        else:
+            left += 1
+ 
+    left = 0
+    right = N - 1
+    while left != right:
+        total = aprefix_sum[right]
+        if total % x != 0:
+            rightmax = right - left + 1
+            break
+        else:
+            right -= 1
+    
+    if leftmax == 0 and rightmax == 0:
+        print(-1)
+    else:
+        print(max(leftmax, rightmax))
 ```
 
 
