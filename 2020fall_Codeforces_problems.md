@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 1559 GMT+8 Oct 5, 2023
+Updated 2219 GMT+8 Oct 18, 2023
 
 
 
@@ -3174,6 +3174,8 @@ Note
 The given test has three numbers. The first number 4 has exactly three divisors — 1, 2 and 4, thus the answer for this number is "YES". The second number 5 has two divisors (1 and 5), and the third number 6 has four divisors (1, 2, 3, 6), hence the answer for them is "NO".
 
 
+
+与这个题目类似，都是找平方数优化。01218:THE DRUNK JAILER，http://cs101.openjudge.cn/practice/01218/
 
 这个题目实际上是DP思路。
 
