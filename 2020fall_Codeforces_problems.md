@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 2219 GMT+8 Oct 18, 2023
+Updated 1132 GMT+8 Oct 22, 2023
 
 
 
@@ -2412,7 +2412,7 @@ output
 
 
 
-练习加保护圈
+练习加保护圈。如果出现2*2黑，一定是新来这步造成的。
 
 ```python
 # http://codeforces.com/contest/508/submission/44603553
