@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 1132 GMT+8 Oct 22, 2023
+Updated 1211 GMT+8 Oct 23, 2023
 
 
 
@@ -2267,6 +2267,97 @@ else:
 
 
 
+## 489B. BerSU Ball
+
+greedy, sortings, two pointers, 1200, https://codeforces.com/problemset/problem/489/B
+
+The Berland State University is hosting a ballroom dance in celebration of its 100500-th anniversary! *n* boys and *m* girls are already busy rehearsing waltz, minuet, polonaise and quadrille moves.
+
+We know that several boy&girl pairs are going to be invited to the ball. However, the partners' dancing skill in each pair must differ by at most one.
+
+For each boy, we know his dancing skills. Similarly, for each girl we know her dancing skills. Write a code that can determine the largest possible number of pairs that can be formed from *n* boys and *m* girls.
+
+**Input**
+
+The first line contains an integer *n* (1 ≤ *n* ≤ 100) — the number of boys. The second line contains sequence *a*1, *a*2, ..., *a**n* (1 ≤ *a**i* ≤ 100), where *a**i* is the *i*-th boy's dancing skill.
+
+Similarly, the third line contains an integer *m* (1 ≤ *m* ≤ 100) — the number of girls. The fourth line contains sequence *b*1, *b*2, ..., *b**m* (1 ≤ *b**j* ≤ 100), where *b**j* is the *j*-th girl's dancing skill.
+
+**Output**
+
+Print a single number — the required maximum possible number of pairs.
+
+Examples
+
+input
+
+```
+4
+1 4 6 2
+5
+5 1 5 7 9
+```
+
+output
+
+```
+3
+```
+
+input
+
+```
+4
+1 2 3 4
+4
+10 11 12 13
+```
+
+output
+
+```
+0
+```
+
+input
+
+```
+5
+1 1 1 1 1
+3
+1 2 3
+```
+
+output
+
+```
+2
+```
+
+
+
+```python
+n = int(input())
+a = [int(i) for i in input().split()]
+m = int(input())
+b = [int(i) for i in input().split()]
+ 
+a.sort()
+b.sort()
+ 
+cnt = 0
+for i in range(n):
+  for j in range(m):
+    if abs(a[i]-b[j])<=1:
+      b[j] = 1000;
+      cnt += 1
+      break
+ 
+print(cnt)
+```
+
+
+
 ## 492B. Vanya and Lanterns
 
 binary search/implementation/math/sortings, 1200, https://codeforces.com/problemset/problem/492/B
@@ -2442,6 +2533,63 @@ for i in range(k):
         break
 else:
     print(0)
+```
+
+
+
+## 545D. Queue
+
+greedy, implementation, sortings, 1300, https://codeforces.com/problemset/problem/545/D
+
+Little girl Susie went shopping with her mom and she wondered how to improve service quality.
+
+There are *n* people in the queue. For each person we know time $t_i$ needed to serve him. A person will be disappointed if the time he waits is more than the time needed to serve him. The time a person waits is the total time when all the people who stand in the queue in front of him are served. Susie thought that if we swap some people in the queue, then we can decrease the number of people who are disappointed.
+
+Help Susie find out what is the maximum number of not disappointed people can be achieved by swapping people in the queue.
+
+**Input**
+
+The first line contains integer $n (1 ≤ n ≤ 10^5)$.
+
+The next line contains *n* integers $t_i (1 ≤ ti ≤ 10^9)$, separated by spaces.
+
+**Output**
+
+Print a single number — the maximum number of not disappointed people in the queue.
+
+Examples
+
+input
+
+```
+5
+15 2 1 5 3
+```
+
+output
+
+```
+4
+```
+
+Note
+
+Value 4 is achieved at such an arrangement, for example: 1, 2, 3, 5, 15. Thus, you can make everything feel not disappointed except for the person with time 5.
+
+
+
+```python
+n=int(input())
+t=[int(i) for i in input().split()]
+t.sort()
+wait=0
+ans=0
+for i in range(n):
+    if t[i]>=wait:
+        wait+=t[i]
+        ans+=1
+ 
+print(ans)
 ```
 
 
