@@ -2865,6 +2865,74 @@ print(x[-1] - x[0])
 
 
 
+## 903C. Boxes Packing
+
+greedy, 1200, https://codeforces.com/problemset/problem/903/C
+
+Mishka has got *n* empty boxes. For every *i* (1 ≤ *i* ≤ *n*), *i*-th box is a cube with side length *a**i*.
+
+Mishka can put a box *i* into another box *j* if the following conditions are met:
+
+- *i*-th box is not put into another box;
+- *j*-th box doesn't contain any other boxes;
+- box *i* is smaller than box *j* (*a**i* < *a**j*).
+
+Mishka can put boxes into each other an arbitrary number of times. He wants to minimize the number of *visible* boxes. A box is called *visible* iff it is not put into some another box.
+
+Help Mishka to determine the minimum possible number of *visible* boxes!
+
+Input
+
+The first line contains one integer *n* (1 ≤ *n* ≤ 5000) — the number of boxes Mishka has got.
+
+The second line contains *n* integers *a*1, *a*2, ..., *a**n* (1 ≤ *a**i* ≤ 109), where *a**i* is the side length of *i*-th box.
+
+Output
+
+Print the minimum possible number of *visible* boxes.
+
+Examples
+
+input
+
+```
+3
+1 2 3
+```
+
+output
+
+```
+1
+```
+
+input
+
+```
+4
+4 2 4 3
+```
+
+output
+
+```
+2
+```
+
+Note
+
+In the first example it is possible to put box 1 into box 2, and 2 into 3.
+
+In the second example Mishka can put box 2 into box 3, and box 4 into box 1.
+
+
+
+```python
+from collections import *
+input()
+print(max(Counter(input().split()).values()))
+```
+
 
 
 # ==OPTIONAL PROBLEMS==
@@ -3476,7 +3544,7 @@ Sereja wrote out the necessary array elements but the array was so large and the
 
 **Input**
 
-The first line contains two integers *n* and *m* (1 ≤ *n*, *m* ≤ 10^5^). The second line contains *n* integers a~1~, a~2~, ..., a~n~ (1 ≤ a~i~ ≤ 10^5^) — the array elements.
+The first line contains two integers *n* and *m* (1 ≤ *n*, *m* ≤ 10^5^). The second line contains *n* integers $a_1, a_2, ..., a_n (1 ≤ a_i ≤ 10^5)$ — the array elements.
 
 Next *m* lines contain integers $l_1, l_2, ..., l_m$. The *i*-th line contains integer $l_i$ (1 ≤ $l_i$ ≤ *n*).
 
@@ -4879,6 +4947,90 @@ for i in range(q):
         print(n)     
     else:        
         print(search(p)) 
+```
+
+
+
+## 803A. Maximal Binary Matrix
+
+constructive algorithms, 1400, https://codeforces.com/problemset/problem/803/A
+
+You are given matrix with *n* rows and *n* columns filled with zeroes. You should put *k* ones in it in such a way that the resulting matrix is symmetrical with respect to the main diagonal (the diagonal that goes from the top left to the bottom right corner) and is lexicographically maximal.
+
+One matrix is lexicographically greater than the other if the first different number in the first different row from the top in the first matrix is greater than the corresponding number in the second one.
+
+If there exists no such matrix then output -1.
+
+**Input**
+
+The first line consists of two numbers *n* and *k* (1 ≤ *n* ≤ 100, 0 ≤ *k* ≤ 106).
+
+**Output**
+
+If the answer exists then output resulting matrix. Otherwise output -1.
+
+Examples
+
+input
+
+```
+2 1
+```
+
+output
+
+```
+1 0 
+0 0 
+```
+
+input
+
+```
+3 2
+```
+
+output
+
+```
+1 0 0 
+0 1 0 
+0 0 0 
+```
+
+input
+
+```
+2 5
+```
+
+output
+
+```
+-1
+```
+
+
+
+```python
+n, k = map(int, input().split())
+num = [[0] * n for _ in range(n)]
+ 
+for i in range(n):
+    for j in range(i, n):
+        if k > 1 and i != j:
+            num[i][j] = 1
+            num[j][i] = 1
+            k -= 2
+        elif k > 0 and i == j:
+            num[i][i] = 1
+            k -= 1
+ 
+if k == 0:
+    for row in num:
+        print(*row)
+else:
+    print("-1")
 ```
 
 
@@ -6474,6 +6626,220 @@ for _ in range(int(input())):
     res.append(n)
     print(high-low, len(res))
     print(*res)
+```
+
+
+
+## 1764C. Doremy's City Construction
+
+graphs, greedy, 1400, https://codeforces.com/problemset/problem/1764/C
+
+Doremy's new city is under construction! The city can be regarded as a simple undirected graph with 𝑛 vertices. The 𝑖-th vertex has altitude 𝑎𝑖. Now Doremy is deciding which pairs of vertices should be connected with edges.
+
+Due to economic reasons, there should be no self-loops or multiple edges in the graph.
+
+Due to safety reasons, there should not be **pairwise distinct** vertices 𝑢, 𝑣, and 𝑤 such that $𝑎_𝑢≤𝑎_𝑣≤𝑎_𝑤$ and the edges (𝑢,𝑣) and (𝑣,𝑤) exist.
+
+Under these constraints, Doremy would like to know the maximum possible number of edges in the graph. Can you help her?
+
+Note that the constructed graph is allowed to be disconnected.
+
+**Input**
+
+The input consists of multiple test cases. The first line contains a single integer $t (1≤𝑡≤10^4)$ — the number of test cases. The description of the test cases follows.
+
+The first line of each test case contains a single integer $n (2≤𝑛≤2⋅10^5)$ — the number of vertices.
+
+The second line of each test case contains 𝑛 integers $𝑎_1,𝑎_2,…,𝑎_𝑛 (1≤𝑎_𝑖≤10^6)$ — the altitudes of each vertex.
+
+It is guaranteed that the sum of 𝑛 over all test cases does not exceed $2⋅10^5$.
+
+**Output**
+
+For each test case, output the maximum possible number of edges in the graph.
+
+Example
+
+input
+
+```
+4
+4
+2 2 3 1
+6
+5 2 3 1 5 2
+12
+7 2 4 9 1 4 6 3 7 4 2 3
+4
+1000000 1000000 1000000 1000000
+```
+
+output
+
+```
+3
+9
+35
+2
+```
+
+Note
+
+In the first test case, there can only be at most 33 edges in the graph. A possible construction is to connect (1,3), (2,3), (3,4). In the picture below the red number above node 𝑖 is 𝑎𝑖.
+
+![img](https://raw.githubusercontent.com/GMyhf/img/main/img/1418c24979440d1a012429347170871195054446.png)
+
+The following list shows all such 𝑢, 𝑣, 𝑤 that the edges (𝑢,𝑣) and (𝑣,𝑤) exist.
+
+- 𝑢=1, 𝑣=3, 𝑤=2;
+- 𝑢=1, 𝑣=3, 𝑤=4;
+- 𝑢=2, 𝑣=3, 𝑤=1;
+- 𝑢=2, 𝑣=3, 𝑤=4;
+- 𝑢=4, 𝑣=3, 𝑤=1;
+- 𝑢=4, 𝑣=3, 𝑤=2.
+
+Another possible construction is to connect (1,4), (2,4), (3,4).
+
+![img](https://raw.githubusercontent.com/GMyhf/img/main/img/115580187374dcfe66c47f2d96ac1755b4df4d3d.png)
+
+An unacceptable construction is to connect (1,3), (2,3), (2,4), (3,4. Because when 𝑢=4, 𝑣=2, 𝑤=3, $𝑎_𝑢≤𝑎_𝑣≤𝑎_𝑤$ holds, and the respective edges exist.
+
+![img](https://raw.githubusercontent.com/GMyhf/img/main/img/a030082fa80a298932acf8c816dcb70e2a123219.png)
+
+
+
+思路: 要满足条件，先将点权排序，设一个点 i，那么它满足前面的数都小于等于它，后面的数都大于等于它。那么就会有一个贪心方案，以这个点为分段点，后面的所有点与它连边后再与这个点前面的点连边，这样能够满足题目要求，且方案数也越大，但前提是没有与它相等的点。
+
+所以答案就为 $max\{i×(n−i)\}$。
+
+有一点要注意，样例中第 4 个过不去，原因是每个点都与 i 相等，那么方案就是两两相连，答案即为 
+$⌊\frac{n}{2}⌋$
+
+```python
+for i in range(int(input())):
+    n = int(input())
+    L = sorted(list(map(int, input().split())))
+    ans = n//2
+    for i in range(1, len(L)):
+        if L[i] != L[i-1]:
+            ans = max(ans, i*(n-i))
+    print(ans)
+```
+
+
+
+## 1793C. Dora and Search
+
+constructive algorithms, data structures, two pointers, 1200, 
+
+https://codeforces.com/problemset/problem/1793/C
+
+As you know, the girl Dora is always looking for something. This time she was given a permutation, and she wants to find such a subsegment of it that none of the elements at its ends is either the minimum or the maximum of the entire subsegment. More formally, you are asked to find the numbers 𝑙 and 𝑟 (1≤𝑙≤𝑟≤𝑛) such that $𝑎𝑙≠min(𝑎_𝑙,𝑎_{𝑙+1},…,𝑎_𝑟)$, $𝑎𝑙≠max(𝑎_𝑙,𝑎_{𝑙+1},…,𝑎_𝑟)$ and $𝑎𝑟≠min(𝑎_𝑙,𝑎_{𝑙+1},…,𝑎_𝑟)$, $𝑎𝑟≠max(𝑎_𝑙,𝑎_{𝑙+1},…,𝑎_𝑟)$.
+
+A permutation of length 𝑛 is an array consisting of 𝑛 distinct integers from 11 to 𝑛 in any order. For example, \[2,3,1,5,4] is a permutation, but \[1,2,2] is not a permutation (2 occurs twice in the array) and \[1,3,4][1,3,4] is also not a permutation (𝑛=3, but 4 is present in the array).
+
+Help Dora find such a subsegment, or tell her that such a subsegment does not exist.
+
+**Input**
+
+Each test consists of multiple test cases. The first line contains a single integer $𝑡 (1≤𝑡≤10^4)$ — the number of test cases. Description of the test cases follows.
+
+For each test case, the first line contains one integer $𝑛(1≤𝑛≤2⋅10^5)$ — the length of permutation.
+
+The second line contains 𝑛 distinct integers $𝑎_1,𝑎_2,…,𝑎_𝑛 (1≤𝑎_𝑖≤𝑛)$ — the elements of permutation.
+
+It is guarented that the sum of 𝑛 over all test cases doesn't exceed 2⋅1052⋅105.
+
+**Output**
+
+For each test case, output −1−1 if the desired subsegment does not exist.
+
+Otherwise, output two indexes 𝑙,𝑟 such that $[𝑎_𝑙,𝑎_{𝑙+1},…,𝑎_𝑟]$ satisfies all conditions.
+
+If there are several solutions, then output any of them.
+
+Example
+
+input
+
+```
+4
+3
+1 2 3
+4
+2 1 4 3
+7
+1 3 2 4 6 5 7
+6
+2 3 6 5 4 1
+```
+
+output
+
+```
+-1
+1 4
+2 6
+-1
+```
+
+Note
+
+In the first and fourth test cases, it can be shown that there are no desired subsegments.
+
+In the second test case, the subsegment \[1,4] satisfies all the conditions, because $max(𝑎_1,𝑎_2,𝑎_3,𝑎_4)=4,min(𝑎_1,𝑎_2,𝑎_3,𝑎_4)=1$, as we see, all the conditions are met.
+
+In the third test case, the subsegment \[2,6] also satisfies all the conditions described.
+
+
+
+参考：https://blog.csdn.net/lmb_f/article/details/129077484
+
+题目大意：给你个n的排列，找出是否存在$a_l, a_{l+1},...,a_r$的子序列满足端点不是区间最大和最小。
+
+思路
+
+因为题目只要有1个满足就好，所以我们从（1，n）开始缩小（因为此时最大值就是n，最小值是1）
+
+然后根据要求移动l和r就行
+
+如果a[l]是最大值，l++,max--;
+如果a[l]是最小值,l++,min++;
+如果a[r]是最大值，r--,max--;
+如果a[r]是最小值,r--,min++;
+
+```python
+num = []
+t = int(input())
+
+for _ in range(t):
+    n = int(input())
+    num = list(map(int, input().split()))
+    l = 1
+    r = n
+    vmin = 1
+    vmax = n
+
+    while l < r:
+        if num[l-1] == vmin:
+          l += 1
+          vmin += 1
+        elif num[l-1] == vmax:
+          l += 1
+          vmax -= 1
+        elif num[r-1] == vmin:
+          r -= 1
+          vmin += 1
+        elif num[r-1] == vmax:
+          r -= 1
+          vmax -= 1
+        else:
+          break
+
+    if l < r:
+        print(l, r)
+    else:
+        print(-1)
 ```
 
 
