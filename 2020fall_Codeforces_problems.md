@@ -6138,7 +6138,7 @@ binary search/data structure/games/greedy/implementation, 1400, https://codeforc
 
 Alice and Bob are playing a game. They have an array of positive integers 𝑎a of size 𝑛n.
 
-Before starting the game, Alice chooses an integer 𝑘≥0. The game lasts for 𝑘k stages, the stages are numbered from 1 to 𝑘. During the 𝑖-th stage, Alice must remove an element from the array that is less than or equal to $𝑘−𝑖+1$. After that, if the array is not empty, Bob must add $𝑘−𝑖+1$ to an arbitrary element of the array. Note that both Alice's move and Bob's move are two parts of the same stage of the game. If Alice can't delete an element during some stage, she loses. If the 𝑘k-th stage ends and Alice hasn't lost yet, she wins.
+Before starting the game, Alice chooses an integer 𝑘≥0. The game lasts for 𝑘 stages, the stages are numbered from 1 to 𝑘. During the 𝑖-th stage, Alice must remove an element from the array that is less than or equal to $𝑘−𝑖+1$. After that, if the array is not empty, Bob must add $𝑘−𝑖+1$ to an arbitrary element of the array. Note that both Alice's move and Bob's move are two parts of the same stage of the game. If Alice can't delete an element during some stage, she loses. If the 𝑘k-th stage ends and Alice hasn't lost yet, she wins.
 
 Your task is to determine the maximum value of 𝑘 such that Alice can win if both players play optimally. Bob plays against Alice, so he tries to make her lose the game, if it's possible.
 
@@ -6146,7 +6146,7 @@ Input
 
 The first line contains a single integer 𝑡t (1≤𝑡≤100) — the number of test cases.
 
-The first line of each test case contains a single integer 𝑛n (1≤𝑛≤100) — the size of the array 𝑎a.
+The first line of each test case contains a single integer 𝑛 (1≤𝑛≤100) — the size of the array 𝑎.
 
 The second line contains 𝑛n integers $𝑎_1,𝑎_2,…,𝑎_𝑛 (1≤𝑎_𝑖≤𝑛)$.
 
