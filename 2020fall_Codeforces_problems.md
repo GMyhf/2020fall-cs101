@@ -3059,7 +3059,7 @@ Group 2 found at 2-4: 23
 
 ## 158B. Taxi
 
-*special problem/greedy/mplementation, 1100, https://codeforces.com/problemset/problem/158/B
+*special problem/greedy/implementation, 1100, https://codeforces.com/problemset/problem/158/B
 
 
 After the lessons *n* groups of schoolchildren went outside and decided to visit Polycarpus to celebrate his birthday. We know that the *i*-th group consists of s~i~ friends (1 ≤ s~i~ ≤ 4), and they want to go to Polycarpus together. They decided to get there by taxi. Each car can carry at most four passengers. What minimum number of cars will the children need if all members of each group should ride in the same taxi (but one taxi can take more than one group)?
