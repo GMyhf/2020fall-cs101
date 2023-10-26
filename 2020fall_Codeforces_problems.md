@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 1710 GMT+8 Oct 23, 2023
+Updated 1351 GMT+8 Oct 26, 2023
 
 
 
@@ -6714,6 +6714,10 @@ An unacceptable construction is to connect (1,3), (2,3), (2,4), (3,4. Because wh
 
 有一点要注意，样例中第 4 个过不去，原因是每个点都与 i 相等，那么方案就是两两相连，答案即为 
 $⌊\frac{n}{2}⌋$
+
+【李石泉-光华-23】就是一个建筑按照高度要么全建向上的路或者向下的路或者同高度的一条路。
+
+
 
 ```python
 for i in range(int(input())):
