@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 1351 GMT+8 Oct 26, 2023
+Updated 2339 GMT+8 Oct 26, 2023
 
 
 
@@ -5517,6 +5517,164 @@ for _ in range(t):
     else:
         print(max(leftmax, rightmax))
 ```
+
+
+
+```python
+for _ in range(int(input())):
+    a, b = map(int, input().split())
+    s = -1
+    A = list(map(lambda x: int(x) % b, input().split()))
+    if sum(A) % b:
+        print(a)
+        continue
+    for i in range(a//2+1):
+        if A[i] or A[~i]:
+            s = a-i-1
+            break
+    print(s)
+```
+
+
+
+Pypy3 可以AC。使用tree segment，时间复杂度是O(long)
+
+```python
+# CF 1364A
+ 
+# def prefix_sum(nums):
+#     prefix = []
+#     total = 0
+#     for num in nums:
+#         total += num
+#         prefix.append(total)
+#     return prefix
+ 
+# def suffix_sum(nums):
+#     suffix = []
+#     total = 0
+#     # 首先将列表反转
+#     reversed_nums = nums[::-1]
+#     for num in reversed_nums:
+#         total += num
+#         suffix.append(total)
+#     # 将结果反转回来
+#     suffix.reverse()
+#     return suffix
+ 
+ 
+t = int(input())
+ans = []
+for _ in range(t):
+    n, x = map(int, input().split())
+    a = [int(i) for i in input().split()]
+
+
+# Segment tree | Efficient implementation
+# https://www.geeksforgeeks.org/segment-tree-efficient-implementation/
+
+    # Max size of tree 
+    tree = [0] * (2 * n); 
+
+    def build(arr) : 
+
+        # insert leaf nodes in tree 
+        for i in range(n) : 
+            tree[n + i] = arr[i]; 
+        
+        # build the tree by calculating parents 
+        for i in range(n - 1, 0, -1) : 
+            tree[i] = tree[i << 1] + tree[i << 1 | 1]; 
+
+    # function to update a tree node 
+    def updateTreeNode(p, value) : 
+        
+        # set value at position p 
+        tree[p + n] = value; 
+        p = p + n; 
+        
+        # move upward and update parents 
+        i = p; 
+        
+        while i > 1 : 
+            
+            tree[i >> 1] = tree[i] + tree[i ^ 1]; 
+            i >>= 1; 
+
+    # function to get sum on interval [l, r) 
+    def query(l, r) : 
+
+        res = 0; 
+        
+        # loop to find the sum in the range 
+        l += n; 
+        r += n; 
+        
+        while l < r : 
+        
+            if (l & 1) : 
+                res += tree[l]; 
+                l += 1
+        
+            if (r & 1) : 
+                r -= 1; 
+                res += tree[r]; 
+                
+            l >>= 1; 
+            r >>= 1
+        
+        return res; 
+    #aprefix_sum = prefix_sum(a)
+    #asuffix_sum = suffix_sum(a)
+ 
+    build([i%x for i in a]);
+    
+    left = 0
+    right = n - 1
+    if right == 0:
+        if a[0] % x !=0:
+            print(1)
+        else:
+            print(-1)
+        continue
+ 
+    leftmax = 0
+    rightmax = 0
+    while left != right:
+        #total = asuffix_sum[left]
+        total = query(left, right+1)
+        if total % x != 0:
+            leftmax = right - left + 1
+            break
+        else:
+            left += 1
+ 
+    left = 0
+    right = n - 1
+    while left != right:
+        #total = aprefix_sum[right]
+        total = query(left, right+1)
+        if total % x != 0:
+            rightmax = right - left + 1
+            break
+        else:
+            right -= 1
+    
+    if leftmax == 0 and rightmax == 0:
+        #print(-1)
+        ans.append(-1)
+    else:
+        #print(max(leftmax, rightmax))
+        ans.append(max(leftmax, rightmax))
+
+print('\n'.join(map(str,ans)))
+```
+
+
+
+如果用sum求和，O(n^2)，会在test3 超时。
+
+
 
 
 
