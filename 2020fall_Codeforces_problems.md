@@ -5537,7 +5537,7 @@ for _ in range(int(input())):
 
 
 
-Pypy3 可以AC。使用tree segment，时间复杂度是O(long)
+Pypy3 可以AC。使用tree segment，时间复杂度是O(n*logn)
 
 ```python
 # CF 1364A
@@ -5672,7 +5672,7 @@ print('\n'.join(map(str,ans)))
 
 
 
-如果用sum求和，O(n^2)，会在test3 超时。
+如果用sum求和，O(n^2)，pypy3也会在test3 超时。
 
 
 
