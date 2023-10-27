@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 2339 GMT+8 Oct 26, 2023
+Updated 1130 GMT+8 Oct 27, 2023
 
 
 
@@ -6887,6 +6887,38 @@ for i in range(int(input())):
             ans = max(ans, i*(n-i))
     print(ans)
 ```
+
+
+
+排序后，从中间位置开始往左一步，往右一步，找第一个与中间值不同的点。
+
+```python
+t = int(input())
+ans = []
+for _ in range(t):
+    n = int(input())
+    altitude = list(map(int, input().split()))
+    altitude.sort()
+
+    mid = n//2
+    if altitude[0] ==  altitude[-1] == altitude[mid]:
+        ans.append(mid)
+        continue
+
+    cut = 1
+    for i in range(1, (n+1)//2):
+        if altitude[mid-i] != altitude[mid]:
+            cut = mid - i + 1
+            break
+        elif altitude[mid+i] != altitude[mid]:
+            cut = mid + i
+            break
+    ans.append(cut*(n-cut))
+
+print('\n'.join(map(str, ans)))
+```
+
+
 
 
 
