@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 1130 GMT+8 Oct 27, 2023
+Updated 1024 GMT+8 Oct 31, 2023
 
 
 
@@ -6915,6 +6915,30 @@ for _ in range(t):
             break
     ans.append(cut*(n-cut))
 
+print('\n'.join(map(str, ans)))
+```
+
+
+
+```python
+# 1764C
+t = int(input())
+ans = []
+for _ in range(t):
+    N = int(input())
+    a = list(map(int, input().split()))
+    a.sort()
+    
+    mid = N//2
+    if a[0] == a[-1] == a[mid]:
+        ans.append(mid)
+        continue
+
+    b = a[::-1]       # b=sorted(a,reverse=True)
+    x = a.index(a[mid])
+    y = b.index(a[mid])
+    ans.append(max(x*(N-x), y*(N-y)))
+    #print(max( x*(N-x), y*(N-y), N//2))
 print('\n'.join(map(str, ans)))
 ```
 
