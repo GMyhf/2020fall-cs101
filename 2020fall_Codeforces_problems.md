@@ -6944,6 +6944,8 @@ print('\n'.join(map(str, ans)))
 
 
 
+<img src="https://raw.githubusercontent.com/GMyhf/img/main/img/image-20231031103020073.png" alt="image-20231031103020073" style="zoom:50%;" />
+
 
 
 ## 1793C. Dora and Search
