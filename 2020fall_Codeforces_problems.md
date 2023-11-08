@@ -6224,8 +6224,8 @@ Petya is preparing for his birthday. He decided that there would be nn different
 
 Unfortunately, all dishes are prepared in different restaurants and therefore Petya needs to pick up his orders from nn different places. To speed up this process, he wants to order courier delivery at some restaurants. Thus, for each dish, there are two options for Petya how he can get it:
 
-- the dish will be delivered by a courier from the restaurant ii, in this case the courier will arrive in aiai minutes,
-- Petya goes to the restaurant ii on his own and picks up the dish, he will spend bibi minutes on this.
+- the dish will be delivered by a courier from the restaurant $i$, in this case the courier will arrive in $a_i$ minutes,
+- Petya goes to the restaurant $i$ on his own and picks up the dish, he will spend $b_i$ minutes on this.
 
 Each restaurant has its own couriers and they start delivering the order at the moment Petya leaves the house. In other words, all couriers work in parallel. Petya must visit all restaurants in which he has not chosen delivery, he does this consistently.
 
@@ -6239,9 +6239,9 @@ The first line contains one positive integer t (1≤t≤2⋅10^5^) — the numbe
 
 Each test case begins with a line containing one integer n (1≤n≤2⋅10^5^) — the number of dishes that Petya wants to order.
 
-The second line of each test case contains n integers a~1~…a~n~ (1≤a~i~≤10^9^) — the time of courier delivery of the dish with the number ii.
+The second line of each test case contains n integers a~1~…a~n~ (1≤a~i~≤10^9^) — the time of courier delivery of the dish with the number i.
 
-The third line of each test case contains n integers b~1~…b~n~ (1≤bi≤10^9^) — the time during which Petya will pick up the dish with the number ii.
+The third line of each test case contains n integers b~1~…b~n~ (1≤bi≤10^9^) — the time during which Petya will pick up the dish with the number i.
 
 The sum of nn over all test cases does not exceed 2⋅10^5^.
 
@@ -6446,15 +6446,15 @@ int main(){
 
 binary search/data structure/games/greedy/implementation, 1400, https://codeforces.com/problemset/problem/1749/C
 
-Alice and Bob are playing a game. They have an array of positive integers 𝑎a of size 𝑛n.
+Alice and Bob are playing a game. They have an array of positive integers 𝑎 of size 𝑛.
 
-Before starting the game, Alice chooses an integer 𝑘≥0. The game lasts for 𝑘 stages, the stages are numbered from 1 to 𝑘. During the 𝑖-th stage, Alice must remove an element from the array that is less than or equal to $𝑘−𝑖+1$. After that, if the array is not empty, Bob must add $𝑘−𝑖+1$ to an arbitrary element of the array. Note that both Alice's move and Bob's move are two parts of the same stage of the game. If Alice can't delete an element during some stage, she loses. If the 𝑘k-th stage ends and Alice hasn't lost yet, she wins.
+Before starting the game, Alice chooses an integer 𝑘≥0. The game lasts for 𝑘 stages, the stages are numbered from 1 to 𝑘. During the 𝑖-th stage, Alice must remove an element from the array that is less than or equal to $𝑘−𝑖+1$. After that, if the array is not empty, Bob must add $𝑘−𝑖+1$ to an arbitrary element of the array. Note that both Alice's move and Bob's move are two parts of the same stage of the game. If Alice can't delete an element during some stage, she loses. If the 𝑘-th stage ends and Alice hasn't lost yet, she wins.
 
 Your task is to determine the maximum value of 𝑘 such that Alice can win if both players play optimally. Bob plays against Alice, so he tries to make her lose the game, if it's possible.
 
 Input
 
-The first line contains a single integer 𝑡t (1≤𝑡≤100) — the number of test cases.
+The first line contains a single integer 𝑡 (1≤𝑡≤100) — the number of test cases.
 
 The first line of each test case contains a single integer 𝑛 (1≤𝑛≤100) — the size of the array 𝑎.
 
