@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 1025 GMT+8 Oct 31, 2023
+Updated 1726 GMT+8 Nov 9, 2023
 
 
 
@@ -4825,6 +4825,35 @@ x.sort()
 for _ in range(int(input())):
     m = int(input())
     print(bisect.bisect_right(x, m))
+```
+
+
+
+如果将此问题看作一个 dp 问题，其实这就变成了一个求累积和的问题，因为我们不仅需要知道小于等于某价格的店铺数量，而且还需要知道小于等于其他任何可能价格的店铺数量。每天我们都需要查询小于等于 mi 的店铺有多少个。
+
+可以把所有价格进行排序然后使用 dp 保存每个价格以及之前所有价格的店铺总数量，也就是说 dp[i] = dp[i-1] + current_shop_number。然后就可以直接得出答案。
+
+这就代表了在价格不大于 xi 的店铺中，可以购买 "Beecola" 的店铺数量。
+
+```python
+n = int(input())
+prices = sorted(list(map(int, input().split())))
+q = int(input())
+coins = [int(input()) for _ in range(q)]
+
+# 创建DP数组并初始化
+dp = [0] * 100001
+for price in prices:
+    dp[price] += 1
+for i in range(1, len(dp)):
+    dp[i] += dp[i-1]
+
+# 处理并输出每一天的结果
+for coin in coins:
+    if coin >= len(dp):
+        print(dp[-1])
+    else:
+        print(dp[coin])
 ```
 
 
