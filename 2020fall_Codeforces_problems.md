@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 1726 GMT+8 Nov 9, 2023
+Updated 0937 GMT+8 Nov 21, 2023
 
 
 
@@ -3179,14 +3179,12 @@ In the second example Polycarpus can cut the ribbon in such way: the first piece
 思路：就是一个需要刚好装满的完全背包问题，只有三种商品a, b, c，能取无限件物品，每件物品价值是1，求最大价值。
 
 ```python
-inf = 1e9 + 7
-n,a,b,c = map(int,input().split())
-dp = [0]+[-inf]*n
+n, a, b, c = map(int, input().split())
+dp = [0]+[float('-inf')]*n
 
-for i in range(1,n+1):
-    for j in (a,b,c):
+for i in range(1, n+1):
+    for j in (a, b, c):
         if i >= j:
-            #dp[i] = max(dp[i-j], dp[i-j] + 1, dp[i])
             dp[i] = max(dp[i-j] + 1, dp[i])
 
 print(dp[n])
@@ -4725,6 +4723,130 @@ print(restaurant)
 
 
 
+## 698A. Vacations
+
+dp, 1400, https://codeforces.com/problemset/problem/698/A
+
+Vasya has *n* days of vacations! So he decided to improve his IT skills and do sport. Vasya knows the following information about each of this *n* days: whether that gym opened and whether a contest was carried out in the Internet on that day. For the *i*-th day there are four options:
+
+1. on this day the gym is closed and the contest is not carried out;
+2. on this day the gym is closed and the contest is carried out;
+3. on this day the gym is open and the contest is not carried out;
+4. on this day the gym is open and the contest is carried out.
+
+On each of days Vasya can either have a rest or write the contest (if it is carried out on this day), or do sport (if the gym is open on this day).
+
+Find the minimum number of days on which Vasya will have a rest (it means, he will not do sport and write the contest at the same time). The only limitation that Vasya has — *he does not want to do the same activity on two consecutive days: it means, he will not do sport on two consecutive days, and write the contest on two consecutive days*.
+
+**Input**
+
+The first line contains a positive integer *n* (1 ≤ *n* ≤ 100) — the number of days of Vasya's vacations.
+
+The second line contains the sequence of integers *a*1, *a*2, ..., *a**n* (0 ≤ *a**i* ≤ 3) separated by space, where:
+
+- *a**i* equals 0, if on the *i*-th day of vacations the gym is closed and the contest is not carried out;
+- *a**i* equals 1, if on the *i*-th day of vacations the gym is closed, but the contest is carried out;
+- *a**i* equals 2, if on the *i*-th day of vacations the gym is open and the contest is not carried out;
+- *a**i* equals 3, if on the *i*-th day of vacations the gym is open and the contest is carried out.
+
+**Output**
+
+Print the minimum possible number of days on which Vasya will have a rest. Remember that Vasya refuses:
+
+- to do sport on any two consecutive days,
+- to write the contest on any two consecutive days.
+
+Examples
+
+input
+
+```
+4
+1 3 2 0
+```
+
+output
+
+```
+2
+```
+
+input
+
+```
+7
+1 3 3 2 1 2 3
+```
+
+output
+
+```
+0
+```
+
+input
+
+```
+2
+2 2
+```
+
+output
+
+```
+1
+```
+
+Note
+
+In the first test Vasya can write the contest on the day number 1 and do sport on the day number 3. Thus, he will have a rest for only 2 days.
+
+In the second test Vasya should write contests on days number 1, 3, 5 and 7, in other days do sport. Thus, he will not have a rest for a single day.
+
+In the third test Vasya can do sport either on a day number 1 or number 2. He can not do sport in two days, because it will be contrary to the his limitation. Thus, he will have a rest for only one day. 
+
+
+
+```python
+n = int(input())
+#n = 100
+*a, = map(int, input().split())
+#b = '3 2 3 3 3 2 3 1 3 2 2 3 2 3 3 3 3 3 3 1 2 2 3 1 3 3 2 2 2 3 1 0 3 3 3 2 3 \
+#    3 1 1 3 1 3 3 3 1 3 1 3 0 1 3 2 3 2 1 1 3 2 3 3 3 2 3 1 3 3 3 3 2 2 2 1 3 \
+#    1 3 3 3 3 1 3 2 3 3 0 3 3 3 3 3 1 0 2 1 3 3 0 2 3 3'
+#*a, = map(int, b.split())
+ 
+dp = [0]*n
+if a[0] == 0:
+    dp[0] = 1
+ 
+i= 1
+while i < n:
+    if a[i] == 0:
+        dp[i] = 1
+        i += 1
+        continue
+ 
+    if a[i] == a[i-1] and a[i] != 3:
+        a[i] = 0
+        dp[i] = 1
+        i += 1
+        continue
+ 
+    if a[i] == 3 and a[i-1]!=3:
+        a[i] = 3 - a[i-1]
+ 
+    i += 1
+ 
+print(sum(dp))
+```
+
+
+
+
+
+
+
 ## 706B. Interesting drink
 
 binary search/dp/implementation, 1100,  https://codeforces.com/problemset/problem/706/B
@@ -5237,6 +5359,105 @@ else:print(out)
 
 
 
+## 1195C. Basketball Exercise
+
+dp, 1400, https://codeforces.com/problemset/problem/1195/C
+
+Finally, a basketball court has been opened in SIS, so Demid has decided to hold a basketball exercise session. 2⋅𝑛 students have come to Demid's exercise session, and he lined up them into two rows of the same size (there are exactly 𝑛 people in each row). Students are numbered from 11 to 𝑛 in each row in order from left to right.
+
+![img](https://espresso.codeforces.com/bf391a96cdb51467057f2a6fae4d88e745e0fc53.png)
+
+Now Demid wants to choose a team to play basketball. He will choose players from left to right, and the index of each chosen player (excluding the first one **taken**) will be strictly greater than the index of the previously chosen player. To avoid giving preference to one of the rows, Demid chooses students in such a way that no consecutive chosen students belong to the same row. The first student can be chosen among all 2𝑛 students (there are no additional constraints), and a team can consist of any number of students.
+
+Demid thinks, that in order to compose a perfect team, he should choose students in such a way, that the total height of all chosen students is maximum possible. Help Demid to find the maximum possible total height of players in a team he can choose.
+
+Input
+
+The first line of the input contains a single integer 𝑛 (1≤𝑛≤10^5^) — the number of students in each row.
+
+The second line of the input contains 𝑛 integers $ℎ_{1,1},ℎ_{1,2},…,ℎ_{1,𝑛} (1≤ℎ_{1,𝑖}≤10^9)$, where $ℎ_{1,𝑖}$is the height of the 𝑖-th student in the first row.
+
+The third line of the input contains 𝑛 integers $ℎ_{2,1},ℎ_{2,2},…,ℎ_{2,𝑛} (1≤ℎ_{2,𝑖}≤10^9)$, where $ℎ_{2,𝑖}$ is the height of the 𝑖-th student in the second row.
+
+Output
+
+Print a single integer — the maximum possible total height of players in a team Demid can choose.
+
+Examples
+
+input
+
+```
+5
+9 3 5 7 3
+5 8 1 4 5
+```
+
+output
+
+```
+29
+```
+
+input
+
+```
+3
+1 2 9
+10 1 1
+```
+
+output
+
+```
+19
+```
+
+input
+
+```
+1
+7
+4
+```
+
+output
+
+```
+7
+```
+
+Note
+
+In the first example Demid can choose the following team as follows:
+
+![img](https://espresso.codeforces.com/4e91cbc6d188bea6a651a3ee663b4842b5a853d6.png)
+
+In the second example Demid can choose the following team as follows:
+
+![img](https://espresso.codeforces.com/05e00446ce2bc15b43dee54633824f909a6e8695.png)
+
+
+
+```python
+n = int(input())
+*h1, = map(int, input().split())
+*h2, = map(int, input().split())
+ 
+dp1 = [0]*n
+dp1[0] = h1[0]
+dp2 = [0]*n
+dp2[0] = h2[0]
+ 
+for i in range(1,n):
+    dp1[i] = max(dp2[i-1], dp2[i-1]+h1[i], dp1[i-1])
+    dp2[i] = max(dp1[i-1], dp1[i-1]+h2[i], dp2[i-1])
+ 
+print(max(dp1[-1],dp2[-1]))
+```
+
+
+
 ## 1221A. 2048 Game
 
 brute force/greedy/math, 1000, http://codeforces.com/problemset/problem/1221/A
@@ -5431,7 +5652,7 @@ print(*d)
 
 
 
-## 1364A: A. XXXXX
+## 1364A. XXXXX
 
 brute force/data structures/number theory/two pointers, 1200, https://codeforces.com/problemset/problem/1364/A
 
