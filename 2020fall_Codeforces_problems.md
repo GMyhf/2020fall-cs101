@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 0937 GMT+8 Nov 21, 2023
+Updated 2345 GMT+8 Nov 23, 2023
 
 
 
@@ -4205,6 +4205,147 @@ print(s)
 注：初始时`s = 1`是算入了最后一颗树。`r`用来标记已倒下的树的最右端，初始时`r = -xh[0][1]`是为了让第一颗树一定能往左倒。
 
 心得：通过写两道选做题的解题思路，我有点体会到了贪心算法的共同模式。（1）把问题按某种顺序分解为一次次选择（“充实的寒假生活”(http://cs101.openjudge.cn/practice/16528/)按结束时间从早到晚遍历每个活动，“Woodcutters”从左到右遍历每颗树）；（2）确定每次做选择的策略（“充实的寒假生活”是”若能参加就参加“，“Woodcutters”是“若能往左倒就往左倒，若不能往左倒但能往右倒就往右倒”），使这种策略不会使结果更坏。这里对于贪心选择正确性的推理是“计算机式”的，需要反复迭代，如果要让推理更“数学”，可以用数学归纳法倒过来说。
+
+
+
+## 550C. Divisibility by Eight
+
+Brute force, dp, math, 1500, https://codeforces.com/contest/550/problem/C
+
+You are given a non-negative integer *n*, its decimal representation consists of at most 100 digits and doesn't contain leading zeroes.
+
+Your task is to determine if it is possible in this case to remove some of the digits (possibly not remove any digit at all) so that the result contains at least one digit, forms a non-negative integer, doesn't have leading zeroes and is divisible by 8. After the removing, it is forbidden to rearrange the digits.
+
+If a solution exists, you should print it.
+
+**Input**
+
+The single line of the input contains a non-negative integer *n*. The representation of number *n* doesn't contain any leading zeroes and its length doesn't exceed 100 digits.
+
+**Output**
+
+Print "NO" (without quotes), if there is no such way to remove some digits from number *n*.
+
+Otherwise, print "YES" in the first line and the resulting number after removing digits from number *n* in the second line. The printed number must be divisible by 8.
+
+If there are multiple possible answers, you may print any of them.
+
+Examples
+
+input
+
+```
+3454
+```
+
+output
+
+```
+YES
+344
+```
+
+input
+
+```
+10
+```
+
+output
+
+```
+YES
+0
+```
+
+input
+
+```
+111111
+```
+
+output
+
+```
+NO
+```
+
+
+
+Dp
+
+```python
+'''
+应该递归后三位，而不是所有的位数。因为
+A number is divisible by 8 if its last three digits are also divisible by 8
+'''
+from functools import lru_cache
+
+
+@lru_cache(maxsize=None)
+def dfs(n, i, depth):
+    global bo, result
+    if depth > 3 or bo:
+        return
+    if len(n) > 0 and int(n) % 8 == 0:
+        result = n
+        bo = True
+        return
+    if bo:
+        return
+    if i >= l:
+        return
+    dfs(n, i+1, depth)
+    dfs(n+s[i], i+1, depth+1)
+
+
+s = input()
+l = len(s)
+bo = False
+result = ""
+dfs('', 0, 0)
+if bo:
+    print('YES\n', result)
+else:
+    print('NO')
+```
+
+
+
+Brute force
+
+```python
+def check_divisibility_by_8(n):
+    # A number is divisible by 8 if its last three digits are also divisible by 8
+    
+    # Check for single and double digit cases
+    if int(n) % 8 == 0:
+        return ("YES", n)
+    for i in range(len(n)):
+        if int(n[i]) % 8 == 0:
+            return ("YES", n[i])
+        for j in range(i + 1, len(n)):
+            if int(n[i] + n[j]) % 8 == 0:
+                return ("YES", n[i] + n[j])
+            for k in range(j + 1, len(n)):
+                if int(n[i] + n[j] + n[k]) % 8 == 0:
+                    return ("YES", n[i] + n[j] + n[k])
+    # If no divisibility by 8 found
+    return ("NO",)
+ 
+ 
+#inputs = ["3454","10","111111"]
+ 
+ 
+#for number in inputs:
+number = input()
+result = check_divisibility_by_8(number)
+if result[0] == "YES":
+    print(result[0])
+    print(result[1])
+else:
+    print(result[0])
+```
 
 
 
