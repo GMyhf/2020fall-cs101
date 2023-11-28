@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 2345 GMT+8 Nov 23, 2023
+Updated 1404 GMT+8 Nov 28, 2023
 
 
 
@@ -4272,7 +4272,7 @@ NO
 
 
 
-Dp
+记忆式搜索，20-21是分叉。
 
 ```python
 '''
@@ -4280,7 +4280,6 @@ Dp
 A number is divisible by 8 if its last three digits are also divisible by 8
 '''
 from functools import lru_cache
-
 
 @lru_cache(maxsize=None)
 def dfs(n, i, depth):
