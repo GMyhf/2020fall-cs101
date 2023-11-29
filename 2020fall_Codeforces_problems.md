@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 1404 GMT+8 Nov 28, 2023
+Updated 1520 GMT+8 Nov 28, 2023
 
 
 
@@ -7541,6 +7541,133 @@ for _ in range(t):
 ```
 
 
+
+## 1883D. In Love
+
+data structure, greedy, https://codeforces.com/contest/1883/problem/D
+
+Initially, you have an empty multiset of segments. You need to process 𝑞 operations of two types:
+
+- \+ 𝑙 𝑟 — Add the segment (𝑙,𝑟) to the multiset,
+- − 𝑙 𝑟 — Remove **exactly** one segment (𝑙,𝑟) from the multiset. It is guaranteed that this segment exists in the multiset.
+
+After each operation, you need to determine if there exists a pair of segments in the multiset that do not intersect. A pair of segments (𝑙,𝑟) and (𝑎,𝑏) do not intersect if there does not exist a point 𝑥 such that 𝑙≤𝑥≤𝑟 and 𝑎≤𝑥≤𝑏.
+
+**Input**
+
+The first line of each test case contains an integer 𝑞 (1≤𝑞≤10^5^) — the number of operations.
+
+The next 𝑞 lines describe two types of operations. If it is an addition operation, it is given in the format \+ 𝑙 𝑟. If it is a deletion operation, it is given in the format − 𝑙 𝑟 (1≤𝑙≤𝑟≤10^9^).
+
+**Output**
+
+After each operation, print "YES" if there exists a pair of segments in the multiset that do not intersect, and "NO" otherwise.
+
+You can print the answer in any case (uppercase or lowercase). For example, the strings "yEs", "yes", "Yes", and "YES" will be recognized as positive answers.
+
+Example
+
+input
+
+```
+12
++ 1 2
++ 3 4
++ 2 3
++ 2 2
++ 3 4
+- 3 4
+- 3 4
+- 1 2
++ 3 4
+- 2 2
+- 2 3
+- 3 4
+```
+
+output
+
+```
+NO
+YES
+YES
+YES
+YES
+YES
+NO
+NO
+YES
+NO
+NO
+NO
+```
+
+Note
+
+In the example, after the second, third, fourth, and fifth operations, there exists a pair of segments (1,2)(1,2) and (3,4)(3,4) that do not intersect.
+
+Then we remove exactly one segment (3,4)(3,4), and by that time we had two segments. Therefore, the answer after this operation also exists.
+
+
+
+```python
+'''
+The claim is that if the answer exists, we can take the segment with 
+the minimum right boundary and the maximum left boundary 
+(let's denote these boundaries as 𝑟 and 𝑙). Therefore, if 𝑟<𝑙
+, it is obvious that this pair of segments is suitable for us. 
+Otherwise, all pairs of segments intersect because they have common 
+points in the range 𝑙…𝑟.
+
+先写了个超时的算法，然后看tutorial及其他人引入dict, heap的代码。
+按照区间右端点从小到大排序。从前往后依次枚举每个区间。
+假设当前遍历到的区间为第i个区间 [li, ri]，如果有li > ed，
+说明当前区间与前面没有交集。
+'''
+
+import sys
+import heapq
+from collections import defaultdict
+input = sys.stdin.readline
+ 
+minH = []
+maxH = []
+ 
+ldict = defaultdict(int)
+rdict = defaultdict(int)
+ 
+n = int(input())
+ 
+for _ in range(n):
+    op, l, r = map(str, input().strip().split())
+    l, r = int(l), int(r)
+    if op == "+":
+        ldict[l] += 1
+        rdict[r] += 1
+        heapq.heappush(maxH, -l)
+        heapq.heappush(minH, r)
+    else:
+        ldict[l] -= 1
+        rdict[r] -= 1
+    
+    '''
+    使用 while 循环，将最大堆 maxH 和最小堆 minH 中出现次数为 0 的边界移除。
+    通过比较堆顶元素的出现次数，如果出现次数为 0，则通过 heappop 方法将其从堆中移除。
+    '''
+    while len(maxH) > 0 >= ldict[-maxH[0]]:
+        heapq.heappop(maxH)
+    while len(minH) > 0 >= rdict[minH[0]]:
+        heapq.heappop(minH)
+    
+    '''
+    判断堆 maxH 和 minH 是否非空，并且最小堆 minH 的堆顶元素是否小于
+    最大堆 maxH 的堆顶元素的相反数。
+    '''
+    if len(maxH) > 0 and len(minH) > 0 and minH[0] < -maxH[0]:
+        print("Yes")
+    else:
+        print("No")
+```
 
 
 
