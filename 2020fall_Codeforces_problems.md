@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 1520 GMT+8 Nov 28, 2023
+Updated 2200 GMT+8 Nov 29, 2023
 
 
 
@@ -7450,6 +7450,120 @@ for _ in range(t):
         print(l, r)
     else:
         print(-1)
+```
+
+
+
+## 1881C. Perfect Square
+
+Brute force, implementation, 1200, https://codeforces.com/contest/1881/problem/C
+
+Kristina has a matrix of size 𝑛 by 𝑛, filled with lowercase Latin letters. The value of 𝑛 is **even**.
+
+She wants to change some characters so that her matrix becomes a *perfect square*. A matrix is called a *perfect square* if it remains unchanged when rotated 90∘90∘ clockwise **once**.
+
+Here is an example of rotating a matrix by 90^∘^:
+
+![img](https://espresso.codeforces.com/f31ca811677514ff724a6af677d2e4a129b8fcfb.png)
+
+In one operation, Kristina can choose any cell and replace its value with the next character in the alphabet. If the character is equal to "z", its value **does not change**.
+
+Find the **minimum** number of operations required to make the matrix a *perfect square*.
+
+For example, if the 4 by 4 matrix looks like this:
+
+
+
+$\matrix{ a & b & b & a \cr b & c & \textbf{b} & b \cr b & c & c & b\cr a & b & b & a \cr }$
+
+
+
+then it is enough to apply 11 operation to the letter **b**, highlighted in bold.
+
+**Input**
+
+The first line of the input contains a single integer 𝑡 (1≤𝑡≤100) — the number of test cases.
+
+Then follows the description of each test case.
+
+The first line of each test case contains a single **even** integer 𝑛 (2≤𝑛≤1000) — the number of rows and columns in the matrix.
+
+Then follows 𝑛 lines, each containing exactly 𝑛 lowercase Latin letters.
+
+It is guaranteed that the sum of 𝑛 over all test cases does not exceed 1000.
+
+**Output**
+
+For each test case, output a single number on a separate line: the **minimum** number of operations required for Kristina to obtain a *perfect square*.
+
+Example
+
+input
+
+```
+5
+4
+abba
+bcbb
+bccb
+abba
+2
+ab
+ba
+6
+codefo
+rcesco
+deforc
+escode
+forces
+codefo
+4
+baaa
+abba
+baba
+baab
+4
+bbaa
+abba
+aaba
+abba
+```
+
+output
+
+```
+1
+2
+181
+5
+9
+```
+
+Note
+
+The first test case is explained in the problem statement.
+
+
+
+```python
+def solve():
+    ans = 0
+    for i in range(n//2):
+        for j in range(n//2):
+            M = [A[i][j], A[j][~i], A[~i][~j],A[~j][i]]
+            c = max(M)
+            for e in M:
+                ans += ord(c) - ord(e)
+    return ans
+ 
+ 
+t = int(input())
+for _ in range(t):
+    n = int(input())
+    A = []
+    for i in range(n):
+        A.append(input())
+    print(solve())
 ```
 
 
