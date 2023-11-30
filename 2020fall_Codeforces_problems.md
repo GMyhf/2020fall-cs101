@@ -7906,7 +7906,9 @@ thread.join()
 
 ## 1883D. In Love
 
-data structure, greedy, https://codeforces.com/contest/1883/problem/D
+data structure, greedy, *1500
+
+https://codeforces.com/contest/1883/problem/D
 
 Initially, you have an empty multiset of segments. You need to process 𝑞 operations of two types:
 
