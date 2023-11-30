@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 0042 GMT+8 Dec 1, 2023
+Updated 0250 GMT+8 Dec 1, 2023
 
 
 
@@ -7451,6 +7451,127 @@ for _ in range(t):
     else:
         print(-1)
 ```
+
+
+
+## 1829E. The Lakes
+
+Dfs and similar, dsu, graphs, implementation, *1100,
+
+https://codeforces.com/problemset/problem/1829/E
+
+You are given an 𝑛×𝑚 grid 𝑎 of non-negative integers. The value 𝑎𝑖,𝑗 represents the depth of water at the 𝑖-th row and 𝑗-th column.
+
+A lake is a set of cells such that:
+
+- each cell in the set has 𝑎𝑖,𝑗>0, and
+- there exists a path between any pair of cells in the lake by going up, down, left, or right a number of times and without stepping on a cell with 𝑎𝑖,𝑗=0.
+
+The volume of a lake is the sum of depths of all the cells in the lake.
+
+Find the largest volume of a lake in the grid.
+
+**Input**
+
+The first line contains a single integer 𝑡 (1≤𝑡≤10^4^) — the number of test cases.
+
+The first line of each test case contains two integers 𝑛,𝑚 (1≤𝑛,𝑚≤1000) — the number of rows and columns of the grid, respectively.
+
+Then 𝑛 lines follow each with 𝑚 integers 𝑎𝑖,𝑗 (0≤𝑎𝑖,𝑗≤1000) — the depth of the water at each cell.
+
+It is guaranteed that the sum of 𝑛⋅𝑚 over all test cases does not exceed 10^6^.
+
+**Output**
+
+For each test case, output a single integer — the largest volume of a lake in the grid.
+
+Example
+
+input
+
+```
+5
+3 3
+1 2 0
+3 4 0
+0 0 5
+1 1
+0
+3 3
+0 1 1
+1 0 1
+1 1 1
+5 5
+1 1 1 1 1
+1 0 0 0 1
+1 0 5 0 1
+1 0 0 0 1
+1 1 1 1 1
+5 5
+1 1 1 1 1
+1 0 0 0 1
+1 1 4 0 1
+1 0 0 0 1
+1 1 1 1 1
+```
+
+output
+
+```
+10
+0
+7
+16
+21
+```
+
+
+
+![image-20231201025017890](https://raw.githubusercontent.com/GMyhf/img/main/img/202312010250266.png)
+
+```python
+from collections import deque
+
+def bfs(x, y):
+    cnt = field[x][y]
+    field[x][y] = 0
+    #queue = [(x, y)]
+    queue = deque([(x, y)])
+
+    while queue:
+        x, y = queue.pop()
+
+        for k in range(4):
+            nx, ny = x + dx[k], y + dy[k]
+            if field[nx][ny]:
+                cnt += field[nx][ny]
+                field[nx][ny] = 0
+                queue.append((nx, ny))
+    return cnt
+
+
+t = int(input())
+for _ in range(t):
+    n, m = map(int, input().split())
+    field = [[0 for _ in range(m+2)] for _ in range(n+2)]
+
+    for i in range(1, n+1):
+        field[i][1:-1] = list(map(int, input().split()))
+
+    best = 0
+    dx = [-1,  0, 0, 1]
+    dy = [0, -1, 1, 0]
+    for i in range(1, n+1):
+        for j in range(1, m+1):
+            if field[i][j] != 0:
+                best = max(best, bfs(i, j))
+
+    print(best)
+```
+
+
+
+
 
 
 
