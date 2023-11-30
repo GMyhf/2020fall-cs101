@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 2342 GMT+8 Nov 30, 2023
+Updated 0042 GMT+8 Dec 1, 2023
 
 
 
@@ -7662,36 +7662,36 @@ Combinatorics, dfs and similar, dp, math, trees, *1200
 
 https://codeforces.com/problemset/problem/1843/D
 
-Timofey has an apple tree growing in his garden; it is a rooted tree of 𝑛� vertices with the root in vertex 11 (the vertices are numbered from 11 to 𝑛�). A tree is a connected graph without loops and multiple edges.
+Timofey has an apple tree growing in his garden; it is a rooted tree of 𝑛 vertices with the root in vertex 1 (the vertices are numbered from 1 to 𝑛). A tree is a connected graph without loops and multiple edges.
 
 This tree is very unusual — it grows with its root upwards. However, it's quite normal for programmer's trees.
 
 The apple tree is quite young, so only two apples will grow on it. Apples will grow in certain vertices (these vertices may be the same). After the apples grow, Timofey starts shaking the apple tree until the apples fall. Each time Timofey shakes the apple tree, the following happens to each of the apples:
 
-Let the apple now be at vertex 𝑢�.
+Let the apple now be at vertex 𝑢.
 
-- If a vertex 𝑢� has a child, the apple moves to it (if there are several such vertices, the apple can move to any of them).
+- If a vertex 𝑢 has a child, the apple moves to it (if there are several such vertices, the apple can move to any of them).
 - Otherwise, the apple falls from the tree.
 
 It can be shown that after a finite time, both apples will fall from the tree.
 
-Timofey has 𝑞� assumptions in which vertices apples can grow. He assumes that apples can grow in vertices 𝑥� and 𝑦�, and wants to know the number of pairs of vertices (𝑎�, 𝑏�) from which apples can fall from the tree, where 𝑎� — the vertex from which an apple from vertex 𝑥� will fall, 𝑏� — the vertex from which an apple from vertex 𝑦� will fall. Help him do this.
+Timofey has 𝑞 assumptions in which vertices apples can grow. He assumes that apples can grow in vertices 𝑥 and 𝑦, and wants to know the number of pairs of vertices (𝑎, 𝑏) from which apples can fall from the tree, where 𝑎 — the vertex from which an apple from vertex 𝑥 will fall, 𝑏 — the vertex from which an apple from vertex 𝑦 will fall. Help him do this.
 
-Input
+**Input**
 
-The first line contains integer 𝑡� (1≤𝑡≤1041≤�≤104) — the number of test cases.
+The first line contains integer 𝑡 (1≤𝑡≤10^4^) — the number of test cases.
 
-The first line of each test case contains integer 𝑛� (2≤𝑛≤2⋅1052≤�≤2⋅105) — the number of vertices in the tree.
+The first line of each test case contains integer 𝑛 (2≤𝑛≤2⋅10^5^) — the number of vertices in the tree.
 
-Then there are 𝑛−1�−1 lines describing the tree. In line 𝑖� there are two integers 𝑢𝑖�� and 𝑣𝑖�� (1≤𝑢𝑖,𝑣𝑖≤𝑛1≤��,��≤�, 𝑢𝑖≠𝑣𝑖��≠��) — edge in tree.
+Then there are 𝑛−1 lines describing the tree. In line 𝑖 there are two integers 𝑢𝑖 and 𝑣𝑖 (1≤𝑢𝑖,𝑣𝑖≤𝑛, 𝑢𝑖≠𝑣𝑖) — edge in tree.
 
-The next line contains a single integer 𝑞� (1≤𝑞≤2⋅1051≤�≤2⋅105) — the number of Timofey's assumptions.
+The next line contains a single integer 𝑞 (1≤𝑞≤2⋅10^5^) — the number of Timofey's assumptions.
 
-Each of the next 𝑞� lines contains two integers 𝑥𝑖�� and 𝑦𝑖�� (1≤𝑥𝑖,𝑦𝑖≤𝑛1≤��,��≤�) — the supposed vertices on which the apples will grow for the assumption 𝑖�.
+Each of the next 𝑞 lines contains two integers 𝑥𝑖 and 𝑦𝑖 (1≤𝑥𝑖,𝑦𝑖≤𝑛) — the supposed vertices on which the apples will grow for the assumption .
 
-It is guaranteed that the sum of 𝑛� does not exceed 2⋅1052⋅105. Similarly, It is guaranteed that the sum of 𝑞� does not exceed 2⋅1052⋅105.
+It is guaranteed that the sum of  𝑛 does not exceed 2⋅10^5^. Similarly, It is guaranteed that the sum of 𝑞 does not exceed 2⋅10^5^.
 
-Output
+**Output**
 
 For each Timofey's assumption output the number of ordered pairs of vertices from which apples can fall from the tree if the assumption is true on a separate line.
 
@@ -7738,8 +7738,6 @@ Copy
 
 input
 
-Copy
-
 ```
 2
 5
@@ -7762,8 +7760,6 @@ Copy
 ```
 
 output
-
-Copy
 
 ```
 1
@@ -7788,7 +7784,7 @@ For the second example, there are 44 of possible pairs of vertices from which ap
 
 
 
-参照 蒋子轩23工学院 清晰明了的程序，custom stack.
+蒋子轩23工学院 清晰明了的程序，custom stack.
 
 ```python
 def build_tree(edges):
@@ -7798,7 +7794,7 @@ def build_tree(edges):
         tree.setdefault(u, []).append(v)
         tree.setdefault(v, []).append(u)
     return tree
- 
+
 def count_leaves(tree, leaves_count):
     stack = [(1, 0, 0)] # 节点，阶段标志，父节点
     while stack:
@@ -7808,7 +7804,7 @@ def count_leaves(tree, leaves_count):
             stack.append((vertex, 1, parent))
             for child in tree[vertex]:
                 if child != parent:
-                    stack.append(((child, 0, vertex)))
+                    stack.append((child, 0, vertex))
         else:
             if len(tree[vertex]) == 1 and vertex != 1:
                 leaves_count[vertex] = 1
@@ -7817,21 +7813,21 @@ def count_leaves(tree, leaves_count):
                 for child in tree[vertex]:
                     if child != parent:
                         child_count += leaves_count[child]
- 
+
                 leaves_count[vertex] = child_count  # 当前节点的叶子节点数等于其子节点的叶子节点数之和
- 
+
 def process_assumptions(tree, leaves_count, assumptions):
     for x, y in assumptions:
         result = leaves_count[x] * leaves_count[y]
         print(result)
- 
+
 t = int(input())
 for _ in range(t):
     n = int(input())
     edges = []
     for _ in range(n - 1):
         edges.append(tuple(map(int, input().split())))
- 
+
     tree = build_tree(edges)
     leaves_count = {node: 0 for node in range(1, n + 1)}
     count_leaves(tree, leaves_count)  
@@ -7840,13 +7836,14 @@ for _ in range(t):
     assumptions = []
     for _ in range(q):
         assumptions.append(tuple(map(int, input().split())))
- 
+
     process_assumptions(tree, leaves_count, assumptions)
+
 ```
 
  
 
-参照 蒋子轩23工学院 清晰明了的程序，dfs with thread.
+蒋子轩23工学院 清晰明了的程序，dfs with thread.
 
 ```python
 import sys
