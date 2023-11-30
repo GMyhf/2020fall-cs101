@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 2200 GMT+8 Nov 29, 2023
+Updated 2342 GMT+8 Nov 30, 2023
 
 
 
@@ -7652,6 +7652,257 @@ for _ in range(t):
     for data in z:
         print(data, end=" ")
     print()
+```
+
+
+
+## 1843D. Apple Tree
+
+Combinatorics, dfs and similar, dp, math, trees, *1200
+
+https://codeforces.com/problemset/problem/1843/D
+
+Timofey has an apple tree growing in his garden; it is a rooted tree of 𝑛� vertices with the root in vertex 11 (the vertices are numbered from 11 to 𝑛�). A tree is a connected graph without loops and multiple edges.
+
+This tree is very unusual — it grows with its root upwards. However, it's quite normal for programmer's trees.
+
+The apple tree is quite young, so only two apples will grow on it. Apples will grow in certain vertices (these vertices may be the same). After the apples grow, Timofey starts shaking the apple tree until the apples fall. Each time Timofey shakes the apple tree, the following happens to each of the apples:
+
+Let the apple now be at vertex 𝑢�.
+
+- If a vertex 𝑢� has a child, the apple moves to it (if there are several such vertices, the apple can move to any of them).
+- Otherwise, the apple falls from the tree.
+
+It can be shown that after a finite time, both apples will fall from the tree.
+
+Timofey has 𝑞� assumptions in which vertices apples can grow. He assumes that apples can grow in vertices 𝑥� and 𝑦�, and wants to know the number of pairs of vertices (𝑎�, 𝑏�) from which apples can fall from the tree, where 𝑎� — the vertex from which an apple from vertex 𝑥� will fall, 𝑏� — the vertex from which an apple from vertex 𝑦� will fall. Help him do this.
+
+Input
+
+The first line contains integer 𝑡� (1≤𝑡≤1041≤�≤104) — the number of test cases.
+
+The first line of each test case contains integer 𝑛� (2≤𝑛≤2⋅1052≤�≤2⋅105) — the number of vertices in the tree.
+
+Then there are 𝑛−1�−1 lines describing the tree. In line 𝑖� there are two integers 𝑢𝑖�� and 𝑣𝑖�� (1≤𝑢𝑖,𝑣𝑖≤𝑛1≤��,��≤�, 𝑢𝑖≠𝑣𝑖��≠��) — edge in tree.
+
+The next line contains a single integer 𝑞� (1≤𝑞≤2⋅1051≤�≤2⋅105) — the number of Timofey's assumptions.
+
+Each of the next 𝑞� lines contains two integers 𝑥𝑖�� and 𝑦𝑖�� (1≤𝑥𝑖,𝑦𝑖≤𝑛1≤��,��≤�) — the supposed vertices on which the apples will grow for the assumption 𝑖�.
+
+It is guaranteed that the sum of 𝑛� does not exceed 2⋅1052⋅105. Similarly, It is guaranteed that the sum of 𝑞� does not exceed 2⋅1052⋅105.
+
+Output
+
+For each Timofey's assumption output the number of ordered pairs of vertices from which apples can fall from the tree if the assumption is true on a separate line.
+
+Examples
+
+input
+
+Copy
+
+```
+2
+5
+1 2
+3 4
+5 3
+3 2
+4
+3 4
+5 1
+4 4
+1 3
+3
+1 2
+1 3
+3
+1 1
+2 3
+3 1
+```
+
+output
+
+Copy
+
+```
+2
+2
+1
+4
+4
+1
+2
+```
+
+input
+
+Copy
+
+```
+2
+5
+5 1
+1 2
+2 3
+4 3
+2
+5 5
+5 1
+5
+3 2
+5 3
+2 1
+4 2
+3
+4 3
+2 1
+4 2
+```
+
+output
+
+Copy
+
+```
+1
+2
+1
+4
+2
+```
+
+Note
+
+In the first example:
+
+- For the first assumption, there are two possible pairs of vertices from which apples can fall from the tree: (4,4),(5,4)(4,4),(5,4).
+- For the second assumption there are also two pairs: (5,4),(5,5)(5,4),(5,5).
+- For the third assumption there is only one pair: (4,4)(4,4).
+- For the fourth assumption, there are 44 pairs: (4,4),(4,5),(5,4),(5,5)(4,4),(4,5),(5,4),(5,5).
+
+![img](https://espresso.codeforces.com/7c6d16e8362e76df883e925d30296fb28360d590.png)Tree from the first example.
+
+For the second example, there are 44 of possible pairs of vertices from which apples can fall: (2,3),(2,2),(3,2),(3,3)(2,3),(2,2),(3,2),(3,3). For the second assumption, there is only one possible pair: (2,3)(2,3). For the third assumption, there are two pairs: (3,2),(3,3)(3,2),(3,3).
+
+
+
+参照 蒋子轩23工学院 清晰明了的程序，custom stack.
+
+```python
+def build_tree(edges):
+    tree = {}
+    for edge in edges:
+        u, v = edge
+        tree.setdefault(u, []).append(v)
+        tree.setdefault(v, []).append(u)
+    return tree
+ 
+def count_leaves(tree, leaves_count):
+    stack = [(1, 0, 0)] # 节点，阶段标志，父节点
+    while stack:
+        vertex, stage, parent = stack.pop()
+        
+        if stage == 0:
+            stack.append((vertex, 1, parent))
+            for child in tree[vertex]:
+                if child != parent:
+                    stack.append(((child, 0, vertex)))
+        else:
+            if len(tree[vertex]) == 1 and vertex != 1:
+                leaves_count[vertex] = 1
+            else:               
+                child_count = 0
+                for child in tree[vertex]:
+                    if child != parent:
+                        child_count += leaves_count[child]
+ 
+                leaves_count[vertex] = child_count  # 当前节点的叶子节点数等于其子节点的叶子节点数之和
+ 
+def process_assumptions(tree, leaves_count, assumptions):
+    for x, y in assumptions:
+        result = leaves_count[x] * leaves_count[y]
+        print(result)
+ 
+t = int(input())
+for _ in range(t):
+    n = int(input())
+    edges = []
+    for _ in range(n - 1):
+        edges.append(tuple(map(int, input().split())))
+ 
+    tree = build_tree(edges)
+    leaves_count = {node: 0 for node in range(1, n + 1)}
+    count_leaves(tree, leaves_count)  
+    # print(tree, leaves_count)
+    q = int(input())
+    assumptions = []
+    for _ in range(q):
+        assumptions.append(tuple(map(int, input().split())))
+ 
+    process_assumptions(tree, leaves_count, assumptions)
+```
+
+ 
+
+参照 蒋子轩23工学院 清晰明了的程序，dfs with thread.
+
+```python
+import sys
+import threading
+sys.setrecursionlimit(1 << 30)
+threading.stack_size(2*10**8)
+
+
+def main():
+    def build_tree(edges):
+        tree = {}
+        for edge in edges:
+            u, v = edge
+            tree.setdefault(u, []).append(v)
+            tree.setdefault(v, []).append(u)
+        return tree
+
+    def count_leaves(tree, vertex, parent, leaves_count):
+        child_count = 0
+        for child in tree[vertex]:
+            if child != parent:
+                child_count += count_leaves(tree, child, vertex, leaves_count)
+        #if len(tree[vertex]) == 1 and vertex != parent:  # 当前节点是叶子节点
+        if len(tree[vertex]) == 1 and vertex != 1:
+            leaves_count[vertex] = 1
+            return 1
+        leaves_count[vertex] = child_count  # 当前节点的叶子节点数等于其子节点的叶子节点数之和
+        return leaves_count[vertex]
+
+    def process_assumptions(tree, leaves_count, assumptions):
+        for x, y in assumptions:
+            result = leaves_count[x] * leaves_count[y]
+            print(result)
+
+    t = int(input())
+    for _ in range(t):
+        n = int(input())
+        edges = []
+        for _ in range(n - 1):
+            edges.append(tuple(map(int, input().split())))
+
+        tree = build_tree(edges)
+        leaves_count = {node: 0 for node in range(1, n + 1)}
+        count_leaves(tree, 1, 0, leaves_count)  # 从根节点开始遍历计算叶子节点数量
+        #print(tree, leaves_count)
+        q = int(input())
+        assumptions = []
+        for _ in range(q):
+            assumptions.append(tuple(map(int, input().split())))
+
+        process_assumptions(tree, leaves_count, assumptions)
+
+
+thread = threading.Thread(target=main)
+thread.start()
+thread.join()
 ```
 
 
