@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 0134 GMT+8 Dec 2, 2023
+Updated 0151 GMT+8 Dec 2, 2023
 
 2020 fall, Complied by Hongfei Yan
 
@@ -3877,6 +3877,26 @@ def dfs(n, b):
  
 n, k, d = map(int, input().split())
 print(dfs(n, 0))
+```
+
+
+
+```python
+# 23工学院 蒋子轩
+n,k,d=map(int,input().split())
+mod = 10**9 + 7
+# A[i]：总权重为i的路径数 ； B[i]：总权重为i且所有边权重小于d的路径数
+A = [1] + [0] * n
+B = [1] + [0] * n
+# 路径数本质上就是整数划分问题
+# 本题即求用不大于k的正整数划分i，用小于d的正整数划分i的方法数之差
+for i in range(1, n + 1):
+    for j in range(1, min(i,k)+1):
+        A[i] = (A[i] + A[i - j]) % mod
+    for j in range(1, min(d, i + 1)):
+        B[i] = (B[i] + B[i - j]) % mod
+print((A[n] - B[n]) % mod)
+
 ```
 
 
