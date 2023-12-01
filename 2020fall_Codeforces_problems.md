@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 0250 GMT+8 Dec 1, 2023
+Updated 16:58 GMT+8 Dec 1, 2023
 
 
 
@@ -2932,6 +2932,114 @@ from collections import *
 input()
 print(max(Counter(input().split()).values()))
 ```
+
+
+
+## 1829D. Gold Rush
+
+brute force, dfs and similar, dp, implementation, *1000
+
+https://codeforces.com/problemset/problem/1829/D
+
+Initially you have a single pile with 𝑛 gold nuggets. In an operation you can do the following:
+
+- Take any pile and split it into two piles, so that one of the resulting piles has exactly twice as many gold nuggets as the other. (All piles should have an integer number of nuggets.)
+
+![img](https://espresso.codeforces.com/723dd5ce328f1a04932ecf7a71a71f198294eaa3.png)
+
+One possible move is to take a pile of size 66 and split it into piles of sizes 22 and 44, which is valid since 44 is twice as large as 22.
+
+Can you make a pile with **exactly** 𝑚 gold nuggets using zero or more operations?
+
+**Input**
+
+The first line contains an integer 𝑡 (1≤𝑡≤1000) — the number of test cases.
+
+The only line of each test case contains two integers 𝑛 and 𝑚 (1≤𝑛,𝑚≤10^7^) — the starting and target pile sizes, respectively.
+
+**Output**
+
+For each test case, output "YES" if you can make a pile of size exactly 𝑚, and "NO" otherwise.
+
+You can output the answer in any case (for example, the strings "yEs", "yes", "Yes" and "YES" will be recognized as a positive answer).
+
+Example
+
+input
+
+```
+11
+6 4
+9 4
+4 2
+18 27
+27 4
+27 2
+27 10
+1 1
+3 1
+5 1
+746001 2984004
+```
+
+output
+
+```
+YES
+YES
+NO
+NO
+YES
+YES
+NO
+YES
+YES
+NO
+NO
+```
+
+Note
+
+The first test case is pictured in the statement. We can make a pile of size 44.
+
+In the second test case, we can perform the following operations: {9}→{6,3}→{4,2,3}{9}→{6,3}→{4,2,3}. The pile that is split apart is colored red before each operation.
+
+In the third test case, we can't perform a single operation.
+
+In the fourth test case, we can't end up with a larger pile than we started with.
+
+
+
+```python
+from functools import lru_cache
+
+@lru_cache(maxsize=None)
+def dfs(n,m):
+    if n == m:
+        return True
+    if n < m or n%3 != 0:
+        return False
+    
+    if dfs((n//3)*2, m):
+        return True
+    
+    if dfs(n//3, m):
+        return True
+    
+    return False
+        
+
+t = int(input())
+for _ in range(t):
+    n, m = map(int, input().split())
+    
+    if dfs(n, m):
+        print('YES')
+    else:
+        print('NO')
+```
+
+
 
 
 
