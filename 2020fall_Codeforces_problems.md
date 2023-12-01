@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 0107 GMT+8 Dec 2, 2023
+Updated 0134 GMT+8 Dec 2, 2023
 
 2020 fall, Complied by Hongfei Yan
 
@@ -3877,6 +3877,33 @@ def dfs(n, b):
  
 n, k, d = map(int, input().split())
 print(dfs(n, 0))
+```
+
+
+
+```python
+# 23数院，胡睿诚
+# 这题其实有点核电站的味道感觉
+# 09267: 核电站
+# http://cs101.openjudge.cn/practice/09267/
+
+m = 10**9+7
+
+def compute(n, k):
+    if k == 0:
+        return 0
+    ans = [1]
+    for i in range(k):
+        ans.append((1 << i) % m)
+
+    for i in range(k+1, n+1):
+        ans.append((2*ans[i-1]-ans[i-k-1]) % m)
+
+    return ans[n]
+
+
+n, k, d = map(int, input().split())
+print((compute(n, min(n, k))-compute(n, d-1)) % m)
 ```
 
 
