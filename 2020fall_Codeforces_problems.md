@@ -4,9 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 16:58 GMT+8 Dec 1, 2023
-
-
+Updated 0107 GMT+8 Dec 2, 2023
 
 2020 fall, Complied by Hongfei Yan
 
@@ -3767,6 +3765,118 @@ for i in range(n):
  
 for i in range(m):
     print(ans[int(input()) - 1])
+```
+
+
+
+## 431C. k-Tree
+
+dp, implementation, trees, *1600
+
+https://codeforces.com/problemset/problem/431/C
+
+Quite recently a creative student Lesha had a lecture on trees. After the lecture Lesha was inspired and came up with the tree of his own which he called a *k*-tree.
+
+A *k*-tree is an infinite rooted tree where:
+
+- each vertex has exactly *k* children;
+- each edge has some weight;
+- if we look at the edges that goes from some vertex to its children (exactly *k* edges), then their weights will equal 1, 2, 3, ..., *k*.
+
+The picture below shows a part of a 3-tree.
+
+
+
+![img](https://espresso.codeforces.com/61ac5ac17c4d2f220968eff8fb59bb3c8dc77edf.png)
+
+
+
+As soon as Dima, a good friend of Lesha, found out about the tree, he immediately wondered: "How many paths of total weight *n* (the sum of all weights of the edges in the path) are there, starting from the root of a *k*-tree and also containing at least one edge of weight at least *d*?".
+
+Help Dima find an answer to his question. As the number of ways can be rather large, print it modulo 1000000007 (10^9^ + 7).
+
+**Input**
+
+A single line contains three space-separated integers: *n*, *k* and *d* (1 ≤ *n*, *k* ≤ 100; 1 ≤ *d* ≤ *k*).
+
+**Output**
+
+Print a single integer — the answer to the problem modulo 1000000007 (10^9^ + 7).
+
+Examples
+
+input
+
+```
+3 3 2
+```
+
+output
+
+```
+3
+```
+
+input
+
+```
+3 3 3
+```
+
+output
+
+```
+1
+```
+
+input
+
+```
+4 3 2
+```
+
+output
+
+```
+6
+```
+
+input
+
+```
+4 5 2
+```
+
+output
+
+```
+7
+```
+
+
+
+分类讨论，记忆化搜索。
+
+```python
+MOD = 1000000007
+from functools import lru_cache
+ 
+@lru_cache(maxsize=None)
+def dfs(n, b):
+    if n == 0 and b >= d:
+        return 1
+    if n < 0:
+        return 0
+ 
+    ans = 0
+    for i in range(1, k+1):
+        ans = (ans + dfs(n-i, max(i, b))) % MOD
+ 
+    return ans
+ 
+ 
+n, k, d = map(int, input().split())
+print(dfs(n, 0))
 ```
 
 
