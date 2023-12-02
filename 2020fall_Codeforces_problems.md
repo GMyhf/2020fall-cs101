@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 0151 GMT+8 Dec 2, 2023
+Updated 2205 GMT+8 Dec 2, 2023
 
 2020 fall, Complied by Hongfei Yan
 
@@ -6475,6 +6475,121 @@ for _ in range(t):
         print(s)
     else:
         print(-1)
+```
+
+
+
+## 1398C. Good Subarrays
+
+You are given an array 𝑎1,𝑎2,…,𝑎𝑛 consisting of integers from 0 to 9. A subarray 𝑎𝑙,𝑎𝑙+1,𝑎𝑙+2,…,𝑎𝑟−1,𝑎𝑟 is good if the sum of elements of this subarray is equal to the length of this subarray ($∑_{𝑖=𝑙}^{𝑟}𝑎𝑖=𝑟−𝑙+1$).
+
+For example, if 𝑎=[1,2,0], then there are 3 good subarrays: 𝑎1…1=[1],𝑎2…3=[2,0] and 𝑎1…3=[1,2,0].
+
+Calculate the number of good subarrays of the array 𝑎.
+
+**Input**
+
+The first line contains one integer 𝑡 (1≤𝑡≤1000) — the number of test cases.
+
+The first line of each test case contains one integer 𝑛 (1≤𝑛≤10^5) — the length of the array 𝑎.
+
+The second line of each test case contains a string consisting of 𝑛 decimal digits, where the 𝑖-th digit is equal to the value of 𝑎𝑖.
+
+It is guaranteed that the sum of 𝑛 over all test cases does not exceed 10^5.
+
+**Output**
+
+For each test case print one integer — the number of good subarrays of the array 𝑎.
+
+Example
+
+input
+
+```
+3
+3
+120
+5
+11011
+6
+600005
+```
+
+output
+
+```
+3
+6
+1
+```
+
+Note
+
+The first test case is considered in the statement.
+
+In the second test case, there are 6 good subarrays: 𝑎1…1, 𝑎2…2, 𝑎1…2, 𝑎4…4, 𝑎5…5 and 𝑎4…5.
+
+In the third test case there is only one good subarray: 𝑎2…6.
+
+
+
+
+
+```python
+# 蒋子轩23工学院
+for _ in range(int(input())):
+    n = int(input())
+    arr = input()
+    cnt = [0] * (8 * n + 1)
+    cnt[0] = 1
+    total = 0
+    sum = 0
+    # 通过在遍历时对数字减1并累加构造一个’减去了长度的前缀和‘
+    for num in arr:
+        sum += int(num) - 1
+        # 已遍历的位置中与当前前缀和相等的位置数即新增的good subarray个数
+        total += cnt[sum]
+        cnt[sum] += 1
+    print(total)
+```
+
+
+
+胡睿诚：与这个题目类似，27141:完美的爱，http://cs101.openjudge.cn/practice/27141/。搞前缀和Sk,要求就是Sk-Sl=520(k-l)。
+
+
+
+这段代码中的 `x(x-1)/2` 是为了计算具有相同 `p[i] - i` 值的前缀的组合数。
+
+首先，让我们来理解一下 `p[i]` 的含义。在这个解决方案中，我们使用零索引（zero indexing）。我们还使用半开区间（half-closed interval），即子数组 `[l, r)` 表示为 `a[l], a[l+1], ..., a[r-1]`。
+
+我们预先计算数组 `p`，其中 `p[i]` 表示 `a[0]` 到 `a[i-1]` 的元素之和。换句话说，`p[i]` 是 `a` 的前 `i` 个元素的累加和。
+
+然后，当且仅当 `p[r] - p[l] = r - l` 时，子数组 `[l, r)` 才是好的（即满足条件的）子数组。换句话说，`p[r] - r = p[l] - l`。
+
+因此，我们需要按照 `p[i] - i` 的值将所有前缀分组，对于具有相同 `p[i] - i` 值的前缀，我们需要计算它们的组合数。
+
+而组合数公式为 `C(x, 2) = x(x-1)/2`，表示从 `x` 个元素中选择 2 个元素的组合数。
+
+因此，在这段代码中，我们根据具有相同 `p[i] - i` 值的前缀的数量 `x`，将 `x(x-1)/2` 添加到答案中。
+
+这样做的目的是计算具有相同 `p[i] - i` 值的前缀的所有可能组合数，以满足问题的要求。
+
+希望这样解释能够帮助你理解这段代码的含义。如有需要，请随时提问。
+
+```python
+#for s in [*open(0)][2::2]:
+for _ in range(int(input())):
+    input()
+    s = input()
+    a = [1]+len(s)*8*[0]
+    i = t = 0
+    #for x in s[:-1]:
+    for x in s:
+        i += 1
+        t += int(x)
+        a[t-i] += 1
+    print(sum(x*(x-1)//2 for x in a))
 ```
 
 
