@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 2205 GMT+8 Dec 2, 2023
+Updated 1040 GMT+8 Dec 5, 2023
 
 2020 fall, Complied by Hongfei Yan
 
@@ -2867,25 +2867,25 @@ print(x[-1] - x[0])
 
 greedy, 1200, https://codeforces.com/problemset/problem/903/C
 
-Mishka has got *n* empty boxes. For every *i* (1 ≤ *i* ≤ *n*), *i*-th box is a cube with side length *a**i*.
+Mishka has got *n* empty boxes. For every *i* (1 ≤ *i* ≤ *n*), *i*-th box is a cube with side length a~i~.
 
 Mishka can put a box *i* into another box *j* if the following conditions are met:
 
 - *i*-th box is not put into another box;
 - *j*-th box doesn't contain any other boxes;
-- box *i* is smaller than box *j* (*a**i* < *a**j*).
+- box *i* is smaller than box *j* (a~i~ < a~j~).
 
 Mishka can put boxes into each other an arbitrary number of times. He wants to minimize the number of *visible* boxes. A box is called *visible* iff it is not put into some another box.
 
 Help Mishka to determine the minimum possible number of *visible* boxes!
 
-Input
+**Input**
 
 The first line contains one integer *n* (1 ≤ *n* ≤ 5000) — the number of boxes Mishka has got.
 
-The second line contains *n* integers *a*1, *a*2, ..., *a**n* (1 ≤ *a**i* ≤ 109), where *a**i* is the side length of *i*-th box.
+The second line contains *n* integers $a_1, a_2, ..., a_n (1 ≤ a_i ≤ 10^9)$, where $a_i$ is the side length of *i*-th box.
 
-Output
+**Output**
 
 Print the minimum possible number of *visible* boxes.
 
@@ -3055,11 +3055,11 @@ Sometimes another numeration system is used: RXCY, where X and Y are integer num
 
 Your task is to write a program that reads the given sequence of cell coordinates and produce each item written according to the rules of another numeration system.
 
-Input
+**Input**
 
-The first line of the input contains integer number *n* (1 ≤ *n* ≤ 105), the number of coordinates in the test. Then there follow *n* lines, each of them contains coordinates. All the coordinates are correct, there are no cells with the column and/or the row numbers larger than 106 .
+The first line of the input contains integer number *n* (1 ≤ *n* ≤ 10^5^), the number of coordinates in the test. Then there follow *n* lines, each of them contains coordinates. All the coordinates are correct, there are no cells with the column and/or the row numbers larger than 106 .
 
-Output
+**Output**
 
 Write *n* lines, each line should contain a cell coordinates in the other numeration system.
 
@@ -5776,7 +5776,7 @@ Now Demid wants to choose a team to play basketball. He will choose players from
 
 Demid thinks, that in order to compose a perfect team, he should choose students in such a way, that the total height of all chosen students is maximum possible. Help Demid to find the maximum possible total height of players in a team he can choose.
 
-Input
+**Input**
 
 The first line of the input contains a single integer 𝑛 (1≤𝑛≤10^5^) — the number of students in each row.
 
@@ -5784,7 +5784,7 @@ The second line of the input contains 𝑛 integers $ℎ_{1,1},ℎ_{1,2},…,ℎ
 
 The third line of the input contains 𝑛 integers $ℎ_{2,1},ℎ_{2,2},…,ℎ_{2,𝑛} (1≤ℎ_{2,𝑖}≤10^9)$, where $ℎ_{2,𝑖}$ is the height of the 𝑖-th student in the second row.
 
-Output
+**Output**
 
 Print a single integer — the maximum possible total height of players in a team Demid can choose.
 
@@ -7222,7 +7222,7 @@ Before starting the game, Alice chooses an integer 𝑘≥0. The game lasts for 
 
 Your task is to determine the maximum value of 𝑘 such that Alice can win if both players play optimally. Bob plays against Alice, so he tries to make her lose the game, if it's possible.
 
-Input
+**Input**
 
 The first line contains a single integer 𝑡 (1≤𝑡≤100) — the number of test cases.
 
@@ -7230,7 +7230,7 @@ The first line of each test case contains a single integer 𝑛 (1≤𝑛≤100)
 
 The second line contains 𝑛n integers $𝑎_1,𝑎_2,…,𝑎_𝑛 (1≤𝑎_𝑖≤𝑛)$.
 
-Output
+**Output**
 
 For each test case, print one integer — the maximum value of 𝑘k such that Alice can win if both players play optimally.
 
@@ -8087,7 +8087,7 @@ For example, let an array 𝑎 = [1,3,5,3,9] of length 𝑛=5 and 𝑘=2 be give
 - On the 44th day, |𝑎4−𝑏4|=|3−4|=1, 1≤2=𝑘 is satisfied;
 - On the 55th day, |𝑎5−𝑏5|=|9−11|=2, 2≤2=𝑘 is satisfied.
 
-Input
+**Input**
 
 The first line of input data contains a single integer 𝑡 (1≤𝑡≤10^4^) — the number of test cases.
 
@@ -8101,7 +8101,7 @@ The third line of each test case contains exactly 𝑛 integers — elements of 
 
 It is guaranteed that the sum of 𝑛 over all test cases does not exceed 10^5^, and that the elements of array 𝑏 can always be rearranged so that the equality |𝑎𝑖−𝑏𝑖|≤𝑘 is true for all 𝑖.
 
-Output
+**Output**
 
 On a separate line for each test case, output exactly  numbers — the values of air temperature on each of the days in the correct order.
 
@@ -8200,8 +8200,6 @@ Examples
 
 input
 
-Copy
-
 ```
 2
 5
@@ -8224,8 +8222,6 @@ Copy
 ```
 
 output
-
-Copy
 
 ```
 2
