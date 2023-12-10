@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 1040 GMT+8 Dec 5, 2023
+Updated 1344 GMT+8 Dec 10, 2023
 
 2020 fall, Complied by Hongfei Yan
 
@@ -8397,6 +8397,173 @@ def main():
 thread = threading.Thread(target=main)
 thread.start()
 thread.join()
+```
+
+
+
+## 1875D. Jellyfish and Mex
+
+dp, *1600, https://codeforces.com/problemset/problem/1875/D
+
+You are given an array of 𝑛 nonnegative integers 𝑎1,𝑎2,…,𝑎𝑛.
+
+Let 𝑚 be a variable that is initialized to 00, Jellyfish will perform the following operation 𝑛 times:
+
+- select an index 𝑖 (1≤𝑖≤|𝑎|) and delete 𝑎𝑖 from 𝑎.
+- add MEX(𝑎)† to 𝑚.
+
+Now Jellyfish wants to know the minimum possible final value of 𝑚 if he performs all the operations optimally.
+
+†† The MEX (minimum excluded) of an array is the smallest non-negative integer that does not belong to the array. For instance:
+
+- The MEX of \[2,2,1] is 0, because 0 does not belong to the array.
+- The MEX of \[3,1,0,1] is 2, because 0 and 1 belong to the array, but 2 does not.
+- The MEX of \[0,3,1,2] is 4 because 0, 1, 2, and 3 belong to the array, but 4 does not.
+
+**Input**
+
+Each test contains multiple test cases. The first line contains the number of test cases 𝑡 (1≤𝑡≤5000). The description of the test cases follows.
+
+The first line of each test case contains a single integer 𝑛 (1≤𝑛≤5000) — the size of the array.
+
+The second line of each test case contains 𝑛 integers 𝑎1,𝑎2,…,𝑎𝑛 (0≤𝑎𝑖≤10^9^) — the integers in the array.
+
+It is guaranteed that the sum of 𝑛 over all test cases does not exceed 50005000.
+
+**Output**
+
+For each test case, output a single integer — the minimum value of 𝑚 if the operations are performed optimally.
+
+Example
+
+input
+
+```
+4
+8
+5 2 1 0 3 0 4 0
+2
+1 2
+5
+1 0 2 114514 0
+8
+0 1 2 0 1 2 0 3
+```
+
+output
+
+```
+3
+0
+2
+7
+```
+
+Note
+
+In the first test case, we delete elements from 𝑎 in the following order: [5,2,1,0,3,0,4,0]→[5,2,0,3,0,4,0]→[5,2,0,3,4,0]→[5,2,3,4,0]→[5,2,3,4]→[5,2,4]→[2,4]→[4]→[ ]. The value of 𝑚 will be 1+1+1+0+0+0+0+0=3.
+
+
+
+显然，除非 mexa=0，否则不会删除 >mexa 的数。而 mexa=0 时不对答案产生贡献，因此任意时刻我们都可以忽略 a 中 >mexa 的数。
+
+首先要删肯定把一个数删完再删下一个，删了一个之后肯定接下来删某个比他小的，然后就变成了如何选这一列递降的数最小化那个和。
+
+
+
+考察首先要删光哪个数，不妨设为 j（j<i）。设 j 出现次数为 cnt(j)。显然，前 cnt(j)−1 次删除时 j 还未被删光，此时对答案贡献为 i；最后一次删除时 j 已被删光，此时对答案贡献为 j。删除结束后，剩余的数列满足保留了所有 <j 的数，且 mexa=j。此时，所有 [j+1,i−1] 的数都可以被忽略，问题转化为 fj。因此，得到转移方程：
+
+$f_i= \begin{cases} 0,&i=0\\ \min\limits_{j<i}\{f_j+(cnt(j)-1)\times i+j\},&i>0 \end{cases}$
+
+
+
+dfs
+
+```python
+# 查达闻
+# https://codeforces.com/problemset/problem/1875/D
+from functools import lru_cache
+for _ in range(int(input())):
+    @lru_cache
+    def dfs(m):
+        if m == 0:
+            return 0
+        x = float('inf')
+        for i, cnt in enumerate(cnts):
+            if move[i]:
+                if i >= m:
+                    break
+                x = min(x, m * cnt - m + i + dfs(i))
+        return x
+
+    n = int(input())
+    *a, = map(int, input().split())
+    cnts = [0] * (n+1)
+    
+    # 出现次数相同时更大的数不用考虑
+    # 0 0 0 0 0 1 1 1 1 1 2 2 2 2 2只用考虑0就行
+    move = [True] * (n + 1)
+    
+    for i in range(n):
+        if a[i] <= n:
+            cnts[a[i]] += 1
+
+    if cnts[0] <= 0:
+        print(0); continue
+
+    mex = 0
+    min_before = float('inf')
+    while cnts[mex]:
+        if cnts[mex] >= min_before: 
+            move[mex] = False
+        else:
+            min_before = cnts[mex]
+            
+        mex += 1
+
+    print(dfs(mex))
+```
+
+
+
+dp
+
+```python
+inf = float('inf')
+
+T = int(input())
+for _ in range(T):
+    n = int(input())
+    a = list(map(int, input().split()))
+    cnt = [0] * (n+1)
+    
+    # 出现次数相同时更大的数不用考虑
+    # 0 0 0 0 0 1 1 1 1 1 2 2 2 2 2只用考虑0就行
+    move = [True] * (n + 1)
+
+    dp = [0] + [inf] * n
+    for i in range(n):
+        if a[i] <= n:
+            cnt[a[i]] += 1
+    
+    if cnt[0] <= 0:
+        print(0); continue
+    
+    mex, min_before = 0, inf
+
+    while cnt[mex]:
+        if cnt[mex] >= min_before: 
+            move[mex] = False
+        else:
+            min_before = cnt[mex]    
+        mex += 1
+        
+    for i in range(1, mex+1):
+        if move[i]:
+            for j in range(i):
+                if move[j]:
+                    dp[i] = min(dp[i], dp[j] + (cnt[j] - 1) * i + j)
+    print(dp[mex])
 ```
 
 
