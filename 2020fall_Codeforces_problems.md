@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 1344 GMT+8 Dec 10, 2023
+Updated 1328 GMT+8 Dec 12, 2023
 
 2020 fall, Complied by Hongfei Yan
 
@@ -5760,6 +5760,141 @@ for i in range(2,n):
 mi=min(dp)
 if mi <-1:print(out-mi-1)
 else:print(out)
+```
+
+
+
+## 1163B2. Cat Party (Hard Edition)
+
+data structures, implementation, https://codeforces.com/contest/1163/problem/B2
+
+*This problem is same as the previous one, but has larger constraints.*
+
+Shiro's just moved to the new house. She wants to invite all friends of her to the house so they can play monopoly. However, her house is too small, so she can only invite one friend at a time.
+
+For each of the 𝑛 days since the day Shiro moved to the new house, there will be exactly one cat coming to the Shiro's house. The cat coming in the 𝑖-th day has a ribbon with color 𝑢𝑖. Shiro wants to know the largest number 𝑥, such that if we consider the streak of the first 𝑥 days, it is possible to remove **exactly one** day from this streak so that every ribbon color *that has appeared* among the remaining 𝑥−1−1 will have the same number of occurrences.
+
+For example, consider the following sequence of 𝑢𝑖: \[2,2,1,1,5,4,4,5]. Then 𝑥=7 makes a streak, since if we remove the leftmost 𝑢𝑖=5, each ribbon color will appear exactly twice in the prefix of 𝑥−1 days. Note that 𝑥=8 doesn't form a streak, since you must remove exactly one day.
+
+Since Shiro is just a cat, she is not very good at counting and needs your help finding the longest streak.
+
+**Input**
+
+The first line contains a single integer 𝑛 (1≤𝑛≤10^5^) — the total number of days.
+
+The second line contains 𝑛 integers 𝑢1,𝑢2,…,𝑢𝑛 (1≤𝑢𝑖≤10^5^) — the colors of the ribbons the cats wear.
+
+**Output**
+
+Print a single integer 𝑥 — the largest possible streak of days.
+
+Examples
+
+input
+
+```
+13
+1 1 1 2 2 2 3 3 3 4 4 4 5
+```
+
+output
+
+```
+13
+```
+
+input
+
+```
+5
+10 100 20 200 1
+```
+
+output
+
+```
+5
+```
+
+input
+
+```
+1
+100000
+```
+
+output
+
+```
+1
+```
+
+input
+
+```
+7
+3 2 1 1 4 5 1
+```
+
+output
+
+```
+6
+```
+
+input
+
+```
+6
+1 1 1 2 2 2
+```
+
+output
+
+```
+5
+```
+
+Note
+
+In the first example, we can choose the longest streak of 1313 days, since upon removing the last day out of the streak, all of the remaining colors 11, 22, 33, and 44 will have the same number of occurrences of 33. Note that the streak can also be 1010 days (by removing the 1010-th day from this streak) but we are interested in the longest streak.
+
+In the fourth example, if we take the streak of the first 66 days, we can remove the third day from this streak then all of the remaining colors 11, 22, 33, 44 and 55 will occur exactly once.
+
+
+
+```python
+#使用一个数组 f 来记录每种颜色出现的次数，使用另一个数组 cnt 来统计每个次数的颜色数量。
+#通过迭代颜色列表，并根据不同的条件判断，计算并更新最长的连续天数 ans。
+
+n = int(input())
+colors = list(map(int, input().split()))
+
+N = 10**5 + 10
+ans = 0
+mx = 0
+f = [0] * N
+cnt = [0] * N
+
+for i in range(1, n + 1):
+    color = colors[i - 1]
+    cnt[f[color]] -= 1
+    f[color] += 1
+    cnt[f[color]] += 1
+    mx = max(mx, f[color])
+    ok = False
+    if cnt[1] == i:  # every color has occurrence of 1
+        ok = True
+    elif cnt[i] == 1:  # only one color has the maximum occurrence and the occurrence is i
+        ok = True
+    elif cnt[1] == 1 and cnt[mx] * mx == i - 1:  # one color has occurrence of 1 and other colors have the same occurrence
+        ok = True
+    elif cnt[mx - 1] * (mx - 1) == i - mx and cnt[mx] == 1:  # one color has the occurrence 1 more than any other color
+        ok = True
+    if ok:
+        ans = i
+
+print(ans)
 ```
 
 
