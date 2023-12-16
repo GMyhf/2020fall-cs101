@@ -5857,9 +5857,9 @@ output
 
 Note
 
-In the first example, we can choose the longest streak of 1313 days, since upon removing the last day out of the streak, all of the remaining colors 11, 22, 33, and 44 will have the same number of occurrences of 33. Note that the streak can also be 1010 days (by removing the 1010-th day from this streak) but we are interested in the longest streak.
+In the first example, we can choose the longest streak of 13 days, since upon removing the last day out of the streak, all of the remaining colors 1, 2, 3, and 4 will have the same number of occurrences of 33. Note that the streak can also be 10 days (by removing the 10-th day from this streak) but we are interested in the longest streak.
 
-In the fourth example, if we take the streak of the first 66 days, we can remove the third day from this streak then all of the remaining colors 11, 22, 33, 44 and 55 will occur exactly once.
+In the fourth example, if we take the streak of the first 66 days, we can remove the third day from this streak then all of the remaining colors 1, 2, 3, 4 and 5 will occur exactly once.
 
 
 
