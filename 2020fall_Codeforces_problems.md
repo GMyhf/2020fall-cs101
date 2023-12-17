@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 1328 GMT+8 Dec 12, 2023
+Updated 2146 GMT+8 Dec 17, 2023
 
 2020 fall, Complied by Hongfei Yan
 
@@ -5862,6 +5862,46 @@ In the first example, we can choose the longest streak of 13 days, since upon re
 In the fourth example, if we take the streak of the first 66 days, we can remove the third day from this streak then all of the remaining colors 1, 2, 3, 4 and 5 will occur exactly once.
 
 
+
+```python
+# 23 邓锦文
+from collections import defaultdict
+
+n = int(input())
+colors = list(map(int, input().split()))
+f = defaultdict(int)
+mark_dict = defaultdict(int)
+ans = 1
+
+for k in range(1, n+1):
+    color = colors[k-1]
+    f[color] += 1
+    mark_dict[f[color]] += 1
+
+    if f[color]*mark_dict[f[color]] == k and k<n:
+        #print(f'k1={k}')
+        ans = max(ans, k+1)
+    elif f[color]*mark_dict[f[color]] == k-1:
+        #print(f'k2={k}, f[color], mark_dict[f[color]]')
+        ans = max(ans, k)
+
+print(ans)
+```
+
+
+
+We can iterate over all streaks and check for each streak if we can remove one day so that each color has the same number of cats.
+
+There are 4 cases where we can remove a day from the streak to satisfy the condition:
+
+- There is only one color in this streak.
+- All appeared colors in this streak have the occurrence of 1 (i.e. every color has exactly 1 cat with that color).
+- Every color has the same occurrence of cats, except for exactly one color which has the occurrence of 1.
+- Every color has the same occurrence of cats, except for exactly one color which has the occurrence exactly 1 more than any other color.
+
+All of these four conditions can be checked using counting techniques.
+
+Complexity: 𝑂(𝑛).
 
 ```python
 #使用一个数组 f 来记录每种颜色出现的次数，使用另一个数组 cnt 来统计每个次数的颜色数量。
