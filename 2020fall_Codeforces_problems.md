@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 2146 GMT+8 Dec 17, 2023
+Updated 0013 GMT+8 Dec 18, 2023
 
 2020 fall, Complied by Hongfei Yan
 
@@ -5863,28 +5863,30 @@ In the fourth example, if we take the streak of the first 66 days, we can remove
 
 
 
+当前如果满足，k+1是答案；如果前一个满足，(k-1)+1是答案。
+
 ```python
 # 23 邓锦文
 from collections import defaultdict
-
+ 
 n = int(input())
 colors = list(map(int, input().split()))
 f = defaultdict(int)
 mark_dict = defaultdict(int)
 ans = 1
-
+ 
 for k in range(1, n+1):
     color = colors[k-1]
     f[color] += 1
     mark_dict[f[color]] += 1
-
+ 
     if f[color]*mark_dict[f[color]] == k and k<n:
         #print(f'k1={k}')
-        ans = max(ans, k+1)
+        ans = k + 1
     elif f[color]*mark_dict[f[color]] == k-1:
         #print(f'k2={k}, f[color], mark_dict[f[color]]')
-        ans = max(ans, k)
-
+        ans = k
+ 
 print(ans)
 ```
 
