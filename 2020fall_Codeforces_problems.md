@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 0013 GMT+8 Dec 18, 2023
+Updated 1408 GMT+8 Dec 18, 2023
 
 2020 fall, Complied by Hongfei Yan
 
@@ -8519,11 +8519,20 @@ for _ in range(t):
 
 蒋子轩23工学院 清晰明了的程序，dfs with thread.
 
+在 Mac Studio (Chip: Apple M1 Ultra, macOS: Ventura 13.6.1) 上运行，
+
+line 4, in     threading.stack_size(2*10**8), ValueError: size not valid: 200000000 bytes
+
+需要是4096的倍数，可以改为 threading.stack_size(2\*10240*10240)
+
+
+
 ```python
 import sys
 import threading
 sys.setrecursionlimit(1 << 30)
-threading.stack_size(2*10**8)
+#threading.stack_size(2*10**8)
+threading.stack_size(2*10240*10240)
 
 
 def main():
@@ -8575,6 +8584,45 @@ thread = threading.Thread(target=main)
 thread.start()
 thread.join()
 ```
+
+
+
+> import threading
+>
+> help(threading.stack_size)
+> Help on built-in function stack_size in module _thread:
+>
+> stack_size(...)
+>     stack_size([size]) -> size
+>
+> Return the thread stack size used when creating new threads.  The
+> optional size argument specifies the stack size (in bytes) to be used
+> for subsequently created threads, and must be 0 (use platform or
+> configured default) or a positive integer value of at least 32,768 (32k).
+> If changing the thread stack size is unsupported, a ThreadError
+> exception is raised.  If the specified size is invalid, a ValueError
+> exception is raised, and the stack size is unmodified.  32k bytes
+>  currently the minimum supported stack size value to guarantee
+> sufficient stack space for the interpreter itself.
+>
+> Note that some platforms may have particular restrictions on values for
+> the stack size, such as requiring a minimum stack size larger than 32 KiB or
+> requiring allocation in multiples of the system memory page size
+>
+> platform documentation should be referred to for more information
+> (4 KiB pages are common; using multiples of 4096 for the stack size is
+> the suggested approach in the absence of more specific information).
+>
+> Thread stack size 在mac上 需要是4096的倍数，可以改为 threading.stack_size(2\*10240*10240)
+>
+> 2\*10240*10240 / 4096
+> Out[161]: 51200.0
+>
+> 2*10**8 / 4096
+> Out[162]: 48828.125
+>
+> 8372224 / 4096
+> Out[163]: 2044.0
 
 
 
