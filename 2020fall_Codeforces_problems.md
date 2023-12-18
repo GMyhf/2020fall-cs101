@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 1408 GMT+8 Dec 18, 2023
+Updated 1829 GMT+8 Dec 18, 2023
 
 2020 fall, Complied by Hongfei Yan
 
@@ -3157,6 +3157,100 @@ Group 1 found at 0-2: BC
 Group 2 found at 2-4: 23
 '''
 
+```
+
+
+
+## 20C. Dijkstra?
+
+graphs, shortest paths, *1900
+
+https://codeforces.com/problemset/problem/20/C
+
+You are given a weighted undirected graph. The vertices are enumerated from 1 to *n*. Your task is to find the shortest path between the vertex 1 and the vertex *n*.
+
+**Input**
+
+The first line contains two integers *n* and $m (2 ≤ n ≤ 10^5, m ≤ 10^5)$, where *n* is the number of vertices and *m* is the number of edges. Following *m* lines contain one edge each in form ai, bi and wi (1 ≤ ai, bi ≤ *n*, 1 ≤ wi ≤ 10^6^), where ai, bi are edge endpoints and wi is the length of the edge.
+
+It is possible that the graph has loops and multiple edges between pair of vertices.
+
+**Output**
+
+Write the only integer -1 in case of no path. Write the shortest path in opposite case. If there are many solutions, print any of them.
+
+Examples
+
+input
+
+```
+5 6
+1 2 2
+2 5 5
+2 3 4
+1 4 1
+4 3 3
+3 5 1
+```
+
+output
+
+```
+1 4 3 5 
+```
+
+input
+
+```
+5 6
+1 2 2
+2 5 5
+2 3 4
+1 4 1
+4 3 3
+3 5 1
+```
+
+output
+
+```
+1 4 3 5 
+```
+
+
+
+```python
+# 主要步骤就是：先初始化，然后添加边和节点，然后运行Dijkstra算法，最后输出最短路径
+from heapq import *
+ 
+INF = 1 << 60 # 定义一个大数I作为初始化距离
+ 
+n, m = map(int, input().split())
+g = [[] for _ in range(n)]
+d = [0] + [INF] * n # 初始距离全部设置为大数I，但是以0号节点为起点的距离为0
+p = [-1] * n # 记录每一个节点的上一个节点，-1表示这个节点没有上一节点
+q = [(0, 0)] # 把起点添加到优先队列q中
+for _ in range(m): # 根据输入的边和权重构造邻接表
+	u, v, w = map(int, input().split())
+	g[u-1] += [(w, v-1)]
+	g[v-1] += [(w, u-1)]
+while q: # 只要优先队列不为空，就取出队列顶部的节点，查找它的邻接节点，如果通过这个节点到
+            #邻接节点的距离比原先记录的短，就更新邻接节点的最短距离并加入优先队列
+	u = heappop(q)[1]
+	for e in g[u]:
+		w, v = d[u] + e[0], e[1]
+		if w < d[v]:
+			d[v], p[v] = w, u
+			heappush(q, (d[v], v))
+if d[n-1] == INF: # 如果终点的最短距离仍然是I，表示不存在从起点到终点的路径
+	print(-1);
+else:
+	x, a = n - 1, []
+	while x != -1: # 按上一个节点的信息，从终点倒推到起点，得到最短路径
+		a += [x + 1]
+		x = p[x]
+	a.reverse() # 因为得到的路径是反向的，所以需要反转一下
+	print(' '.join(map(str, a)))
 ```
 
 
