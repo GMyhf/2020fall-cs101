@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 1011 GMT+8 Dec 19, 2023
+Updated 1627 GMT+8 Dec 21, 2023
 
 2020 fall, Complied by Hongfei Yan
 
@@ -6117,19 +6117,20 @@ In the second example Demid can choose the following team as follows:
 
 ```python
 n = int(input())
-*h1, = map(int, input().split())
-*h2, = map(int, input().split())
- 
-dp1 = [0]*n
+h1 = list(map(int, input().split()))
+h2 = list(map(int, input().split()))
+
+dp1 = [0] * n
+dp2 = [0] * n
+
 dp1[0] = h1[0]
-dp2 = [0]*n
 dp2[0] = h2[0]
- 
-for i in range(1,n):
-    dp1[i] = max(dp2[i-1], dp2[i-1]+h1[i], dp1[i-1])
-    dp2[i] = max(dp1[i-1], dp1[i-1]+h2[i], dp2[i-1])
- 
-print(max(dp1[-1],dp2[-1]))
+
+for i in range(1, n):
+    dp1[i] = max(dp2[i - 1] + h1[i], dp1[i - 1])
+    dp2[i] = max(dp1[i - 1] + h2[i], dp2[i - 1])
+
+print(max(dp1[-1], dp2[-1]))
 ```
 
 
