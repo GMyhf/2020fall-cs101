@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 0921 GMT+8 Feb 12, 2024
+Updated 2342 GMT+8 Feb 12, 2024
 
 2020 fall, Complied by Hongfei Yan
 
@@ -3254,6 +3254,197 @@ else:
 ```
 
 
+
+## 37C. Old Berland Language
+
+
+data structures, greedy, trees, *1900
+
+https://www.luogu.com.cn/problem/CF37C
+
+https://codeforces.com/contest/37/problem/C
+
+$Berland$的科学家知道，古老的$Berland$语言中有$n$个单词。这些单词的长度为$l_1$,$l_2$,...,$l_n$。每个单词由$0$和$1$组成。
+
+尽管古代$Berland$人语速很快并且说话不停顿，但同时他们也能很好地理解对方。
+
+可能的原因是：没有一个单词是另一个单词的前缀。字符串的前缀被认为是子串的其中一个开端。
+
+请你帮助科学家确定，是否所有的古$Berland$语的单词都可以被重构。如果可以，输出单词本身。
+
+**输入**
+
+第一行：一个整数$n$，表示古$Berland$语言的单词个数，其中$1 \le n\le 10^3$。
+
+第二行，有$n$个由空格隔开的整数$len$，分别为这$n$个单词的长度。其中$len\le 10^3$。
+
+**输出**
+
+如果没有任何符合的单词，只输出$NO$；
+
+否则，在第一行输出$YES$，并在接下来的$n$行，按照输入顺序输出单词本身。
+
+如果答案不唯一，输出任意一种。
+
+
+
+Berland scientists know that the Old Berland language had exactly $ n $ words. Those words had lengths of $ l_{1},l_{2},...,l_{n} $ letters. Every word consisted of two letters, $ 0 $ and $ 1 $ . Ancient Berland people spoke quickly and didn’t make pauses between the words, but at the same time they could always understand each other perfectly. It was possible because no word was a prefix of another one. The prefix of a string is considered to be one of its substrings that starts from the initial symbol.
+
+Help the scientists determine whether all the words of the Old Berland language can be reconstructed and if they can, output the words themselves.
+
+**Input**
+
+The first line contains one integer $ N $ ( $ 1<=N<=1000 $ ) — the number of words in Old Berland language. The second line contains $ N $ space-separated integers — the lengths of these words. All the lengths are natural numbers not exceeding $ 1000 $ .
+
+**Output**
+
+If there’s no such set of words, in the single line output NO. Otherwise, in the first line output YES, and in the next $ N $ lines output the words themselves in the order their lengths were given in the input file. If the answer is not unique, output any.
+
+Examples
+
+input
+
+```
+3
+1 2 3
+```
+
+output
+
+```
+YES
+0
+10
+110
+```
+
+input
+
+```
+3
+1 1 1
+```
+
+output
+
+```
+NO
+```
+
+
+
+查达闻-23，CF37C 题解，2024-02-12 00:21:58
+
+声明三点：
+
+1. 提醒看其他楼的各位，[本题亲测有 SPJ](https://codeforces.com/contest/37/submission/245874817)；
+
+2. 本题解法是位运算实现的，不涉及树，接下来讲解时为了便于理解会使用树的语言；
+
+3. 提供的 AC 代码是提交版 Python 代码的美化版，非 Python 用户请自行翻译。
+
+对一棵无限大的满二叉树，剪去任意一棵满二叉子树，若保留子树根节点，整棵树是完全二叉树，即：第 n+1层的所有节点数等于第 n 层非叶子结点数的二倍。
+
+> 这个好像国内外定义不一样。国内定义n层满二叉树必须有2^n-1个节点，而完全二叉树只要是每个节点要么有两个儿子要么没有儿子就行。
+
+所以，考虑自上而下的剪枝过程：
+
+- 若在层内剪枝，当前层非叶子节点数减一；
+- 若向下一层，当前层（此时层已更新）非叶子节点数翻倍（有点像动态规划的思想）；
+- 若当前层已经没有非叶子节点，无法剪枝。
+
+每次的剪枝目标取当前层最左侧节点即可，而在上述过程中，剪枝时最左侧节点编号加一，向下一层时最左侧节点编号乘二即可。而按本题要求以零为根节点的树可以以如下形式构造：
+
+- 根节点编号为零（事实上这棵树可以上下无限延伸，方便讨论人为进行向上的剪枝，认为存在根节点）；
+- 对节点 n，左儿子为 2n，右儿子为 2n+1。特别地，对于编号为零的节点，其右儿子是以一为根节点的无限大的满二叉树的根节点；整棵树可以看作在最左侧无限延伸的一群编号为零的节点，每个节点的右儿子都是以一为根节点的无限大的满二叉树的根节点。
+
+所以初始化根节点编号为零，层数为一（字符串最短长度），按上述要求变化，记录答案即可。忽略 O(nlog⁡n)的排序，代码主体复杂度 O(n)。
+
+
+
+> 满二叉树（Full Binary Tree）是一种特殊的二叉树，其中每个节点要么是叶子节点（没有子节点），要么具有两个子节点。换句话说，每个节点的度数要么为0，要么为2。满二叉树的特点是所有的非叶子节点都有两个子节点。
+>
+> 下面是一个示例图示：
+>
+> ```
+>        A
+>      /   \
+>     B     C
+>    / \   / \
+>   D   E F   G
+> ```
+>
+> 在这个示例中，每个节点都要么是叶子节点，要么有两个子节点，因此它是一个满二叉树。
+>
+> 完全二叉树（Complete Binary Tree）是一种二叉树，其中除了最后一层外，所有层的节点都被填满，并且最后一层的节点从左到右连续存在，不存在空缺节点。换句话说，除了最后一层可能不满，其他层的节点都是紧密排列的。
+>
+> 下面是一个示例图示：
+>
+> ```
+>        A
+>      /   \
+>     B     C
+>    / \   /
+>   D   E F
+> ```
+>
+> 在这个示例中，除了最后一层的节点不满，其他层的节点都被填满，并且最后一层的节点从左到右连续存在，因此它是一个完全二叉树。
+>
+> 需要注意的是，满二叉树是完全二叉树的一个特例，即每个节点都有两个子节点的完全二叉树是一个满二叉树。但是，并非所有的完全二叉树都是满二叉树，因为完全二叉树的最后一层可以不满。
+
+
+
+题解中提供的 Python 代码是使用位运算实现的。代码的主要思路是对一棵无限大的满二叉树进行剪枝，每次的剪枝目标取当前层最左侧节点，剪枝时最左侧节点编号加一，向下一层时最左侧节点编号乘二。代码中使用了一个字典来保存答案，每个答案用过即销毁。
+
+One of the easiest to understand solutions of this problem is as follows: sort the words in ascending order of length, while remembering their positions in the source list. We will consistently build our set, starting with the short strings: strings of length one can only be strings "0" and "1". If the number of words of length one in a set are more than two, hence there are no answers. Add the desired number of strings of length one to answer, and remove it from the current list. Then look at the string of length two: each of the remaining strings of length one can be extended in two ways (having added to each of these symbols 0 and 1). Add the desired number of strings of length two in our answer, and then increase the length of the remaining strings by one. Continue this process, until we get all words from the input set. You can see that if at some moment the number of allowable words exceeded the number of remaining, the extra words can be ignored and solution takes O (N * the maximum length of input set) time.
+
+```python
+#查达闻-23
+input()#第一行对 Python 没用
+cuts=list(map(int,input().split()))#剪枝，注意存储输入顺序
+
+poss=2#剩余可能性数
+floor=1#层数
+ans={}#保存答案
+node=0#层内最左节点编号
+
+for cut in sorted(cuts):#从上到下排序
+    if poss==0:#无法剪枝但是还有需求
+        print('NO')
+        exit()
+
+    poss<<=cut-floor#向下层数左移（效果同乘二）
+    node<<=cut-floor#同上
+
+    tmp=bin(node)[2:]#记录答案
+    node+=1#剪枝
+    poss-=1#同上
+    floor=cut#更新层数
+
+    if cut in ans:#基础字典操作，小心 KeyError
+        ans[cut].append('0'*(cut-len(tmp))+tmp)#用零补全位数
+    else:
+        ans[cut]=['0'*(cut-len(tmp))+tmp]
+
+print('YES')
+for i in cuts:
+    print(ans[i].pop())#每个答案用过即销毁
+```
+
+
+
+```python
+# LUOGU_RID: 146703301
+input();a=list(map(int,input().split()));b=2;c=1;d={};e=0
+for i in sorted(a):
+    if b==0:print('NO');exit()
+    if i-c:b<<=i-c
+    b-=1;e<<=i-c;f=bin(e)[2:];e+=1;c=i
+    if i in d:d[i].append('0'*(i-len(f))+f)
+    else:d[i]=['0'*(i-len(f))+f]
+print('YES')
+for i in a:print(d[i].pop())
+```
 
 
 
