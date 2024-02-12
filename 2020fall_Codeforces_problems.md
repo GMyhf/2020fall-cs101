@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 1627 GMT+8 Dec 21, 2023
+Updated 0921 GMT+8 Feb 12, 2024
 
 2020 fall, Complied by Hongfei Yan
 
@@ -8542,14 +8542,14 @@ Note
 
 In the first example:
 
-- For the first assumption, there are two possible pairs of vertices from which apples can fall from the tree: (4,4),(5,4)(4,4),(5,4).
-- For the second assumption there are also two pairs: (5,4),(5,5)(5,4),(5,5).
-- For the third assumption there is only one pair: (4,4)(4,4).
-- For the fourth assumption, there are 44 pairs: (4,4),(4,5),(5,4),(5,5)(4,4),(4,5),(5,4),(5,5).
+- For the first assumption, there are two possible pairs of vertices from which apples can fall from the tree: (4,4),(5,4).
+- For the second assumption there are also two pairs: (5,4),(5,5).
+- For the third assumption there is only one pair: (4,4).
+- For the fourth assumption, there are 4 pairs: (4,4),(4,5),(5,4),(5,5).
 
 ![img](https://espresso.codeforces.com/7c6d16e8362e76df883e925d30296fb28360d590.png)Tree from the first example.
 
-For the second example, there are 44 of possible pairs of vertices from which apples can fall: (2,3),(2,2),(3,2),(3,3)(2,3),(2,2),(3,2),(3,3). For the second assumption, there is only one possible pair: (2,3)(2,3). For the third assumption, there are two pairs: (3,2),(3,3)(3,2),(3,3).
+For the second example, there are 4 of possible pairs of vertices from which apples can fall: (2,3),(2,2),(3,2),(3,3). For the second assumption, there is only one possible pair: (2,3). For the third assumption, there are two pairs: (3,2),(3,3).
 
 
 
