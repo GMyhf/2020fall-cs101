@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 2342 GMT+8 Feb 12, 2024
+Updated 0947 GMT+8 March 4, 2024
 
 2020 fall, Complied by Hongfei Yan
 
@@ -6569,6 +6569,10 @@ In the first test case, the subarray \[2,3\] has sum of elements 5, which isn't 
 In the second test case, the sum of elements of the whole array is 6, which isn't divisible by 4.
 
 In the third test case, all subarrays have an even sum, so the answer is −1.
+
+
+
+数院-胡睿诚 证明：如果所有数的和不是x的倍数则不用去。现在设所有和是x倍数，如果头尾各去一段，设这两段的和分别为A, B。A和B一定至少有一个不是x倍数，那么去一头（不是x倍数的那头）就够了。
 
 
 
