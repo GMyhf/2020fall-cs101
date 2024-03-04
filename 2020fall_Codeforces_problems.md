@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 0947 GMT+8 March 4, 2024
+Updated 1923 GMT+8 March 4, 2024
 
 2020 fall, Complied by Hongfei Yan
 
@@ -6577,43 +6577,47 @@ In the third test case, all subarrays have an even sum, so the answer is −1.
 
 
 ```python
+from itertools import accumulate
+
 def prefix_sum(nums):
-    prefix = []
-    total = 0
-    for num in nums:
-        total += num
-        prefix.append(total)
-    return prefix
- 
+    # prefix = []
+    # total = 0
+    # for num in nums:
+    #     total += num
+    #     prefix.append(total)
+    # return prefix
+    return list(accumulate(nums))
+
 def suffix_sum(nums):
-    suffix = []
-    total = 0
-    # 首先将列表反转
-    reversed_nums = nums[::-1]
-    for num in reversed_nums:
-        total += num
-        suffix.append(total)
-    # 将结果反转回来
-    suffix.reverse()
-    return suffix
- 
- 
+    # suffix = []
+    # total = 0
+    # # 首先将列表反转
+    # reversed_nums = nums[::-1]
+    # for num in reversed_nums:
+    #     total += num
+    #     suffix.append(total)
+    # # 将结果反转回来
+    # suffix.reverse()
+    # return suffix
+    return list(accumulate(reversed(nums)))[::-1]
+
+
 t = int(input())
 for _ in range(t):
     N, x = map(int, input().split())
     a = [int(i) for i in input().split()]
     aprefix_sum = prefix_sum(a)
     asuffix_sum = suffix_sum(a)
- 
+
     left = 0
     right = N - 1
     if right == 0:
-        if a[0] % x !=0:
+        if a[0] % x != 0:
             print(1)
         else:
             print(-1)
         continue
- 
+
     leftmax = 0
     rightmax = 0
     while left != right:
@@ -6623,7 +6627,7 @@ for _ in range(t):
             break
         else:
             left += 1
- 
+
     left = 0
     right = N - 1
     while left != right:
@@ -6633,7 +6637,7 @@ for _ in range(t):
             break
         else:
             right -= 1
-    
+
     if leftmax == 0 and rightmax == 0:
         print(-1)
     else:
