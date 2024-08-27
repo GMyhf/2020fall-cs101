@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 1923 GMT+8 March 4, 2024
+Updated 1116 GMT+8 Aug 27, 2024
 
 2020 fall, Complied by Hongfei Yan
 
@@ -1020,6 +1020,75 @@ for num in facn:
         break
 else:
     print('NO')
+```
+
+
+
+## 151A. Soft Drinking
+
+implementation, math, 800, https://codeforces.com/problemset/problem/151/A
+
+This winter is so cold in Nvodsk! A group of *n* friends decided to buy *k* bottles of a soft drink called "Take-It-Light" to warm up a bit. Each bottle has *l* milliliters of the drink. Also they bought *c* limes and cut each of them into *d* slices. After that they found *p* grams of salt.
+
+To make a toast, each friend needs *nl* milliliters of the drink, a slice of lime and *np* grams of salt. The friends want to make as many toasts as they can, provided they all drink the same amount. How many toasts can each friend make?
+
+**Input**
+
+The first and only line contains **positive** integers *n*, *k*, *l*, *c*, *d*, *p*, *nl*, *np*, not exceeding 1000 and no less than 1. The numbers are separated by exactly one space.
+
+**Output**
+
+Print a single integer — the number of toasts each friend can make.
+
+Examples
+
+Input
+
+```
+3 4 5 10 8 100 3 1
+```
+
+Output
+
+```
+2
+```
+
+Input
+
+```
+5 100 10 1 19 90 4 3
+```
+
+Output
+
+```
+3
+```
+
+Input
+
+```
+10 1000 1000 25 23 1 50 1
+```
+
+Output
+
+```
+0
+```
+
+Note
+
+A comment to the first sample:
+
+Overall the friends have 4 * 5 = 20 milliliters of the drink, it is enough to make 20 / 3 = 6 toasts. The limes are enough for 10 * 8 = 80 toasts and the salt is enough for 100 / 1 = 100 toasts. However, there are 3 friends in the group, so the answer is *min*(6, 80, 100) / 3 = 2.
+
+
+
+```python
+n, k, l, c, d, p, nl, np = map(int, input().split())
+print(min(k * l // nl, c * d, p // np) // n)
 ```
 
 
@@ -2210,6 +2279,105 @@ int main (){
 
 
 
+## 427A. Police Recruits
+
+implementation, 800, https://codeforces.com/problemset/problem/427/A
+
+The police department of your city has just started its journey. Initially, they don’t have any manpower. So, they started hiring new recruits in groups.
+
+Meanwhile, crimes keeps occurring within the city. One member of the police force can investigate only one crime during his/her lifetime.
+
+If there is no police officer free (isn't busy with crime) during the occurrence of a crime, it will go untreated.
+
+Given the chronological order of crime occurrences and recruit hirings, find the number of crimes which will go untreated.
+
+**Input**
+
+The first line of input will contain an integer $n (1 ≤ n ≤ 10^5)$, the number of events. The next line will contain *n* space-separated integers.
+
+If the integer is -1 then it means a crime has occurred. Otherwise, the integer will be positive, the number of officers recruited together at that time. No more than 10 officers will be recruited at a time.
+
+**Output**
+
+Print a single integer, the number of crimes which will go untreated.
+
+Examples
+
+Input
+
+```
+3
+-1 -1 1
+```
+
+Output
+
+```
+2
+```
+
+Input
+
+```
+8
+1 -1 1 -1 -1 1 1 1
+```
+
+Output
+
+```
+1
+```
+
+Input
+
+```
+11
+-1 -1 2 -1 -1 -1 -1 -1 -1 -1 -1
+```
+
+Output
+
+```
+8
+```
+
+Note
+
+Lets consider the second example:
+
+1. Firstly one person is hired.
+2. Then crime appears, the last hired person will investigate this crime.
+3. One more person is hired.
+4. One more crime appears, the last hired person will investigate this crime.
+5. Crime appears. There is no free policeman at the time, so this crime will go untreated.
+6. One more person is hired.
+7. One more person is hired.
+8. One more person is hired.
+
+The answer is one, as one crime (on step 5) will go untreated.
+
+
+
+```python
+n = int(input())
+a = list(map(int, input().split()))
+cnt = 0
+officers = 0
+for i in a:
+    if i == -1 and officers == 0:
+        cnt += 1
+        continue
+    if i > 0:
+        officers += i
+        continue
+    officers -= 1
+
+print(cnt)
+```
+
+
+
 ## 456A. Laptops
 
 sortings, 1100, https://codeforces.com/problemset/problem/456/A
@@ -2929,6 +3097,279 @@ In the second example Mishka can put box 2 into box 3, and box 4 into box 1.
 from collections import *
 input()
 print(max(Counter(input().split()).values()))
+```
+
+
+
+## 996A. Hit the Lottery
+
+dp, greedy, 800, https://codeforces.com/problemset/problem/996/A
+
+Allen has a LOT of money. He has 𝑛n dollars in the bank. For security reasons, he wants to withdraw it in cash (we will not disclose the reasons here). The denominations for dollar bills are 1, 5, 10, 20, 100. What is the minimum number of bills Allen could receive after withdrawing his entire balance?
+
+**Input**
+
+The first and only line of input contains a single integer $𝑛 (1≤𝑛≤10^9)$.
+
+**Output**
+
+Output the minimum number of bills that Allen could receive.
+
+Examples
+
+Input
+
+```
+125
+```
+
+Output
+
+```
+3
+```
+
+Input
+
+```
+43
+```
+
+Output
+
+```
+5
+```
+
+Input
+
+```
+1000000000
+```
+
+Output
+
+```
+10000000
+```
+
+Note
+
+In the first sample case, Allen can withdraw this with a 100100 dollar bill, a 2020 dollar bill, and a 55 dollar bill. There is no way for Allen to receive 125125 dollars in one or two bills.
+
+In the second sample case, Allen can withdraw two 2020 dollar bills and three 11 dollar bills.
+
+In the third sample case, Allen can withdraw 100000000100000000 (ten million!) 100100 dollar bills.
+
+
+
+```python
+n = int(input())
+denominations = [100, 20, 10, 5, 1]
+cnt = 0
+for i in denominations:
+    cnt += n // i
+    n %= i
+print(cnt)
+```
+
+
+
+## 1328A. Divisibility Problem
+
+math, 800, https://codeforces.com/problemset/problem/1328/A
+
+You are given two positive integers 𝑎a and 𝑏b. In one move you can increase 𝑎 by 1 (replace 𝑎 with 𝑎+1). Your task is to find the minimum number of moves you need to do in order to make 𝑎a divisible by 𝑏. It is possible, that you have to make 0 moves, as 𝑎a is already divisible by 𝑏. You have to answer 𝑡 independent test cases.
+
+**Input**
+
+The first line of the input contains one integer $𝑡 (1≤𝑡≤10^4)$ — the number of test cases. Then 𝑡t test cases follow.
+
+The only line of the test case contains two integers 𝑎a and $𝑏 (1≤𝑎,𝑏≤10^9)$.
+
+**Output**
+
+For each test case print the answer — the minimum number of moves you need to do in order to make 𝑎a divisible by 𝑏b.
+
+Example
+
+Input
+
+```
+5
+10 4
+13 9
+100 13
+123 456
+92 46
+```
+
+Output
+
+```
+2
+5
+4
+333
+0
+```
+
+
+
+逐步加1尝试，回超时。
+
+```python
+t = int(input())
+for _ in range(t):
+    a, b = map(int, input().split())
+    res = a % b
+    if res == 0:
+        print(0)
+    else:
+        print(b - res)
+```
+
+
+
+## 1335A. Candies and Two Sisters
+
+math, 800, https://codeforces.com/problemset/problem/1335/A
+
+There are two sisters Alice and Betty. You have 𝑛 candies. You want to distribute these 𝑛 candies between two sisters in such a way that:
+
+- Alice will get 𝑎 (𝑎>0) candies;
+- Betty will get 𝑏 (𝑏>0) candies;
+- each sister will get some **integer** number of candies;
+- Alice will get a greater amount of candies than Betty (i.e. 𝑎>𝑏);
+- all the candies will be given to one of two sisters (i.e. 𝑎+𝑏=𝑛).
+
+Your task is to calculate the number of ways to distribute exactly 𝑛 candies between sisters in a way described above. Candies are indistinguishable.
+
+Formally, find the number of ways to represent 𝑛n as the sum of 𝑛=𝑎+𝑏, where 𝑎a and 𝑏b are positive integers and 𝑎>𝑏.
+
+You have to answer 𝑡 independent test cases.
+
+**Input**
+
+The first line of the input contains one integer $𝑡 (1≤𝑡≤10^4)$ — the number of test cases. Then 𝑡t test cases follow.
+
+The only line of a test case contains one integer $𝑛 (1≤𝑛≤2⋅10^9)$ — the number of candies you have.
+
+**Output**
+
+For each test case, print the answer — the number of ways to distribute exactly 𝑛n candies between two sisters in a way described in the problem statement. If there is no way to satisfy all the conditions, print 00.
+
+Example
+
+Input
+
+```
+6
+7
+1
+2
+3
+2000000000
+763243547
+```
+
+Output
+
+```
+3
+0
+0
+1
+999999999
+381621773
+```
+
+Note
+
+For the test case of the example, the 3 possible ways to distribute candies are:
+
+- 𝑎=6, 𝑏=1;
+- 𝑎=5, 𝑏=2;
+- 𝑎=4, 𝑏=3.
+
+
+
+```python
+n = int(input())
+for _ in range(n):
+    n = int(input())
+    if n % 2 == 0:
+        print((n-2) // 2)
+    else:
+        print((n-1) // 2)
+```
+
+
+
+## 1352A. Sum of Round Numbers
+
+implementation, math, https://codeforces.com/problemset/problem/1352/A
+
+A positive (strictly greater than zero) integer is called *round* if it is of the form d00...0. In other words, a positive integer is round if all its digits except the leftmost (most significant) are equal to zero. In particular, all numbers from 1 to 9 (inclusive) are round.
+
+For example, the following numbers are round: 4000, 1, 99 800, 90. The following numbers are **not** round: 110, 707, 222, 1001.
+
+You are given a positive integer $𝑛 (1≤𝑛≤10^4)$. Represent the number 𝑛n as a sum of round numbers using the minimum number of summands (addends). In other words, you need to represent the given number 𝑛n as a sum of the least number of terms, each of which is a round number.
+
+**Input**
+
+The first line contains an integer $𝑡 (1≤𝑡≤10^4)$ — the number of test cases in the input. Then 𝑡t test cases follow.
+
+Each test case is a line containing an integer $𝑛 (1≤𝑛≤10^4)$.
+
+**Output**
+
+Print 𝑡t answers to the test cases. Each answer must begin with an integer 𝑘k — the minimum number of summands. Next, 𝑘k terms must follow, each of which is a round number, and their sum is 𝑛n. The terms can be printed in any order. If there are several answers, print any of them.
+
+Example
+
+Input
+
+```
+5
+5009
+7
+9876
+10000
+10
+```
+
+Output
+
+```
+2
+5000 9
+1
+7 
+4
+800 70 6 9000 
+1
+10000 
+1
+10 
+```
+
+
+
+```python
+n = int(input())
+for _ in range(n):
+    s = input()
+    cnt = 0
+    res = []
+    i = 0
+    for c in s:
+        i += 1
+        if c != '0':
+            cnt += 1
+            res.append( int(c) * (10 ** (len(s) - i)) )
+    print(cnt)
+    print(*res)
 ```
 
 
