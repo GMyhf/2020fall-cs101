@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 1249 GMT+8 Aug 28, 2024
+Updated 2207 GMT+8 Aug 28, 2024
 
 2020 fall, Complied by Hongfei Yan
 
@@ -229,6 +229,64 @@ else:
 useless = input()
 a = [int(x)%2 for x in input().split()]
 print(a.index(sum(a)==1)+1)
+```
+
+
+
+## 34B. Sale
+
+greedy, sorting, 900, https://codeforces.com/problemset/problem/34/B
+
+Once Bob got to a sale of old TV sets. There were *n* TV sets at that sale. TV set with index *i* costs $a_i$ bellars. Some TV sets have a negative price — their owners are ready to pay Bob if he buys their useless apparatus. Bob can «buy» any TV sets he wants. Though he's very strong, Bob can carry at most *m* TV sets, and he has no desire to go to the sale for the second time. Please, help Bob find out the maximum sum of money that he can earn.
+
+**Input**
+
+The first line contains two space-separated integers *n* and *m* (1 ≤ *m* ≤ *n* ≤ 100) — amount of TV sets at the sale, and amount of TV sets that Bob can carry. The following line contains *n* space-separated integers $a_i ( - 1000 ≤ a_i ≤ 1000)$ — prices of the TV sets.
+
+**Output**
+
+Output the only number — the maximum sum of money that Bob can earn, given that he can carry at most *m* TV sets.
+
+Examples
+
+Input
+
+```
+5 3
+-6 0 35 -2 4
+```
+
+Output
+
+```
+8
+```
+
+Input
+
+```
+4 2
+7 0 0 -7
+```
+
+Output
+
+```
+7
+```
+
+
+
+```python
+n, m = map(int, input().split())
+a = list(map(int, input().split()))
+a.sort()
+ans = 0
+for i in range(m):
+    if a[i] > 0:
+        break
+    ans += a[i]
+print(-ans)
 ```
 
 
@@ -3504,6 +3562,76 @@ for _ in range(n):
             res.append( int(c) * (10 ** (len(s) - i)) )
     print(cnt)
     print(*res)
+```
+
+
+
+## 1475A. Odd Divisor
+
+math, number theory, 900, https://codeforces.com/problemset/problem/1475/A
+
+You are given an integer 𝑛n. Check if 𝑛 has an **odd** divisor, greater than one (does there exist such a number 𝑥 (𝑥>1) that 𝑛n is divisible by 𝑥 and 𝑥 is odd).
+
+For example, if 𝑛=6, then there is 𝑥=3. If 𝑛=4, then such a number does not exist.
+
+**Input**
+
+The first line contains one integer $𝑡 (1≤𝑡≤10^4)$ — the number of test cases. Then 𝑡t test cases follow.
+
+Each test case contains one integer $𝑛 (2≤𝑛≤10^{14})$.
+
+Please note, that the input for some test cases won't fit into 3232-bit integer type, so you should use at least 6464-bit integer type in your programming language.
+
+**Output**
+
+For each test case, output on a separate line:
+
+- "YES" if 𝑛n has an **odd** divisor, greater than one;
+- "NO" otherwise.
+
+You can output "YES" and "NO" in any case (for example, the strings yEs, yes, Yes and YES will be recognized as positive).
+
+Example
+
+Input
+
+```
+6
+2
+3
+4
+5
+998244353
+1099511627776
+```
+
+Output
+
+```
+NO
+YES
+NO
+YES
+YES
+NO
+```
+
+
+
+```python
+t = int(input())
+for _ in range(t):
+    n = int(input())
+    
+    # 不断除以 2 直到 n 是奇数
+    while n % 2 == 0:
+        n //= 2
+    
+    # 检查 n 是否大于 1
+    if n > 1:
+        print("YES")
+    else:
+        print("NO")
 ```
 
 
