@@ -3442,7 +3442,7 @@ for _ in range(n):
 
 ## 1352A. Sum of Round Numbers
 
-implementation, math, https://codeforces.com/problemset/problem/1352/A
+implementation, math, 800, https://codeforces.com/problemset/problem/1352/A
 
 A positive (strictly greater than zero) integer is called *round* if it is of the form d00...0. In other words, a positive integer is round if all its digits except the leftmost (most significant) are equal to zero. In particular, all numbers from 1 to 9 (inclusive) are round.
 
@@ -6626,7 +6626,7 @@ else:print(out)
 
 ## 1163B2. Cat Party (Hard Edition)
 
-data structures, implementation, https://codeforces.com/contest/1163/problem/B2
+data structures, implementation, 1600, https://codeforces.com/contest/1163/problem/B2
 
 *This problem is same as the previous one, but has larger constraints.*
 
@@ -7526,6 +7526,8 @@ for _ in range(t):
 
 
 ## 1398C. Good Subarrays
+
+data structures, dp, math, 1600, https://codeforces.com/contest/1398/problem/C
 
 You are given an array 𝑎1,𝑎2,…,𝑎𝑛 consisting of integers from 0 to 9. A subarray 𝑎𝑙,𝑎𝑙+1,𝑎𝑙+2,…,𝑎𝑟−1,𝑎𝑟 is good if the sum of elements of this subarray is equal to the length of this subarray ($∑_{𝑖=𝑙}^{𝑟}𝑎𝑖=𝑟−𝑙+1$).
 
@@ -8882,7 +8884,7 @@ for _ in range(t):
 
 ## 1829E. The Lakes
 
-Dfs and similar, dsu, graphs, implementation, *1100,
+Dfs and similar, dsu, graphs, implementation, 1100,
 
 https://codeforces.com/problemset/problem/1829/E
 
@@ -9205,7 +9207,7 @@ for _ in range(t):
 
 ## 1843D. Apple Tree
 
-Combinatorics, dfs and similar, dp, math, trees, *1200
+Combinatorics, dfs and similar, dp, math, trees, 1200, 
 
 https://codeforces.com/problemset/problem/1843/D
 
@@ -9497,7 +9499,7 @@ thread.join()
 
 ## 1875D. Jellyfish and Mex
 
-dp, *1600, https://codeforces.com/problemset/problem/1875/D
+dp, 1600, https://codeforces.com/problemset/problem/1875/D
 
 You are given an array of 𝑛 nonnegative integers 𝑎1,𝑎2,…,𝑎𝑛.
 
@@ -9664,9 +9666,7 @@ for _ in range(T):
 
 ## 1883D. In Love
 
-data structure, greedy, *1500
-
-https://codeforces.com/contest/1883/problem/D
+data structure, greedy, 1500, https://codeforces.com/contest/1883/problem/D
 
 Initially, you have an empty multiset of segments. You need to process 𝑞 operations of two types:
 
