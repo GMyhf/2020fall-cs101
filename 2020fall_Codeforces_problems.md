@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 1116 GMT+8 Aug 27, 2024
+Updated 1249 GMT+8 Aug 28, 2024
 
 2020 fall, Complied by Hongfei Yan
 
@@ -1278,6 +1278,74 @@ for i in a:
     if b > c/2:
         break
 print(k)
+```
+
+
+
+## 174A. Sum
+
+implementation, 800, https://codeforces.com/problemset/problem/1742/A
+
+You are given three integers 𝑎, 𝑏, and 𝑐. Determine if one of them is the sum of the other two.
+
+**Input**
+
+The first line contains a single integer 𝑡 (1≤𝑡≤9261) — the number of test cases.
+
+The description of each test case consists of three integers 𝑎, 𝑏, 𝑐 (0≤𝑎,𝑏,𝑐≤20).
+
+**Output**
+
+For each test case, output "YES" if one of the numbers is the sum of the other two, and "NO" otherwise.
+
+You can output the answer in any case (for example, the strings "yEs", "yes", "Yes" and "YES" will be recognized as a positive answer).
+
+Example
+
+Input
+
+```
+7
+1 4 3
+2 5 8
+9 11 20
+0 0 0
+20 20 20
+4 12 3
+15 7 8
+```
+
+Output
+
+```
+YES
+NO
+YES
+YES
+NO
+NO
+YES
+```
+
+Note
+
+In the first test case, 1+3=4.
+
+In the second test case, none of the numbers is the sum of the other two.
+
+In the third test case, 9+11=20.
+
+
+
+```python
+t = int(input())
+for _ in range(t):
+    a = list(map(int, input().split()))
+    a.sort()
+    if a[0] + a[1] == a[2]:
+        print("YES")
+    else:
+        print("NO")
 ```
 
 
@@ -3171,6 +3239,72 @@ for i in denominations:
     cnt += n // i
     n %= i
 print(cnt)
+```
+
+
+
+## 1154A. Restoring Three Numbers
+
+math, 800, https://codeforces.com/problemset/problem/1154/A
+
+Polycarp has guessed three positive integers 𝑎a, 𝑏b and 𝑐c. He keeps these numbers in secret, but he writes down four numbers on a board in arbitrary order — their pairwise sums (three numbers) and sum of all three numbers (one number). So, there are four numbers on a board in random order: 𝑎+𝑏, 𝑎+𝑐, 𝑏+𝑐 and 𝑎+𝑏+𝑐.
+
+You have to guess three numbers 𝑎, 𝑏 and 𝑐 using given numbers. Print three guessed integers in any order.
+
+Pay attention that some given numbers 𝑎, 𝑏 and 𝑐 can be equal (it is also possible that 𝑎=𝑏=𝑐).
+
+**Input**
+
+The only line of the input contains four positive integers $𝑥_1,𝑥_2,𝑥_3,𝑥_4 (2≤𝑥_𝑖≤10^9) $— numbers written on a board in random order. It is guaranteed that the answer exists for the given number $𝑥_1,𝑥_2,𝑥_3,𝑥_4$.
+
+**Output**
+
+Print such positive integers 𝑎a, 𝑏b and 𝑐c that four numbers written on a board are values 𝑎+𝑏, 𝑎+𝑐, 𝑏+𝑐 and 𝑎+𝑏+𝑐 written in some order. Print 𝑎a, 𝑏b and 𝑐c in any order. If there are several answers, you can print any. It is guaranteed that the answer exists.
+
+Examples
+
+Input
+
+```
+3 6 5 4
+```
+
+Output
+
+```
+2 1 3
+```
+
+Input
+
+```
+40 40 40 60
+```
+
+Output
+
+```
+20 20 20
+```
+
+Input
+
+```
+201 101 101 200
+```
+
+Output
+
+```
+1 100 100
+```
+
+
+
+```python
+a = list(map(int, input().split()))
+a.sort()
+print(a[3]-a[0],a[3]-a[1],a[3]-a[2])
 ```
 
 
