@@ -3849,6 +3849,98 @@ for _ in range(t):
 
 
 
+## 1879B. Chips on the Board
+
+constructive algorithms, greedy, 900, https://codeforces.com/problemset/problem/1879/B
+
+You are given a board of size 𝑛×𝑛 (𝑛 rows and 𝑛 colums) and two arrays of positive integers 𝑎 and 𝑏 of size 𝑛n.
+
+Your task is to place the chips on this board so that the following condition is satisfied for every cell (𝑖,𝑗):
+
+- there exists at least one chip in the same column or in the same row as the cell (𝑖,𝑗). I. e. there exists a cell (𝑥,𝑦) such that there is a chip in that cell, and either 𝑥=𝑖 or 𝑦=𝑗 (or both).
+
+The cost of putting a chip in the cell (𝑖,𝑗) is equal to $𝑎_𝑖+𝑏_𝑗$.
+
+For example, for 𝑛=3, 𝑎=[1,4,1] and 𝑏=[3,2,2]. One of the possible chip placements is as follows:
+
+![img](https://espresso.codeforces.com/8026451d612be7da97f8e4ee35e1babb83fc896f.png)
+
+<center>White squares are empty</center>
+
+
+
+The total cost of that placement is (1+3)+(1+2)+(1+2)=10.
+
+Calculate the minimum possible total cost of putting chips according to the rules above.
+
+**Input**
+
+The first line contains a single integer $𝑡 (1≤𝑡≤104)$ — the number of test cases.
+
+The first line of each test case contains a single integer $𝑛 (1≤𝑛≤3⋅10^5)$.
+
+The second line contains 𝑛n integers $𝑎_1,𝑎_2,…,𝑎_𝑛 (1≤𝑎_𝑖≤10^9)$.
+
+The third line contains 𝑛n integers $𝑏_1,𝑏_2,…,𝑏_𝑛 (1≤𝑏_𝑖≤10^9)$.
+
+The sum of 𝑛 over all test cases doesn't exceed $3⋅10^5$.
+
+**Output**
+
+For each test case, print a single integer — the minimum possible total cost of putting chips according to the rules.
+
+Example
+
+Input
+
+```
+4
+3
+1 4 1
+3 2 2
+1
+4
+5
+2
+4 5
+2 3
+5
+5 2 4 5 3
+3 4 2 1 5
+```
+
+Output
+
+```
+10
+9
+13
+24
+```
+
+Note
+
+The first test case of the example is described in the statement.
+
+
+
+从数组a中找一个最小的数，分别和b数组相加；从数组b中找一个最小的数，分别和a数组相加。最后取较小者。
+
+```python
+t = int(input())
+for _ in range(t):
+    n = int(input())
+    *a, = map(int, input().split())
+    *b, = map(int, input().split())
+    
+    min_a = min(a)
+    min_b = min(b)
+    
+    ans1 = sum([min_a + i for i in b])
+    ans2 = sum([min_b + i for i in a])
+    print(min(ans1, ans2))
+```
+
 
 
 # ==OPTIONAL PROBLEMS==
