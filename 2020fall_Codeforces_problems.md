@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 2207 GMT+8 Aug 28, 2024
+Updated 0956 GMT+8 Aug 29, 2024
 
 2020 fall, Complied by Hongfei Yan
 
@@ -3753,6 +3753,94 @@ for _ in range(t):
         print('YES')
     else:
         print('NO')
+```
+
+
+
+## 1833B. Restore the Weather
+
+greedy, sortings, 900, https://codeforces.com/problemset/problem/1833/B
+
+You are given an array $𝑎_i$ containing the weather forecast for Berlandia for the last 𝑛 days. That is, $𝑎_𝑖$ — is the estimated air temperature on day 𝑖 (1≤𝑖≤𝑛).
+
+You are also given an array 𝑏 — the air temperature that was actually present on each of the days. However, all the values in array 𝑏 are mixed up.
+
+Determine which day was which temperature, if you know that the weather never differs from the forecast by more than 𝑘 degrees. In other words, if on day 𝑖 the real air temperature was 𝑐, then the equality $|𝑎_𝑖−𝑐|≤𝑘$ is always true.
+
+For example, let an array 𝑎 = [1,3,5,3,9] of length 𝑛=5 and 𝑘=2 be given and an array 𝑏 = [2,5,11,2,4]. Then, so that the value of $𝑏_𝑖$ corresponds to the air temperature on day 𝑖, we can rearrange the elements of the array 𝑏 so: [2,2,5,4,11]. Indeed:
+
+- On the 11st day, |𝑎1−𝑏1|=|1−2|=1, 1≤2=𝑘 is satisfied;
+- On the 22nd day |𝑎2−𝑏2|=|3−2|=1, 1≤2=𝑘 is satisfied;
+- On the 33rd day, |𝑎3−𝑏3|=|5−5|=0, 0≤2=𝑘 is satisfied;
+- On the 44th day, |𝑎4−𝑏4|=|3−4|=1, 1≤2=𝑘 is satisfied;
+- On the 55th day, |𝑎5−𝑏5|=|9−11|=2, 2≤2=𝑘 is satisfied.
+
+**Input**
+
+The first line of input data contains a single integer 𝑡 (1≤𝑡≤10^4^) — the number of test cases.
+
+The description of the test cases follows.
+
+The first line of each test case contains two integers 𝑛 (1≤𝑛≤10^5^) and 𝑘 (0≤𝑘≤10^9^) — the number of days and the maximum difference between the expected and actual air temperature on each day.
+
+The second line of each test case contains exactly 𝑛 integers — elements of array 𝑎 ($−10^9≤𝑎_𝑖≤10^9$).
+
+The third line of each test case contains exactly 𝑛 integers — elements of array 𝑏 ($−10^9≤𝑏_𝑖≤10^9$).
+
+It is guaranteed that the sum of 𝑛 over all test cases does not exceed 10^5^, and that the elements of array 𝑏 can always be rearranged so that the equality |𝑎𝑖−𝑏𝑖|≤𝑘 is true for all 𝑖.
+
+**Output**
+
+On a separate line for each test case, output exactly  numbers — the values of air temperature on each of the days in the correct order.
+
+If there is more than one answer — output any of them.
+
+Example
+
+input
+
+```
+3
+5 2
+1 3 5 3 9
+2 5 11 2 4
+6 1
+-1 3 -2 0 -5 -1
+-4 0 -1 4 0 0
+3 3
+7 7 7
+9 4 8
+```
+
+output
+
+```
+2 2 5 4 11
+0 4 -1 0 -4 0
+8 4 9
+```
+
+
+
+```python
+t = int(input())
+for _ in range(t):
+    j, k = map(int, input().split())
+
+    l1 = list(map(int, input().split()))
+    v = [(l1[i], i) for i in range(j)]
+    v.sort()
+
+    l2 = list(map(int, input().split()))
+    l2.sort()
+
+    z = [0] * j
+    for i in range(j):
+        z[v[i][1]] = l2[i]
+
+    for data in z:
+        print(data, end=" ")
+    print()
 ```
 
 
@@ -9256,94 +9344,6 @@ for _ in range(t):
     for i in range(n):
         A.append(input())
     print(solve())
-```
-
-
-
-## 1833B. Restore the Weather
-
-greedy/sortings, 1100, https://codeforces.com/problemset/problem/1833/B
-
-You are given an array $𝑎_i$ containing the weather forecast for Berlandia for the last 𝑛 days. That is, $𝑎_𝑖$ — is the estimated air temperature on day 𝑖 (1≤𝑖≤𝑛1).
-
-You are also given an array 𝑏 — the air temperature that was actually present on each of the days. However, all the values in array 𝑏 are mixed up.
-
-Determine which day was which temperature, if you know that the weather never differs from the forecast by more than 𝑘 degrees. In other words, if on day 𝑖 the real air temperature was 𝑐, then the equality $|𝑎_𝑖−𝑐|≤𝑘$ is always true.
-
-For example, let an array 𝑎 = [1,3,5,3,9] of length 𝑛=5 and 𝑘=2 be given and an array 𝑏 = [2,5,11,2,4]. Then, so that the value of $𝑏_𝑖$ corresponds to the air temperature on day 𝑖, we can rearrange the elements of the array 𝑏 so: [2,2,5,4,11]. Indeed:
-
-- On the 11st day, |𝑎1−𝑏1|=|1−2|=1, 1≤2=𝑘 is satisfied;
-- On the 22nd day |𝑎2−𝑏2|=|3−2|=1, 1≤2=𝑘 is satisfied;
-- On the 33rd day, |𝑎3−𝑏3|=|5−5|=0, 0≤2=𝑘 is satisfied;
-- On the 44th day, |𝑎4−𝑏4|=|3−4|=1, 1≤2=𝑘 is satisfied;
-- On the 55th day, |𝑎5−𝑏5|=|9−11|=2, 2≤2=𝑘 is satisfied.
-
-**Input**
-
-The first line of input data contains a single integer 𝑡 (1≤𝑡≤10^4^) — the number of test cases.
-
-The description of the test cases follows.
-
-The first line of each test case contains two integers 𝑛 (1≤𝑛≤10^5^) and 𝑘 (0≤𝑘≤10^9^) — the number of days and the maximum difference between the expected and actual air temperature on each day.
-
-The second line of each test case contains exactly 𝑛 integers — elements of array 𝑎 ($−10^9≤𝑎_𝑖≤10^9$).
-
-The third line of each test case contains exactly 𝑛 integers — elements of array 𝑏 ($−10^9≤𝑏_𝑖≤10^9$).
-
-It is guaranteed that the sum of 𝑛 over all test cases does not exceed 10^5^, and that the elements of array 𝑏 can always be rearranged so that the equality |𝑎𝑖−𝑏𝑖|≤𝑘 is true for all 𝑖.
-
-**Output**
-
-On a separate line for each test case, output exactly  numbers — the values of air temperature on each of the days in the correct order.
-
-If there is more than one answer — output any of them.
-
-Example
-
-input
-
-```
-3
-5 2
-1 3 5 3 9
-2 5 11 2 4
-6 1
--1 3 -2 0 -5 -1
--4 0 -1 4 0 0
-3 3
-7 7 7
-9 4 8
-```
-
-output
-
-```
-2 2 5 4 11
-0 4 -1 0 -4 0
-8 4 9
-```
-
-
-
-```python
-t = int(input())
-for _ in range(t):
-    j, k = map(int, input().split())
-
-    l1 = list(map(int, input().split()))
-    v = [(l1[i], i) for i in range(j)]
-    v.sort()
-
-    l2 = list(map(int, input().split()))
-    l2.sort()
-
-    z = [0] * j
-    for i in range(j):
-        z[v[i][1]] = l2[i]
-
-    for data in z:
-        print(data, end=" ")
-    print()
 ```
 
 
