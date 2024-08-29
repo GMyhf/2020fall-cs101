@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 1053 GMT+8 Aug 29, 2024
+Updated 1734 GMT+8 Aug 29, 2024
 
 2020 fall, Complied by Hongfei Yan
 
@@ -2574,6 +2574,68 @@ for i in s[1:]:
     s[0][1] = i[1] 
 else:
     print('Poor Alex') 
+```
+
+
+
+## 474A. Keyboard
+
+implementation, 900, https://codeforces.com/problemset/problem/474/A
+
+Our good friend Mole is trying to code a big message. He is typing on an unusual keyboard with characters arranged in following way:
+
+```
+qwertyuiop
+asdfghjkl;
+zxcvbnm,./
+```
+
+Unfortunately Mole is blind, so sometimes it is problem for him to put his hands accurately. He accidentally moved both his hands with one position to the left or to the right. That means that now he presses not a button he wants, but one neighboring button (left or right, as specified in input).
+
+We have a sequence of characters he has typed and we want to find the original message.
+
+**Input**
+
+First line of the input contains one letter describing direction of shifting ('L' or 'R' respectively for left or right).
+
+Second line contains a sequence of characters written by Mole. The size of this sequence will be no more than 100. Sequence contains only symbols that appear on Mole's keyboard. It doesn't contain spaces as there is no space on Mole's keyboard.
+
+It is guaranteed that even though Mole hands are moved, he is still pressing buttons on keyboard and not hitting outside it.
+
+**Output**
+
+Print a line that contains the original message.
+
+Examples
+
+Input
+
+```
+R
+s;;upimrrfod;pbr
+```
+
+Output
+
+```
+allyouneedislove
+```
+
+
+
+```python
+d = input()
+s = input()
+kb = 'qwertyuiopasdfghjkl;zxcvbnm,./'
+
+if d=='R':
+        for c in s:
+                print(kb[kb.index(c) - 1], end='')
+else:
+        for c in s:
+                print(kb[kb.index(c) + 1], end='')
+
+print()
 ```
 
 
