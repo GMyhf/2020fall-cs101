@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 1016 GMT+8 Aug 29, 2024
+Updated 1053 GMT+8 Aug 29, 2024
 
 2020 fall, Complied by Hongfei Yan
 
@@ -2905,6 +2905,80 @@ print(ans)
 
 
 
+## 580A. Kefa and First Steps
+
+brute force, dp, implementation, 900, https://codeforces.com/problemset/problem/580/A
+
+Kefa decided to make some money doing business on the Internet for exactly *n* days. He knows that on the *i*-th day (1 ≤ *i* ≤ *n*) he makes $a_i$ money. Kefa loves progress, that's why he wants to know the length of the maximum non-decreasing subsegment in sequence $a_i$. Let us remind you that the subsegment of the sequence is its continuous fragment. A subsegment of numbers is called non-decreasing if all numbers in it follow in the non-decreasing order.
+
+Help Kefa cope with this task!
+
+**Input**
+
+The first line contains integer $n (1 ≤ n ≤ 10^5)$.
+
+The second line contains *n* integers $a_1,  a_2,  ...,  a_n (1 ≤ a_i ≤ 10^9)$.
+
+**Output**
+
+Print a single integer — the length of the maximum non-decreasing subsegment of sequence *a*.
+
+Examples
+
+Input
+
+```
+6
+2 2 1 3 4 1
+```
+
+Output
+
+```
+3
+```
+
+Input
+
+```
+3
+2 2 9
+```
+
+Output
+
+```
+3
+```
+
+Note
+
+In the first test the maximum non-decreasing subsegment is the numbers from the third to the fifth one.
+
+In the second test the maximum non-decreasing subsegment is the numbers from the first to the third one.
+
+
+
+```python
+n = int(input())
+a = [int(i) for i in input().split()]
+ 
+f = [0]*n
+f[0] = 1
+max_value = 1
+for i in range(1,len(a)):
+        if a[i]>=a[i-1]:
+               f[i] = f[i-1] + 1
+               if f[i]>max_value:
+                       max_value = f[i]
+        else:
+               f[i] = 1
+ 
+print(max_value)
+```
+
+
+
 ## 615A. Bulbs
 
 implementation, 800, http://codeforces.com/contest/615/problem/A 
@@ -3581,6 +3655,152 @@ for _ in range(n):
             res.append( int(c) * (10 ** (len(s) - i)) )
     print(cnt)
     print(*res)
+```
+
+
+
+## 1374B. Multiply by 2, divide by 6
+
+math, 900, http://codeforces.com/problemset/problem/1374/B
+
+You are given an integer *n*. In one move, you can either multiply *n* by two or divide *n* by *6* (if it is divisible by *6* without the remainder).
+
+Your task is to find the minimum number of moves needed to obtain *1* from *n* or determine if it's impossible to do that.
+
+You have to answer *t* independent test cases.
+
+**Input**
+
+The first line of the input contains one integer *t*(1≤t≤2⋅10^4^) — the number of test cases. Then t test cases follow.
+
+The only line of the test case contains one integer *n* (1≤n≤10^9^).
+
+**Output**
+
+For each test case, print the answer — the minimum number of moves needed to obtain 1 from *n* if it's possible to do that or -1 if it's impossible to obtain 1 from *n*.
+
+Example
+
+input
+
+```
+7
+1
+2
+3
+12
+12345
+15116544
+387420489
+```
+
+output
+
+```
+0
+-1
+2
+-1
+-1
+12
+36
+```
+
+Note
+
+Consider the sixth test case of the example. The answer can be obtained by the following sequence of moves from the given integer 1511654415116544:
+
+1. Divide by 66 and get 25194242519424;
+2. divide by 66 and get 419904419904;
+3. divide by 66 and get 6998469984;
+4. divide by 66 and get 1166411664;
+5. multiply by 22 and get 2332823328;
+6. divide by 66 and get 38883888;
+7. divide by 66 and get 648648;
+8. divide by 66 and get 108108;
+9. multiply by 22 and get 216216;
+10. divide by 66 and get 3636;
+11. divide by 66 and get 66;
+12. divide by 66 and get 11.
+
+
+
+```python
+for _ in range(int(input())):
+    t = int(input())
+    cnt = 0
+    while t!=1:
+        if t%3==0 and t%2==0:
+            t = t//6
+            cnt += 1
+        elif t%3==0 and t%2!=0:
+            t *= 2
+            cnt += 1
+        else:
+            print(-1); break
+    else:
+        print(cnt)
+```
+
+
+
+2020fall-cs101-顾臻宜的解题思路：只要 $𝑛=2^x 3^y$ 且 $𝑦≥𝑥,\ 𝑥,𝑦∈𝑁$ 即可，且最多进行 $2𝑙𝑜𝑔_3 𝑛$ 步。
+
+小知识：import math之后math.log（真数N，底数a）就是 $𝑙𝑜𝑔_a 𝑁$。
+
+```python
+import math
+
+for _ in range(int(input())):
+    n = int(input())
+    x = 0
+    for i in range(2*(1+int(math.log(n,3)))):
+        if n/6 == int(n/6):
+            n /= 6
+            x += 1
+        else:
+            if n/3 == int(n/3):
+                n *= 2
+                x += 1
+    
+print(x if n==1 else -1)
+```
+
+2020fall-cs101-黄旭思路：如果一个数在经过题目所说操作之后可以得到 1，那么一定在每一个步骤中都是 3的倍数，于是在循环中一旦发现该数不是 3的倍数，就跳出循环，反之就一直进行*2或者/6的操作，直到等于一为止，记录操作次数，若结果为 1则输出操作次数，反之输出-1。
+
+```python
+for i in range(int(input())):
+    x = int(input())
+    a = 0
+    while x!=1:
+        if x%3:
+            break
+        elif x%6==0:
+            x=x/6
+            a+=1
+        else:
+            x*=2
+            a+=1
+    print([a,-1][x!=1])
+```
+
+2021fall-cs101-吉祥瑞，解题思路：先一直将除以6，直至不能除尽。再一直将乘以2后除以6，即将除以3，直至不能除尽。若此时不是1，则说明无法实现。
+
+```python
+t = int(input())
+for _ in range(t):
+    n = int(input())
+    s = 0
+    while n%6 == 0:
+        n = int(n/6)
+        s += 1
+    while n%3 == 0:
+        n = int(n/3)
+        s += 2
+    if n == 1:
+        print(s)
+    else:
+        print(-1)
 ```
 
 
@@ -7701,154 +7921,6 @@ print('\n'.join(map(str,ans)))
 
 
 如果用sum求和，O(n^2)，pypy3也会在test3 超时。
-
-
-
-
-
-## 1374B. Multiply by 2, divide by 6
-
-math, 900, http://codeforces.com/problemset/problem/1374/B
-
-You are given an integer *n*. In one move, you can either multiply *n* by two or divide *n* by *6* (if it is divisible by *6* without the remainder).
-
-Your task is to find the minimum number of moves needed to obtain *1* from *n* or determine if it's impossible to do that.
-
-You have to answer *t* independent test cases.
-
-**Input**
-
-The first line of the input contains one integer *t*(1≤t≤2⋅10^4^) — the number of test cases. Then t test cases follow.
-
-The only line of the test case contains one integer *n* (1≤n≤10^9^).
-
-**Output**
-
-For each test case, print the answer — the minimum number of moves needed to obtain 1 from *n* if it's possible to do that or -1 if it's impossible to obtain 1 from *n*.
-
-Example
-
-input
-
-```
-7
-1
-2
-3
-12
-12345
-15116544
-387420489
-```
-
-output
-
-```
-0
--1
-2
--1
--1
-12
-36
-```
-
-Note
-
-Consider the sixth test case of the example. The answer can be obtained by the following sequence of moves from the given integer 1511654415116544:
-
-1. Divide by 66 and get 25194242519424;
-2. divide by 66 and get 419904419904;
-3. divide by 66 and get 6998469984;
-4. divide by 66 and get 1166411664;
-5. multiply by 22 and get 2332823328;
-6. divide by 66 and get 38883888;
-7. divide by 66 and get 648648;
-8. divide by 66 and get 108108;
-9. multiply by 22 and get 216216;
-10. divide by 66 and get 3636;
-11. divide by 66 and get 66;
-12. divide by 66 and get 11.
-
-
-
-```python
-for _ in range(int(input())):
-    t = int(input())
-    cnt = 0
-    while t!=1:
-        if t%3==0 and t%2==0:
-            t = t//6
-            cnt += 1
-        elif t%3==0 and t%2!=0:
-            t *= 2
-            cnt += 1
-        else:
-            print(-1); break
-    else:
-        print(cnt)
-```
-
-
-
-2020fall-cs101-顾臻宜的解题思路：只要 $𝑛=2^x 3^y$ 且 $𝑦≥𝑥,\ 𝑥,𝑦∈𝑁$ 即可，且最多进行 $2𝑙𝑜𝑔_3 𝑛$ 步。
-
-小知识：import math之后math.log（真数N，底数a）就是 $𝑙𝑜𝑔_a 𝑁$。
-
-```python
-import math
-
-for _ in range(int(input())):
-    n = int(input())
-    x = 0
-    for i in range(2*(1+int(math.log(n,3)))):
-        if n/6 == int(n/6):
-            n /= 6
-            x += 1
-        else:
-            if n/3 == int(n/3):
-                n *= 2
-                x += 1
-    
-print(x if n==1 else -1)
-```
-
-2020fall-cs101-黄旭思路：如果一个数在经过题目所说操作之后可以得到 1，那么一定在每一个步骤中都是 3的倍数，于是在循环中一旦发现该数不是 3的倍数，就跳出循环，反之就一直进行*2或者/6的操作，直到等于一为止，记录操作次数，若结果为 1则输出操作次数，反之输出-1。
-
-```python
-for i in range(int(input())):
-    x = int(input())
-    a = 0
-    while x!=1:
-        if x%3:
-            break
-        elif x%6==0:
-            x=x/6
-            a+=1
-        else:
-            x*=2
-            a+=1
-    print([a,-1][x!=1])
-```
-
-2021fall-cs101-吉祥瑞，解题思路：先一直将除以6，直至不能除尽。再一直将乘以2后除以6，即将除以3，直至不能除尽。若此时不是1，则说明无法实现。
-
-```python
-t = int(input())
-for _ in range(t):
-    n = int(input())
-    s = 0
-    while n%6 == 0:
-        n = int(n/6)
-        s += 1
-    while n%3 == 0:
-        n = int(n/3)
-        s += 2
-    if n == 1:
-        print(s)
-    else:
-        print(-1)
-```
 
 
 
