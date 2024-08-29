@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 0956 GMT+8 Aug 29, 2024
+Updated 1016 GMT+8 Aug 29, 2024
 
 2020 fall, Complied by Hongfei Yan
 
@@ -19,6 +19,10 @@ Codeforces is a project joining people interested in and taking part in programm
 如果想查看某个题目其他人提交的代码，替换链接中数字和最后一个字母，例如查看580C 可以访问
 
 http://codeforces.com/problemset/status/580/problem/C
+
+如果想看题目的中文，替换链接中题号，例如查看1879B可以访问
+
+https://www.luogu.com.cn/problem/CF1879B
 
 # ==Basic Programming Exercises==
 
