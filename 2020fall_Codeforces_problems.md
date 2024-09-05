@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 1749 GMT+8 Aug 29, 2024
+Updated 1637 GMT+8 Sep 5, 2024
 
 2020 fall, Complied by Hongfei Yan
 
@@ -3924,6 +3924,44 @@ for _ in range(t):
         print(s)
     else:
         print(-1)
+```
+
+
+
+```python
+def min_moves_to_one(t, test_cases):
+    results = []
+    for n in test_cases:
+        moves = 0
+        while n != 1:
+            if n % 6 == 0:
+                n //= 6
+            elif n % 3 == 0:
+                n *= 2
+            else:
+                moves = -1
+                break
+            moves += 1
+        if n == 1:
+            results.append(moves)
+        else:
+            results.append(-1)
+    return results
+
+# Input reading
+import sys
+input = sys.stdin.read
+data = input().split()
+
+t = int(data[0])
+test_cases = [int(data[i]) for i in range(1, t + 1)]
+
+# Get results
+results = min_moves_to_one(t, test_cases)
+
+# Print results
+for result in results:
+    print(result)
 ```
 
 
