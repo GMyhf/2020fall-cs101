@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 1637 GMT+8 Sep 5, 2024
+Updated 2356 GMT+8 Sep 10, 2024
 
 2020 fall, Complied by Hongfei Yan
 
@@ -4206,6 +4206,8 @@ output
 ```
 
 
+
+这题的k几乎是冗余条件
 
 ```python
 t = int(input())
