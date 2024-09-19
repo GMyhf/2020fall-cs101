@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 2356 GMT+8 Sep 10, 2024
+Updated 2203 GMT+8 Sep 19, 2024
 
 2020 fall, Complied by Hongfei Yan
 
@@ -550,7 +550,7 @@ else:
 
 ## 71A. Way Too Long Words
 
-strings, 1000, http://codeforces.com/problemset/problem/71/A
+strings, 800, http://codeforces.com/problemset/problem/71/A
 
 Sometimes some words like "*localization*" or "*internationalization*" are so long that writing them many times in one text is quite tiresome.
 
