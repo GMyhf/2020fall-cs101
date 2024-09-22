@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 2203 GMT+8 Sep 19, 2024
+Updated 1328 GMT+8 Sep 22, 2024
 
 2020 fall, Complied by Hongfei Yan
 
@@ -2520,6 +2520,126 @@ for i in a:
 
 print(cnt)
 ```
+
+
+
+## 433B. Kuriyama Mirai's Stones
+
+dp, implementation, sorting, 1200
+
+https://codeforces.com/problemset/problem/433/B
+
+Kuriyama Mirai has killed many monsters and got many (namely *n*) stones. She numbers the stones from 1 to *n*. The cost of the *i*-th stone is $v_i$. Kuriyama Mirai wants to know something about these stones so she will ask you two kinds of questions:
+
+1. She will tell you two numbers, *l* and *r* (1 ≤ *l* ≤ *r* ≤ *n*), and you should tell her $\sum\limits_{i=l}^rv_i$.  
+2. Let $u_i$ be the cost of the *i*-th cheapest stone (the cost that will be on the *i*-th place if we arrange all the stone costs in non-decreasing order). This time she will tell you two numbers, *l* and *r* (1 ≤ *l* ≤ *r* ≤ *n*), and you should tell her $\sum\limits_{i=l}^ru_i$. 
+
+For every question you should give the correct answer, or Kuriyama Mirai will say "fuyukai desu" and then become unhappy.
+
+**Input**
+
+The first line contains an integer *n* ($1 ≤ n ≤ 10^5$). The second line contains *n* integers: $v_1, v_2, ..., v_n (1 ≤ v_i ≤ 10^9)$ — costs of the stones. 
+
+The third line contains an integer *m* ($1 ≤ m ≤ 10^5$) — the number of Kuriyama Mirai's questions. Then follow *m* lines, each line contains three integers *type*, *l* and *r* (1 ≤ *l* ≤ *r* ≤ *n*; 1 ≤ *type* ≤ 2), describing a question. If *type* equal to 1, then you should output the answer for the first question, else you should output the answer for the second one.
+
+**Output**
+
+Print *m* lines. Each line must contain an integer — the answer to Kuriyama Mirai's question. Print the answers to the questions in the order of input.
+
+Examples
+
+input
+
+```
+6
+6 4 2 7 2 7
+3
+2 3 6
+1 3 4
+1 1 6
+```
+
+output
+
+```
+24
+9
+28
+```
+
+input
+
+```
+4
+5 5 2 3
+10
+1 2 4
+2 1 4
+1 1 1
+2 1 4
+2 1 2
+1 1 1
+1 3 3
+1 1 3
+1 4 4
+1 2 2
+```
+
+output
+
+```
+10
+15
+5
+15
+5
+5
+2
+12
+3
+5
+```
+
+Note
+
+Please note that the answers to the questions may overflow 32-bit integer type.
+
+
+
+```python
+def precompute_prefix_sums(arr):
+    prefix_sums = [0] * (len(arr) + 1)
+    for i in range(1, len(arr) + 1):
+        prefix_sums[i] = prefix_sums[i - 1] + arr[i - 1]
+    return prefix_sums
+
+# Read input
+n = int(input().strip())
+v = list(map(int, input().strip().split()))
+m = int(input().strip())
+
+# Precompute prefix sums for the original and sorted lists
+original_prefix_sums = precompute_prefix_sums(v)
+sorted_v = sorted(v)
+sorted_prefix_sums = precompute_prefix_sums(sorted_v)
+
+# Process each query
+results = []
+for _ in range(m):
+    query = list(map(int, input().strip().split()))
+    q_type, l, r = query[0], query[1], query[2]
+    if q_type == 1:
+        result = original_prefix_sums[r] - original_prefix_sums[l - 1]
+    else:
+        result = sorted_prefix_sums[r] - sorted_prefix_sums[l - 1]
+    results.append(result)
+
+# Print results
+for result in results:
+    print(result)
+```
+
+
 
 
 
