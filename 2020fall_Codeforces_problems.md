@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 1855 GMT+8 Sep 22, 2024
+Updated 2106 GMT+8 Sep 29, 2024
 
 2020 fall, Complied by Hongfei Yan
 
@@ -2911,7 +2911,9 @@ print()
 
 ## 489B. BerSU Ball
 
-greedy, sortings, two pointers, 1200, https://codeforces.com/problemset/problem/489/B
+dfs and similar, dp, graph matchings, greedy, sortings, two pointers, 1200, 
+
+https://codeforces.com/problemset/problem/489/B
 
 The Berland State University is hosting a ballroom dance in celebration of its 100500-th anniversary! *n* boys and *m* girls are already busy rehearsing waltz, minuet, polonaise and quadrille moves.
 
