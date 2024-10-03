@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 1617 GMT+8 Oct 3, 2024
+Updated 2014 GMT+8 Oct 3, 2024
 
 2020 fall, Complied by Hongfei Yan
 
@@ -4180,17 +4180,17 @@ for result in results:
 
 math, number theory, 900, https://codeforces.com/problemset/problem/1475/A
 
-You are given an integer 𝑛n. Check if 𝑛 has an **odd** divisor, greater than one (does there exist such a number 𝑥 (𝑥>1) that 𝑛n is divisible by 𝑥 and 𝑥 is odd).
+You are given an integer 𝑛. Check if 𝑛 has an **odd** divisor, greater than one (does there exist such a number 𝑥 (𝑥>1) that 𝑛 is divisible by 𝑥 and 𝑥 is odd).
 
 For example, if 𝑛=6, then there is 𝑥=3. If 𝑛=4, then such a number does not exist.
 
 **Input**
 
-The first line contains one integer $𝑡 (1≤𝑡≤10^4)$ — the number of test cases. Then 𝑡t test cases follow.
+The first line contains one integer $𝑡 (1≤𝑡≤10^4)$ — the number of test cases. Then 𝑡 test cases follow.
 
 Each test case contains one integer $𝑛 (2≤𝑛≤10^{14})$.
 
-Please note, that the input for some test cases won't fit into 3232-bit integer type, so you should use at least 6464-bit integer type in your programming language.
+Please note, that the input for some test cases won't fit into 32-bit integer type, so you should use at least 64-bit integer type in your programming language.
 
 **Output**
 
