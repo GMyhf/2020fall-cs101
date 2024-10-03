@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 2106 GMT+8 Sep 29, 2024
+Updated 1547 GMT+8 Oct 3, 2024
 
 2020 fall, Complied by Hongfei Yan
 
@@ -5379,6 +5379,42 @@ for i in range(n):
     else:
         print('NO')
 ```
+
+
+
+线性筛（欧拉筛），时间复杂度为：O(n)。Python3, Accepted, 992ms。
+
+```python
+def euler_sieve(n):
+    is_prime = [True] * (n + 1)
+    is_prime[0] = is_prime[1] = False
+    primes = []
+    for i in range(2, n + 1):
+        if is_prime[i]:
+            primes.append(i)
+        for p in primes:
+            if i * p > n:
+                break
+            is_prime[i * p] = False
+            if i % p == 0:
+                break
+    return is_prime
+ 
+s = euler_sieve(1000000)
+ 
+input()
+for i in map(int,input().split()):
+    sqrt_i = i**0.5
+    if sqrt_i % 1 == 0:	# 对于浮点数，x % 1 == 0 用于检查 x 是否是一个整数。
+        if s[int(sqrt_i)]:
+            print('YES')
+        else:
+            print('NO')
+    else:
+        print('NO')
+```
+
+
 
 线性筛（欧拉筛），时间复杂度为：O(n)。Python3, Accepted, 1808ms。
 
