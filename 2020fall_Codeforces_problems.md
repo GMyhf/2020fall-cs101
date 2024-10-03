@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 1547 GMT+8 Oct 3, 2024
+Updated 1617 GMT+8 Oct 3, 2024
 
 2020 fall, Complied by Hongfei Yan
 
@@ -5383,6 +5383,50 @@ for i in range(n):
 
 
 线性筛（欧拉筛），时间复杂度为：O(n)。Python3, Accepted, 998ms。
+
+> 欧拉筛法（也称为线性筛法）是一种高效的算法，用于在 O(n) 时间复杂度内找到一定范围内所有的素数。相比埃拉托斯特尼筛法，欧拉筛法通过确保每个合数只被其最小的素因子筛除一次，从而避免了重复标记，提高了效率。
+>
+> **欧拉筛法的基本思想**
+>
+> 1. **初始化**：创建一个布尔数组 `is_prime`，初始时所有元素设为 `True`，表示所有数都是素数。同时创建一个列表 `primes`，用于存储找到的素数。
+> 2. **遍历**：从 2 开始遍历到 n，对于每个数 i：
+>    - 如果 `is_prime[i]` 为 `True`，则 i 是素数，将其加入 `primes` 列表。
+>    - 对于每个已知的素数 `p`，如果 `i * p` 不超过 n，将 `i * p` 标记为合数（设置 `is_prime[i * p]` 为 `False`）。
+>    - 如果 `i` 能被 `p` 整除（即 `i % p == 0`），则停止当前的内层循环。这是因为 `i * p` 之后的合数会被 `i` 的更大倍数筛除，不需要重复标记。
+>
+> **代码实现**
+>
+> ```python
+> def euler_sieve(n):
+>     is_prime = [True] * (n + 1)
+>     primes = []
+>     for i in range(2, n + 1):
+>         if is_prime[i]:
+>             primes.append(i)
+>         for p in primes:
+>             if i * p > n:
+>                 break
+>             is_prime[i * p] = False
+>             if i % p == 0:
+>                 break
+>     return primes
+> 
+> # 示例
+> n = 50
+> print(euler_sieve(n))
+> ```
+>
+> ### 关键点
+>
+> - **避免重复标记**：通过 `if i % p == 0` 这个条件，确保每个合数只被其最小的素因子标记一次。
+> - **时间复杂度**：O(n)，每个数只会被标记一次。
+> - **空间复杂度**：O(n)，需要一个布尔数组来记录每个数是否为素数。
+>
+> ### 优点
+>
+> - **高效**：时间复杂度为 O(n)，适用于处理大规模数据。
+> - **简洁**：实现相对简单，易于理解和维护。
+>
 
 ```python
 def euler_sieve(n):
