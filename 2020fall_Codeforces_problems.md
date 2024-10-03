@@ -5382,7 +5382,7 @@ for i in range(n):
 
 
 
-线性筛（欧拉筛），时间复杂度为：O(n)。Python3, Accepted, 992ms。
+线性筛（欧拉筛），时间复杂度为：O(n)。Python3, Accepted, 998ms。
 
 ```python
 def euler_sieve(n):
