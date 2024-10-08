@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 2014 GMT+8 Oct 3, 2024
+Updated 1337 GMT+8 Oct 8, 2024
 
 2020 fall, Complied by Hongfei Yan
 
@@ -5494,6 +5494,104 @@ for i in map(int,input().split()):
         print('YES')
     else:
         print('NO')
+```
+
+
+
+Python3, Accepted, 748ms。用到了埃式筛法，内置函数math.sqrt, math.isqrt，set，第8行循环从i*i开始，使用 sys.stdin.read() 一次性读取所有输入，缓存一次性输出。
+
+```python
+import math
+
+def sieve(limit):
+    is_prime = [True] * (limit + 1)
+    is_prime[0] = is_prime[1] = False
+    for i in range(2, int(math.sqrt(limit)) + 1):
+        if is_prime[i]:
+            for j in range(i * i, limit + 1, i):
+                is_prime[j] = False
+    return [i for i in range(limit + 1) if is_prime[i]]
+
+def is_t_prime(x, primes_set):
+    if x < 2:
+        return False
+    root = int(math.isqrt(x))
+    return root * root == x and root in primes_set
+
+def main():
+    import sys
+    input = sys.stdin.read
+    data = input().split()
+    
+    n = int(data[0])
+    numbers = list(map(int, data[1:n+1]))
+    
+    limit = 10**6
+    primes = sieve(limit)
+    primes_set = set(primes)
+    
+    results = []
+    for number in numbers:
+        if is_t_prime(number, primes_set):
+            results.append("YES")
+        else:
+            results.append("NO")
+    
+    print("\n".join(results))
+
+if __name__ == "__main__":
+    main()
+```
+
+
+
+可以进一步优化，直接用is_prim列表。Python3, Accepted, 654ms。
+
+```python
+import math
+
+def sieve(limit):
+    is_prime = [True] * (limit + 1)
+    is_prime[0] = is_prime[1] = False
+    for i in range(2, int(math.sqrt(limit)) + 1):
+        if is_prime[i]:
+            for j in range(i * i, limit + 1, i):
+                is_prime[j] = False
+    #return [i for i in range(limit + 1) if is_prime[i]]
+    return is_prime
+
+#def is_t_prime(x, primes_set):
+def is_t_prime(x, primes_list):
+    if x < 2:
+        return False
+    root = int(math.isqrt(x))
+    #return root * root == x and root in primes_set
+    return root * root == x and primes_list[root]
+
+def main():
+    import sys
+    input = sys.stdin.read
+    data = input().split()
+
+    n = int(data[0])
+    numbers = list(map(int, data[1:n+1]))
+
+    limit = 10**6
+    primes = sieve(limit)
+    #primes_set = set(primes)
+
+    results = []
+    for number in numbers:
+        #if is_t_prime(number, primes_set):
+        if is_t_prime(number, primes):
+            results.append("YES")
+        else:
+            results.append("NO")
+
+    print("\n".join(results))
+
+if __name__ == "__main__":
+    main()
 ```
 
 
