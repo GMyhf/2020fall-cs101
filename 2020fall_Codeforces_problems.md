@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 1016 GMT+8 Oct 19, 2024
+Updated 1710 GMT+8 Oct 19, 2024
 
 2020 fall, Complied by Hongfei Yan
 
@@ -9360,7 +9360,7 @@ Example
 
 1749C - Nubmer Game Tutorial, https://codeforces.com/blog/entry/108269
 
-Note that if Bob has increased some element, then Alice can't remove it on the next stages. Obviously, it is more profitable for Bob to "prohibit" the smallest element of the array. Using this fact, we can iterate over the value of 𝑘, and then simulate the game process. To simulate the game, we can maintain the set of elements that Alice can remove. On the 𝑖i-th stage, Alice removes the maximum element 𝑥x, such that $𝑥≤𝑘−𝑖+1$, if there are no such elements, then Alice lost. Bob always removes the minimum element of the set.
+Note that if Bob has increased some element, then Alice can't remove it on the next stages. Obviously, it is more profitable for Bob to "prohibit" the smallest element of the array. Using this fact, we can iterate over the value of 𝑘, and then simulate the game process. To simulate the game, we can maintain the set of elements that Alice can remove. On the 𝑖-th stage, Alice removes the maximum element 𝑥, such that $𝑥≤𝑘−𝑖+1$, if there are no such elements, then Alice lost. Bob always removes the minimum element of the set.
 
 Thus, the complexity of the solution is $𝑂(𝑛^2log𝑛)$ for each test case.
 
@@ -9369,6 +9369,50 @@ There is another possible solution: we can notice that, if Alice wins, Bob will 
 
 
 为了采取最优策略，Bob尽量从小的数开始增加k-i+1，而增加后的数将无法在以后的步骤中被Alice选取，为在后续步骤中能够继续选取，Alice尽量取满足条件的最大数来移除。
+
+```python
+#import sys
+from bisect import bisect_right
+#from collections import deque
+
+def solve():
+    n = int(input())
+    a = list(map(int, input().split()))
+
+    res = 0
+
+    for k in range(1, n + 1):
+        s = sorted(a)
+
+        for i in range(1, k + 1):
+            idx = bisect_right(s, k - i + 1)
+            if idx == 0:
+                break
+
+            s.pop(idx - 1)
+
+            if s:
+                now = s.pop(0)
+                s.append(now + k - i + 1)
+                s.sort()
+
+        if len(s) + k == n:
+            res = k
+
+    print(res)
+
+def main():
+    t = int(input())
+    for _ in range(t):
+        solve()
+
+if __name__ == "__main__":
+    main()
+```
+
+
+
+
 
 ```python
 # 2022fall-cs101, 梁力潇
