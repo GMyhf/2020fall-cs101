@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 1711 GMT+8 Oct 19, 2024
+Updated 1941 GMT+8 Oct 20, 2024
 
 2020 fall, Complied by Hongfei Yan
 
@@ -4998,6 +4998,8 @@ In the first test we can sort the children into four cars like this:
 There are other ways to sort the groups into four cars.
 
 
+
+数“1,2,3,4”出现的次数，3、4 人一组的直接算一辆，2 人的算两个座位，计算 1 人、3 人的组数能否刚好配对（若刚好，则 1 人直接与 3 人拼），加 3向上取整后整除 4。
 
 ```python
 input()
