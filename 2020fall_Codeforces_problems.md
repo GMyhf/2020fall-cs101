@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 0050 GMT+8 Oct 23, 2024
+Updated 1728 GMT+8 Oct 23, 2024
 
 2020 fall, Complied by Hongfei Yan
 
@@ -3009,6 +3009,36 @@ output
 
 ```
 2
+```
+
+
+
+```python
+n = int(input())
+a = [int(i) for i in input().split()]
+m = int(input())
+b = [int(i) for i in input().split()]
+
+a.sort()
+b.sort()
+
+cnt = 0
+i, j = 0, 0
+
+while i < n and j < m:
+    if abs(a[i] - b[j]) <= 1:
+        # 找到一个匹配，移动两个指针，并增加计数
+        cnt += 1
+        i += 1
+        j += 1
+    elif a[i] < b[j]:
+        # 如果 a[i] 小于 b[j]，移动 a 的指针
+        i += 1
+    else:
+        # 如果 a[i] 大于 b[j]，移动 b 的指针
+        j += 1
+
+print(cnt)
 ```
 
 
