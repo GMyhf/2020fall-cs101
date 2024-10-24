@@ -8874,7 +8874,7 @@ print('\n'.join(map(str, ans)))
 
 
 
-python提交超时了，简答优化是数据整体读入，一起处理。可以AC。
+python提交超时了，简单优化是数据整体读入，一起处理。可以AC。
 
 ```python
 import sys
