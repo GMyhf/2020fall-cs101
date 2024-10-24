@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 1728 GMT+8 Oct 23, 2024
+Updated 1215 GMT+8 Oct 24, 2024
 
 2020 fall, Complied by Hongfei Yan
 
@@ -16,13 +16,13 @@ Codeforces is a project joining people interested in and taking part in programm
 
 
 
-如果想查看某个题目其他人提交的代码，替换链接中数字和最后一个字母，例如查看580C 可以访问
-
+如果想查看某个题目的测试数据（往年可以看到其他人提交的代码，目前2024年10月被屏蔽了），替换链接中数字和最后一个字母，例如查看580C 可以访问
 http://codeforces.com/problemset/status/580/problem/C
 
-如果想看题目的中文，替换链接中题号，例如查看1879B可以访问
+Codeforces题目是英文，洛谷提供中文。方法是拿到CF题号，如：1749C，直接编辑这个link的相应题号位置，
+https://www.luogu.com.cn/problem/CF1749C
 
-https://www.luogu.com.cn/problem/CF1879B
+
 
 # ==Basic Programming Exercises==
 
@@ -8874,7 +8874,7 @@ print('\n'.join(map(str, ans)))
 
 
 
-超时了，简答优化是数据整体读入，一起处理。可以AC。
+python提交超时了，简答优化是数据整体读入，一起处理。可以AC。
 
 ```python
 import sys
