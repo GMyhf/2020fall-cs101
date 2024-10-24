@@ -8845,7 +8845,7 @@ def solve(n):
         if n == 4:
             f += 3
             s += 1
-            n = 0   # Specia lJudge
+            n = 0   # Special Judge
         elif (n//2) & 1: # The First Situation
             f += n//2
             s += 1
@@ -8869,6 +8869,51 @@ for i in coins:
     else:
         solve(i)
  
+print('\n'.join(map(str, ans)))
+```
+
+
+
+超时了，简答优化是数据整体读入，一起处理。可以AC。
+
+```python
+import sys
+input = sys.stdin.read
+
+def solve(n):
+    f = s = 0  # To distinguish between first and second hands.
+    fs = True
+
+    if n & 1:
+        n -= 1
+        fs = False
+
+    while n:
+        if n == 4:
+            f += 3
+            s += 1
+            n = 0  # Special case
+        elif (n // 2) & 1:  # The First Situation
+            f += n // 2
+            s += 1
+            n = (n // 2) - 1
+        else:  # The Second Situation
+            f += 1
+            s += 1
+            n -= 2
+    ans.append([s + 1, f][fs])
+
+data = input().split()
+t = int(data[0])
+coins = list(map(int, data[1:t + 1]))
+
+ans = []
+for i in coins:
+    if i == 1:
+        ans.append(1)
+    else:
+        solve(i)
+
 print('\n'.join(map(str, ans)))
 ```
 
