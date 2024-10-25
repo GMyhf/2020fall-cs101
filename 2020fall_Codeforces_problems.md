@@ -7338,6 +7338,54 @@ In the third test Vasya can do sport either on a day number 1 or number 2. He ca
 
 
 
+**Plan**
+
+1. Initialize a 2D list `dp` where `dp[i][0]` represents the minimum rest days up to day `i` if Vasya rests on day `i`, `dp[i][1]` represents the minimum rest days up to day `i` if Vasya participates in a contest on day `i`, and `dp[i][2]` represents the minimum rest days up to day `i` if Vasya goes to the gym on day `i`.
+2. Initialize the first day's values based on the activity available on the first day.
+3. Iterate through each day from the second day to the last day:
+   - Update `dp[i][0]` as the minimum rest days if Vasya rests on day `i`.
+   - Update `dp[i][1]` as the minimum rest days if Vasya participates in a contest on day `i`.
+   - Update `dp[i][2]` as the minimum rest days if Vasya goes to the gym on day `i`.
+4. The result will be the minimum value among `dp[n-1][0]`, `dp[n-1][1]`, and `dp[n-1][2]`.
+
+**Code**
+
+```python
+def min_rest_days(n, activities):
+    # Initialize dp array
+    dp = [[float('inf')] * 3 for _ in range(n)]
+    
+    # Initialize the first day
+    dp[0][0] = 1  # Rest
+    if activities[0] == 1 or activities[0] == 3:
+        dp[0][1] = 0  # Contest
+    if activities[0] == 2 or activities[0] == 3:
+        dp[0][2] = 0  # Gym
+    
+    # Fill the dp array
+    for i in range(1, n):
+        # Rest on day i
+        dp[i][0] = min(dp[i-1]) + 1
+        
+        # Contest on day i
+        if activities[i] == 1 or activities[i] == 3:
+            dp[i][1] = min(dp[i-1][0], dp[i-1][2])
+        
+        # Gym on day i
+        if activities[i] == 2 or activities[i] == 3:
+            dp[i][2] = min(dp[i-1][0], dp[i-1][1])
+    
+    # The result is the minimum value on the last day
+    return min(dp[n-1])
+
+# Example usage:
+n = int(input())
+activities = list(map(int, input().split()))
+print(min_rest_days(n, activities))
+```
+
+
+
 ```python
 n = int(input())
 #n = 100
