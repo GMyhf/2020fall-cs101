@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 1215 GMT+8 Oct 24, 2024
+Updated 1131 GMT+8 Oct 28, 2024
 
 2020 fall, Complied by Hongfei Yan
 
@@ -6499,6 +6499,49 @@ print(s)
 注：初始时`s = 1`是算入了最后一颗树。`r`用来标记已倒下的树的最右端，初始时`r = -xh[0][1]`是为了让第一颗树一定能往左倒。
 
 心得：通过写两道选做题的解题思路，我有点体会到了贪心算法的共同模式。（1）把问题按某种顺序分解为一次次选择（“充实的寒假生活”(http://cs101.openjudge.cn/practice/16528/)按结束时间从早到晚遍历每个活动，“Woodcutters”从左到右遍历每颗树）；（2）确定每次做选择的策略（“充实的寒假生活”是”若能参加就参加“，“Woodcutters”是“若能往左倒就往左倒，若不能往左倒但能往右倒就往右倒”），使这种策略不会使结果更坏。这里对于贪心选择正确性的推理是“计算机式”的，需要反复迭代，如果要让推理更“数学”，可以用数学归纳法倒过来说。
+
+
+
+```python
+# DP 许慧琳 23心理与认知科学学院
+n = int(input())
+trees = []
+for _ in range(n):
+    c, h = map(int, input().split())
+    trees.append([c, h])
+
+if n == 1: # if only have one tree :)
+    print(1)
+    exit() # break version without while, not recommend in big program, can use sys.exit() to get an error code
+
+# first tree, can always fall
+stay = 0
+left = 1
+right = 1
+
+for i in range(1, n):
+    maxi = max(stay, left, right)
+    stay = maxi # when i-th stay
+
+    if right == maxi and left != maxi:
+        if trees[i][0] - trees[i][1] > trees[i-1][0] + trees[i-1][1]: # special situation, previous one fall right and overlap with the present tree falling left
+            left = maxi + 1
+        else:
+            left = maxi
+    else: 
+        if trees[i][0] - trees[i][1] > trees[i-1][0]: # can fall left
+            left = maxi + 1
+        else:
+            left = maxi
+
+    if i == n - 1 or (trees[i][0] + trees[i][1]) < trees[i+1][0]: # i-th fall right / the last (to prevent an error like above done bfr)
+        right = maxi + 1
+    else:
+        right = maxi
+
+print(max(stay, left, right))
+
+```
 
 
 
