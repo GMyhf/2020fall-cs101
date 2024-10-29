@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 0824 GMT+8 Oct 29, 2024
+Updated 0133 GMT+8 Oct 30, 2024
 
 2020 fall, Complied by Hongfei Yan
 
@@ -5302,6 +5302,58 @@ for i in range(1, n +  1):
             dp[i] = max(dp[i - j] + 1, dp[i])
 print(dp[n])
 ```
+
+
+
+
+
+扩欧（3个物品才比较优），枚举一个变量对另外两个解不定方程。
+
+```python
+# 高景行 24数学科学学院
+def swap(a, b):
+    return b, a
+
+def exgcd(a, b):
+    if not b:
+        return a, 1, 0
+    d, x, y = exgcd(b, a % b)
+    return d, y, x - (a // b) * y
+
+# 读取输入值
+n, a, b, c = map(int, input().split())  # ax + by = n
+if a < b:
+    a, b = swap(a, b)
+
+# 扩展欧几里得算法，求解最大公约数和初始解
+d, x0, y0 = exgcd(a, b)
+ans = 0
+
+# 化简 a 和 b
+a //= d
+b //= d
+
+# 枚举 i，计算可能的解
+for i in range(n // c + 1):
+    remainder = n - c * i
+    if remainder % d != 0:
+        continue
+
+    C = remainder // d
+    tmpx = (x0 * C % b + b) % b
+
+    if C < a * tmpx:
+        continue
+
+    # 计算 ans，尝试取最大值
+    ans = max(ans, tmpx + (C - a * tmpx) // b + i)
+
+# 输出结果
+print(ans)
+
+```
+
+
 
 
 
