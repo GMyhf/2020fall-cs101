@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 1131 GMT+8 Oct 28, 2024
+Updated 0824 GMT+8 Oct 29, 2024
 
 2020 fall, Complied by Hongfei Yan
 
@@ -4321,7 +4321,7 @@ Initially you have a single pile with 𝑛 gold nuggets. In an operation you can
 
 ![img](https://espresso.codeforces.com/723dd5ce328f1a04932ecf7a71a71f198294eaa3.png)
 
-One possible move is to take a pile of size 66 and split it into piles of sizes 22 and 44, which is valid since 44 is twice as large as 22.
+One possible move is to take a pile of size 6 and split it into piles of sizes 2 and 4, which is valid since 4 is twice as large as 2.
 
 Can you make a pile with **exactly** 𝑚 gold nuggets using zero or more operations?
 
@@ -4374,9 +4374,9 @@ NO
 
 Note
 
-The first test case is pictured in the statement. We can make a pile of size 44.
+The first test case is pictured in the statement. We can make a pile of size 4.
 
-In the second test case, we can perform the following operations: {9}→{6,3}→{4,2,3}{9}→{6,3}→{4,2,3}. The pile that is split apart is colored red before each operation.
+In the second test case, we can perform the following operations: {9}→{6,3}→{4,2,3}. The pile that is split apart is colored red before each operation.
 
 In the third test case, we can't perform a single operation.
 
@@ -6368,6 +6368,8 @@ In the first sample you can fell the trees like that:
 In the second sample you can also fell 4-th tree to the right, after that it will occupy segment [10;19].
 
 
+
+思路：如果一颗树可以向左倒而不与前一棵树重叠，就选择向左倒。否则，如果可以向右倒而且不与下一棵树重叠，就选择向右倒。如果都不可以，则该树保持不砍的状态。
 
 2020fall-cs101-陈彦如
 
