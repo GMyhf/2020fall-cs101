@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 0133 GMT+8 Oct 30, 2024
+Updated 2310 GMT+8 Oct 30, 2024
 
 2020 fall, Complied by Hongfei Yan
 
@@ -9136,6 +9136,47 @@ for i in range(int(input())):
         flag ^= 1
     output.append(ans)
 print('\n'.join(map(str,output)))
+```
+
+
+
+递归实现，pypy可以AC。
+
+```python
+# 刘家亦 24
+import sys
+#from functools import lru_cache
+ 
+# 设置递归深度限制
+sys.setrecursionlimit(30000)
+ 
+ 
+#@lru_cache(maxsize=None)
+def find_the_ans(n):
+    if n == 1:
+        return 1
+    if n == 4:
+        return 3
+    if n % 2 == 0 and n % 4 != 0:
+        return n - find_the_ans(n // 2)
+    else:
+        return n - find_the_ans(n - 1)
+ 
+ 
+if __name__ == "__main__":
+    # 读取所有输入数据
+    input_data = sys.stdin.read().strip()
+    lines = input_data.split('\n')
+ 
+    T = int(lines[0])
+    ans = []
+ 
+    for i in range(1, T + 1):
+        N = int(lines[i])
+        ans.append(find_the_ans(N))
+ 
+    # 打印结果
+    print(*ans, sep='\n')
 ```
 
 
