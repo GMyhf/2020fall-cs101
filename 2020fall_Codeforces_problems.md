@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 2310 GMT+8 Oct 30, 2024
+Updated 2030 GMT+8 Oct 31, 2024
 
 2020 fall, Complied by Hongfei Yan
 
@@ -5351,6 +5351,24 @@ for i in range(n // c + 1):
 # 输出结果
 print(ans)
 
+```
+
+
+
+思路：和小偷背包的思路很像，建立二维数组表示要切掉a，b，c中一段的最大段数，然后取最大值。
+
+```python
+# 陈一匡 24物理学院
+n,a,b,c=map(int,input().split())
+d=[a,b,c]
+l=[[0]+[-1]*n for _ in range(3)]
+for i in range(1,n+1):
+    for j in range(3):
+        if i>=d[j]:
+            l[j][i]=max(l[0][i-d[j]],l[1][i-d[j]],l[2][i-d[j]])+1
+            if l[j][i]==0:
+                l[j][i]=-1
+print(max(l[0][n],l[1][n],l[2][n]))
 ```
 
 
