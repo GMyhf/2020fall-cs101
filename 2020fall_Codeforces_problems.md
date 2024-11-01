@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 1522 GMT+8 Nov 1, 2024
+Updated 1607 GMT+8 Nov 1, 2024
 
 2020 fall, Complied by Hongfei Yan
 
@@ -5213,6 +5213,36 @@ else:
             if w%c==0:
                 num.append(i+j+int(w/c))
     print(max(num))
+```
+
+
+
+暴力，AC时间186ms
+
+```python
+# 冯全璟 24物理学院
+n, a, b, c = map(int, input().split())
+dui = sorted([a, b, c])
+ans = 0
+
+# 遍历 i 的所有可能值
+for i in range(n // dui[2] + 1):
+    da = n - i * dui[2]
+    if da < 0:
+        break  # 提前终止外层循环
+
+    # 遍历 j 的所有可能值
+    for j in range(da // dui[1] + 1):
+        remaining = da - j * dui[1]
+        if remaining < 0:
+            break  # 提前终止内层循环
+
+        if remaining % dui[0] == 0:
+            k = remaining // dui[0]
+            ans = max(ans, i + j + k)
+            break  # 剪枝，找到一个解后跳出内层循环
+
+print(ans)
 ```
 
 
