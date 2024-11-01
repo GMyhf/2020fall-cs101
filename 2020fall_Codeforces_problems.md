@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 1447 GMT+8 Nov 1, 2024
+Updated 1522 GMT+8 Nov 1, 2024
 
 2020 fall, Complied by Hongfei Yan
 
@@ -5235,6 +5235,41 @@ while a*i <= n:
     i += 1
  
 print(num)
+```
+
+
+
+暴力解法，在test 37超时。
+
+Test: #37
+Input
+4000 1 1 1
+
+```python
+def f(n, a, b, c):
+    num = 0
+
+    # 优化外层循环的范围
+    max_i = n // a
+    for i in range(max_i + 1):
+        remaining_n_after_a = n - a * i
+
+        # 优化内层循环的范围
+        max_j = remaining_n_after_a // b
+        for j in range(max_j + 1):
+            d = remaining_n_after_a - b * j
+
+            # 检查 d 是否可以被 c 整除
+            if d >= 0 and d % c == 0:
+                k = d // c
+                num = max(num, i + j + k)
+
+    return num
+
+
+n, a, b, c = map(int, input().split())
+print(f(n, a, b, c))
+
 ```
 
 
