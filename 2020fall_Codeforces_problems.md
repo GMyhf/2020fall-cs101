@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 2030 GMT+8 Oct 31, 2024
+Updated 1447 GMT+8 Nov 1, 2024
 
 2020 fall, Complied by Hongfei Yan
 
@@ -11113,6 +11113,85 @@ for _ in range(n):
     else:
         print("No")
 ```
+
+
+
+## 2033D. Kousuke's Assignment
+
+data structures, dp, dsu, greedy, math,1300 https://codeforces.com/contest/2033/problem/D
+
+After a trip with Sakurako, Kousuke was very scared because he forgot about his programming assignment. In this assignment, the teacher gave him an array 𝑎 of 𝑛n integers and asked him to calculate the number of **non-overlapping** segments of the array 𝑎a, such that each segment is considered *beautiful*.
+
+A segment [𝑙,𝑟] is considered *beautiful* if 𝑎𝑙+𝑎𝑙+1+⋯+𝑎𝑟−1+𝑎𝑟=0.
+
+For a fixed array 𝑎a, your task is to compute the maximum number of non-overlapping *beautiful* segments.
+
+**Input**
+
+The first line of input contains the number 𝑡 ($1≤𝑡≤10^4$) — the number of test cases. Each test case consists of 22 lines.
+
+- The first line contains one integer 𝑛 ($1≤𝑛≤10^5$) — the length of the array.
+- The second line contains 𝑛n integers 𝑎𝑖 ($−10^5≤𝑎𝑖≤10^5$) — the elements of the array 𝑎a.
+
+It is guaranteed that the sum of 𝑛n across all test cases does not exceed $3⋅10^5$.
+
+**Output**
+
+For each test case, output a single integer: the maximum number of non-overlapping *beautiful* segments.
+
+Example
+
+Input
+
+```
+3
+5
+2 1 -3 2 1
+7
+12 -4 4 43 -3 -5 8
+6
+0 -4 0 3 0 1
+```
+
+Output
+
+```
+1
+2
+3
+```
+
+
+
+考虑前缀和思想，令 $s0=0,si=\sum_{j=1}^i a_j$，则子段 [l,r] 是“美丽的”当且仅当 $s_r−s_{l−1}=0$，即 $s_{l−1}=s_r$。
+
+贪心一下当从左往右扫当前扫到的位置可以作为“美丽的”子段的最右端时一定将它作为一个子段，这样对后面产生子段的影响一定最小。
+
+所以每一次要检查当前的前缀和是否出现过，出现过则分割出一个美丽子段。需要特判 00。
+
+```python
+t = int(input())
+for _ in range(t):
+    n = int(input())
+    a = list(map(int, input().split()))
+    
+    prefix_sum = 0
+    prefix_sums = set()
+    count = 0
+    
+    for num in a:
+        prefix_sum += num
+        if prefix_sum == 0 or prefix_sum in prefix_sums:
+            count += 1
+            prefix_sum = 0
+            prefix_sums.clear()
+        else:
+            prefix_sums.add(prefix_sum)
+    
+    print(count)
+```
+
+
 
 
 
