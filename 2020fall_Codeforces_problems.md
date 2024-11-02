@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 1607 GMT+8 Nov 1, 2024
+Updated 1227 GMT+8 Nov 2, 2024
 
 2020 fall, Complied by Hongfei Yan
 
@@ -11254,6 +11254,95 @@ for _ in range(t):
             prefix_sums.add(prefix_sum)
     
     print(count)
+```
+
+
+
+这个题目还挺神的，dp与greedy思路差不多，但是dp多维护了桶，就超时了。
+
+> 确实，这个题目很有意思！它展示了贪心算法和动态规划在某些问题中是如何接近的，但是不同的实现细节会导致性能差异。
+>
+> 在这种情况下，**贪心算法通过少量信息的维护**实现了最优解，而动态规划却因为额外状态的维护导致了时间复杂度的增加。
+>
+> **为什么动态规划会超时**？
+>
+> 1. **状态空间和时间复杂度**：动态规划会记录更多的状态（例如，前缀和可能会维护一个更复杂的数组或桶），从而在复杂度上增加了额外的开销。
+> 2. **贪心算法的简化**：贪心算法每次找到符合条件的美丽区间后立即重置，这种<mark>“局部清空”</mark>的方式减少了大量不必要的状态存储。相比之下，动态规划可能在不断地更新状态的同时，仍然存储了之前的解，导致了较高的时间和空间消耗。
+>
+> **为什么贪心有效**？
+>
+> 在这个问题中，**贪心解法正好能够保证全局最优**。因为我们只需要找到不重叠的美丽区间的最大数量，每次遇到满足条件的美丽区间时都可以直接计数并清空状态继续向后找，这样就保证了每次都能尽可能多地统计符合条件的区间。
+>
+> **总结**
+>
+> 这个题目很好地展现了贪心算法的优势——在合适的场景下，贪心的局部最优决策可以直接得到全局最优解，而不需要动态规划的全面状态维护。这种情况在数据量很大的问题中尤其明显。
+
+
+
+DP实现超时，Time limit exceeded on test 24。
+
+```python
+t = int(input())
+for _ in range(t):
+    n = int(input())
+    a = list(map(int, input().split()))
+    suma = 0
+    prefix = {0: -1}
+    ans = 0
+    mark = -1
+    for i in range(n):
+        suma += a[i]
+        if suma in prefix and prefix[suma] >= mark:
+            ans += 1
+            mark = i
+        prefix[suma] = i
+    print(ans)
+```
+
+
+
+用C++实现的DP也是超时。
+
+```C++
+#include <iostream>
+#include <vector>
+#include <unordered_map>
+using namespace std;
+
+int main() {
+    int t;
+    cin >> t;
+    while (t--) {
+        int n;
+        cin >> n;
+        vector<int> a(n);
+        for (int i = 0; i < n; ++i) {
+            cin >> a[i];
+        }
+
+        long long suma = 0;
+        unordered_map<long long, int> prefix;
+        prefix[0] = -1;  // 前缀和 0 对应位置 -1
+        int ans = 0;
+        int mark = -1;
+
+        for (int i = 0; i < n; ++i) {
+            suma += a[i];
+            if (prefix.count(suma)) {
+                if (prefix[suma] >= mark) {
+                    ++ans;
+                    mark = i;
+                }
+                prefix[suma] = i;  // 更新前缀和位置
+            } else {
+                prefix[suma] = i;  // 新前缀和，添加到字典
+            }
+        }
+        cout << ans << endl;
+    }
+    return 0;
+}
+
 ```
 
 
