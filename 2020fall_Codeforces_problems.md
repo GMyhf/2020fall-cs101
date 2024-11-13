@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 1227 GMT+8 Nov 2, 2024
+Updated 1128 GMT+8 Nov 13, 2024
 
 2020 fall, Complied by Hongfei Yan
 
@@ -6156,6 +6156,50 @@ output
 Note
 
 Consider the third test example. At first step we need to choose any element equal to 2. After that step our sequence looks like this [2, 2, 2, 2]. Then we do 4 steps, on each step we choose any element equals to 2. In total we earn 10 points.
+
+
+
+题目要求从给定的数组中选择一些数，使得这些数的和最大，但有一个限制条件：选择的数不能相邻。这里的“相邻”指的是数值上的相邻，而不是数组中的相邻位置。
+
+将每个数的出现次数统计出来，然后用动态规划来解决“选择不相邻数的最大和”问题。通过维护两个状态 `dp[i][0]` 和 `dp[i][1]`，分别记录不选择和选择当前数时的最大和，从而逐步构建最终的解。
+
+```python
+# 高景行 24数学科学学院
+M = int(1e5)
+a = [0] * (M + 1)
+n = int(input())
+for x in map(int, input().split()): a[x] += 1
+dp = [[0, 0] for _ in range(M + 1)]
+# dp[i][0] 不选i, dp[i][1] 选i
+for i in range(1, M + 1):
+    dp[i][0] = max(dp[i - 1][0], dp[i - 1][1])
+    dp[i][1] = dp[i - 1][0] + a[i] * i
+print(max(dp[M][0], dp[M][1]))
+```
+
+
+
+> **初始化动态规划表**
+>
+> ```python
+> dp = [[0, 0] for _ in range(M + 1)]
+> # dp[i][0] 不选i, dp[i][1] 选i
+> ```
+>
+> - `dp` 是一个二维列表，`dp[i][0]` 表示不选择数字 `i` 时的最大和，`dp[i][1]` 表示选择数字 `i` 时的最大和。
+>
+> **动态规划状态转移**
+>
+> ```python
+> for i in range(1, M + 1):
+>     dp[i][0] = max(dp[i - 1][0], dp[i - 1][1])
+>     dp[i][1] = dp[i - 1][0] + a[i] * i
+> ```
+>
+> - `dp[i][0]` 表示不选择 `i` 时的最大和，等于前一个数 `i-1` 的两种状态的最大值。
+> - `dp[i][1]` 表示选择 `i` 时的最大和，等于不选择 `i-1` 的最大和加上 `i` 的值乘以其出现次数 `a[i]`。
+
+
 
 
 
