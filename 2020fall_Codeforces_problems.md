@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 1128 GMT+8 Nov 13, 2024
+Updated 1329 GMT+8 Nov 24, 2024
 
 2020 fall, Complied by Hongfei Yan
 
@@ -6475,6 +6475,123 @@ else:
 
     print(ans)
 ```
+
+
+
+## 474D. Flowers
+
+dp, *1700, https://codeforces.com/contest/474/problem/D
+
+We saw the little game Marmot made for Mole's lunch. Now it's Marmot's dinner time and, as we all know, Marmot eats flowers. At every dinner he eats some red and white flowers. Therefore a dinner can be represented as a sequence of several flowers, some of them white and some of them red.
+
+But, for a dinner to be tasty, there is a rule: Marmot wants to eat white flowers only in groups of size *k*.
+
+Now Marmot wonders in how many ways he can eat between *a* and *b* flowers. As the number of ways could be very large, print it modulo $1000000007 (10^9 + 7)$.
+
+**Input**
+
+Input contains several test cases.
+
+The first line contains two integers *t* and *k* ($1 ≤ t, k ≤ 10^5$), where *t* represents the number of test cases.
+
+The next *t* lines contain two integers $a_i$ and $b_i$ ($1 ≤ a_i ≤ b_i ≤ 10^5$), describing the *i*-th test.
+
+**Output**
+
+Print *t* lines to the standard output. The *i*-th line should contain the number of ways in which Marmot can eat between $a_i$ and $b_i$ flowers at dinner modulo $1000000007 (10^9 + 7)$.
+
+Examples
+
+Input
+
+```
+3 2
+1 3
+2 3
+4 4
+```
+
+Output
+
+```
+6
+5
+5
+```
+
+Note
+
+- For *K* = 2 and length 1 Marmot can eat (*R*).
+- For *K* = 2 and length 2 Marmot can eat (*RR*) and (*WW*).
+- For *K* = 2 and length 3 Marmot can eat (*RRR*), (*RWW*) and (*WWR*).
+- For *K* = 2 and length 4 Marmot can eat, for example, (*WWWW*) or (*RWWR*), but for example he can't eat (*WWWR*).
+
+
+
+
+
+> https://www.luogu.com.cn/article/fd2jp6qb
+>
+> 看到题面 “当蛋糕数量为x1到x2之间” 的描述，不难想到可以用前缀和刻画这一点，如下
+>
+> ```cpp
+> int sum(int l,int r){
+>     return (s[r]-s[l-1]+mod)%mod;
+> }
+> ```
+>
+> **接下来考虑蛋糕数量为x的时候有多少种吃法：**
+>
+> 我们这样考察：x个蛋糕，如果采取办法1吃，那么会剩下x-1个蛋糕，采取方法2则会剩下x-k （这里x>=k，写代码时注意判断）个蛋糕。
+>
+> 记f(x)为吃x个蛋糕的方法数，我们有：
+>
+> f(x)=f(x-1)+f(x-k) (x>=k)
+>
+> 这，便是dp题的核心：状态转移方程
+>
+> 核心代码如下，我们从x=1开始依次更新：
+>
+> ```cpp
+> for(i=1;i<=maxn;i++){
+>         if(i>=k) f[i]=f[i-1]+f[i-k];
+>         else f[i]=f[i-1];
+>     }
+> ```
+>
+> 其他补充：
+>
+> 记得初始化x=0的情况 f[0]=1
+>
+> 取模
+>
+> 结合前缀和处理
+
+```python
+# 成组放置问题
+MOD = 1000000007
+MAXN = 100001
+
+t, k = map(int, input().split())
+
+f = [0] * MAXN
+f[0] = 1
+s = [0] * MAXN
+for i in range(1, 100001):
+    if i >= k:
+        f[i] = (f[i-1] + f[i - k]) % MOD
+    else:
+        f[i] = f[i - 1]
+
+    s[i] = (s[i - 1] + f[i]) % MOD
+
+for _ in range(t):
+    a, b = map(int, input().split())
+    print((s[b] - s[a - 1] + MOD) % MOD)
+
+```
+
+
 
 
 
