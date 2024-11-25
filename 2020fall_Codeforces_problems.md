@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 1329 GMT+8 Nov 24, 2024
+Updated 1129 GMT+8 Nov 25, 2024
 
 2020 fall, Complied by Hongfei Yan
 
@@ -6536,7 +6536,7 @@ Note
 >
 > ```cpp
 > int sum(int l,int r){
->     return (s[r]-s[l-1]+mod)%mod;
+>  return (s[r]-s[l-1]+mod)%mod;
 > }
 > ```
 >
@@ -6550,15 +6550,6 @@ Note
 >
 > 这，便是dp题的核心：状态转移方程
 >
-> 核心代码如下，我们从x=1开始依次更新：
->
-> ```cpp
-> for(i=1;i<=maxn;i++){
->         if(i>=k) f[i]=f[i-1]+f[i-k];
->         else f[i]=f[i-1];
->     }
-> ```
->
 > 其他补充：
 >
 > 记得初始化x=0的情况 f[0]=1
@@ -6566,6 +6557,10 @@ Note
 > 取模
 >
 > 结合前缀和处理
+>
+> CF tutorial:
+>
+> We can notate each string as a binary string, instead of red and white flowers. A string of this type is good only if every maximal contigous subsequence of "0" has the length divisible by `k`. We can make dynamic programming this way : $nr_i$ = the number of good strings of length `i`. If the *i*-th character is "1" then we can have any character before and if the *i*-th character is "0" we must have another *k* - 1 "0" characters before, so $nr_i = nr_{i - 1} + nr_{i - k}$ for $i ≥ k$ and $nr_i$ = 1 for $i < k$. Then we compute the partial sums ($sum_i = nr_1 + nr_2 + ... + nr_i$) and for each query the result will be $sum_b - sum_{a - 1}$. This solution has the complexity *O*(*maxVal* + *t*), where *maxVal* is the maximum value of $b_i$.
 
 ```python
 # 成组放置问题
@@ -6581,7 +6576,8 @@ for i in range(1, 100001):
     if i >= k:
         f[i] = (f[i-1] + f[i - k]) % MOD
     else:
-        f[i] = f[i - 1]
+        #f[i] = f[i - 1]
+        f[i] = 1
 
     s[i] = (s[i - 1] + f[i]) % MOD
 
