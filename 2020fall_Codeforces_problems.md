@@ -6595,6 +6595,30 @@ for _ in range(t):
 
 
 
+思路：dp，枚举最后一个连续k个白色段所在位置，得到$f[i]=\sum_{j=0}^{i-k} f[j]$,然后前缀和维护
+
+```python
+# 高景行 24数学科学学院
+P = int(1e9) + 7
+
+def main():
+    n = int(1e5)
+    T, k = map(int, input().split())
+    f = [1] * (n + 1)
+    s = [i + 1 for i in range(n + 1)]
+    for i in range(k, n + 1):
+        f[i] = (1 + s[i - k]) % P
+        s[i] = (s[i - 1] + f[i]) % P
+    for ___ in range(T):
+        x, y = map(int, input().split())
+        print(((s[y] - s[x - 1]) % P + P) % P)
+
+if __name__ == "__main__":
+    main()
+```
+
+
+
 
 
 ## 545C. Woodcutters
