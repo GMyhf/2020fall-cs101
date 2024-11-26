@@ -6562,6 +6562,12 @@ Note
 >
 > We can notate each string as a binary string, instead of red and white flowers. A string of this type is good only if every maximal contigous subsequence of "0" has the length divisible by `k`. We can make dynamic programming this way : $nr_i$ = the number of good strings of length `i`. If the *i*-th character is "1" then we can have any character before and if the *i*-th character is "0" we must have another *k* - 1 "0" characters before, so $nr_i = nr_{i - 1} + nr_{i - k}$ for $i ≥ k$ and $nr_i$ = 1 for $i < k$. Then we compute the partial sums ($sum_i = nr_1 + nr_2 + ... + nr_i$) and for each query the result will be $sum_b - sum_{a - 1}$. This solution has the complexity *O*(*maxVal* + *t*), where *maxVal* is the maximum value of $b_i$.
 
+
+
+设$dp_i$为吃$i$朵花的方案数，则有$dp_0=1,dp_i=\begin{cases}dp_{i-1},i<k\\dp_{i-1}+dp_{i-k},i\ge k\end{cases}$，据此计算即可。可以用前缀和加快区间和查询速度。
+
+
+
 ```python
 # 成组放置问题
 MOD = 1000000007
