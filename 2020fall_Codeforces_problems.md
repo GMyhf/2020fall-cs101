@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 1129 GMT+8 Nov 25, 2024
+Updated 1402 GMT+8 Nov 27, 2024
 
 2020 fall, Complied by Hongfei Yan
 
@@ -6528,6 +6528,32 @@ Note
 
 
 
+思路：题目本身就是一个普通的“上楼梯”，但是这里不用前缀和来查询会超时
+
+```python
+MAX = 1000000007
+t, k = map(int, input().split())
+MOD = int(1e9+7)
+MAXN = 100001
+dp = [0]*MAXN
+s = [0]*MAXN
+dp[0] = 1
+s[0] = 1
+for i in range(1, MAXN):
+    if i >= k:
+        dp[i] = (dp[i-1]+dp[i-k]) % MOD
+    else:
+        dp[i] = dp[i-1] % MOD
+    s[i] = (s[i-1]+dp[i]) % MOD
+
+for _ in range(t):
+    a, b = map(int, input().split())
+    print((s[b]-s[a-1]+MOD) % MOD)
+
+```
+
+
+
 
 
 > https://www.luogu.com.cn/article/fd2jp6qb
@@ -6582,8 +6608,8 @@ for i in range(1, 100001):
     if i >= k:
         f[i] = (f[i-1] + f[i - k]) % MOD
     else:
-        #f[i] = f[i - 1]
-        f[i] = 1
+        f[i] = f[i - 1]
+        #f[i] = 1
 
     s[i] = (s[i - 1] + f[i]) % MOD
 
@@ -6639,7 +6665,30 @@ for _ in range(t):
     print((p[b]-p[a-1])%1000000007)
 ```
 
-
+> 1. 状态定义：
+>
+> - `dp[i][0]`: 使用正好 i 朵花，其中最后一朵是红花的所有排列方法数。
+> - `dp[i][1]`: 使用正好 i 朵花，其中最后 k 朵花是白花的所有排列方法数。
+>
+> 2. 状态转移方程：
+>
+> - 如果最后一朵是红花，则前 `i−1` 朵可以是任意排列： `dp[i][0]=dp[i−1][0]+dp[i−1][1]`
+> - 如果最后 `k` 朵是白花，则前 `i−k` 朵可以是任意排列： $dp[i][1] = dp[i-k][0] + dp[i-k][1] \quad \text{(当 \( i \geq k \))}$
+> - 初始条件：`dp[0][0]=1,dp[0][1]=0`。当没有花时，只有一种方法，即什么都不选。
+>
+> 3. 前缀和数组：
+>
+> 为了快速计算区间内的方案数，定义数组 `p[i]`，表示前 i 朵花的方法数总和：
+>
+> `p[i]=p[i−1]+dp[i][0]+dp[i][1]`
+>
+> `p[0] = 1`
+>
+> 4. **区间求解**：
+>
+> 对于每个测试用例的区间 `[a,b]`，可以通过前缀和快速计算：
+>
+> $\text{result} = p[b] - p[a-1]$
 
 
 
