@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 1402 GMT+8 Nov 27, 2024
+Updated 0248 GMT+8 Dec 01, 2024
 
 2020 fall, Complied by Hongfei Yan
 
@@ -9947,6 +9947,85 @@ int main(){
 	return 0;
 }
 ```
+
+
+
+## 1526C1. Potions (Easy Version)
+
+greedy, dp, data structures, brute force, *1500, https://codeforces.com/problemset/problem/1526/C1
+
+**This is the easy version of the problem. The only difference is that in this version 𝑛≤2000. You can make hacks only if both versions of the problem are solved.**
+
+There are 𝑛 potions in a line, with potion 1 on the far left and potion 𝑛n on the far right. Each potion will increase your health by 𝑎𝑖ai when drunk. 𝑎𝑖 can be negative, meaning that potion will decrease will health.
+
+You start with 0 health and you will walk from left to right, from first potion to the last one. At each potion, you may choose to drink it or ignore it. **You must ensure that your health is always non-negative**.
+
+What is the largest number of potions you can drink?
+
+**Input**
+
+The first line contains a single integer 𝑛 (1≤𝑛≤2000) — the number of potions.
+
+The next line contains 𝑛n integers 𝑎1, 𝑎2, ... ,𝑎𝑛 ($−10^9≤𝑎𝑖≤10^9$) which represent the change in health after drinking that potion.
+
+**Output**
+
+Output a single integer, the maximum number of potions you can drink without your health becoming negative.
+
+Example
+
+Input
+
+```
+6
+4 -4 1 -3 1 -3
+```
+
+Output
+
+```
+5
+```
+
+Note
+
+For the sample, you can drink 5 potions by taking potions 1, 3, 4, 5 and 6. It is not possible to drink all 6 potions because your health will go negative at some point
+
+
+
+Greedy 后悔解法, https://oi-wiki.org/basic/greedy/
+
+思路是无论当前的选项是否最优都接受，然后进行比较，如果选择之后不是最优了，则反悔，舍弃掉这个选项；否则，正式接受。如此往复。
+
+```python
+import heapq
+
+
+def max_potions(n, potions):
+    # 当前健康值
+    health = 0
+    # 已经饮用的药水效果列表，用作最小堆
+    consumed = []
+
+    for potion in potions:
+        # 尝试饮用当前药水
+        health += potion
+        heapq.heappush(consumed, potion)
+        if health < 0:
+            # 如果饮用后健康值为负，且堆中有元素
+            if consumed:
+                health -= consumed[0]
+                heapq.heappop(consumed)
+
+
+    return len(consumed)
+
+n = int(input())
+potions = list(map(int, input().split()))
+print(max_potions(n, potions))
+```
+
+
 
 
 
