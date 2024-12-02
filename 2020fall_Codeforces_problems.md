@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 0248 GMT+8 Dec 01, 2024
+Updated 2349 GMT+8 Dec 02, 2024
 
 2020 fall, Complied by Hongfei Yan
 
@@ -6592,7 +6592,8 @@ for _ in range(t):
 
 设$dp_i$为吃$i$朵花的方案数，则有$dp_0=1,dp_i=\begin{cases}dp_{i-1},i<k\\dp_{i-1}+dp_{i-k},i\ge k\end{cases}$，据此计算即可。可以用前缀和加快区间和查询速度。
 
-
+在 k 以下的都只能吃红花，只有一种方案，在 k 以上的可以从 i-1 基础上吃一朵红花或从 i-k
+基础上吃 k 朵白花。
 
 ```python
 # 成组放置问题
