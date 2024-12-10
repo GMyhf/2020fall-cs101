@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 2349 GMT+8 Dec 02, 2024
+Updated 2323 GMT+8 Dec 10, 2024
 
 2020 fall, Complied by Hongfei Yan
 
@@ -8558,7 +8558,7 @@ print(ans)
 
 dp, 1400, https://codeforces.com/problemset/problem/1195/C
 
-Finally, a basketball court has been opened in SIS, so Demid has decided to hold a basketball exercise session. 2⋅𝑛 students have come to Demid's exercise session, and he lined up them into two rows of the same size (there are exactly 𝑛 people in each row). Students are numbered from 11 to 𝑛 in each row in order from left to right.
+Finally, a basketball court has been opened in SIS, so Demid has decided to hold a basketball exercise session. 2⋅𝑛 students have come to Demid's exercise session, and he lined up them into two rows of the same size (there are exactly 𝑛 people in each row). Students are numbered from 1 to 𝑛 in each row in order from left to right.
 
 ![img](https://espresso.codeforces.com/bf391a96cdb51467057f2a6fae4d88e745e0fc53.png)
 
