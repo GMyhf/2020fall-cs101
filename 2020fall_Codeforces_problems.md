@@ -10028,6 +10028,27 @@ print(max_potions(n, potions))
 
 
 
+按药水数量dp，记录喝i瓶药水的剩余最大生命值
+
+```python
+# 李佳聪 24工学院
+a=int(input())
+potions=list(map(int,input().split()))
+dp=[-float('inf')]*(1+a)
+dp[0]=0
+for i in range(1+a):
+	for j in range(i,0,-1):
+		temp=max(dp[j],dp[j-1]+potions[i-1])
+		if temp>=0:
+			dp[j]=temp
+for i in range(a,-1,-1):
+	if dp[i]>=0:
+		print(i)
+		break
+```
+
+
+
 
 
 ## 1729C. Jumping on Tiles
