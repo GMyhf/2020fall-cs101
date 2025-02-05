@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 2212 GMT+8 Feb 5, 2025
+Updated 2228 GMT+8 Feb 5, 2025
 
 2020 fall, Complied by Hongfei Yan
 
@@ -11094,6 +11094,86 @@ output
 7
 16
 21
+```
+
+
+
+2812 ms AC。	可以使用 **深度优先搜索 (DFS) 或 广度优先搜索 (BFS)** 来高效地找到连通的湖泊，并计算其体积。思路：
+
+1. 遍历整个网格，找到 `a[i][j] > 0` 的起点，说明这是一个湖的一部分。
+2. 采用 **DFS 或 BFS** 遍历与其相连的所有水域，计算湖泊的体积（所有连通单元的 `a[i][j]` 之和）。
+3. 记录所有湖泊的最大体积，最终输出。
+
+优化
+
+- 使用 `visited` 数组：避免重复访问同一个湖泊。
+- 采用迭代 BFS（比递归 DFS 更节省栈空间）。
+- 每个网格最多访问一次，所以时间复杂度是 **O(n × m)**，能在 `10^6` 级别数据下高效运行。
+- 用 **`sys.stdin.read()`** 快速读取大规模输入，避免 `input()` 多次调用导致的性能问题。
+
+```python
+import sys
+from collections import deque
+
+def bfs(grid, visited, x, y, n, m):
+    """ 使用 BFS 计算湖泊体积 """
+    queue = deque([(x, y)])
+    visited[x][y] = True
+    volume = 0
+
+    # 方向数组：上、下、左、右
+    directions = [(-1, 0), (1, 0), (0, -1), (0, 1)]
+    
+    while queue:
+        cx, cy = queue.popleft()
+        volume += grid[cx][cy]  # 累加当前湖泊单元的水量
+        
+        for dx, dy in directions:
+            nx, ny = cx + dx, cy + dy
+            if 0 <= nx < n and 0 <= ny < m and not visited[nx][ny] and grid[nx][ny] > 0:
+                visited[nx][ny] = True
+                queue.append((nx, ny))
+    
+    return volume
+
+def largest_lake_volume(test_cases):
+    results = []
+    
+    for n, m, grid in test_cases:
+        visited = [[False] * m for _ in range(n)]
+        max_volume = 0
+        
+        for i in range(n):
+            for j in range(m):
+                if grid[i][j] > 0 and not visited[i][j]:
+                    max_volume = max(max_volume, bfs(grid, visited, i, j, n, m))
+        
+        results.append(str(max_volume))
+    
+    # 统一输出，提高性能
+    sys.stdout.write("\n".join(results) + "\n")
+
+def main():
+    # 读取输入
+    input = sys.stdin.read
+    data = input().split()
+    
+    index = 0
+    t = int(data[index])
+    index += 1
+    test_cases = []
+    
+    for _ in range(t):
+        n, m = map(int, data[index:index+2])
+        index += 2
+        grid = [list(map(int, data[index + i * m: index + (i + 1) * m])) for i in range(n)]
+        index += n * m
+        test_cases.append((n, m, grid))
+    
+    largest_lake_volume(test_cases)
+
+if __name__ == "__main__":
+    main()
 ```
 
 
