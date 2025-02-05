@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 23213073 GMT+8 Dec 21, 2024
+Updated 2147 GMT+8 Feb 5, 2025
 
 2020 fall, Complied by Hongfei Yan
 
@@ -7258,6 +7258,183 @@ Note to the second sample test:
 
 
 The restaurants are located at vertices 4, 5, 6, 7. Kefa can't go to restaurants 6, 7.
+
+
+
+**显示栈进行迭代DFS**：用栈模拟DFS，而不是递归调用，这样能避免 Python 栈深度限制的问题。359ms AC。
+
+```python
+import sys
+from collections import defaultdict
+
+def count_restaurants(n, m, cats, edges):
+    # 构建树的邻接表
+    tree = defaultdict(list)
+    for x, y in edges:
+        tree[x].append(y)
+        tree[y].append(x)
+
+    # 迭代 DFS (使用显式栈)
+    stack = [(1, 0)]  # (当前节点, 连续猫的数量)
+    visited = [False] * (n + 1)
+    visited[1] = True
+    leaf_count = 0
+
+    while stack:
+        node, consecutive_cats = stack.pop()
+        
+        if cats[node - 1]:
+            consecutive_cats += 1
+        else:
+            consecutive_cats = 0
+
+        if consecutive_cats > m:
+            continue
+
+        is_leaf = True
+        for neighbor in tree[node]:
+            if not visited[neighbor]:
+                visited[neighbor] = True
+                stack.append((neighbor, consecutive_cats))
+                is_leaf = False
+        
+        if is_leaf:  # 如果是叶子节点
+            leaf_count += 1
+
+    return leaf_count
+
+# 读取输入
+def main():
+    n, m = map(int, sys.stdin.readline().split())
+    cats = list(map(int, sys.stdin.readline().split()))
+    edges = [tuple(map(int, sys.stdin.readline().split())) for _ in range(n - 1)]
+    
+    print(count_restaurants(n, m, cats, edges))
+
+if __name__ == "__main__":
+    main()
+
+```
+
+
+
+> rutime error on test 35
+>
+> ```python
+> import sys
+> 
+> sys.setrecursionlimit(10 ** 6)
+> 
+> 
+> def count_restaurants(n, m, cats, edges):
+>     from collections import defaultdict
+> 
+>     # 建立树的邻接表
+>     tree = defaultdict(list)
+>     for x, y in edges:
+>         tree[x].append(y)
+>         tree[y].append(x)
+> 
+>     # 记录访问过的节点
+>     visited = [False] * (n + 1)
+> 
+>     def dfs(node, consecutive_cats):
+>         if cats[node - 1]:
+>             consecutive_cats += 1
+>         else:
+>             consecutive_cats = 0
+> 
+>         if consecutive_cats > m:
+>             return 0
+> 
+>         visited[node] = True
+>         is_leaf = True
+>         count = 0
+> 
+>         for neighbor in tree[node]:
+>             if not visited[neighbor]:
+>                 is_leaf = False
+>                 count += dfs(neighbor, consecutive_cats)
+> 
+>         return count if not is_leaf else 1
+> 
+>     return dfs(1, 0)
+> 
+> 
+> # 读取输入
+> def main():
+>     n, m = map(int, input().split())
+>     cats = list(map(int, input().split()))
+>     edges = [tuple(map(int, input().split())) for _ in range(n - 1)]
+> 
+>     print(count_restaurants(n, m, cats, edges))
+> 
+> 
+> if __name__ == "__main__":
+>     main()
+> 
+> ```
+>
+> 
+
+
+
+使用 **BFS（广度优先搜索）**，通过 `deque` 队列进行迭代处理，而不依赖递归。这种方式避免了递归深度限制，同时保证高效遍历大规模输入。374ms AC。
+
+```python
+import sys
+from collections import defaultdict, deque
+
+def count_restaurants(n, m, cats, edges):
+    # 构建树的邻接表
+    tree = defaultdict(list)
+    for x, y in edges:
+        tree[x].append(y)
+        tree[y].append(x)
+
+    # 迭代 BFS (使用队列)
+    queue = deque([(1, 0)])  # (当前节点, 连续猫的数量)
+    visited = [False] * (n + 1)
+    visited[1] = True
+    leaf_count = 0
+
+    while queue:
+        node, consecutive_cats = queue.popleft()
+        
+        if cats[node - 1]:
+            consecutive_cats += 1
+        else:
+            consecutive_cats = 0
+
+        if consecutive_cats > m:
+            continue
+
+        is_leaf = True
+        for neighbor in tree[node]:
+            if not visited[neighbor]:
+                visited[neighbor] = True
+                queue.append((neighbor, consecutive_cats))
+                is_leaf = False
+        
+        if is_leaf:  # 如果是叶子节点
+            leaf_count += 1
+
+    return leaf_count
+
+# 读取输入
+def main():
+    n, m = map(int, sys.stdin.readline().split())
+    cats = list(map(int, sys.stdin.readline().split()))
+    edges = [tuple(map(int, sys.stdin.readline().split())) for _ in range(n - 1)]
+    
+    print(count_restaurants(n, m, cats, edges))
+
+if __name__ == "__main__":
+    main()
+
+```
+
+
 
 
 
