@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 2228 GMT+8 Feb 5, 2025
+Updated 0009 GMT+8 Feb 6, 2025
 
 2020 fall, Complied by Hongfei Yan
 
@@ -11523,23 +11523,13 @@ for _ in range(t):
 
  
 
-蒋子轩23工学院 清晰明了的程序，dfs with thread.
-
-在 Mac Studio (Chip: Apple M1 Ultra, macOS: Ventura 13.6.1) 上运行，
-
-line 4, in     threading.stack_size(2*10**8), ValueError: size not valid: 200000000 bytes
-
-需要是4096的倍数，可以改为 threading.stack_size(2\*10240*10240)
-
-
+1765 ms AC。蒋子轩23工学院 清晰明了的程序，dfs with thread. 在 Mac Studio (Chip: Apple M1 Ultra, macOS: Ventura 13.6.1) 上运行，line 4, in     `threading.stack_size(2*10**8)`, ValueError: size not valid: 200000000 bytes。需要是4096的倍数，可以改为 `threading.stack_size(2*10240*10240)`
 
 ```python
 import sys
 import threading
 sys.setrecursionlimit(1 << 30)
-#threading.stack_size(2*10**8)
-threading.stack_size(2*10240*10240)
-
+threading.stack_size(2*10240*10240)	#threading.stack_size(2*10**8)
 
 def main():
     def build_tree(edges):
@@ -11585,7 +11575,6 @@ def main():
 
         process_assumptions(tree, leaves_count, assumptions)
 
-
 thread = threading.Thread(target=main)
 thread.start()
 thread.join()
@@ -11629,6 +11618,112 @@ thread.join()
 >
 > 8372224 / 4096
 > Out[163]: 2044.0
+
+
+
+1421 ms AC。
+
+叶子数量可以通过 **DFS 递归** 计算，每个节点的叶子数等于其子节点叶子数的和。直接查询 **两节点的叶子数**，然后相乘，避免集合操作的额外开销。使用 `sys.stdin.read()` **一次性读取输入**，提高大数据量的处理效率。
+
+```python
+import sys
+from collections import defaultdict
+
+def build_tree(edges, n):
+    """ 构建树的邻接表 """
+    tree = defaultdict(list)
+    for u, v in edges:
+        tree[u].append(v)
+        tree[v].append(u)
+    return tree
+
+def count_leaves(tree, n):
+    """ 计算每个节点的叶子数 (使用迭代 DFS) """
+    leaves_count = {i: 0 for i in range(1, n + 1)}
+    parent = {1: -1}
+    stack = [(1, 0)]  # (当前节点, 状态 0-首次访问 1-回溯)
+
+    order = []  # 记录 DFS 访问顺序
+
+    while stack:
+        node, state = stack.pop()
+        if state == 0:  # 首次访问
+            stack.append((node, 1))
+            order.append(node)
+            for child in tree[node]:
+                if child == parent.get(node):  
+                    continue
+                parent[child] = node
+                stack.append((child, 0))
+
+    # 反向遍历 order 计算叶子数。确保每个节点在其所有子节点之后被处理
+    for node in reversed(order):
+        if len(tree[node]) == 1 and node != 1:  # 叶子节点（根节点除外）
+            leaves_count[node] = 1
+        else:
+            leaves_count[node] = sum(leaves_count[child] for child in tree[node] if child != parent[node])
+
+    return leaves_count
+
+def process_queries(leaves_count, queries):
+    """ 处理查询，计算答案 """
+    results = []
+    for x, y in queries:
+        results.append(str(leaves_count[x] * leaves_count[y]))
+    sys.stdout.write("\n".join(results) + "\n")
+
+def solve():
+    input = sys.stdin.read
+    data = input().split()
+    
+    index = 0
+    t = int(data[index])
+    index += 1
+    results = []
+    
+    for _ in range(t):
+        n = int(data[index])
+        index += 1
+        
+        edges = []
+        for _ in range(n - 1):
+            u, v = int(data[index]), int(data[index + 1])
+            index += 2
+            edges.append((u, v))
+        
+        tree = build_tree(edges, n)
+        leaves_count = count_leaves(tree, n)  
+
+        q = int(data[index])
+        index += 1
+        
+        queries = []
+        for _ in range(q):
+            x, y = int(data[index]), int(data[index + 1])
+            index += 2
+            queries.append((x, y))
+        
+        process_queries(leaves_count, queries)
+
+if __name__ == "__main__":
+    #sys.setrecursionlimit(300000)  # 提高递归深度
+    solve()
+```
+
+> 1. 用迭代 DFS 代替递归，避免 **递归栈溢出**。
+> 2. 显式存储 `parent` 以跟踪父节点，确保 `leaves_count` 计算正确。
+> 3. 优化查询计算，直接访问 `leaves_count`。
+>
+> 时间复杂度分析
+>
+> - 构建树：`O(n)`
+> - 迭代 DFS 计算叶子数：`O(n)`
+> - 查询处理：`O(1) * q`
+> - 总复杂度：`O(n + q) ≈ 2 × 10⁵`，符合题目要求。
+
+
+
+
 
 
 
