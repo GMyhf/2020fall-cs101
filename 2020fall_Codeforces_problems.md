@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 2147 GMT+8 Feb 5, 2025
+Updated 2212 GMT+8 Feb 5, 2025
 
 2020 fall, Complied by Hongfei Yan
 
@@ -4727,9 +4727,7 @@ Group 2 found at 2-4: 23
 
 ## 20C. Dijkstra?
 
-graphs, shortest paths, *1900
-
-https://codeforces.com/problemset/problem/20/C
+graphs, shortest paths, *1900, https://codeforces.com/problemset/problem/20/C
 
 You are given a weighted undirected graph. The vertices are enumerated from 1 to *n*. Your task is to find the shortest path between the vertex 1 and the vertex *n*.
 
@@ -4780,6 +4778,139 @@ output
 ```
 1 4 3 5 
 ```
+
+
+
+
+
+使用 **Dijkstra 算法** 来找到从 **节点 1 到节点 n 的最短路径**。我们使用 **优先队列 (heapq)** 来高效地找到当前最短路径的扩展方式。436ms AC。
+
+```python
+import sys
+import heapq
+
+def dijkstra(n, edges):
+    # 使用列表存储图，减少内存开销
+    graph = [[] for _ in range(n + 1)]
+    for u, v, w in edges:
+        graph[u].append((v, w))
+        graph[v].append((u, w))
+    
+    # 直接使用数组，避免字典占用过多内存
+    INF = float('inf')
+    dist = [INF] * (n + 1)
+    prev = [-1] * (n + 1)
+    dist[1] = 0
+    
+    pq = [(0, 1)]  # (当前路径长度, 当前节点)
+    
+    while pq:
+        d, node = heapq.heappop(pq)
+        if d > dist[node]:
+            continue
+        
+        for neighbor, weight in graph[node]:
+            new_dist = d + weight
+            if new_dist < dist[neighbor]:
+                dist[neighbor] = new_dist
+                prev[neighbor] = node
+                heapq.heappush(pq, (new_dist, neighbor))
+    
+    if dist[n] == INF:
+        return [-1]
+    
+    path = []
+    node = n
+    while node != -1:
+        path.append(node)
+        node = prev[node]
+    
+    return path[::-1]
+
+def main():
+    n, m = map(int, sys.stdin.readline().split())
+    edges = [tuple(map(int, sys.stdin.readline().split())) for _ in range(m)]
+    print(*dijkstra(n, edges))
+
+if __name__ == "__main__":
+    sys.setrecursionlimit(10**6)  # 确保不会因为递归深度限制崩溃
+    main()
+
+```
+
+> 1. 构建图的邻接表：
+>    - **用列表存储图**（代替 `defaultdict(list)`），支持多条边和环。
+> 2. Dijkstra 算法：
+>    - 使用 **最小堆 (heapq)** 维护当前探索到的最短路径。
+>    - `dist` 记录从 **节点 1** 到各节点的最短距离，初始化 `dist[1] = 0`。
+>    - `prev` 记录路径中每个节点的前驱，用于路径回溯。
+>    - **`dist` 和 `prev` 用数组**（避免字典带来的额外开销）。
+> 3. 路径回溯：
+>    - 从终点 `n` 回溯 `prev` 直到 `1`，然后反转路径。
+>
+> 时间复杂度
+>
+> - **O((n + m) log n)**，适用于 `n, m ≤ 10⁵`。
+
+
+
+> Memory limit exceeded on test 31
+>
+> ```python
+> import sys
+> import heapq
+> from collections import defaultdict
+> 
+> def dijkstra(n, edges):
+>     graph = defaultdict(list)
+>     for u, v, w in edges:
+>         graph[u].append((v, w))
+>         graph[v].append((u, w))
+>     
+>     # 最短路径初始化
+>     dist = {i: float('inf') for i in range(1, n + 1)}
+>     dist[1] = 0
+>     prev = {i: None for i in range(1, n + 1)}
+>     
+>     # 优先队列 (min-heap)
+>     pq = [(0, 1)]  # (当前路径长度, 当前节点)
+>     
+>     while pq:
+>         d, node = heapq.heappop(pq)
+>         
+>         if d > dist[node]:
+>             continue
+>         
+>         for neighbor, weight in graph[node]:
+>             new_dist = d + weight
+>             if new_dist < dist[neighbor]:
+>                 dist[neighbor] = new_dist
+>                 prev[neighbor] = node
+>                 heapq.heappush(pq, (new_dist, neighbor))
+>     
+>     # 反向构造路径
+>     if dist[n] == float('inf'):
+>         return [-1]
+>     
+>     path = []
+>     node = n
+>     while node is not None:
+>         path.append(node)
+>         node = prev[node]
+>     
+>     return path[::-1]
+> 
+> def main():
+>     n, m = map(int, sys.stdin.readline().split())
+>     edges = [tuple(map(int, sys.stdin.readline().split())) for _ in range(m)]
+>     print(*dijkstra(n, edges))
+> 
+> if __name__ == "__main__":
+>     main()
+> 
+> ```
+
+
 
 
 
