@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 0009 GMT+8 Feb 6, 2025
+Updated 1105 GMT+8 May 13, 2025
 
 2020 fall, Complied by Hongfei Yan
 
@@ -8509,6 +8509,228 @@ if k == 0:
 else:
     print("-1")
 ```
+
+
+
+
+
+## M893C. Rumor
+
+bfs, union find, 1300, https://codeforces.com/contest/893/problem/C
+
+Vova promised himself that he would never play computer games... But recently Firestorm — a well-known game developing company — published their newest game, World of Farcraft, and it became really popular. Of course, Vova started playing it.
+
+Now he tries to solve a quest. The task is to come to a settlement named Overcity and spread a rumor in it.
+
+Vova knows that there are *n* characters in Overcity. Some characters are friends to each other, and they share information they got. Also Vova knows that he can bribe each character so he or she starts spreading the rumor; *i*-th character wants ci gold in exchange for spreading the rumor. When a character hears the rumor, he tells it to all his friends, and they start spreading the rumor to their friends (for free), and so on.
+
+The quest is finished when all *n* characters know the rumor. What is the minimum amount of gold Vova needs to spend in order to finish the quest?
+
+Take a look at the notes if you think you haven't understood the problem completely.
+
+**Input**
+
+The first line contains two integer numbers *n* and *m* (1 ≤ n ≤ 10^5, 0 ≤ m ≤ 10^5) — the number of characters in Overcity and the number of pairs of friends.
+
+The second line contains *n* integer numbers ci (0 ≤ ci ≤ 10^9) — the amount of gold *i*-th character asks to start spreading the rumor.
+
+Then *m* lines follow, each containing a pair of numbers (xi, yi) which represent that characters xi and yi are friends (1 ≤ xi, yi ≤ n, xi ≠ yi). It is guaranteed that each pair is listed at most once.
+
+**Output**
+
+Print one number — the minimum amount of gold Vova has to spend in order to finish the quest.
+
+Examples
+
+input
+
+```
+5 2
+2 5 3 4 8
+1 4
+4 5
+```
+
+output
+
+```
+10
+```
+
+input
+
+```
+10 0
+1 2 3 4 5 6 7 8 9 10
+```
+
+output
+
+Copy
+
+```
+55
+```
+
+input
+
+```
+10 5
+1 6 2 7 3 8 4 9 5 10
+1 2
+3 4
+5 6
+7 8
+9 10
+```
+
+output
+
+```
+15
+```
+
+Note
+
+In the first example the best decision is to bribe the first character (he will spread the rumor to fourth character, and the fourth one will spread it to fifth). Also Vova has to bribe the second and the third characters, so they know the rumor.
+
+In the second example Vova has to bribe everyone.
+
+In the third example the optimal decision is to bribe the first, the third, the fifth, the seventh and the ninth characters.
+
+
+
+
+
+bfs
+
+```python
+def min_cost_to_spread_rumors(n, m, costs, friendships):
+    from collections import defaultdict, deque
+
+    # 图的邻接列表表示
+    graph = defaultdict(list)
+    for x, y in friendships:
+        graph[x-1].append(y-1)
+        graph[y-1].append(x-1)
+
+    # 访问标记数组
+    visited = [False] * n
+    total_cost = 0
+
+    # 计算每个连通分量的最小成本
+    for i in range(n):
+        if not visited[i]:
+            min_cost = float('inf')
+            queue = deque([i])
+            while queue:
+                node = queue.popleft()
+                min_cost = min(min_cost, costs[node])
+                visited[node] = True
+                for neighbor in graph[node]:
+                    if not visited[neighbor]:
+                        visited[neighbor] = True
+                        queue.append(neighbor)
+            total_cost += min_cost
+
+    return total_cost
+
+# 读取输入
+n, m = map(int, input().split())
+costs = list(map(int, input().split()))
+friendships = [tuple(map(int, input().split())) for _ in range(m)]
+
+# 输出结果
+print(min_cost_to_spread_rumors(n, m, costs, friendships))
+
+```
+
+
+
+如果不修改递归深度，会爆栈
+
+```python
+import sys
+sys.setrecursionlimit(10**6)
+
+# 读取角色数量 n 和朋友关系数量 m
+n, m = map(int, input().split())
+
+# 每个角色传播谣言的贿赂费用，索引从 1 开始，方便处理
+costs = [0] + list(map(int, input().split()))
+
+# 并查集初始化，每个人是自己所在集合的代表
+parent = list(range(n + 1))
+
+# 查找函数：带路径压缩
+def find(u):
+    if parent[u] != u:
+        parent[u] = find(parent[u])
+    return parent[u]
+
+# 合并函数：将两个朋友合并到一个集合中，保留成本较低的那个作为代表
+def union(x, y):
+    root_x = find(x)
+    root_y = find(y)
+    if root_x != root_y:
+        # 将成本更高的根合并到成本更低的根下
+        if costs[root_x] < costs[root_y]:
+            parent[root_y] = root_x
+        else:
+            parent[root_x] = root_y
+
+# 处理所有朋友关系
+for _ in range(m):
+    u, v = map(int, input().split())
+    union(u, v)
+
+# 每个连通块只需要贿赂一个人：找出每个集合的最小成本之和
+visited = set()
+total_cost = 0
+for i in range(1, n + 1):
+    root = find(i)
+    if root not in visited:
+        visited.add(root)
+        total_cost += costs[root]
+
+# 输出最小贿赂总费用
+print(total_cost)
+
+```
+
+
+
+把 find 改成迭代，不增加深度也能AC
+
+```python
+n, m = map(int, input().split())
+cs = [0] + list(map(int, input().split()))
+p = [0] + list(range(1, n + 1))
+
+
+def find(t):
+    while p[t] != t:
+        p[t] = p[p[t]]
+        t = p[t]
+    return t
+
+
+for _ in range(m):
+    x, y = map(find, (map(int, input().split())))
+    if cs[x] < cs[y]:
+        p[y] = x
+    else:
+        p[x] = y
+
+ans = 0
+for i in range(n + 1):
+    if p[i] == i:
+        ans += cs[i]
+print(ans)
+
+```
+
+
 
 
 
