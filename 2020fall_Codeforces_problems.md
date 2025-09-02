@@ -4,7 +4,7 @@
 
 # Problems in Codeforces.com
 
-Updated 1105 GMT+8 May 13, 2025
+Updated 2140 GMT+8 Sep 2, 2025
 
 2020 fall, Complied by Hongfei Yan
 
@@ -12407,6 +12407,199 @@ int main() {
     return 0;
 }
 
+```
+
+
+
+## 2131C. Make it Equal
+
+math, number theory, *1100, https://codeforces.com/problemset/problem/2131/C   
+
+Given two [multisets](https://en.wikipedia.org/wiki/Multiset) 𝑆 and 𝑇 of size 𝑛 and a positive integer 𝑘, you may perform the following operations any number (including zero) of times on 𝑆:
+
+- Select an element 𝑥 in 𝑆, and remove one occurrence of 𝑥 in 𝑆. Then, either insert 𝑥+𝑘 into 𝑆, or insert |𝑥−𝑘| into 𝑆.
+
+Determine if it is possible to make 𝑆 equal to 𝑇. Two multisets 𝑆 and 𝑇 are equal if every element appears the same number of times in 𝑆 and 𝑇.
+
+**Input**
+
+Each test contains multiple test cases. The first line contains an integer 𝑡 (1≤𝑡≤104) — the number of test cases. The description of the test cases follows.
+
+The first line contains two integers 𝑛 and 𝑘 (1≤𝑛≤2⋅105, 1≤𝑘≤109) — the size of 𝑆 and the constant, respectively.
+
+The second line contains 𝑛 integers 𝑆1,𝑆2,…,𝑆𝑛 (0≤𝑆𝑖≤109) — the elements in 𝑆.
+
+The third line contains 𝑛 integers 𝑇1,𝑇2,…,𝑇𝑛 (0≤𝑇𝑖≤109) — the elements in 𝑇.
+
+It is guaranteed that the sum of 𝑛 over all test cases does not exceed 2⋅105.
+
+**Output**
+
+For each test case, output "YES" if it is possible to make 𝑆 equal to 𝑇, and "NO" otherwise.
+
+You can output the answer in any case (upper or lower). For example, the strings "yEs", "yes", "Yes", and "YES" will be recognized as positive responses.
+
+Example
+
+Input
+
+```
+5
+1 3
+1
+2
+1 8
+4
+12
+3 5
+6 2 9
+8 4 11
+2 7
+2 8
+2 9
+3 2
+0 1 0
+1 0 1
+```
+
+Output
+
+```
+YES
+YES
+YES
+NO
+NO
+```
+
+Note
+
+In the first test case, we can remove one occurrence of 1 from 𝑆 and insert |1−𝑘|=|1−3|=2 into 𝑆, making 𝑆 equal to 𝑇.
+
+In the second test case, we can remove one occurrence of 4 from 𝑆 and insert 4+𝑘=4+8=12 into 𝑆, making 𝑆 equal to 𝑇.
+
+In the last test case, we can show that it is impossible to make 𝑆 equal to 𝑇.
+
+
+
+这个题在 Codeforces 上是 **高数据量 + 严格时间** 的典型题。用python的化，难度不止1100。
+
+**核心规律**
+
+操作规则：
+
+- 从 `x` 可以变成 `x + k` 或 `|x - k|`。
+
+所以元素能不能互相转化，关键在于 **模 k 的余数**。
+
+- 因为不管你加/减 `k`，余数始终保持不变。
+- 唯一例外：如果 `x < k`，做 `|x - k|` 会变成 `k - x`，余数发生了对称变化。
+
+比如：
+
+- `x = 2, k = 7` → `|2 - 7| = 5`。余数 `2` ↔ `5`。
+- 所以一个数的余数可以是 `r` 或 `k - r`。
+
+进一步简化：
+
+- 每个元素最终只能归类到 `[0, k//2]` 这个区间里的一个“代表余数”。
+  - 如果 `r <= k//2`，就归类到 `r`；
+  - 如果 `r > k//2`，就归类到 `k - r`。
+- 然后只要两个 multiset 的归类计数完全一致，就能相互转化。
+
+------
+
+**解法**
+
+1. 把 `S` 和 `T` 中的每个元素转成 “代表余数”。
+2. 统计各代表余数的出现次数。
+3. 两边统计结果相等 → YES，否则 NO。
+
+------
+
+搞笑版： I/O 和简洁，不用字典，排序。
+
+```python
+import sys
+input = sys.stdin.readline
+
+def normalize(arr, k):
+    w = k // 2
+    return sorted((r if r <= w else k - r) for r in (x % k for x in arr))
+
+t = int(input())
+out = []
+for _ in range(t):
+    n, k = map(int, input().split())
+    s = list(map(int, input().split()))
+    t_ = list(map(int, input().split()))
+    if normalize(s, k) == normalize(t_, k):
+        out.append("YES")
+    else:
+        out.append("NO")
+
+sys.stdout.write("\n".join(out))
+```
+
+
+
+C++普通写法就可以AC
+
+```c++
+#include <iostream>
+#include <vector>
+#include <map>
+using namespace std;
+
+// 函数 fo：计算模 k 后的对称频次
+map<int, int> fo(const vector<int>& s, int n, int k) {
+    int w = k / 2;
+    map<int, int> a;
+    for (int i : s) {
+        int r = i % k;
+        if (r <= w) {
+            a[r]++;
+        } else {
+            a[k - r]++;
+        }
+    }
+    return a;
+}
+
+// 函数 eq：比较两个序列经过 fo 处理后是否相等
+bool eq(const vector<int>& s, const vector<int>& t, int n, int k) {
+    map<int, int> a = fo(s, n, k);
+    map<int, int> b = fo(t, n, k);
+    return a == b;
+}
+
+int main() {
+    int m;
+    cin >> m;
+
+    for (int q = 0; q < m; ++q) {
+        int n, k;
+        cin >> n >> k;
+
+        vector<int> s(n);
+        vector<int> t(n);
+
+        for (int i = 0; i < n; ++i) {
+            cin >> s[i];
+        }
+        for (int i = 0; i < n; ++i) {
+            cin >> t[i];
+        }
+
+        if (eq(s, t, n, k)) {
+            cout << "YES" << endl;
+        } else {
+            cout << "NO" << endl;
+        }
+    }
+
+    return 0;
+}
 ```
 
 
