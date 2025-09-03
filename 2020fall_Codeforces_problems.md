@@ -1,7 +1,3 @@
-
-
-
-
 # Problems in Codeforces.com
 
 Updated 2140 GMT+8 Sep 2, 2025
