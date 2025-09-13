@@ -1,6 +1,6 @@
 # Problems in Codeforces.com
 
-Updated 2140 GMT+8 Sep 2, 2025
+Updated 0044 GMT+8 Sep 14, 2025
 
 2020 fall, Complied by Hongfei Yan
 
@@ -4598,6 +4598,142 @@ for _ in range(t):
     ans2 = sum([min_b + i for i in a])
     print(min(ans1, ans2))
 ```
+
+
+
+## 2132B. The Secret Number
+
+math, 900 https://codeforces.com/problemset/problem/2132/B
+
+Vadim has thought of a number 𝑥. To ensure that no one can guess it, he appended a positive number of zeros to the right of it, thus obtaining a new number 𝑦. However, as a precaution, Vadim decided to spread the number 𝑛=𝑥+𝑦. Find all suitable 𝑥 that Vadim could have thought of for the given 𝑛.
+
+**Input**
+
+Each test consists of several test cases. The first line contains a single integer 𝑡 (1≤𝑡≤104) — the number of test cases. The following lines describe the test cases.
+
+In a single line of each test case, there is an integer 𝑛 — the number spread by Vadim (11≤𝑛≤1018).
+
+**Output**
+
+For each number 𝑛, output 0 if there are no suitable 𝑥. Otherwise, output the number of suitable 𝑥, followed by all suitable 𝑥 **in ascending order**.
+
+Example
+
+input
+
+```
+5
+1111
+12
+55
+999999999999999999
+1000000000000000000
+```
+
+output
+
+```
+2
+11 101
+0
+1
+5
+3
+999999999 999000999000999 90909090909090909
+0
+```
+
+Note
+
+In the first sample, to 11 one can append two zeros to the right, then 11+1100=1111, and to 101 one can append one zero to the right, then 101+1010=1111.
+
+In the second sample, it is impossible to obtain 12 through the described actions.
+
+
+
+
+
+推导：把 x 右边添 k≥1 个零得到 y = x⋅10^k，于是
+
+n = x+y = x(1+10^k).
+
+因此对于任意满足 $1+10^k∣n$ 的 $k≥1$，就有一个解
+
+$x = \frac{n}{1+10^k}$.
+
+只需枚举所有可能的 k（因为 10^k 快速增长，对于 n≤10^18 只需枚举到 k=18），检查 1+10^k 是否整除 n，把对应的 x 收集并排序输出即可。
+
+
+
+```python
+def solve():
+    t = int(input())
+    ans_lines = []
+
+    for _ in range(t):
+        n = int(input());
+        sols = []
+        # 枚举 k 从1开始，直到 10^k + 1 > n
+        p = 10
+        for k in range(1, 19):  # 10^18 <= 1e18，所以 k 最大 18 足够
+            val = p + 1  # 10^k + 1
+            if val > n:
+                break
+            if n % val == 0:
+                x = n // val
+                sols.append(x)
+            p *= 10
+        if not sols:
+            ans_lines.append("0")
+        else:
+            sols.sort()
+            ans_lines.append(str(len(sols)))
+            ans_lines.append(" ".join(str(x) for x in sols))
+    print("\n".join(ans_lines))
+
+if __name__ == "__main__":
+    solve()
+
+```
+
+
+
+
+
+```python
+import sys
+
+def solve():
+    data = sys.stdin.read().strip().split()
+    t = int(data[0])
+    ans_lines = []
+    idx = 1
+    for _ in range(t):
+        n = int(data[idx]); idx += 1
+        sols = []
+        # 枚举 k 从1开始，直到 10^k + 1 > n
+        p = 10
+        for k in range(1, 19):  # 10^18 <= 1e18，所以 k 最大 18 足够
+            val = p + 1  # 10^k + 1
+            if val > n:
+                break
+            if n % val == 0:
+                x = n // val
+                sols.append(x)
+            p *= 10
+        if not sols:
+            ans_lines.append("0")
+        else:
+            sols.sort()
+            ans_lines.append(str(len(sols)))
+            ans_lines.append(" ".join(str(x) for x in sols))
+    sys.stdout.write("\n".join(ans_lines))
+
+if __name__ == "__main__":
+    solve()
+```
+
+
 
 
 
