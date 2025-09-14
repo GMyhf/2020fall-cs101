@@ -1,6 +1,6 @@
 # Problems in Codeforces.com
 
-Updated 0044 GMT+8 Sep 14, 2025
+Updated 1635 GMT+8 Sep 14, 2025
 
 2020 fall, Complied by Hongfei Yan
 
@@ -12732,6 +12732,87 @@ int main() {
 
     return 0;
 }
+```
+
+
+
+## 2140B. Another Divisibility Problem, 
+
+constructive algorithms, math, number theory
+
+https://codeforces.com/problemset/problem/2140/B
+
+Alice and Bob are playing a game in which Alice has given Bob a positive integer 𝑥<108.
+
+To win the game, Bob has to find another positive integer 𝑦<109 such that 𝑥#𝑦 is divisible by 𝑥+𝑦.
+
+Here 𝑥#𝑦 denotes the integer formed by **concatenating** the integers 𝑥 and 𝑦 in that order. For example, if 𝑥=835, 𝑦=47, then 𝑥#𝑦=83547.
+
+However, since Bob is dumb, he is unable to find such an integer. Please help him.
+
+It can be shown that such an integer always exists.
+
+**Input**
+
+Each test contains multiple test cases. The first line contains the number of test cases 𝑡 (1≤𝑡≤104). The description of the test cases follows. 
+
+The only line of each test case contains a single integer 𝑥 (1≤𝑥<108) — the integer that Alice has given to Bob.
+
+**Output**
+
+For each test case, print a single integer 𝑦 (1≤𝑦<109) so that Bob can win the game.
+
+If there are multiple answers, print any one of them.
+
+Example
+
+input
+
+```
+6
+8
+42
+1000
+66666
+106344
+9876543
+```
+
+output
+
+```
+1
+12
+998
+7872
+8190
+174036
+```
+
+Note
+
+For the first test case, 𝑥=8, we can choose 𝑦=1, and we have 𝑥#𝑦=81, which is divisible by 𝑥+𝑦=9.
+
+For the second test case, 𝑥=42, we can choose 𝑦=12, and we have 𝑥#𝑦=4212, which is divisible by 𝑥+𝑦=54.
+
+
+
+数学思路：
+
+- 对于一个n位的数字x和一个m位的数字y，`x#y=x*10^m+y`。
+- 当考虑x+y是否能整除`x*10^m+y`时，这等价于整除x*(10^m-1)`。
+- 由于x+y显然不会直接整除x，因此需要让x+y整除`(10^m-1)`，即9*1111...(m位)。
+- 为了满足上述条件，可以设定`x+y=10^m-1`，这意味着y的值可以通过公式`y=10^(n+1)-1-x`计算得出，其中n是x的位数。
+- y的位数必须大于等于x的位数，才能保证了x+y>10^m-1。
+
+写成 y = 10^(n+1)-1-x即可
+
+```python
+for _ in range(int(input())):
+    x = int(input())
+    n = len(str(x))
+    print(10**(n+1)-1-x)
+
 ```
 
 
