@@ -931,6 +931,21 @@ int main(){
 
 
 
+思路：正则表达式的反向引用，其中\g<0>引用匹配的全部部分。更精细的反向引用可以用捕获组（）和\g<1>这种结构。也可以?P对捕获组命名。
+
+```python
+import re
+s = input().lower()
+s = re.sub(r"[aeiouy]", "" ,s)
+s = re.sub(r".", "."+r"\g<0>",s)
+print(s)
+
+```
+
+
+
+
+
 ## 122A. Lucky Division
 
 brute force, number theory, 1000, https://codeforces.com/problemset/problem/122/A
