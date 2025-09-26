@@ -1,6 +1,6 @@
 # Problems in Codeforces.com
 
-Updated 1811 GMT+8 Sep 26, 2025
+Updated 2113 GMT+8 Sep 26, 2025
 
 2020 fall, Complied by Hongfei Yan
 
@@ -139,6 +139,105 @@ short code 2
 ```python
 print("YNEOS"[2**int(input())%24<9::2]) 
 ```
+
+
+
+
+
+## 20B. Equation
+
+math, 2000, https://codeforces.com/problemset/problem/20/B
+
+You are given an equation: 
+
+*Ax*^2 + *Bx* + *C* = 0. 
+
+Your task is to find the number of distinct roots of the equation and print all of them in ascending order.
+
+**Input**
+
+The first line contains three integer numbers *A*, *B* and *C* ( - 10^5 ≤ *A*, *B*, *C* ≤ 10^5). Any coefficient may be equal to 0.
+
+**Output**
+
+In case of infinite root count print the only integer -1. In case of no roots print the only integer 0. In other cases print the number of root on the first line and the roots on the following lines in the ascending order. Print roots with at least 5 digits after the decimal point.
+
+Examples
+
+input
+
+```
+1 -5 6
+```
+
+output
+
+```
+2
+2.0000000000
+3.0000000000
+```
+
+
+
+分情况处理：
+
+**A = 0** → 方程退化为线性方程或常数方程：
+
+- 如果 B = 0, C = 0 → 恒等式 `0 = 0`，解无限多 → 输出 `-1`。
+- 如果 B = 0, C ≠ 0 → 恒不成立 → 输出 `0`。
+- 否则是线性方程 `Bx + C = 0` → 唯一解 `x = -C/B`。
+
+**A ≠ 0** → 标准二次方程，计算判别式 `D = B^2 - 4AC`：
+
+- 如果 D < 0 → 无解 → 输出 `0`。
+- 如果 D = 0 → 一个实根 `-B / (2A)`。
+- 如果 D > 0 → 两个实根，按升序输出。
+
+输出时要保证**小数点后至少 5 位**（用 `:.10f` 来格式化即可）。
+
+```python
+import math
+
+def solve():
+    A, B, C = map(int, input().split())
+    
+    # Case 1: Linear / constant equation
+    if A == 0:
+        if B == 0:
+            if C == 0:
+                print(-1)  # infinite solutions
+            else:
+                print(0)   # no solution
+        else:
+            root = -C / B
+            print(1)
+            print(f"{root:.10f}")
+        return
+    
+    # Case 2: Quadratic equation
+    D = B * B - 4 * A * C
+    if D < 0:
+        print(0)
+    elif D == 0:
+        root = -B / (2 * A)
+        print(1)
+        print(f"{root:.10f}")
+    else:
+        sqrt_D = math.sqrt(D)
+        r1 = (-B - sqrt_D) / (2 * A)
+        r2 = (-B + sqrt_D) / (2 * A)
+        if r1 > r2:
+            r1, r2 = r2, r1
+        print(2)
+        print(f"{r1:.10f}")
+        print(f"{r2:.10f}")
+
+if __name__ == "__main__":
+    solve()
+```
+
+
 
 
 
