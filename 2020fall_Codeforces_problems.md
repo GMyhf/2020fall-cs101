@@ -1,6 +1,6 @@
 # Problems in Codeforces.com
 
-Updated 1110 GMT+8 Sep 26, 2025
+Updated 1811 GMT+8 Sep 26, 2025
 
 2020 fall, Complied by Hongfei Yan
 
@@ -10095,6 +10095,113 @@ print('\n'.join(map(str,ans)))
 
 
 如果用sum求和，O(n^2)，pypy3也会在test3 超时。
+
+
+
+
+
+## 1366D. Two Divisors
+
+constructive algorithms, math, number theory, 2000, https://codeforces.com/problemset/problem/1366/D
+
+You are given 𝑛 integers 𝑎1,𝑎2,…,𝑎𝑛.
+
+For each 𝑎𝑖 find its **two divisors** 𝑑1>1 and 𝑑2>1 such that gcd(𝑑1+𝑑2,𝑎𝑖)=1 (where gcd(𝑎,𝑏) is the greatest common divisor of 𝑎 and 𝑏) or say that there is no such pair.
+
+**Input**
+
+The first line contains single integer 𝑛 (1≤𝑛≤5⋅10^5) — the size of the array 𝑎.
+
+The second line contains 𝑛 integers 𝑎1,𝑎2,…,𝑎𝑛 (2≤𝑎𝑖≤10^7) — the array 𝑎.
+
+**Output**
+
+To speed up the output, print two lines with 𝑛 integers in each line.
+
+The 𝑖-th integers in the first and second lines should be corresponding divisors 𝑑1>1 and 𝑑2>1 such that gcd(𝑑1+𝑑2,𝑎𝑖)=1 or −1 and −1 if there is no such pair. If there are multiple answers, print any of them.
+
+Example
+
+input
+
+```
+10
+2 3 4 5 6 7 8 9 10 24
+```
+
+output
+
+```
+-1 -1 -1 -1 3 -1 -1 -1 2 2 
+-1 -1 -1 -1 2 -1 -1 -1 5 3 
+```
+
+Note
+
+Let's look at 𝑎7=8. It has 3 divisors greater than 1: 2, 4, 8. As you can see, the sum of any pair of divisors is divisible by 2 as well as 𝑎7.
+
+There are other valid pairs of 𝑑1 and 𝑑2 for 𝑎10=24, like (3,4) or (8,3). You can print any of them.
+
+
+
+思路要点：
+
+- 记 x=ai。取其最小质因子 p，把所有 p 都从 x 中除掉，得到 m=x/pk（即把 p 的最大幂剥掉）。
+- 若 m==1（也就是 x 是某个质数的幂），则无解，输出 `-1 -1`。否则令 d1=pk=x//m，d2=m。显然 d1,d2>1、都整除 x，且 gcd⁡(d1+d2,x)=1（证明见题解）。题目与练习参考。
+
+下面是高效实现（对 ai≤10^7 的限制使用线性筛计算 SPF）。读入大量数据并快速输出，pypy3提交AC。
+
+```python
+# 线性筛求最小质因子（spf），然后对每个数剥离最小质因子的全部幂。
+
+import sys
+data = list(map(int, sys.stdin.buffer.read().split()))
+n = data[0]
+arr = data[1:]
+
+if n == 0:
+    sys.exit()
+
+maxA = max(arr)
+
+# compute spf (smallest prime factor) with linear sieve
+spf = [0] * (maxA + 1)
+primes = []
+for i in range(2, maxA + 1):
+    if spf[i] == 0:
+        spf[i] = i
+        primes.append(i)
+    for p in primes:
+        v = p * i
+        if v > maxA:
+            break
+        spf[v] = p
+        if p == spf[i]:
+            break
+
+res1 = []
+res2 = []
+for x in arr:
+    p = spf[x]
+    tmp = x
+    while tmp % p == 0:
+        tmp //= p
+    if tmp == 1:
+        res1.append(-1)
+        res2.append(-1)
+    else:
+        d1 = x // tmp   # p^k
+        d2 = tmp
+        res1.append(d1)
+        res2.append(d2)
+
+out = []
+out.append(" ".join(map(str, res1)))
+out.append(" ".join(map(str, res2)))
+sys.stdout.write("\n".join(out))
+```
+
+复杂度：线性筛 O(maxA)，每个数因子剥离耗费 O(log⁡x)（总体对给定约束内可接受）。
 
 
 
