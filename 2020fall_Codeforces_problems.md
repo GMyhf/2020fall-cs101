@@ -1,6 +1,6 @@
 # Problems in Codeforces.com
 
-*Updated 2025-09-27 11:05 GMT+8*
+*Updated 2025-09-27 11:19 GMT+8*
  *Compiled by Hongfei Yan (2020 Fall)*
 
 
@@ -1211,6 +1211,127 @@ for num in facn:
 else:
     print('NO')
 ```
+
+
+
+## 131A. cAPS lOCK
+
+implementation, strings, https://codeforces.com/problemset/problem/131/A
+
+
+wHAT DO WE NEED cAPS LOCK FOR?
+
+Caps lock is a computer keyboard key. Pressing it sets an input mode in which typed letters are capital by default. If it is pressed by accident, it leads to accidents like the one we had in the first passage. 
+
+Let's consider that a word has been typed with the Caps lock key accidentally switched on, if: 
+
+- either it only contains uppercase letters; 
+- or all letters except for the first one are uppercase. 
+
+In this case we should automatically change the case of all letters. For example, the case of the letters that form words "hELLO", "HTTP", "z" should be changed.
+
+Write a program that applies the rule mentioned above. If the rule cannot be applied, the program should leave the word unchanged.
+
+**Input**
+
+The first line of the input data contains a word consisting of uppercase and lowercase Latin letters. The word's length is from 1 to 100 characters, inclusive.
+
+**Output**
+
+Print the result of the given word's processing.
+
+Examples
+
+input
+
+```
+cAPS
+```
+
+output
+
+```
+Caps
+```
+
+input
+
+```
+Lock
+```
+
+output
+
+```
+Lock
+```
+
+
+
+规则总结：
+
+- 如果 **整个字符串全是大写**，或者 **首字母小写、其余全是大写**，就把整个字符串大小写反转。
+- 否则保持不变。
+
+```python
+line = input()
+
+diff = ord('a') - ord('A')
+fail_rule = False
+ns = ''
+for i in range(len(line)):
+        t = 0
+        if i==0 and 'a' <= line[0] <='z':
+                t = ord(line[0]) - diff
+                ns += chr(t)
+
+        elif i!=0 and 'a' <=line[i] <='z':
+                fail_rule = True
+                break
+        else:
+                t = ord(line[i]) + diff
+                ns += chr(t)
+ 
+if fail_rule:
+        print(line)
+else:
+        print(ns)
+
+```
+
+
+
+```python
+_str = input()
+
+flag = True
+for i in _str[1:]:
+        if i.islower():
+                flag = False
+
+if flag: _str = _str.swapcase()
+
+print(_str)
+
+```
+
+
+
+```python
+word = input().strip()
+
+# 条件：全部是大写，或者 除第一个字母外全大写
+if word.isupper() or (word[0].islower() and word[1:].isupper()):
+    print(word.swapcase())
+else:
+    print(word)
+```
+
+`isupper()`：检查字符串是否全大写。
+
+`islower()`：检查字符是否小写。
+
+`swapcase()`：大小写互换。
 
 
 
