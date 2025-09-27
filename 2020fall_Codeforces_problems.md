@@ -1,13 +1,16 @@
 # Problems in Codeforces.com
 
-Updated 2113 GMT+8 Sep 26, 2025
+*Updated 2025-09-27 11:05 GMT+8*
+ *Compiled by Hongfei Yan (2020 Fall)*
 
-2020 fall, Complied by Hongfei Yan
 
-==**How to find the problems?**==
+
+> Basic 题目难度是800~1100，Optional 题目难度1200+
+
+**How to find the problems?**
 Visit http://codeforces.com/, click 'PROBLEMSET', then click green checkmark (order=BY_SOLVED_DESC). That is, click http://codeforces.com/problemset?order=BY_SOLVED_DESC.
 
-==**What is Codeforces? What kind of a site/resource is it?**==
+**What is Codeforces? What kind of a site/resource is it?**
 Codeforces is a project joining people interested in and taking part in programming contests. On one hand, Codeforces is a social network dedicated to programming and programming contests. On the other hand, it is a platform where contests are held regularly, the participant's skills are reflected by their rating and the former contests can be used to prepare. 
 
 
@@ -20,9 +23,9 @@ https://www.luogu.com.cn/problem/CF1749C
 
 
 
-# ==Basic Programming Exercises==
+# Basic Problems
 
-#. title, algorithm, ==difficulty==, link
+#. title, algorithm tab, difficulty, link
 
 
 
@@ -2725,6 +2728,111 @@ print(cnt)
 
 
 
+## 363B. Fence
+
+sliding window, prefix sum, 1100, https://codeforces.com/problemset/problem/363/B
+
+原题目给出的tag是brute force, dp，应该是 sliding window, prefix sum
+
+There is a fence in front of Polycarpus's home. The fence consists of *n* planks of the same width which go one after another from left to right. The height of the *i*-th plank is *h**i* meters, distinct planks can have distinct heights.
+
+![e670a72caaa33bad302d556ab498edd2](https://raw.githubusercontent.com/GMyhf/img/main/img/e670a72caaa33bad302d556ab498edd2.png)
+
+Fence for *n* = 7 and *h* = [1, 2, 6, 1, 1, 7, 1]
+
+Polycarpus has bought a posh piano and is thinking about how to get it into the house. In order to carry out his plan, he needs to take exactly *k* consecutive planks from the fence. Higher planks are harder to tear off the fence, so Polycarpus wants to find such *k*consecutive planks that the sum of their heights is minimal possible.
+
+Write the program that finds the indexes of *k* consecutive planks with minimal total height. Pay attention, the fence is not around Polycarpus's home, it is in front of home (in other words, the fence isn't cyclic).
+
+**Input**
+
+The first line of the input contains integers *n* and *k* (1 ≤ *n* ≤ 1.5·10^5, 1 ≤ *k* ≤ *n*) — the number of planks in the fence and the width of the hole for the piano. The second line contains the sequence of integers *h*1, *h*2, ..., hn (1 ≤ hi ≤ 100), where hi is the height of the *i*-th plank of the fence.
+
+**Output**
+
+Print such integer *j* that the sum of the heights of planks *j*, *j* + 1, ..., *j* + *k* - 1 is the minimum possible. If there are multiple such *j*'s, print any of them.
+
+Examples
+
+input
+
+```
+7 3
+1 2 6 1 1 7 1
+```
+
+output
+
+```
+3
+```
+
+Note
+
+In the sample, your task is to find three consecutive planks with the minimum sum of heights. In the given case three planks with indexes 3, 4 and 5 have the required attribute, their total height is 8.
+
+
+
+题意：给出 `n` 个木板高度数组 `h[0..n-1]`，要找到长度为 `k` 的连续子段，使得这个子段的总高度最小，输出子段的起始下标（从 1 开始）。
+
+------
+
+滑动窗口思路：滑动窗口：先算出第一个窗口的和，之后每次加一个元素、减一个元素即可，O(n)。
+
+```python
+n, k = map(int, input().split())
+h = list(map(int, input().split()))
+
+# 先算第一个窗口的和
+window_sum = sum(h[:k])
+min_sum = window_sum
+min_index = 0  # 从 0 开始计
+
+# 滑动窗口
+for i in range(k, n):
+    window_sum += h[i] - h[i-k]
+    if window_sum < min_sum:
+        min_sum = window_sum
+        min_index = i - k + 1
+
+print(min_index + 1)  # 转成从 1 开始
+```
+
+
+
+前缀和思路是：
+
+构造前缀和数组 `prefix`，其中	prefix[i] = h[0]+h[1]+⋯+h[i−1]	（注意 `prefix[0] = 0`）。
+
+那么长度为 `k` 的子段 `[i, i+k-1]` 的和就是：sum(i,i+k−1) = prefix[i+k] − prefix[i]
+
+只要枚举所有起点 `i` (0 ≤ i ≤ n-k)，找最小的和。
+
+```python
+n, k = map(int, input().split())
+h = list(map(int, input().split()))
+
+# 构建前缀和
+prefix = [0] * (n + 1)
+for i in range(n):
+    prefix[i+1] = prefix[i] + h[i]
+
+# 枚举长度为 k 的区间
+min_sum = float('inf')
+min_index = 0
+for i in range(n - k + 1):
+    window_sum = prefix[i+k] - prefix[i]
+    if window_sum < min_sum:
+        min_sum = window_sum
+        min_index = i
+
+print(min_index + 1)  # 转成 1-based
+```
+
+
+
+
+
 ## 427A. Police Recruits
 
 implementation, 800, https://codeforces.com/problemset/problem/427/A
@@ -5142,7 +5250,7 @@ if __name__ == "__main__":
 
 
 
-# ==OPTIONAL PROBLEMS==
+# Optional Problems
 
 ## 1B. Spreadsheets
 
