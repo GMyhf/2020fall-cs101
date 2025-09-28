@@ -1,6 +1,6 @@
 # Problems in Codeforces.com
 
-*Updated 2025-09-27 11:19 GMT+8*
+*Updated 2025-09-28 11:15 GMT+8*
  *Compiled by Hongfei Yan (2020 Fall)*
 
 
@@ -4866,6 +4866,98 @@ results = min_moves_to_one(t, test_cases)
 for result in results:
     print(result)
 ```
+
+
+
+
+
+## 1374C. Move Brackets
+
+greedy, string, 1000, https://codeforces.com/problemset/problem/1374/C
+
+You are given a bracket sequence 𝑠 of length 𝑛, where 𝑛 is even (divisible by two). The string 𝑠 consists of 𝑛2 opening brackets '(' and 𝑛2closing brackets ')'.
+
+In one move, you can choose **exactly one bracket** and move it to the beginning of the string or to the end of the string (i.e. you choose some index 𝑖, remove the 𝑖-th character of 𝑠 and insert it before or after all remaining characters of 𝑠).
+
+Your task is to find the minimum number of moves required to obtain **regular bracket sequence** from 𝑠. It can be proved that the answer always exists under the given constraints.
+
+Recall what the regular bracket sequence is:
+
+- "()" is regular bracket sequence; 
+- if 𝑠 is regular bracket sequence then "(" + 𝑠 + ")" is regular bracket sequence; 
+- if 𝑠 and 𝑡 are regular bracket sequences then 𝑠 + 𝑡 is regular bracket sequence. 
+
+For example, "()()", "(())()", "(())" and "()" are regular bracket sequences, but ")(", "()(" and ")))" are not.
+
+You have to answer 𝑡 independent test cases.
+
+**Input**
+
+The first line of the input contains one integer 𝑡 (1≤𝑡≤2000) — the number of test cases. Then 𝑡 test cases follow.
+
+The first line of the test case contains one integer 𝑛 (2≤𝑛≤50) — the length of 𝑠. It is guaranteed that 𝑛 is even. The second line of the test case containg the string 𝑠 consisting of 𝑛2 opening and 𝑛2 closing brackets.
+
+**Output**
+
+For each test case, print the answer — the minimum number of moves required to obtain **regular bracket sequence** from 𝑠. It can be proved that the answer always exists under the given constraints.
+
+Example
+
+input
+
+```
+4
+2
+)(
+4
+()()
+8
+())()()(
+10
+)))((((())
+```
+
+output
+
+```
+1
+0
+1
+3
+```
+
+Note
+
+In the first test case of the example, it is sufficient to move the first bracket to the end of the string.
+
+In the third test case of the example, it is sufficient to move the last bracket to the beginning of the string.
+
+In the fourth test case of the example, we can choose last three openning brackets, move them to the beginning of the string and obtain "((()))(())".
+
+
+
+思路：遍历字符串时维护一个平衡值 `bal`（遇到 `(` 加 1，遇到 `)` 减 1）。
+
+- 如果 `bal` 从未小于 0，说明序列是合法的。
+- 如果 `bal` 出现过负数，最小值 `min_bal` 就表示右括号超前多少个。
+  答案就是 `-min_bal`（需要把多少个右括号挪到后面）。
+
+代码
+
+```python
+t = int(input())
+for _ in range(t):
+    n = int(input())
+    s = input().strip()
+    bal = 0
+    min_bal = 0
+    for ch in s:
+        bal += 1 if ch == '(' else -1
+        min_bal = min(min_bal, bal)
+    print(-min_bal)
+```
+
+
 
 
 
