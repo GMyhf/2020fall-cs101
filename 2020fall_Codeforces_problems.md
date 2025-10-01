@@ -1216,7 +1216,7 @@ else:
 
 ## 131A. cAPS lOCK
 
-implementation, strings, https://codeforces.com/problemset/problem/131/A
+implementation, strings, 1000, https://codeforces.com/problemset/problem/131/A
 
 
 wHAT DO WE NEED cAPS LOCK FOR?
@@ -3289,90 +3289,6 @@ print(n)
 
 
 
-## 460B. Little Dima and Equation
-
-brute force, implementation, math, number theory, 1500
-
-https://codeforces.com/problemset/problem/460/B
-
-Little Dima misbehaved during a math lesson a lot and the nasty teacher Mr. Pickles gave him the following problem as a punishment. 
-
-Find all integer solutions x ($0 < x < 10^9$) of the equation:
-
-$x = b·s(x)^a + c$, 
-
-where *a*, *b*, *c* are some predetermined constant values and function *s*(*x*) determines the sum of all digits in the decimal representation of number *x*.
-
-The teacher gives this problem to Dima for each lesson. He changes only the parameters of the equation: *a*, *b*, *c*. Dima got sick of getting bad marks and he asks you to help him solve this challenging problem.
-
-**Input**
-
-The first line contains three space-separated integers: *a*, *b*, *c* (1 ≤ *a* ≤ 5; 1 ≤ *b* ≤ 10000; - 10000 ≤ *c* ≤ 10000).
-
-**Output**
-
-Print integer *n* — the number of the solutions that you've found. Next print *n* integers in the increasing order — the solutions of the given equation. Print only integer solutions that are larger than zero and strictly less than $10^9$.
-
-Examples
-
-input
-
-```
-3 2 8
-```
-
-output
-
-```
-3
-10 2008 13726 
-```
-
-input
-
-```
-1 2 -18
-```
-
-output
-
-```
-0
-```
-
-input
-
-```
-2 2 -1
-```
-
-output
-
-```
-4
-1 31 337 967 
-```
-
-
-
-```python
-def s(n):
-    return sum([int(i) for i in str(n)])
-
-a,b,c = map(int, input().split())
-ans = []
-for i in range(1,82):
-    y = b * (i**a) + c
-    if y <= 0 or y >= 10**9:
-        continue
-    if s(y) == i:
-        ans.append(y)
-
-print(len(ans))
-if ans:
-    print(*ans)
-```
-
 
 
 
@@ -3523,9 +3439,9 @@ For each boy, we know his dancing skills. Similarly, for each girl we know her d
 
 **Input**
 
-The first line contains an integer *n* (1 ≤ *n* ≤ 100) — the number of boys. The second line contains sequence *a*1, *a*2, ..., *a**n* (1 ≤ *a**i* ≤ 100), where *a**i* is the *i*-th boy's dancing skill.
+The first line contains an integer *n* (1 ≤ *n* ≤ 100) — the number of boys. The second line contains sequence *a*1, *a*2, ..., an (1 ≤ ai ≤ 100), where ai is the *i*-th boy's dancing skill.
 
-Similarly, the third line contains an integer *m* (1 ≤ *m* ≤ 100) — the number of girls. The fourth line contains sequence *b*1, *b*2, ..., *b**m* (1 ≤ *b**j* ≤ 100), where *b**j* is the *j*-th girl's dancing skill.
+Similarly, the third line contains an integer *m* (1 ≤ *m* ≤ 100) — the number of girls. The fourth line contains sequence *b*1, *b*2, ..., bm (1 ≤ bj ≤ 100), where bj is the *j*-th girl's dancing skill.
 
 **Output**
 
@@ -7281,6 +7197,94 @@ for d in s:
 
 print(max(a,b))
 ```
+
+
+
+## 460B. Little Dima and Equation
+
+brute force, implementation, math, number theory, 1500
+
+https://codeforces.com/problemset/problem/460/B
+
+Little Dima misbehaved during a math lesson a lot and the nasty teacher Mr. Pickles gave him the following problem as a punishment. 
+
+Find all integer solutions x ($0 < x < 10^9$) of the equation:
+
+$x = b·s(x)^a + c$, 
+
+where *a*, *b*, *c* are some predetermined constant values and function *s*(*x*) determines the sum of all digits in the decimal representation of number *x*.
+
+The teacher gives this problem to Dima for each lesson. He changes only the parameters of the equation: *a*, *b*, *c*. Dima got sick of getting bad marks and he asks you to help him solve this challenging problem.
+
+**Input**
+
+The first line contains three space-separated integers: *a*, *b*, *c* (1 ≤ *a* ≤ 5; 1 ≤ *b* ≤ 10000; - 10000 ≤ *c* ≤ 10000).
+
+**Output**
+
+Print integer *n* — the number of the solutions that you've found. Next print *n* integers in the increasing order — the solutions of the given equation. Print only integer solutions that are larger than zero and strictly less than $10^9$.
+
+Examples
+
+input
+
+```
+3 2 8
+```
+
+output
+
+```
+3
+10 2008 13726 
+```
+
+input
+
+```
+1 2 -18
+```
+
+output
+
+```
+0
+```
+
+input
+
+```
+2 2 -1
+```
+
+output
+
+```
+4
+1 31 337 967 
+```
+
+
+
+```python
+def s(n):
+    return sum([int(i) for i in str(n)])
+
+a,b,c = map(int, input().split())
+ans = []
+for i in range(1,82):
+    y = b * (i**a) + c
+    if y <= 0 or y >= 10**9:
+        continue
+    if s(y) == i:
+        ans.append(y)
+
+print(len(ans))
+if ans:
+    print(*ans)
+```
+
+
 
 
 
