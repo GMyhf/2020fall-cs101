@@ -1,6 +1,6 @@
 # Problems in Codeforces.com
 
-*Updated 2025-09-28 11:15 GMT+8*
+*Updated 2025-10-01 20:02 GMT+8*
  *Compiled by Hongfei Yan (2020 Fall)*
 
 
@@ -13206,6 +13206,232 @@ for _ in range(n):
         print("Yes")
     else:
         print("No")
+```
+
+
+
+【马铉钦25化院】前言：这三道CF1970题对算法知识的要求很低，但对数学知识有一定要求。
+
+## 1970E1. Trails (Easy)
+
+dp,1800, https://codeforces.com/problemset/problem/1970/E1
+
+Harry Potter is hiking in the Alps surrounding Lake Geneva. In this area there are m cabins, numbered 1 to m. Each cabin is connected, with one or more trails, to a central meeting point next to the lake. Each trail is either short or long. Cabin i is connected with $s_i$ short trails and $l_i$ long trails to the lake.
+
+Each day, Harry walks a trail from the cabin where he currently is to Lake Geneva, and then from there he walks a trail to any of the m cabins (including the one he started in). However, as he has to finish the hike in a day, at least one of the two trails has to be short.
+
+How many possible combinations of trails can Harry take if he starts in cabin 1 and walks for n days?
+
+Give the answer modulo $10^9$+7.
+
+
+**Input**
+
+The first line contains the integers m and n.
+
+The second line contains m integers, $s_1$,…,$s_m$, where $s_i$ is the number of short trails between cabin i and Lake Geneva.
+
+The third and last line contains m integers, $l_1,…,l_m$, where $l_i$ is the number of long trails between cabin i and Lake Geneva.
+
+We have the following constraints:
+
+0≤$s_i,l_i$≤$10^3$.
+
+1≤m≤$10^2$.
+
+1≤n≤$10^3$.
+
+**Output**
+
+The number of possible combinations of trails, modulo 109+7.
+
+Example
+
+Input
+
+```
+3 2
+1 0 1
+0 1 1
+```
+
+Output
+
+```
+18
+```
+
+
+
+【马铉钦25化院】本题虽然难度标1800，但是是一道比较简单的dp问题。
+考虑第n天时如果在第i个盆地，想要走到第j个盆地的方法：
+令$b_i,c_i$分别代表第i个盆地与中心的长、短路的数目，a(n,i)代表第n天时走到第i个盆地的总方法数，则容易发现有
+$$a(n+1,j)=\sum_{i=1} ^m a(n,i)(b_ib_j+b_ic_j+c_ib_j)$$
+使用这个公式进行动态规划即可，实现时可以使用两个一维数组代替二维数组。
+算法时间复杂度为$O(nm^2)$
+
+二维数组：
+
+```python
+m,n=map(int,input().split())
+lis=list(map(int,input().split()))
+lil=list(map(int,input().split()))
+dp=[[1]+[0]*(m-1) for i in range(n+1)]
+r=1000000007
+for i in range(1,n+1):
+    for j in range(m):
+        c=0
+        for t in range(m):
+            c+=(dp[i-1][t]*(lis[t]*(lil[j]+lis[j])+lil[t]*lis[j]))%r
+        
+        dp[i][j]=c%r
+    
+print(sum(dp[n])%r)
+```
+
+一维数组：
+
+```python
+from copy import copy
+m,n=map(int,input().split())
+lis=list(map(int,input().split()))
+lil=list(map(int,input().split()))
+dp=[1]+[0]*(m-1)
+dpnew=[0]*m
+litr=[[0]*m for i in range(m)]
+r=1000000007
+for j in range(m):
+    for t in range(m):
+        litr[j][t]=lis[t]*(lil[j]+lis[j])+lil[t]*lis[j]
+for i in range(1,n+1):
+    
+    for j in range(m):
+        c=0
+        for t in range(m):
+            c+=(dp[t]*litr[j][t])%r
+        
+        dpnew[j]=c%r
+    dp=copy(dpnew)
+    
+print(sum(dp)%r)
+```
+
+
+
+## 1970E2. Trails(Medium)
+
+dp,matrices,2000, https://codeforces.com/problemset/problem/1970/E2
+
+【马铉钦25化院】题目描述与E1完全相同，n的取值改为1≤n≤$10^9$.
+上面的$O(nm^2)$的方法不再能够满足要求。我们重新审视递推式：
+$$a(n+1,j)=\sum_{i=1} ^m a(n,i)(b_ib_j+b_ic_j+c_ib_j)$$
+对每一组$i,j$,后面$(b_ib_j+b_ic_j+c_ib_j)$都是一个整体，在固定$j$时只随$i$变化，不妨记作$f_{ij}$。
+那么$$a(n+1,j)=\sum_{i=1} ^m a(n,i)f_{ij}$$
+这个格式和matrices的tag不禁让人想到了矩阵的乘法。
+我们令$A_0=[1,0,...,0]$为第0天的走法数（只能在1盆地），那么我们有：
+$A_{i+1}=A_i\times F$  ，其中$F$是一个$m\times m$的方阵，满足$f_{ij}=b_ib_j+b_ic_j+c_ib_j$.
+那么，我们有：$A_n=A_0\times F^n$ ,只要求出$F^n$即可。
+利用快速幂的思想（联想OJ的T02706：麦森数），我们可以将求$F^n$的时间复杂度降到$O(m^3 log n$).
+代码如下：
+
+```python
+from copy import copy
+def muls(ma1,ma2):#实现方阵乘法
+    res=[[0]*m for i in range(m)]
+    for i in range(m):
+        for j in range(m):
+            c=0
+            for t in range(m):
+                c+=ma1[i][t]*ma2[t][j]%1000000007
+            res[i][j]=c%1000000007
+    return res
+    
+m,n=map(int,input().split())
+lis=list(map(int,input().split()))
+lil=list(map(int,input().split()))
+ 
+litr=[[0]*m for i in range(m)]
+for j in range(m):
+    for t in range(m):
+        litr[j][t]=lis[t]*(lil[j]+lis[j])+lil[t]*lis[j]#获得方阵F
+ 
+
+nb=(bin(n-1))[2:]
+li=copy(litr)
+for i in nb[::-1]:
+    if i=='1':
+        li=muls(li,litr)
+    litr=muls(litr,litr)
+
+print(sum(li[0])%1000000007)
+```
+
+
+
+## 1970E3. Trails(Hard)
+
+dp,matrices,2200, https://codeforces.com/problemset/problem/1970/E3
+
+【马铉钦25化院】题目描述与E1完全相同，n的取值改为1≤n≤$10^9$,m的取值改为1≤m≤$10^5$.
+由于m的取值增大，上面的方法无疑会TLE，我们需要另辟蹊径。
+由于$m\times m$方阵乘法需要$O(m^3$)，我们希望能够降低进行乘法的方阵的边长。
+观察方阵F的生成公式：$f_{ij}=b_ib_j+b_ic_j+c_ib_j=(b_i+b_j)(c_i+c_j)-c_ic_j$.
+这是一个秩为2的方阵，我们能不能把它的乘方化成一个$2\times 2$矩阵的乘方呢？
+其实是可以的。注意到$F=D\times E$,其中D是一个$n\times 2$矩阵，满足
+$$\begin{cases}
+\ d_{i0}=b_i+c_i
+\\ d_{i1}=c_i
+\end{cases}$$
+E是一个$2\times n$矩阵，满足
+$$\begin{cases}
+\ e_{0j}=b_j+c_j
+\\ e_{1j}=-c_j
+\end{cases}$$
+那么，我们有：$$F^n=(D\times E)(D\times E)(D\times E)...(D\times E)=D(E\times D)(E\times D)...(E\times D)E$$
+而这里的$E\times D$就是所需的$2\times 2$矩阵了。
+实现代码如下：
+
+```python
+r=1000000007
+def muls(ma1,ma2,ro1,co1,ro2,co2):#实现矩阵乘法
+    res=[[0]*co2 for i in range(ro1)]
+    for i in range(ro1):
+        for j in range(co2):
+            c=0
+            for t in range(co1):
+                c+=ma1[i][t]*ma2[t][j]%r
+            res[i][j]=c%r
+    return res
+
+m,n=map(int,input().split())
+lis=list(map(int,input().split()))
+lil=list(map(int,input().split()))
+r1,r2,r3=0,0,0
+for i in range(m):
+    r1+=(lis[i]+lil[i])**2
+    r2+=(lis[i]+lil[i])*lil[i]
+    r3+=lil[i]**2
+    r1,r2,r3=r1%r,r2%r,r3%r
+mat=[[r1,r2],[-r2,-r3]]#求出E*D
+me=[[1,0],[0,1]]
+
+nb=bin(n-1)[2:]
+for i in nb[::-1]:
+    if i=='1':
+        me=muls(me,mat,2,2,2,2)
+    mat=muls(mat,mat,2,2,2,2)
+
+out=[[lis[i]+lil[i] for i in range(m)],[-lil[j] for j in range(m)]]#矩阵E
+
+a1,b1=lis[0]+lil[0],lil[0]    
+out=muls(me,out,2,2,2,m)
+cou=0
+for i in range(m):#只需要结果的第一行的和：如果这里求出整个m*m方阵会MLE
+    cou+=out[0][i]*a1+out[1][i]*b1
+    cou=cou%r
+    
+print(cou)   
+
 ```
 
 
