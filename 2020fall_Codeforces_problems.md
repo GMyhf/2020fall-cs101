@@ -1,6 +1,6 @@
 # Problems in Codeforces.com
 
-*Updated 2025-10-05 09:01 GMT+8*
+*Updated 2025-10-05 10:01 GMT+8*
  *Compiled by Hongfei Yan (2020 Fall)*
 
 
@@ -11576,6 +11576,80 @@ int main(){
 	}
 	return 0;
 }
+```
+
+
+
+
+
+## 1520D. Same Differences
+
+data structures, hashing, math, 1200, https://codeforces.com/problemset/problem/1520/D
+
+You are given an array 𝑎 of 𝑛 integers. Count the number of pairs of indices (𝑖,𝑗) such that 𝑖<𝑗 and 𝑎𝑗−𝑎𝑖=𝑗−𝑖.
+
+**Input**
+
+The first line contains one integer 𝑡 (1≤𝑡≤10^4). Then 𝑡 test cases follow.
+
+The first line of each test case contains one integer 𝑛 (1≤𝑛≤2⋅10^5).
+
+The second line of each test case contains 𝑛 integers 𝑎1,𝑎2,…,𝑎𝑛 (1≤𝑎𝑖≤𝑛) — array 𝑎.
+
+It is guaranteed that the sum of 𝑛 over all test cases does not exceed 2⋅10^5.
+
+**Output**
+
+For each test case output the number of pairs of indices (𝑖,𝑗) such that 𝑖<𝑗 and 𝑎𝑗−𝑎𝑖=𝑗−𝑖.
+
+Example
+
+input
+
+```
+4
+6
+3 5 1 4 6 6
+3
+1 2 3
+4
+1 3 3 4
+6
+1 6 3 4 5 6
+```
+
+output
+
+```
+1
+3
+3
+10
+```
+
+
+
+思路：数学变形从 `a[j]-a[i]=j-i` 得到 `a[i]-i = a[j]-j`
+
+组合公式每组出现 `cnt` 次可组成 `cnt*(cnt-1)//2` 对
+
+```python
+from collections import Counter
+
+t = int(input())
+for _ in range(t):
+    n = int(input())
+    a = list(map(int, input().split()))
+    counter = Counter()
+
+    for i in range(n):
+        counter[a[i] - i] += 1
+
+    ans = 0
+    for cnt in counter.values():
+        ans += cnt * (cnt - 1) // 2
+
+    print(ans)
 ```
 
 
