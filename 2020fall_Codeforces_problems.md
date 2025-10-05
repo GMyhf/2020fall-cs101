@@ -1,6 +1,6 @@
 # Problems in Codeforces.com
 
-*Updated 2025-10-02 10:45 GMT+8*
+*Updated 2025-10-05 09:01 GMT+8*
  *Compiled by Hongfei Yan (2020 Fall)*
 
 
@@ -393,6 +393,8 @@ Output
 ```
 
 
+
+思路：排序后，找出需要的负数。
 
 ```python
 n, m = map(int, input().split())
@@ -1540,6 +1542,44 @@ In the second sample one coin isn't enough for us, too. You can pick coins with 
 
 
 
+
+
+思路：从大到小排序后，一个一个加上并判断是否满足条件。
+
+```python
+n = int(input())
+a = list(map(int, input().split()))
+a.sort(reverse=True)
+b = 0
+c = sum(a)
+k = 0
+for i in a:
+    b += i
+    k += 1
+    if b > c/2:
+        break
+print(k)
+```
+
+这段代码的目标是找出最少数量的硬币，使得这些硬币的总值大于所有硬币总值的一半。为了实现这个目标，它首先对硬币按照价值进行降序排序，然后依次累加硬币的值，直到总值超过所有硬币总值的一半。下面是对这段代码的时间复杂度分析：
+
+1. **输入处理**：
+   - `n = int(input())`：读取输入的硬币数量，时间复杂度为 O(1)。
+   - `a = list(map(int, input().split()))`：读取并转换成整数列表，时间复杂度为 O(n)。
+
+2. **排序**：
+   - `a.sort(reverse=True)`：对硬币列表按降序排序。排序操作的时间复杂度通常为 O(n log n)，其中 n 是列表中的元素数量。
+
+3. **求和**：
+   - `c = sum(a)`：计算所有硬币的总值，时间复杂度为 O(n)。
+
+4. **累加和判断**：
+   - `for i in a:`：遍历排序后的硬币列表，时间复杂度为 O(n)。但在实际运行中，由于存在 `if b > c/2: break` 的条件，循环可能会提前终止，具体取决于硬币的分布情况。然而，在最坏的情况下，这个循环仍然需要遍历整个列表，所以时间复杂度仍为 O(n)。
+
+综合以上各部分，这段代码的时间复杂度主要由排序操作决定，即 **O(n log n)**。这是因为排序操作的时间复杂度通常高于其他部分的操作，如输入处理、求和和累加判断等。
+
+
+
 ```python
 n = int(input())
 coins = [int(i) for i in input().split()]
@@ -1591,38 +1631,6 @@ print(n_coin)
 这个算法有效地解决了问题，因为它通过首先考虑高价值的硬币来尽可能快地达到目标值，从而确保了选择的硬币数量最少。
 
 
-
-```python
-n = int(input())
-a = list(map(int, input().split()))
-a.sort(reverse=True)
-b = 0
-c = sum(a)
-k = 0
-for i in a:
-    b += i
-    k += 1
-    if b > c/2:
-        break
-print(k)
-```
-
-这段代码的目标是找出最少数量的硬币，使得这些硬币的总值大于所有硬币总值的一半。为了实现这个目标，它首先对硬币按照价值进行降序排序，然后依次累加硬币的值，直到总值超过所有硬币总值的一半。下面是对这段代码的时间复杂度分析：
-
-1. **输入处理**：
-   - `n = int(input())`：读取输入的硬币数量，时间复杂度为 O(1)。
-   - `a = list(map(int, input().split()))`：读取并转换成整数列表，时间复杂度为 O(n)。
-
-2. **排序**：
-   - `a.sort(reverse=True)`：对硬币列表按降序排序。排序操作的时间复杂度通常为 O(n log n)，其中 n 是列表中的元素数量。
-
-3. **求和**：
-   - `c = sum(a)`：计算所有硬币的总值，时间复杂度为 O(n)。
-
-4. **累加和判断**：
-   - `for i in a:`：遍历排序后的硬币列表，时间复杂度为 O(n)。但在实际运行中，由于存在 `if b > c/2: break` 的条件，循环可能会提前终止，具体取决于硬币的分布情况。然而，在最坏的情况下，这个循环仍然需要遍历整个列表，所以时间复杂度仍为 O(n)。
-
-综合以上各部分，这段代码的时间复杂度主要由排序操作决定，即 **O(n log n)**。这是因为排序操作的时间复杂度通常高于其他部分的操作，如输入处理、求和和累加判断等。
 
 
 
@@ -5169,7 +5177,7 @@ Calculate the minimum possible total cost of putting chips according to the rule
 
 **Input**
 
-The first line contains a single integer $𝑡 (1≤𝑡≤104)$ — the number of test cases.
+The first line contains a single integer $𝑡 (1≤𝑡≤10^4)$ — the number of test cases.
 
 The first line of each test case contains a single integer $𝑛 (1≤𝑛≤3⋅10^5)$.
 
@@ -5218,9 +5226,7 @@ The first test case of the example is described in the statement.
 
 
 
-在一个 n×n 的网格里，我们设一个点$ (i,j)$的代价为 $a_i+b_j$，你要选出一些点，选取的点所在的横行或纵列会被填充，要求：
-1.网格里的每一个点都被填充。
-2.选择的点的代价之和最少。
+在一个 n×n 的网格里，设一个点$ (i,j)$的代价为 $a_i+b_j$，要选出一些点，选取的点所在的横行或纵列会被填充，要求：每个点都被填充，选择的点的代价之和最少。
 
 要使每个点都满足，最少的芯片个数应该为 n。要么每一行各有一个芯片，要么每一列各有一个芯片，否则就会有格子影响不到，无法满足规则。
 那么我们只要把所有芯片都放在代价最小的那一行（列）上，最后比较都放都放在同一行上代价小还是都放在同一列上代价小即可。
