@@ -1,6 +1,6 @@
 # Problems in Codeforces.com
 
-*Updated 2025-10-05 10:01 GMT+8*
+*Updated 2025-10-06 08:48 GMT+8*
  *Compiled by Hongfei Yan (2020 Fall)*
 
 
@@ -4360,7 +4360,7 @@ The only line of the input contains four positive integers $𝑥_1,𝑥_2,𝑥_3
 
 **Output**
 
-Print such positive integers 𝑎a, 𝑏b and 𝑐c that four numbers written on a board are values 𝑎+𝑏, 𝑎+𝑐, 𝑏+𝑐 and 𝑎+𝑏+𝑐 written in some order. Print 𝑎a, 𝑏b and 𝑐c in any order. If there are several answers, you can print any. It is guaranteed that the answer exists.
+Print such positive integers 𝑎, 𝑏 and 𝑐c that four numbers written on a board are values 𝑎+𝑏, 𝑎+𝑐, 𝑏+𝑐 and 𝑎+𝑏+𝑐 written in some order. Print 𝑎, 𝑏 and 𝑐 in any order. If there are several answers, you can print any. It is guaranteed that the answer exists.
 
 Examples
 
@@ -4414,7 +4414,7 @@ print(a[3]-a[0],a[3]-a[1],a[3]-a[2])
 
 math, 800, https://codeforces.com/problemset/problem/1328/A
 
-You are given two positive integers 𝑎a and 𝑏b. In one move you can increase 𝑎 by 1 (replace 𝑎 with 𝑎+1). Your task is to find the minimum number of moves you need to do in order to make 𝑎a divisible by 𝑏. It is possible, that you have to make 0 moves, as 𝑎a is already divisible by 𝑏. You have to answer 𝑡 independent test cases.
+You are given two positive integers 𝑎 and 𝑏. In one move you can increase 𝑎 by 1 (replace 𝑎 with 𝑎+1). Your task is to find the minimum number of moves you need to do in order to make 𝑎 divisible by 𝑏. It is possible, that you have to make 0 moves, as 𝑎 is already divisible by 𝑏. You have to answer 𝑡 independent test cases.
 
 **Input**
 
