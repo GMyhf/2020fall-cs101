@@ -3061,6 +3061,23 @@ print(cnt)
 
 
 
+全部求和，如果发生犯罪，则可用警力为负，此时重置该数字为零，继续计算。
+
+```python
+input()
+*event, = map(int, input().split())
+m = 0
+n = 0
+for i in event:
+    m += i
+    if m < 0:
+        m = 0
+        n += 1
+print(n)
+```
+
+
+
 ## 433B. Kuriyama Mirai's Stones
 
 dp, implementation, sorting, 1200
@@ -4407,6 +4424,81 @@ a = list(map(int, input().split()))
 a.sort()
 print(a[3]-a[0],a[3]-a[1],a[3]-a[2])
 ```
+
+
+
+
+
+## 1327A. Sum of Odd Integers
+
+math, 1100, https://codeforces.com/problemset/problem/1327/A
+
+You are given two integers 𝑛 and 𝑘. Your task is to find if 𝑛 can be represented as a sum of 𝑘 **distinct positive odd** (not divisible by 2) integers or not.
+
+You have to answer 𝑡 independent test cases.
+
+**Input**
+
+The first line of the input contains one integer 𝑡 (1≤𝑡≤105) — the number of test cases.
+
+The next 𝑡 lines describe test cases. The only line of the test case contains two integers 𝑛 and 𝑘 (1≤𝑛,𝑘≤107).
+
+**Output**
+
+For each test case, print the answer — "YES" (without quotes) if 𝑛 can be represented as a sum of 𝑘 **distinct positive odd** (not divisible by 2) integers and "NO" otherwise.
+
+Example
+
+input
+
+```
+6
+3 1
+4 2
+10 3
+10 2
+16 4
+16 5
+```
+
+output
+
+```
+YES
+YES
+NO
+YES
+YES
+NO
+```
+
+Note
+
+In the first test case, you can represent 3 as 3.
+
+In the second test case, the only way to represent 4 is 1+3.
+
+In the third test case, you cannot represent 10 as the sum of three distinct positive odd integers.
+
+In the fourth test case, you can represent 10 as 3+7, for example.
+
+In the fifth test case, you can represent 16 as 1+3+5+7.
+
+In the sixth test case, you cannot represent 16 as the sum of five distinct positive odd integers.
+
+
+
+```python
+t = int(input())
+for i in range(t):
+    n, k = map(int, input().split())
+    if (n+k) % 2 == 0 and n >= k**2:
+        print('YES')
+    else:
+        print('NO')
+```
+
+
 
 
 
