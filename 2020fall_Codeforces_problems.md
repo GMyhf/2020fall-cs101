@@ -1,6 +1,6 @@
 # Problems in Codeforces.com
 
-*Updated 2025-10-06 08:48 GMT+8*
+*Updated 2025-10-07 08:48 GMT+8*
  *Compiled by Hongfei Yan (2020 Fall)*
 
 
@@ -3959,6 +3959,59 @@ for i in range(1,len(a)):
                f[i] = 1
  
 print(max_value)
+```
+
+
+
+## 584A. Olesya and Rodion
+
+constructive algorithm, math, 1000, https://codeforces.com/problemset/problem/584/A
+
+Olesya loves numbers consisting of *n* digits, and Rodion only likes numbers that are divisible by *t*. Find some number that satisfies both of them.
+
+Your task is: given the *n* and *t* print an integer strictly larger than zero consisting of *n* digits that is divisible by *t*. If such number doesn't exist, print - 1.
+
+**Input**
+
+The single line contains two numbers, *n* and *t* (1 ≤ *n* ≤ 100, 2 ≤ *t* ≤ 10) — the length of the number and the number it should be divisible by.
+
+**Output**
+
+Print one such positive number without leading zeroes, — the answer to the problem, or - 1, if such number doesn't exist. If there are multiple possible answers, you are allowed to print any of them.
+
+Examples
+
+input
+
+```
+3 2
+```
+
+output
+
+```
+712
+```
+
+
+
+```python
+n,t = [int(i) for i in input().split()]
+
+if t==10 and n==1:
+        print(-1)
+elif t==10 and n>1:
+        for i in range(n-1):
+                print(1, end='')
+
+        print(0)
+
+else:
+        for i in range(n):
+                print(t, end='')
+
+        print()
+
 ```
 
 
