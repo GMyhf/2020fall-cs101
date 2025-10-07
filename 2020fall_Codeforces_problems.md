@@ -1,6 +1,6 @@
 # Problems in Codeforces.com
 
-*Updated 2025-10-07 08:48 GMT+8*
+*Updated 2025-10-08 00:48 GMT+8*
  *Compiled by Hongfei Yan (2020 Fall)*
 
 
@@ -10464,6 +10464,109 @@ for i in range(1,a+1):
     else:
         d.append("NO")
 print(*d)
+```
+
+
+
+## 1352C. K-th Not Divisible by n
+
+binary search, math, 1200, https://codeforces.com/problemset/problem/1352/C
+
+You are given two positive integers n and k. Print the k-th positive integer that is not divisible by n.
+
+For example, if n=3, and k=7, then all numbers that are not divisible by 3 are: 1, 2, 4, 5, 7, 8, 10, 11, 13 . The 7-th number among them is 10.
+
+**Input**
+
+The first line contains an integer t ($1 \le t \le 1000$) — the number of test cases in the input. Next, t test cases are given, one per line.
+
+Each test case is two positive integers n ($2 \le n \le 10^9$) and k ($1 \le k \le 10^9$).
+
+**Output**
+
+For each test case print the k-th positive integer that is not divisible by n.
+
+Example
+
+input
+
+```
+6
+3 7
+4 12
+2 1000000000
+7 97
+1000000000 1000000000
+2 1
+```
+
+output
+
+```
+10
+15
+1999999999
+113
+1000000001
+1
+```
+
+
+
+思路：
+
+**观察规律**
+
+在每一段连续的 `n` 个整数中：
+
+- 有 `n - 1` 个数**不是** n 的倍数；
+- 有 `1` 个数**是** n 的倍数。
+
+------
+
+**数学推导法**
+
+可以推导出一个**直接公式**：
+
+```
+cnt = k // (n - 1)
+rem = k % (n - 1)
+```
+
+解释：
+
+- 每 `n` 个数中有 `n - 1` 个有效。
+- 所以经过 `cnt` 组（每组 n 个数），共计 `cnt * (n - 1)` 个有效数。
+
+剩余还需要 `rem` 个。
+
+那么答案是：
+
+```
+x = cnt * n + rem
+```
+
+但要注意一个细节：
+
+- 当 `rem == 0` 时，说明恰好在某个 n 的倍数前停下；
+  那就要**往前退一个倍数**：
+
+  ```
+  x = cnt * n - 1
+  ```
+
+  
+
+```python
+t = int(input())
+for _ in range(t):
+    n, k = map(int, input().split())
+    cnt = k // (n - 1)
+    rem = k % (n - 1)
+    if rem == 0:
+        print(cnt * n - 1)
+    else:
+        print(cnt * n + rem)
 ```
 
 
