@@ -14268,7 +14268,7 @@ int main() {
 
 
 
-## 2140B. Another Divisibility Problem, 
+## 2140B. Another Divisibility Problem
 
 constructive algorithms, math, number theory
 
