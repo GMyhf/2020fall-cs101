@@ -1,6 +1,6 @@
 # Problems in Codeforces.com
 
-*Updated 2025-10-08 00:48 GMT+8*
+*Updated 2025-10-09 00:48 GMT+8*
  *Compiled by Hongfei Yan (2020 Fall)*
 
 
@@ -14272,7 +14272,7 @@ int main() {
 
 constructive algorithms, math, number theory
 
-https://codeforces.com/problemset/problem/2140/B
+900, https://codeforces.com/problemset/problem/2140/B
 
 Alice and Bob are playing a game in which Alice has given Bob a positive integer 𝑥<108.
 
@@ -14326,6 +14326,21 @@ Note
 For the first test case, 𝑥=8, we can choose 𝑦=1, and we have 𝑥#𝑦=81, which is divisible by 𝑥+𝑦=9.
 
 For the second test case, 𝑥=42, we can choose 𝑦=12, and we have 𝑥#𝑦=4212, which is divisible by 𝑥+𝑦=54.
+
+
+
+
+
+```python
+t = int(input())
+for _ in range(t):
+    x = int(input())
+    print(2 * x)
+```
+
+**正确**：因为 `y = 2x` 时，`x#y = x * 10^d + 2x`，`x + y = 3x`，而 `(10^d + 2)` 总是能被 3 整除。
+
+**高效**：时间复杂度 O(1) 每个测试用例。
 
 
 
