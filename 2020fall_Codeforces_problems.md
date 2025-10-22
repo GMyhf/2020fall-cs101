@@ -1,6 +1,6 @@
 # Problems in Codeforces.com
 
-*Updated 2025-10-09 00:48 GMT+8*
+*Updated 2025-10-22 17:52 GMT+8*
  *Compiled by Hongfei Yan (2020 Fall)*
 
 
@@ -12879,6 +12879,225 @@ for _ in range(t):
 
     print(best)
 ```
+
+
+
+## 1868A. Fill in the Matrix
+
+constructive algorithms, implementation, 1300, https://codeforces.com/problemset/problem/1868/A
+
+There is an empty matrix 𝑀 of size 𝑛×𝑚.
+
+Zhongkao examination is over, and Daniel would like to do some puzzle games. He is going to fill in the matrix  using permutations of length 𝑚. That is, each row of 𝑀 must be a permutation of length 𝑚†.
+
+Define the *value* of the 𝑖-th column in 𝑀 as $𝑣𝑖=MEX(𝑀_{1,𝑖},𝑀_{2,𝑖},…,𝑀_{𝑛,𝑖})$‡. Since Daniel likes diversity, the *beauty* of 𝑀 is $𝑠=MEX(𝑣_1,𝑣_2,⋯,𝑣_𝑚)$.
+
+You have to help Daniel fill in the matrix 𝑀 and **maximize** its beauty.
+
+†† A permutation of length 𝑚 is an array consisting of 𝑚 distinct integers from 0 to 𝑚−1 in arbitrary order. For example, \[1,2,0,4,3] is a permutation, but \[0,1,1] is not a permutation (1 appears twice in the array), and \[0,1,3] is also not a permutation (𝑚−1=2 but there is 3 in the array).
+
+‡‡ The MEXMEX of an array is the smallest non-negative integer that does not belong to the array. For example, MEX(2,2,1)=0 because 0 does not belong to the array, and MEX(0,3,1,2)=4 because 0, 1, 2 and 3 appear in the array, but 4 does not.
+
+**Input**
+
+The first line of input contains a single integer 𝑡 (1≤𝑡≤1000) — the number of test cases. The description of test cases follows.
+
+The only line of each test case contains two integers 𝑛 and 𝑚 (1≤𝑛,𝑚≤2⋅10^5^) — the size of the matrix.
+
+It is guaranteed that the sum of 𝑛⋅𝑚 over all test cases does not exceed 2⋅10^5^.
+
+**Output**
+
+For each test case, in the first line output a single integer — the maximum beauty of 𝑀.
+
+Then output the matrix 𝑀 of size 𝑛×𝑚 — the matrix you find.
+
+If there are multiple solutions, you may output any of them.
+
+Example
+
+input
+
+```
+4
+4 3
+1 16
+6 6
+2 1
+```
+
+output
+
+```
+3
+1 0 2
+0 2 1
+1 0 2
+0 2 1
+2
+14 7 15 4 10 0 8 6 1 2 3 5 9 11 12 13 
+6
+3 0 1 4 2 5 
+5 2 1 0 4 3 
+1 3 2 4 5 0 
+4 1 3 2 5 0 
+4 2 5 3 0 1 
+2 4 0 5 1 3
+0
+0
+0
+```
+
+Note
+
+In the first test case:
+
+- 𝑣1=MEX(1,0,1,0)=2;
+- 𝑣2=MEX(0,2,0,2)=1;
+- 𝑣3=MEX(2,1,2,1)=0.
+
+Therefore, 𝑠=MEX(2,1,0)=3.
+
+It can be shown that 3 is the maximum possible beauty of 𝑀.
+
+In the second test case, any permutation will make 𝑠=2.
+
+In the third test case:
+
+- 𝑣1=MEX(3,5,1,4,4,2)=0;
+- 𝑣2=MEX(0,2,3,1,2,4)=5;
+- 𝑣3=MEX(1,1,2,3,5,0)=4;
+- 𝑣4=MEX(4,0,4,2,3,5)=1;
+- 𝑣5=MEX(2,4,5,5,0,1)=3;
+- 𝑣6=MEX(5,3,0,0,1,3)=2.
+
+Therefore, 𝑠=MEX(0,5,4,1,3,2)=6.
+
+
+
+```python
+T = int(input())
+
+def solve():
+    n, m = map(int, input().split())
+    if m == 1:
+        print(0)
+    elif n >= m - 1:
+        print(m)
+    else:
+        print(n + 1)
+
+    for i in range(min(m - 1, n)):   # 循环移位部分
+        for j in range(m):
+            print((j + i) % m, end=' ')
+        print()
+
+    if n > m - 1:                    # 多余行（全部相同）
+        for i in range(m - 1, n):
+            for j in range(m):
+                print(j, end=' ')
+            print()
+
+for _ in range(T):
+    solve()
+
+```
+
+
+
+**完整思路总结**，包括题意 → 规律 → 构造方法 → 为什么是 `m−1`。
+
+------
+
+**🧩 题意简述**
+
+要构造一个 `n × m` 的矩阵 `M`，满足：
+
+- 每一行是 `[0, 1, ..., m−1]` 的一个排列；
+- 第 i 列的值定义为
+  `v_i = MEX(该列所有元素)`
+- 矩阵的「美丽度」定义为
+  `s = MEX(v_1, v_2, ..., v_m)`
+- 目标：**最大化 s**。
+
+------
+
+**💡 规律分析**
+
+我们要让各列的 MEX 值尽量丰富（0、1、2、...都出现），
+这样 `MEX(v)` 就会更大。
+
+**1️⃣ 当行数少时：`n < m−1`**
+
+- 每列最多能看到 `n` 个不同数字。
+- 所以每列 MEX ≤ n。
+- 如果我们构造得好（比如每列的 MEX 从 0 到 n），
+  就能让
+  `v = [0, 1, 2, ..., n]`
+  ⇒ `MEX(v) = n + 1`
+
+📈 所以当 `n < m−1` 时：
+
+> 最大美丽度 = **n + 1**
+
+------
+
+**2️⃣ 当行数多时：`n ≥ m−1`**
+
+- **能构造出**一个矩阵，使得列 MEX 的集合为 `[0,1,2,…,m−1]`，
+  因此最终 $s=MEX(v)=m$。
+
+📈 所以当 `n ≥ m−1` 时：
+
+> 最大美丽度 = **m**
+
+------
+
+**🏗️ 构造思路（关键）**
+
+为了让每列出现尽可能多的不同数字，我们采用：
+
+**🔁 循环移位排列**
+
+例：`m = 4`
+循环移位 `i` 次的行：
+
+| 行号 | 内容    |
+| ---- | ------- |
+| 0    | 0 1 2 3 |
+| 1    | 1 2 3 0 |
+| 2    | 2 3 0 1 |
+| 3    | 3 0 1 2 |
+
+你会发现：
+
+- 每列的数字完全不同；
+- 所以每列 MEX = m。
+
+------
+
+**✅ 复杂度与正确性**
+
+- 每个元素只打印一次，总复杂度 `O(nm)`；
+- 保证行数 ≤ n；
+- 每行合法（都是 `[0..m-1]` 的排列）；
+- MEX 取值最优。
+
+------
+
+🧩 总结一句话
+
+> **思路精华：**
+> 循环移位前 `m−1` 行制造“列的差异性”，
+> 若还有剩余行，全填相同 `[0..m−1]`。
+>
+> 因此最大美丽度：
+> $$
+> s = \begin{cases}
+> n+1, & n < m-1 \\
+> m, & n \ge m-1
+> \end{cases}
+> $$
 
 
 
