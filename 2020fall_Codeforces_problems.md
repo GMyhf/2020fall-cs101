@@ -1,6 +1,6 @@
 # Problems in Codeforces.com
 
-*Updated 2025-10-22 17:52 GMT+8*
+*Updated 2025-10-28 10:59 GMT+8*
  *Compiled by Hongfei Yan (2020 Fall)*
 
 
@@ -13100,6 +13100,31 @@ for _ in range(T):
 > $$
 
 
+
+【邓博文 光华管院】思路：分类讨论找出特解即可。若只有1列，结果为0。若行>=列-1，结果为列数，修改原矩阵的（列-2）行即可。反之，则结果为（行数+1），修改原矩阵的（行-1）行即可。修改方式均为将该行改为上一行“平移”1后的结果。
+
+```python
+n = int(input())  
+for _ in range(n):  
+    row,col = map(int,input().split())  
+    grid = [list(range(col)) for _ in range(row)]  
+    if col == 1:  
+        print(0)  
+        for row in grid:  
+            print(*row)  
+    elif row >= col-1:  
+        print(col)  
+        for i in range(1,col-1):  
+            grid[i] = [(num+1)%col for num in grid[i-1]]  
+        for row in grid:  
+            print(*row)  
+    else:  
+        print(row+1)  
+        for i in range(1,row):  
+            grid[i] = [(num+1)%col for num in grid[i-1]]  
+        for row in grid:  
+            print(*row)
+```
 
 
 
