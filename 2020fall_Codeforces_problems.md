@@ -1,6 +1,6 @@
 # Problems in Codeforces.com
 
-*Updated 2025-10-28 10:59 GMT+8*
+*Updated 2025-10-28 12:39 GMT+8*
  *Compiled by Hongfei Yan (2020 Fall)*
 
 
@@ -13124,6 +13124,41 @@ for _ in range(n):
             grid[i] = [(num+1)%col for num in grid[i-1]]  
         for row in grid:  
             print(*row)
+```
+
+
+
+【马铉钦25化院】思路：m=1 应该需要分出来讨论，然后尽量让每列的mex覆盖0-n的值
+
+```python
+def sol(n,m):
+    if m==1:
+        return 0,[[0] for _ in range(n)]
+    
+    else:
+        if m>n:
+            li=[]
+            tem=[i for i in range(m)]
+            for _ in range(n):
+                li.append(tem)
+                tem=tem[1:]+[tem[0]]
+            return n+1,li
+        elif m<=n:
+            li=[]
+            tem=[i for i in range(m)]
+            for _ in range(m-1):
+                tem=tem[1:]+[tem[0]]
+                li.append(tem)
+                
+            for _ in range(n-m+1):
+                li.append(tem)
+            return m,li
+for t in range(int(input())):
+    n,m=map(int,input().split())
+    res=sol(n,m)
+    print(res[0])
+    for i in res[1]:
+        print(*i)
 ```
 
 
