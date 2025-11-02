@@ -12975,6 +12975,38 @@ Therefore, 𝑠=MEX(0,5,4,1,3,2)=6.
 
 
 
+
+
+思路：卡得最久的一题，第二天才想出办法，但是一旦有思路很快就能写出来，尝试用了一下平时不怎么用的队列，不知道合不合适。迷惑性最强的点就是题目说输出任何一个符合条件的矩阵都行
+
+```python
+from collections import deque
+t=int(input())
+for i in range(t):
+    n,m=map(int,input().split())
+    q=deque(i for i in range(m))
+    if m==1:
+        for j in range(n+1):
+            print(0)
+        continue
+    if n>=m:
+        print(m)
+        for j in range(n-m+2):
+            print(" ".join(str(k) for k in q))
+        for j in range(m-2):
+            q.append(q.popleft())
+            print(" ".join(str(k) for k in q))
+        continue
+    print(n+1)
+    for j in range(n):
+        q.append(q.popleft())
+        print(" ".join(str(k) for k in q))
+```
+
+
+
+
+
 ```python
 T = int(input())
 
