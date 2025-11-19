@@ -13429,7 +13429,9 @@ In the first example:
 - For the third assumption there is only one pair: (4,4).
 - For the fourth assumption, there are 4 pairs: (4,4),(4,5),(5,4),(5,5).
 
-![img](https://espresso.codeforces.com/7c6d16e8362e76df883e925d30296fb28360d590.png)Tree from the first example.
+<img src="https://raw.githubusercontent.com/GMyhf/img/main/img/202511192237846.png" alt="8bfe173b900d15885243bef9358a3432" style="zoom: 67%;" />
+
+<center>Tree from the first example.</center>
 
 For the second example, there are 4 of possible pairs of vertices from which apples can fall: (2,3),(2,2),(3,2),(3,3). For the second assumption, there is only one possible pair: (2,3). For the third assumption, there are two pairs: (3,2),(3,3).
 
