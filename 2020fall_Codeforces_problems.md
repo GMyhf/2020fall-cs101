@@ -1,6 +1,6 @@
 # Problems in Codeforces.com
 
-*Updated 2025-10-28 12:39 GMT+8*
+*Updated 2025-11-25 18:42 GMT+8*
  *Compiled by Hongfei Yan (2020 Fall)*
 
 
@@ -9818,6 +9818,70 @@ for i in range(n + 1):
         ans += cs[i]
 print(ans)
 
+```
+
+
+
+
+
+## 986D. Perfect Encoding
+
+fft, math, 3100, https://codeforces.com/problemset/problem/986/D
+You are working as an analyst in a company working on a new system for big data storage. This system will store n different objects. Each object should have a unique ID.
+
+To create the system, you choose the parameters of the system — integers m≥1 and $b_1,b_2,…,b_m.$ With these parameters an ID of some object in the system is an array of integers $[a_1,a_2,…,a_m]$ where $1≤a_i≤b_i$ holds for every 1≤i≤m.
+
+Developers say that production costs are proportional to $\sum_{i=1}^{m}b_i$ . You are asked to choose parameters m and bi so that the system will be able to assign unique IDs to n different objects and production costs are minimized. Note that you don't have to use all available IDs.
+
+**Input**
+
+In the only line of input there is one positive integer n. The length of the decimal representation of n is no greater than $1.5⋅10^6$. The integer does not contain leading zeros.
+
+**Output**
+
+Print one number — minimal value of $\sum_{i=1}^{m}b_i$ 
+**Example**
+Input
+
+```
+12345678901234567890123456789
+```
+
+Output
+
+```
+177
+```
+
+
+
+【马铉钦25化院】由于python的强大的内置的大整数处理能力，这绝对是最水最水的3100，感觉做的体感难度也就在1500左右。
+考虑应该把$a_i$取什么样的值呢？由于$5=2+3<2\times3,4=2+2=2\times2$,再朝上的数已经不可能取到最优解了，所以一定有$a_i=2,3$.同时，$6=2+2+2=3+3,2\times2\times2<3\times3$,所以最多可能会有2个2.
+考虑一下数字比较小的情况：[0,1,2,3,4,5,5,6,6,6,7,7,7,8,8,8,8,8,8]是1-18时的解。更大的数字可以除以$3^{n}$转换到6-18.由于CF使用的是3.13,大整数需要声明位数扩大（默认上限4300）
+代码如下：
+
+```python
+import sys
+from math import log,ceil
+
+
+sys.set_int_max_str_digits(1800000)
+n=int(input())
+li=[0,1,2,3,4,5,5,6,6,6,7,7,7,8,8,8,8,8,8]
+if n<=18:
+    print(li[n])
+    exit()
+a=log(2,3)
+b=log(n,3)
+
+c=int(b-a-1)
+
+d=round(pow(3,b-c))
+
+if d*3**c<n:#由于浮点数精度的问题，需要重新判断一下
+    print(li[d+1]+3*c)
+else:
+    print(li[d]+3*c)
 ```
 
 
