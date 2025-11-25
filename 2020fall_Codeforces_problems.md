@@ -14515,20 +14515,20 @@ print(cou)
 
 data structures, dp, dsu, greedy, math,1300 https://codeforces.com/contest/2033/problem/D
 
-After a trip with Sakurako, Kousuke was very scared because he forgot about his programming assignment. In this assignment, the teacher gave him an array 𝑎 of 𝑛n integers and asked him to calculate the number of **non-overlapping** segments of the array 𝑎a, such that each segment is considered *beautiful*.
+After a trip with Sakurako, Kousuke was very scared because he forgot about his programming assignment. In this assignment, the teacher gave him an array 𝑎 of 𝑛 integers and asked him to calculate the number of **non-overlapping** segments of the array 𝑎a, such that each segment is considered *beautiful*.
 
-A segment [𝑙,𝑟] is considered *beautiful* if 𝑎𝑙+𝑎𝑙+1+⋯+𝑎𝑟−1+𝑎𝑟=0.
+A segment [𝑙,𝑟] is considered *beautiful* if $𝑎_𝑙+𝑎_{𝑙+1}+⋯+𝑎_{𝑟−1}+𝑎_𝑟=0$.
 
 For a fixed array 𝑎a, your task is to compute the maximum number of non-overlapping *beautiful* segments.
 
 **Input**
 
-The first line of input contains the number 𝑡 ($1≤𝑡≤10^4$) — the number of test cases. Each test case consists of 22 lines.
+The first line of input contains the number 𝑡 ($1≤𝑡≤10^4$) — the number of test cases. Each test case consists of 2 lines.
 
 - The first line contains one integer 𝑛 ($1≤𝑛≤10^5$) — the length of the array.
-- The second line contains 𝑛n integers 𝑎𝑖 ($−10^5≤𝑎𝑖≤10^5$) — the elements of the array 𝑎a.
+- The second line contains 𝑛 integers 𝑎𝑖 ($−10^5≤𝑎𝑖≤10^5$) — the elements of the array 𝑎.
 
-It is guaranteed that the sum of 𝑛n across all test cases does not exceed $3⋅10^5$.
+It is guaranteed that the sum of 𝑛 across all test cases does not exceed $3⋅10^5$.
 
 **Output**
 
@@ -14673,6 +14673,98 @@ int main() {
     return 0;
 }
 
+```
+
+
+
+
+
+## 2075C. Two Colors
+
+binary search, combinatorics, math, 1500, https://codeforces.com/contest/2075/problem/C
+
+Monocarp has installed a new fence at his summer house. The fence consists of 𝑛 planks of the same size arranged in a row.
+
+Monocarp decided that he would paint his fence according to the following rules:
+
+- each plank of the fence will be painted in exactly one color;
+- the number of different colors that the planks will be painted in is **exactly** two;
+- the planks of the fence that are painted in the same color must form a continuous sequence, meaning that for all pairs of planks painted in the same color, there will be no planks painted in a different color between them.
+
+Monocarp has 𝑚 different paints, and the paint of the 𝑖-th color is sufficient to paint no more than 𝑎𝑖 planks of the fence. Monocarp will not buy any additional paints.
+
+Your task is to determine the number of different ways to paint the fence that satisfy all of Monocarp's described wishes. Two ways to paint are considered different if there exists a plank that is painted in different colors in these two ways.
+
+Input
+
+The first line contains a single integer 𝑡 (1≤𝑡≤104) — the number of test cases.
+
+The first line of each test case contains two integers 𝑛 and 𝑚 (2≤𝑛,𝑚≤2⋅105) — the number of planks in the fence and the number of different colors of paint that Monocarp has.
+
+The second line contains 𝑚 integers 𝑎1,𝑎2,…,𝑎𝑚 (1≤𝑎𝑖≤𝑛), where 𝑎𝑖 is the maximum number of planks that can be painted with the paint of color 𝑖.
+
+The sum of 𝑛 over all test cases does not exceed 2⋅105. The sum of 𝑚 over all test cases does not exceed 2⋅105.
+
+Output
+
+For each test case, output the number of different ways to paint the fence that satisfy all of Monocarp's described wishes.
+
+Example
+
+Input
+
+```
+3
+5 2
+2 4
+5 2
+3 4
+12 3
+5 9 8
+```
+
+Output
+
+```
+4
+6
+22
+```
+
+Note
+
+In the first test case, there are 4 different ways to paint the fence (the sequences of color numbers in which the planks can be painted from left to right are listed below):
+
+1. [1,2,2,2,2];
+2. [1,1,2,2,2];
+3. [2,2,2,1,1];
+4. [2,2,2,2,1].
+
+In the second test case, there are 6 different ways to paint the fence (the sequences of color numbers in which the planks can be painted from left to right are listed below):
+
+1. [1,2,2,2,2];
+2. [1,1,2,2,2];
+3. [1,1,1,2,2];
+4. [2,2,1,1,1];
+5. [2,2,2,1,1];
+6. [2,2,2,2,1].
+
+
+
+使用`m-bisect_left(a,k)`找到能涂k个板子的颜色种类数目，然后初步数目为x*y，假设k>n-k，那么能涂k块的x种颜色一定也可以涂(n-k)块，也就是说x中包含了y，所以要减去min(x,y)，这些是用同一种颜色涂的方案数。
+
+```python
+from bisect import bisect_left
+
+for _ in range(int(input())):
+    n, m = map(int, input().split())
+    a = sorted(list(map(int, input().split())))
+    ans = 0
+    for k in range(1, n):
+        x = m - bisect_left(a, k)
+        y = m - bisect_left(a, n - k)
+        ans += x * y - min(x, y)
+    print(ans)
 ```
 
 
