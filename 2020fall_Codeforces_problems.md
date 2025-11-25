@@ -9822,6 +9822,71 @@ print(ans)
 
 
 
+## 986B. Petr and Permutations
+
+Combinatiorics, math, 1800, https://codeforces.com/problemset/problem/986/B
+
+Petr likes to come up with problems about randomly generated data. This time problem is about random permutation. He decided to generate a random permutation this way: he takes identity permutation of numbers from 1 to 𝑛 and then 3𝑛 times takes a random pair of different elements and swaps them. Alex envies Petr and tries to imitate him in all kind of things. Alex has also come up with a problem about random permutation. He generates a random permutation just like Petr but swaps elements 7𝑛+1 times instead of 3𝑛 times. Because it is more random, OK?!
+
+You somehow get a test from one of these problems and now you want to know from which one.
+
+**Input**
+
+In the first line of input there is one integer 𝑛 (103≤𝑛≤106).
+
+In the second line there are 𝑛 distinct integers between 1 and 𝑛 — the permutation of size 𝑛 from the test.
+
+It is guaranteed that all tests except for sample are generated this way: First we choose 𝑛 — the size of the permutation. Then we randomly choose a method to generate a permutation — the one of Petr or the one of Alex. Then we generate a permutation using chosen method.
+
+**Output**
+
+If the test is generated via Petr's method print "Petr" (without quotes). If the test is generated via Alex's method print "Um_nik" (without quotes).
+
+Example
+
+input
+
+```
+5
+2 4 5 1 3
+```
+
+output
+
+```
+Petr
+```
+
+Note
+
+Please note that the sample is not a valid test (because of limitations for 𝑛) and is given only to illustrate input/output format. Your program **still has to print correct answer to this test** to get AC.
+
+Due to randomness of input hacks in this problem are forbidden.
+
+
+
+代码原理：如果一个经过 $n$ 次元素交换的全排列经过 $m$ 次元素交换还原，那么 $m$ 和 $n$ 的奇偶性相同。（因为交换一次元素改变排列的奇偶性）
+
+具体操作：（见30179题解，2020fall_cs101.openjudge.cn_problems.md）
+对于arr数组中下标为 i-1 的元素，如果它等于 i ，说明他已经在正确的位置上了，就前往下一个元素；如果它不等于 i ，就将下标为 arr[i-1] -1 的元素与它交换，这样让它在自己应该在的位置上，重复以上操作，直到它等于 i 。
+
+```python
+def inversion_count():
+    global n
+    c = 0
+    for i in range(1,n+1):
+        while arr[i-1] != i:
+            idx = arr[i-1]-1
+            arr[idx],arr[i-1] = arr[i-1],arr[idx]
+            c = 1-c
+    return c
+n = int(input())
+arr = list(map(int,input().split()))
+dic = {0:"Petr",1:"Um_nik"}
+print(dic[(inversion_count()+n)%2])
+
+```
+
 
 
 ## 986D. Perfect Encoding
