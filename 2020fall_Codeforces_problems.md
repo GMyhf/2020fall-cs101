@@ -1,6 +1,6 @@
 # Problems in Codeforces.com
 
-*Updated 2025-11-30 22:51 GMT+8*
+*Updated 2026-01-27 17:47 GMT+8*
  *Compiled by Hongfei Yan (2020 Fall)*
 
 
@@ -15082,6 +15082,214 @@ for _ in range(int(input())):
 ```
 
 
+
+## M2193E. Product Queries
+
+dp, math, number theory, bfs, seive https://codeforces.com/contest/2193/problem/E
+
+Today, Sabyrzhan was called to the board with an array 𝑎 of length 𝑛 and was assigned an officer's task — to answer 𝑛 questions.
+
+In the 𝑖-th question, it is required to determine the minimum number of elements from the array that need to be selected from the board (it is allowed to use the same element multiple times) so that their product is exactly equal to 𝑖, or to report that it is impossible to achieve such a product.
+
+Note that at least one element must be selected.
+
+**Input**
+
+Each test consists of several test cases. The first line contains one integer 𝑡 (1≤𝑡≤104) — the number of test cases. The description of the test cases follows.
+
+The first line of each test case contains one integer 𝑛 (1≤𝑛≤3⋅105).
+
+The second line of each test case contains 𝑛 integers 𝑎1,𝑎2,…,𝑎𝑛 (1≤𝑎𝑖≤𝑛).
+
+It is guaranteed that the sum of the values of 𝑛 across all test cases does not exceed 3⋅105.
+
+**Output**
+
+For the 𝑖-th question, output one integer — the minimum number of elements from the array required to obtain a product equal to 𝑖, or −1 if it is impossible to achieve such a product.
+
+Example
+
+input
+
+```
+6
+8
+3 2 2 3 7 3 6 7
+5
+1 2 3 4 5
+3
+1 1 1
+10
+2 1 2 1 3 5 5 7 7 7
+4
+1 1 2 2
+1
+1
+```
+
+output
+
+```
+-1 1 1 2 -1 1 1 3
+1 1 1 1 1
+1 -1 -1
+1 1 1 2 1 2 1 3 2 2
+1 1 -1 2
+1
+```
+
+Note
+
+Consider the first test case. The products can be obtained as follows: 
+
+- 1 cannot be obtained. 
+- 2 can be obtained by selecting 𝑎2. 
+- 3 can be obtained by selecting 𝑎1. 
+- 4 can be obtained by selecting 𝑎2 twice. 
+- 5 cannot be obtained. 
+- 6 can be obtained by selecting 𝑎7. 
+- 7 can be obtained by selecting 𝑎5. 
+- 8 can be obtained by selecting 𝑎2 three times.
+
+
+
+【马铉钦25化院】dp。注意接收数据用list，如果用set会在第24个数据超时。
+
+```python
+def sol():
+    f = 10000000
+    n = int(input())
+    se = list(map(int, input().split()))
+
+    res = [f] * (n + 1)
+    for i in se:
+        res[i] = 1
+
+    for i in range(2, n + 1):
+        if res[i] == f:
+            continue
+        for j in range(i, n // i + 1):
+            if res[j] == f:
+                continue
+            if res[i * j] > res[i] + res[j]:
+                res[i * j] = res[i] + res[j]
+
+    del res[0]
+    for i in range(n):
+        if res[i] == f:
+            res[i] = -1
+
+    print(*res)
+
+for _ in range(int(input())):
+    sol()
+```
+
+
+
+这个问题可以通过**广度优先搜索 (BFS)** 结合 **筛法 (Sieve-like approach)** 的思想来高效解决。
+
+**算法思路**
+
+1.  **最短路问题转换**：
+    我们将产品 $i$ ($1 \le i \le n$) 看作图中的节点。如果我们能通过若干个数组元素 $a_j$ 的乘积得到 $i$，那么我们想要找到所需元素个数的最小值。这本质上是在一个隐含图中寻找从“空积”（即数值1）到各个节点的最短路径。由于每选择一个元素步数加1（边权为1），BFS 是最适合的。
+
+2.  **BFS 状态与转移**：
+    -   **初始状态**：数组中存在的每一个唯一数字 $x$（且 $1 < x \le n$）其步数为 1。将它们加入 BFS 队列。
+    -   **转移**：从队列中取出一个已达到的数值 $u$，尝试将其与数组中的唯一元素 $v$ 相乘。如果 $u \times v \le n$ 且 $u \times v$ 之前未被访问过，则更新其步数为 `dist[u] + 1` 并加入队列。
+    -   **特殊处理 1**：如果数组中包含数字 `1`，则达到乘积 `1` 的最小次数为 1。由于乘以 1 不会改变数值但会增加次数，因此对于 $i > 1$ 的情况，使用 1 永远不是最优的，我们只需在最后单独处理 `dist[1]`。
+
+3.  **复杂度分析 (筛法效率)**：
+    -   对于每个从队列中取出的 $u$，我们遍历唯一的元素列表 $S$。如果我们将 $S$ 排序，当 $u \times v > n$ 时即可停止。
+    -   总的计算量类似于埃氏筛法：对于每个数 $u$，我们执行的乘法次数最多为 $n/u$。
+    -   整体时间复杂度为 $O(\sum n \ln n)$。对于 $n = 3 \cdot 10^5$，这个数值大约是 $4 \cdot 10^6$，在 Python 中通过合理优化可以在 3 秒内运行。
+
+**Python 代码实现**
+
+```python
+import sys
+from itertools import islice
+
+def solve():
+    # 使用快速读取方式处理大量数据
+    input_data = sys.stdin.read().split()
+    if not input_data:
+        return
+    
+    it = iter(input_data)
+    t_str = next(it, None)
+    if t_str is None:
+        return
+    t = int(t_str)
+    
+    final_output = []
+    
+    for _ in range(t):
+        n_str = next(it, None)
+        if n_str is None:
+            break
+        n = int(n_str)
+        
+        # 读取当前测试用例的数组 a
+        a = list(map(int, islice(it, n)))
+        
+        # 预处理：提取大于1的唯一元素，并记录是否有1
+        s_set = set()
+        has_one = False
+        for x in a:
+            if x == 1:
+                has_one = True
+            elif x <= n:
+                s_set.add(x)
+        
+        # dist[i] 存储得到乘积 i 所需的最少元素个数，-1 表示不可达
+        dist = [-1] * (n + 1)
+        # 将唯一元素排序以优化 BFS 中的乘法判断（筛法核心）
+        s_list = sorted(list(s_set))
+        queue = []
+        
+        # BFS 第一层：数组中直接存在的元素，距离为1
+        for x in s_list:
+            dist[x] = 1
+            queue.append(x)
+        
+        # 执行 BFS
+        head = 0
+        while head < len(queue):
+            u = queue[head]
+            head += 1
+            
+            d_next = dist[u] + 1
+            for v in s_list:
+                target = u * v
+                # 如果乘积超过 n，后续的 v 会更大，直接中断
+                if target > n:
+                    break
+                # 如果该乘积尚未达到，则是最短路径
+                if dist[target] == -1:
+                    dist[target] = d_next
+                    queue.append(target)
+        
+        # 如果原数组有 1，则乘积 1 的最小次数为 1
+        if has_one:
+            dist[1] = 1
+            
+        # 收集结果：dist[1] 到 dist[n]
+        final_output.append(" ".join(map(str, dist[1:])))
+    
+    # 集中输出，提高效率
+    sys.stdout.write("\n".join(final_output) + "\n")
+
+if __name__ == '__main__':
+    solve()
+```
+
+**关键点解释：**
+
+1.  **`target > n` 的中断**：这是典型的筛法优化。如果不排序 `s_list` 或不进行这个判断，复杂度会退化到 $O(n \cdot |S|)$，导致超时。
+2.  **BFS 队列**：通过 `head` 指针模拟队列，比频繁使用 `list.pop(0)` 要快得多（后者是 $O(n)$ 复杂度）。
+3.  **内存管理**：使用 `sys.stdin.read().split()` 和 `islice` 能在处理多达 $3 \cdot 10^5$ 个整数时保持较快的速度并控制内存开销。
+4.  **乘积为 1 的特殊性**：题目要求至少选一个元素。如果数组里没 `1`，任何大于等于 1 个元素的积最小也是 $\min(a_i)$，因此若 $\min(a_i) > 1$，乘积 `1` 是无法得到的，输出 `-1` 是正确的。
 
 
 
