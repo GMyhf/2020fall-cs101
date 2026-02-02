@@ -1,6 +1,6 @@
 # Problems in Codeforces.com
 
-*Updated 2026-01-27 17:47 GMT+8*
+*Updated 2026-02-02 17:25 GMT+8*
  *Compiled by Hongfei Yan (2020 Fall)*
 
 
@@ -15083,6 +15083,171 @@ for _ in range(int(input())):
 
 
 
+## M2193D. Monster Game
+
+greedy, prefix sum, binary search, sortings, two pointers, https://codeforces.com/problemset/problem/2193/D
+
+You have been gifted a new game called "Elatyh". In the game, you are given 𝑛 swords, each with its own strength. In particular, the sword numbered 𝑖 has a strength of 𝑎𝑖. The game consists of 𝑛 levels, each of which features a monster.
+
+You start at level 1 and progress further. To pass level 𝑖 and move on to level 𝑖+1, you need to defeat the monster at level 𝑖. To defeat the monster at level 𝑖, you need to deal it 𝑏𝑖 sword strikes. The swords in the game are very fragile, so they can only deal **one** strike before breaking. If you complete level 𝑛 or run out of swords, you can finish the game and proceed to score calculation.
+
+Before the game, you are allowed to choose the difficulty level. If you choose difficulty 𝑥, swords with a strength less than 𝑥 will not affect the monsters. The game score in this case is equal to 𝑥 multiplied by the number of levels completed. Your task is to choose the game difficulty in such a way as to maximize the game score.
+
+**Input**
+
+Each test consists of several test cases. The first line contains a single integer 𝑡 (1≤𝑡≤104) — the number of test cases. The following describes the test cases.
+
+The first line of each test case contains a single integer 𝑛 (1≤𝑛≤2⋅105).
+
+The second line of each test case contains 𝑛 integers 𝑎1,𝑎2,…,𝑎𝑛 (1≤𝑎𝑖≤109).
+
+The third line of each test case contains 𝑛 integers 𝑏1,𝑏2,…,𝑏𝑛 (1≤𝑏𝑖≤𝑛).
+
+It is guaranteed that the sum of the values of 𝑛 across all test cases does not exceed 2⋅105.
+
+**Output**
+
+For each test case, output a single integer — the maximum game score.
+
+Example
+
+input
+
+```
+5
+3
+1 3 4
+2 1 1
+2
+2 3
+1 1
+4
+1 2 3 4
+2 2 1 1
+6
+4 4 1 4 5 4
+2 2 4 1 2 2
+10
+1000000000 1000000000 1000000000 1000000000 1000000000 1000000000 1000000000 1000000000 1000000000 1000000000
+1 1 1 1 1 1 1 1 1 1
+```
+
+output
+
+```
+3
+4
+3
+8
+10000000000
+```
+
+Note
+
+Consider the first test case. Optimal difficulty to choose is 3. If difficulty is 3, you can deal strikes with swords number 2 and 3. With 2swords you can complete 1 level, so the game score is 3⋅1=3.
+
+
+
+这个问题可以通过**贪心算法**和**排序**来解决。
+
+**解题思路**
+
+1.  **理解分数的构成**：
+    分数 = $x \times k$，其中 $x$ 是选择的难度， $k$ 是在难度为 $x$ 时能够击败的怪兽层数。
+2.  **确定击败 $k$ 层所需的条件**：
+    *   每一层怪兽 $i$ 需要击打 $b_i$ 次。
+    *   要击败前 $k$ 层怪兽，总共需要消耗 $\sum_{i=1}^k b_i$ 把强度 $\ge x$ 的剑。
+    *   令 $P_k = \sum_{i=1}^k b_i$ 为前 $k$ 层所需次数的前缀和。
+3.  **确定难度的最大取值**：
+    *   假设我们要击败前 $k$ 层，我们至少需要 $P_k$ 把剑。
+    *   如果我们想让分数最大，在确定要击败 $k$ 层的情况下，难度 $x$ 应该尽可能大。
+    *   将所有剑的强度 $a_i$ 从大到小排序。要拥有至少 $P_k$ 把强度 $\ge x$ 的剑，难度 $x$ 最大只能取排序后第 $P_k$ 把剑的强度。
+    *   如果 $P_k$ 超过了总剑数 $n$，则不可能击败第 $k$ 层。
+4.  **算法流程**：
+    *   将剑的强度数组 $a$ 按**降序**排序。
+    *   计算怪兽需求次数 $b$ 的**前缀和** $P_k$。
+    *   遍历 $k$ 从 $1$ 到 $n$：
+        *   如果 $P_k \le n$，则计算当前可能的最高分数：$a[P_k - 1] \times k$（注意索引从 0 开始）。
+        *   不断更新全局最大分数。
+
+**Python 代码实现**
+
+```python
+import sys
+
+def solve():
+    # 使用快速读入
+    input = sys.stdin.read().split()
+    idx = 0
+    
+    t = int(input[idx])
+    idx += 1
+    
+    results = []
+    
+    for _ in range(t):
+        n = int(input[idx])
+        idx += 1
+        
+        # 读取剑的强度并降序排序
+        a = []
+        for _ in range(n):
+            a.append(int(input[idx]))
+            idx += 1
+        a.sort(reverse=True)
+        
+        # 读取怪兽需要的打击次数
+        b = []
+        for _ in range(n):
+            b.append(int(input[idx]))
+            idx += 1
+            
+        max_score = 0
+        current_p_k = 0 # 存储前缀和 P_k
+        
+        for k in range(1, n + 1):
+            # 累加前 k 层需要的总剑数
+            current_p_k += b[k-1]
+            
+            # 如果需要的剑数超过了拥有的剑数，后续层数肯定无法达到
+            if current_p_k > n:
+                break
+            
+            # 要打败前 k 层，难度 x 最大可以是排序后第 current_p_k 把剑的强度
+            # 索引为 current_p_k - 1
+            difficulty_x = a[current_p_k - 1]
+            score = difficulty_x * k
+            
+            if score > max_score:
+                max_score = score
+                
+        results.append(str(max_score))
+    
+    # 批量输出结果
+    sys.stdout.write('\n'.join(results) + '\n')
+
+if __name__ == "__main__":
+    solve()
+```
+
+**复杂度分析**
+
+*   **时间复杂度**：每个测试用例的主要开销是排序 $a$ 数组，复杂度为 $O(n \log n)$。遍历 $k$ 和计算前缀和的复杂度为 $O(n)$。总时间复杂度为 $O(\sum n \log n)$，在 $n=2 \cdot 10^5$ 的量级下可以通过。
+*   **空间复杂度**：$O(n)$ 用于存储 $a$ 和 $b$ 数组。
+
+**示例解释**
+
+以输入的第一组数据为例：
+`n=3`, `a=[1, 3, 4]`, `b=[2, 1, 1]`
+
+1. 排序 `a` 降序：`[4, 3, 1]`
+2. $k=1$: 需要 $P_1 = b[0] = 2$ 把剑。第 2 大的剑是 `a[1] = 3`。分数 = $3 \times 1 = 3$。
+3. $k=2$: 需要 $P_2 = b[0]+b[1] = 3$ 把剑。第 3 大的剑是 `a[2] = 1`。分数 = $1 \times 2 = 2$。
+4. $k=3$: 需要 $P_3 = 4$ 把剑。超过总数 $n=3$，停止。
+   最大分数为 3。
+
+
+
 ## M2193E. Product Queries
 
 dp, math, number theory, bfs, seive https://codeforces.com/contest/2193/problem/E
@@ -15290,6 +15455,10 @@ if __name__ == '__main__':
 2.  **BFS 队列**：通过 `head` 指针模拟队列，比频繁使用 `list.pop(0)` 要快得多（后者是 $O(n)$ 复杂度）。
 3.  **内存管理**：使用 `sys.stdin.read().split()` 和 `islice` 能在处理多达 $3 \cdot 10^5$ 个整数时保持较快的速度并控制内存开销。
 4.  **乘积为 1 的特殊性**：题目要求至少选一个元素。如果数组里没 `1`，任何大于等于 1 个元素的积最小也是 $\min(a_i)$，因此若 $\min(a_i) > 1$，乘积 `1` 是无法得到的，输出 `-1` 是正确的。
+
+
+
+
 
 
 
