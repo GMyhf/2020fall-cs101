@@ -1,0 +1,22 @@
+﻿name: Trigger Update
+on:
+  push:
+    paths:
+      - 2020fall_Codeforces_problems.md
+      - 2020fall_cs101.openjudge.cn_problems.md
+  workflow_dispatch:
+
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: trigger
+        uses: benc-uk/workflow-dispatch@v1
+        with:
+          workflow: update-and-commit.yml
+          repo: FuYnAloft/sol101
+          ref: main
+          token: ${{ secrets.TRIGGER_UPDATE }}
+          wait-for-completion: true
+          sync-status: true
