@@ -1,6 +1,6 @@
 # Problems in Codeforces.com
 
-*Updated 2026-02-02 17:25 GMT+8*
+*Updated 2026-03-07 00:12 GMT+8*
  *Compiled by Hongfei Yan (2020 Fall)*
 
 
@@ -15458,7 +15458,274 @@ if __name__ == '__main__':
 
 
 
+## 2195E. Idiot First Search
 
+tree dp, https://codeforces.com/problemset/problem/2195/E 
+
+There is a binary tree of 𝑛+1 vertices (**𝑛 is odd**), with vertices labeled 0,1,…,𝑛. **At most one letter** can be written on each vertex of the tree, and all vertices initially have nothing written on them. The root of the tree is vertex 0.
+
+In the tree, vertex 0 is the parent of vertex 1, while all other vertices have either 2 children or 0 children.
+
+Bob is lost in one vertex of the tree and wishes to escape the tree by reaching vertex 0. This is very easy for most people with common sense. However, since Bob is an idiot, he created a new way of traversing the tree; introducing the "Idiot First Search".
+
+When Bob is on vertex 𝑣 (1≤𝑣≤𝑛), Bob's movement is determined as follows:
+
+- If vertex 𝑣 is a leaf, Bob **always** moves to the parent of 𝑣; otherwise, check the next few conditions. 
+- If nothing is written on vertex 𝑣, Bob writes 'L' on vertex 𝑣 and moves to the left child of 𝑣; 
+- If 'L' is written on vertex 𝑣, Bob **overwrites it** to 'R' and moves to the right child of 𝑣; 
+- If 'R' is written on vertex 𝑣, Bob **erases it** and moves to the parent of 𝑣. 
+
+It takes exactly 1 second for Bob to move to an adjacent vertex, so Bob will take exactly 𝑥 seconds to perform 𝑥 moves.
+
+It has been shown that regardless of which vertex Bob starts on, Bob can reach vertex 0 in a finite (though possibly inexplicably large) amount of time. We don't know who proved it; surely it can't be Bob, but it is definitely proven.
+
+For each vertex 𝑘=1,2,…,𝑛, please determine the total time it takes to reach vertex 0 if Bob started on vertex 𝑘, in seconds. As the values may be huge, you are only asked to compute them modulo 109+7.
+
+**Input**
+
+Each test contains multiple test cases. The first line contains the number of test cases 𝑡 (1≤𝑡≤104). The description of the test cases follows. 
+
+The first line of each test case contains a single integer 𝑛 (1≤𝑛≤300001, **𝑛 is odd**).
+
+Each of the next 𝑛 lines contains two integers 𝑙𝑖 and 𝑟𝑖 denoting the children of vertex 𝑖 (0≤𝑙𝑖,𝑟𝑖≤𝑛).
+
+For each vertex, 𝑙𝑖=𝑟𝑖=0 is given if the vertex has no children. Otherwise, 𝑙𝑖 and 𝑟𝑖 are the left and right children of vertex 𝑖.
+
+It is guaranteed that the input defines a valid binary tree satisfying the conditions given in the statement.
+
+It is guaranteed that the sum of 𝑛 over all test cases does not exceed 300001.
+
+**Output**
+
+For each test case, output 𝑛 integers 𝜏1,𝜏2,…,𝜏𝑛 separated by spaces.
+
+Here, 𝜏𝑘 denotes the total time it takes to reach vertex 0 if Bob started on vertex 𝑘, modulo 109+7.
+
+Example
+
+input
+
+```
+3
+1
+0 0
+5
+2 3
+0 0
+4 5
+0 0
+0 0
+7
+2 3
+4 5
+0 0
+6 7
+0 0
+0 0
+0 0
+```
+
+output
+
+```
+1
+9 10 14 15 15
+13 22 14 27 23 28 28
+```
+
+Note
+
+On the first test case, there are only two vertices, vertex 0 and vertex 1. It takes only 1 second for Bob to reach vertex 0 from vertex 1.
+
+On the second test case, the tree is given as follows.
+
+![img](https://raw.githubusercontent.com/GMyhf/img/main/img/202603062210338.png)
+
+It takes 14 seconds for Bob to reach vertex 0 from vertex 3. The moves are as follows:
+
+![image-20260306221201932](https://raw.githubusercontent.com/GMyhf/img/main/img/202603062212078.png)
+
+
+
+Here, the letters above the arrows denote the letter on the vertex before moving to the adjacent vertex, where 𝚇 denotes nothing written.
+
+
+
+这是一个经典的树形动态规划（Tree DP）问题，结合了模拟遍历过程的性质。需要计算从每个节点出发，按照特定规则（Idiot First Search）到达根节点 0 所需的步数。
+
+
+
+**解题思路**
+
+**1. 理解移动规则与代价** Bob 的移动规则实际上定义了一个遍历子树的过程：
+
+- 当 Bob 在一个非叶子节点 $u$ 且状态为空时，他会标记 'L' 并进入左子树。
+- 从左子树返回后，状态为 'L'，他会标记 'R' 并进入右子树。
+- 从右子树返回后，状态为 'R'，他会清空标记并向上移动到父节点。
+- 对于叶子节点，直接向上移动。
+
+这意味着，如果 Bob 从父节点进入 $u$（此时 $u$ 为空），为了最终离开 $u$ 回到父节点，他必须：
+
+1. 走一步到左孩子，完整遍历左子树并返回 $u$。
+2. 走一步到右孩子，完整遍历右子树并返回 $u$。
+3. 走一步到父节点。
+
+**2. 定义状态 $Cost(u)$** 设 $Cost(u)$ 为：Bob 从节点 $u$ 出发（初始状态为空），直到**第一次离开 $u$ 前往其父节点**所需的总步数。
+
+- **若 $u$ 是叶子节点**：直接去父节点，耗时 $1$。 $$Cost(u) = 1$$
+
+- **若 $u$ 是非叶子节点**（左孩子 $L$，右孩子 $R$）： 路径为：$u \to L \dots \to u \to R \dots \to u \to parent$。
+
+  - $u \to L$: 1 步。
+  - 在 $L$ 处遍历并返回：这需要 $Cost(L)$ 吗？ 注意：当 Bob 从 $u$ 进入 $L$ 时，$L$ 是空的。他从 $L$ 出发遍历完子树回到 $u$，这正是 $Cost(L)$ 的定义。
+  - $u \to R$: 1 步。
+  - 在 $R$ 处遍历并返回：同理，耗时 $Cost(R)$。
+  - $u \to parent$: 1 步。
+
+  因此： $$Cost(u) = 1 + Cost(L) + 1 + Cost(R) + 1 = Cost(L) + Cost(R) + 3$$ *(结果需对 $10^9+7$ 取模)*
+
+**3. 计算答案 $\tau_k$** 题目要求计算从每个节点 $k$ 出发到达根节点 0 的时间 $\tau_k$。
+
+- **基础情况**：对于根节点 0 的直接子节点（即节点 1），$\tau_1 = Cost(1)$。因为从 1 出发，走完子树流程后直接到达 0。
+
+- **递推关系**：对于其他节点 $k$，设其父节点为 $p$。 Bob 从 $k$ 出发，首先会花费 $Init(k)$ 步到达 $p$ 并清空 $k$ 的状态（使 $k$ 准备好被重新访问）：
+
+  - 若 $k$ 是叶子：$Init(k) = 1$。
+  - 若 $k$ 非叶子：$Init(k) = Cost(k)$。
+
+  到达 $p$ 后，$p$ 的状态是空的（因为是第一次访问）。此时 Bob 需要从 $p$ 走到 0。这个过程的时间正是 $\tau_p$。 **关键点**：$\tau_p$ 的计算过程中包含了“从 $p$ 进入 $k$ 并遍历 $k$”的步骤。由于我们之前已经清空了 $k$，这次遍历的代价与 $\tau_p$ 中假设的完全一致。因此，不需要额外加减修正值。
+
+  递推公式： $$\tau_k = Init(k) + \tau_{parent(k)} \pmod{10^9+7}$$ 其中 $Init(k) = \begin{cases} 1 & \text{if } k \text{ is leaf} \ Cost(k) & \text{otherwise} \end{cases}$
+
+**4. 算法流程**
+
+1. **建图**：读取输入，构建父子关系。注意输入给出的是 $1 \dots n$ 号节点的子节点，根节点 0 的子节点是 1。
+2. **后序遍历 (Bottom-Up)**：计算所有节点的 $Cost(u)$。
+3. **前序遍历 (Top-Down)**：利用递推公式计算所有节点的 $\tau_k$。
+4. **输出**：依次输出 $\tau_1, \dots, \tau_n$。
+
+**Python 代码实现**
+
+```python
+import sys
+
+# 增加递归深度限制，以防树退化成链导致栈溢出
+sys.setrecursionlimit(350000)
+
+def solve():
+    # 快速读取输入
+    input_data = sys.stdin.read().split()
+    if not input_data:
+        return
+    
+    iterator = iter(input_data)
+    
+    try:
+        num_test_cases = int(next(iterator))
+    except StopIteration:
+        return
+
+    MOD = 10**9 + 7
+    
+    results = []
+    
+    for _ in range(num_test_cases):
+        try:
+            n_str = next(iterator)
+            n = int(n_str)
+        except StopIteration:
+            break
+        
+        # children[i] 存储节点 i 的子节点列表
+        # 节点编号 1 到 n
+        children = [[] for _ in range(n + 1)]
+        
+        # 读取 n 行，分别对应节点 1 到 n
+        for i in range(1, n + 1):
+            l = int(next(iterator))
+            r = int(next(iterator))
+            if l == 0 and r == 0:
+                children[i] = [] # 叶子节点
+            else:
+                children[i] = [l, r]
+        
+        # 确定父子关系和遍历顺序
+        # 根节点是 0，它的孩子是 1
+        # 我们需要从 1 开始遍历整棵树
+        parent_map = {1: 0}
+        order = [] # 存储 DFS 序（前序）
+        stack = [1]
+        
+        while stack:
+            u = stack.pop()
+            order.append(u)
+            if children[u]:
+                l, r = children[u]
+                parent_map[l] = u
+                parent_map[r] = u
+                # 先压右再压左，保证弹出顺序是左、右（虽然对于计算 cost 顺序不重要，但为了逻辑清晰）
+                stack.append(r)
+                stack.append(l)
+        
+        # 1. Bottom-Up: 计算 Cost[u]
+        # 逆序遍历即为后序（子节点先于父节点处理）
+        cost = [0] * (n + 1)
+        is_leaf = [False] * (n + 1)
+        
+        for u in reversed(order):
+            if not children[u]:
+                is_leaf[u] = True
+                cost[u] = 1
+            else:
+                l, r = children[u]
+                # Cost[u] = Cost[L] + Cost[R] + 3
+                val = (cost[l] + cost[r] + 3) % MOD
+                cost[u] = val
+        
+        # 2. Top-Down: 计算 Tau[u]
+        tau = [0] * (n + 1)
+        
+        # 基例：节点 1 的父节点是 0，到达 0 即停止
+        # tau[1] = Cost[1] (因为从 1 出发走完流程正好到 0)
+        tau[1] = cost[1]
+        
+        # 按照前序遍历顺序推导子节点
+        for u in order:
+            if u == 1:
+                continue
+            
+            p = parent_map[u]
+            # Init(u): 从 u 出发第一次到达 p 的步数
+            if is_leaf[u]:
+                init_u = 1
+            else:
+                init_u = cost[u]
+            
+            # 递推公式: tau[u] = init_u + tau[p]
+            tau[u] = (init_u + tau[p]) % MOD
+            
+        # 收集结果: tau[1] ... tau[n]
+        res_str = " ".join(str(tau[i]) for i in range(1, n + 1))
+        results.append(res_str)
+    
+    print("\n".join(results))
+
+if __name__ == '__main__':
+    solve()
+```
+
+**代码说明**
+
+1. **输入处理**：使用 `sys.stdin.read().split()` 一次性读取所有输入，提高效率，适应 $N=300,000$ 的大数据量。
+2. **树的构建**：根据题目描述，输入的第 $i$ 行对应节点 $i$ 的子节点。根节点 0 固定连接节点 1。
+3. **遍历顺序**：
+   - 使用栈进行 DFS 获取节点的前序遍历序列 `order`。
+   - 反转 `order` 得到后序遍历序列，用于自底向上计算 `cost`。
+   - 正序 `order` 用于自顶向下计算 `tau`。
+4. **状态转移**：
+   - `cost[u]`：叶子为 1，非叶子为 `cost[l] + cost[r] + 3`。
+   - `tau[u]`：`init_u + tau[parent]`，其中 `init_u` 为 1（叶子）或 `cost[u]`（非叶子）。
+5. **复杂度**：时间复杂度 $O(N)$，空间复杂度 $O(N)$，完全满足题目限制。
 
 
 
