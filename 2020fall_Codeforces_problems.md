@@ -15460,7 +15460,7 @@ if __name__ == '__main__':
 
 ## 2195E. Idiot First Search
 
-tree dp, https://codeforces.com/problemset/problem/2195/E 
+dfs and similar, dp, trees, https://codeforces.com/problemset/problem/2195/E 
 
 There is a binary tree of 𝑛+1 vertices (**𝑛 is odd**), with vertices labeled 0,1,…,𝑛. **At most one letter** can be written on each vertex of the tree, and all vertices initially have nothing written on them. The root of the tree is vertex 0.
 
