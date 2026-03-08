@@ -1,6 +1,6 @@
 # Problems in Codeforces.com
 
-*Updated 2026-03-07 00:12 GMT+8*
+*Updated 2026-03-08 23:12 GMT+8*
  *Compiled by Hongfei Yan (2020 Fall)*
 
 
@@ -10702,7 +10702,7 @@ for _ in range(t):
 
 ## 1364A. XXXXX
 
-brute force/data structures/number theory/two pointers, 1200, https://codeforces.com/problemset/problem/1364/A
+brute force, data structures, number theory, two pointers, 1200, https://codeforces.com/problemset/problem/1364/A
 
 Ehab loves number theory, but for some reason he hates the number 𝑥. Given an array 𝑎, find the length of its longest subarray such that the sum of its elements **isn't** divisible by 𝑥, or determine that such subarray doesn't exist.
 
@@ -10753,6 +10753,38 @@ In the third test case, all subarrays have an even sum, so the answer is −1.
 
 
 数院-胡睿诚 证明：如果所有数的和不是x的倍数则不用去。现在设所有和是x倍数，如果头尾各去一段，设这两段的和分别为A, B。A和B一定至少有一个不是x倍数，那么去一头（不是x倍数的那头）就够了。
+
+
+
+```python
+import sys
+input = sys.stdin.readline
+
+t = int(input())
+
+for _ in range(t):
+    n, x = map(int, input().split())
+    a = list(map(int, input().split()))
+    
+    s = sum(a)
+    
+    if s % x != 0:
+        print(n)
+        continue
+    
+    l = 0
+    while l < n and a[l] % x == 0:
+        l += 1
+        
+    r = n - 1
+    while r >= 0 and a[r] % x == 0:
+        r -= 1
+        
+    if l == n:
+        print(-1)
+    else:
+        print(max(n - l - 1, r))
+```
 
 
 
