@@ -1,6 +1,6 @@
 # Problems in Codeforces.com
 
-*Updated 2026-03-08 23:12 GMT+8*
+*Updated 2026-03-09 20:20 GMT+8*
  *Compiled by Hongfei Yan (2020 Fall)*
 
 
@@ -4353,6 +4353,33 @@ In the second example Mishka can put box 2 into box 3, and box 4 into box 1.
 from collections import *
 input()
 print(max(Counter(input().split()).values()))
+```
+
+
+
+```python
+# 出现次数最多的盒子数就是最后剩下的盒子数:
+"""
+考虑最多的重复出现的盒子出现了M次,那么收纳完的盒子数
+必须至少为M;再考虑有M条流水线,从大到小罗列在线上面,
+前面比出现频次最高的盒子要大的盒子不够铺开时就把频次
+最高的盒子放到那里,依次排序,可知最多就要M个盒子完成
+收纳,所以只需要统计最大频次即可
+"""
+n = input()
+l = list(input().split())
+t = {}
+for a in l:
+    if a in t.keys():
+        t[a] += 1
+    else:
+        t[a] = 1
+M = 0
+for b in t.keys():
+    if t[b] > M:
+        M = t[b]
+print(M)
+
 ```
 
 
