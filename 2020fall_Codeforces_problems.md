@@ -1,6 +1,6 @@
 # Problems in Codeforces.com
 
-*Updated 2026-03-09 20:20 GMT+8*
+*Updated 2026-03-16 16:55 GMT+8*
  *Compiled by Hongfei Yan (2020 Fall)*
 
 
@@ -14570,6 +14570,165 @@ print(cou)
 
 
 
+## 1985H1. Maximize the Largest Component (Easy Version)
+
+brute force, data structures, dfs and similar, dsu, graphs, implementation, 1700, 
+
+https://codeforces.com/problemset/problem/1985/H1
+
+**Easy and hard versions are actually different problems, so read statements of both problems completely and carefully. The only difference between the two versions is the operation.**
+
+Alex has a grid with 𝑛 rows and 𝑚 columns consisting of '.' and '#' characters. A set of '#' cells forms a connected component if from any cell in this set, it is possible to reach any other cell in this set by only moving to another cell in the set that shares a **common side**. The size of a connected component is the number of cells in the set.
+
+In one operation, Alex selects any row 𝑟 (1≤𝑟≤𝑛) **or** any column 𝑐 (1≤𝑐≤𝑚), then sets every cell in row 𝑟 **or** column 𝑐 to be '#'. Help Alex find the maximum possible size of the largest connected component of '#' cells that he can achieve after performing the operation **at most once**.
+
+**Input**
+
+The first line of the input contains a single integer 𝑡 (1≤𝑡≤104) — the number of test cases.
+
+The first line of each test case contains two integers 𝑛 and 𝑚 (1≤𝑛⋅𝑚≤106) — the number of rows and columns of the grid.
+
+The next 𝑛 lines each contain 𝑚 characters. Each character is either '.' or '#'.
+
+It is guaranteed that the sum of 𝑛⋅𝑚 over all test cases does not exceed 106.
+
+**Output**
+
+For each test case, output a single integer — the maximum possible size of a connected component of '#' cells that Alex can achieve.
+
+Example
+
+input
+
+```
+6
+1 1
+.
+4 2
+..
+#.
+#.
+.#
+3 5
+.#.#.
+..#..
+.#.#.
+5 5
+#...#
+....#
+#...#
+.....
+...##
+6 6
+.#..#.
+#..#..
+.#...#
+#.#.#.
+.#.##.
+###..#
+6 8
+..#....#
+.####.#.
+###.#..#
+.##.#.##
+.#.##.##
+#..##.#.
+```
+
+output
+
+```
+1
+6
+9
+11
+15
+30
+```
+
+Note
+
+In the second test case, it is optimal for Alex to set all cells in column 2 to be '#'. Doing so will lead to the largest connected component of '#' having a size of 6.
+
+In the third test case, it is optimal for Alex to set all cells in row 2 to be '#'. Doing so will lead to the largest connected component of '#' having a size of 9.
+
+In the fourth test case, it is optimal for Alex to set all cells in row 4 to be '#'. Doing so will lead to the largest connected component of '#' having a size of 11.
+
+
+
+【尹显齐 2500011456 物理学院】
+
+首先，我们还是要搜索出里面所有的连通体，并存储每一个"#"对应的连通体编号。然后，当选择某一行/某一列来填满时，遍历填满之后所能连通的全部连通体（通过遍历这一行/列每一个点上下/左右的点），将这些连通体的大小加起来，加上这一行/列原先没有被填上的点数量，就得到最终的连通体大小，答案就是遍历完之后取最大值。
+
+看上去这个题并不难，但是实际提交时你会发现，使用python提交仍然会超时。那有人肯定就问了：用pypy不就完了吗？但是用过pypy的人都知道，在pypy中使用的sys.setrecursionlimit()会直接影响到内存大小，让你直接爆内存。这也意味着，我们不能够使用**函数递归**的方式写dfs，而应该使用（不为人所知的）**栈**来写。
+
+用栈实现dfs和用队列实现bfs的方式很像，唯一不同之处在于栈是从栈尾pop出元素，而队列是从队首pop。
+
+```python
+for _ in range(int(input())):
+    n,m = map(int,input().split())
+    grid = [input() for _ in range(n)]
+    found = [[0]*m for _ in range(n)]
+    islands = [[0]*m for _ in range(n)]
+    sizedic = {}
+    def dfs(i,j,num):
+        found[i][j] = 1
+        size = 1
+        islands[i][j] = num
+        stack = [(i,j)]
+        while stack:
+            x,y = stack.pop()
+            for a,b in [(-1,0),(1,0),(0,1),(0,-1)]:
+                if 0<=x+a<n and 0<=y+b<m and found[x+a][y+b] == 0 and grid[x+a][y+b] == "#":
+                    stack.append((x+a,y+b))
+                    islands[x+a][y+b] = num 
+                    found[x+a][y+b] = 1         
+                    size += 1
+        return size
+    num = 0
+    for i in range(n):
+        for j in range(m):
+            if grid[i][j] == "#" and found[i][j] == 0:
+                num += 1
+                sizedic[num] = dfs(i,j,num)
+    ans,cur = 0,0
+    for i in range(n):
+        seen = set()
+        cur = 0
+        for j in range(m):
+            if islands[i][j]:
+                seen.add(islands[i][j])
+            else:
+                cur += 1
+                if i > 0 and islands[i-1][j]:
+                    seen.add(islands[i-1][j])
+                if i < n-1 and islands[i+1][j]:
+                    seen.add(islands[i+1][j])
+        for c in seen:
+            cur += sizedic[c]
+        ans = max(ans,cur)
+    for j in range(m):
+        seen = set()
+        cur = 0
+        for i in range(n):
+            if islands[i][j]:
+                seen.add(islands[i][j])
+            else:
+                cur += 1
+                if j > 0 and islands[i][j-1]:
+                    seen.add(islands[i][j-1])
+                if j < m-1 and islands[i][j+1]:
+                    seen.add(islands[i][j+1])
+        for c in seen:
+            cur += sizedic[c]
+        ans = max(ans,cur)
+    print(ans)
+```
+
+（PS：可以挑战一下用pythonAC）
+
+
+
 ## 2033D. Kousuke's Assignment
 
 data structures, dp, dsu, greedy, math,1300 https://codeforces.com/contest/2033/problem/D
@@ -14825,6 +14984,571 @@ for _ in range(int(input())):
         ans += x * y - min(x, y)
     print(ans)
 ```
+
+
+
+
+
+## 2109C1. Hacking Numbers (Easy Version)
+
+bitmasks, constructive algorithms, interactive, math, number theory, 1500
+
+https://codeforces.com/problemset/problem/2109/C1
+
+**This is the easy version of the problem. In this version, you can send at most \**7\** commands. You can make hacks only if all versions of the problem are solved.**
+
+*This is an interactive problem.*
+
+Welcome, Duelists! In this interactive challenge, there is an unknown integer 𝑥 (1≤𝑥≤109). You must make it equal to a given integer in the input 𝑛. By harnessing the power of "Mathmech" monsters, you can send a command to do one of the following:
+
+| **Command** | **Constraint** | **Result** | **Case**       | **Update** | **Jury's response** |
+| ----------- | -------------- | ---------- | -------------- | ---------- | ------------------- |
+| "add 𝑦"     | −1018≤𝑦≤1018   | res=𝑥+𝑦    | if 1≤res≤1018  | 𝑥←res      | "1"                 |
+| else        | 𝑥←𝑥            | "0"        |                |            |                     |
+| "mul 𝑦"     | 1≤𝑦≤1018       | res=𝑥⋅𝑦    | if 1≤res≤1018  | 𝑥←res      | "1"                 |
+| else        | 𝑥←𝑥            | "0"        |                |            |                     |
+| "div 𝑦"     | 1≤𝑦≤1018       | res=𝑥/𝑦    | if 𝑦 divides 𝑥 | 𝑥←res      | "1"                 |
+| else        | 𝑥←𝑥            | "0"        |                |            |                     |
+| "digit"     | —              | res=𝑆(𝑥)∗  | —              | 𝑥←res      | "1"                 |
+
+You have to make 𝑥 equal to 𝑛 using **at most** **7** commands.
+
+∗𝑆(𝑛) is a function that returns the sum of all the individual digits of a non-negative integer 𝑛. For example, 𝑆(123)=1+2+3=6
+
+**Input**
+
+Each test contains multiple test cases. The first line contains the number of test cases 𝑡 (1≤𝑡≤5000). The description of the test cases follows. 
+
+The first and only line of each test case contains one integer 𝑛 (1≤𝑛≤109).
+
+**Interaction**
+
+The interaction for each test case begins by reading the integer 𝑛.
+
+To send a command, output a line in the following format:
+
+- "add 𝑦" Add some integer 𝑦 (−1018≤𝑦≤1018) to 𝑥.
+
+  The jury will output "1" if 𝑥+𝑦 is within [1,1018] (**successful**), and "0" otherwise. If successful, update 𝑥←𝑥+𝑦.
+
+- "mul 𝑦" Multiply 𝑥 by a positive integer 𝑦 (1≤𝑦≤1018).
+
+  The jury will output "1" if 𝑥⋅𝑦 is within [1,1018] (**successful**), and "0" otherwise. If successful, update 𝑥←𝑥⋅𝑦.
+
+- "div 𝑦" Divide 𝑥 by a positive integer 𝑦 (1≤𝑦≤1018).
+
+  The jury will output "1" if 𝑦 is a divisor of 𝑥 (**successful**), and "0" otherwise. If successful, update 𝑥←𝑥𝑦.
+
+- "digit" Make 𝑥 equal to the sum of its digits.
+
+  The jury will always output "1" and update 𝑥←𝑆(𝑥).
+
+Note that commands are **case sensitive**. 
+
+When you have determined that 𝑥 is equal to 𝑛, output a line in the following format:
+
+- "!" — where the jury will output a "1" if 𝑛 is equal to 𝑥, and "-1" otherwise. 
+
+Note that answering **does not count** toward your limit of **7** commands.
+
+If your program makes more than **7** commands for one test case, or makes an invalid command, then the response to the command will be "-1". After receiving such a response, your program should immediately terminate to receive the verdict **Wrong Answer**. Otherwise, it may receive any other verdict.
+
+After printing a command, do not forget to output the end of the line and flush the output. Otherwise, you will get Idleness limit exceeded. To do this, use:
+
+- fflush(stdout) or cout.flush() in C++; 
+- System.out.flush() in Java; 
+- sys.stdout.flush() in Python; 
+- std::io::stdout().flush() in Rust; 
+- see the documentation for other languages. 
+
+The interactor is **non-adaptive**. The unknown integer 𝑥 **does not change** during the interaction.
+
+**Hacks**
+
+To hack, use the following format.
+
+The first line should contain a single integer 𝑡 (1≤𝑡≤5000) — the number of test cases.
+
+The first line of each test case should contain two positive integers 𝑛 and 𝑥 (1≤𝑛,𝑥≤109) — denoting the unknown integer and the target value to which it should be made equal, respectively.
+
+Example
+
+input
+
+```
+2
+100
+
+0
+
+1
+
+1
+
+1
+
+5
+
+1
+
+1
+
+1
+```
+
+output
+
+```
+add -10
+
+add 1
+
+mul 10
+
+!
+
+digit
+
+div 2
+
+!
+```
+
+Note
+
+| Solution | Jury | Explanation                                                  |
+| -------- | ---- | ------------------------------------------------------------ |
+|          | 𝟸    | There are 2 test cases.                                      |
+|          | 𝟷𝟶𝟶  | In the first test case, the unknown integer 𝑥=9 and we have to make it equal to 𝑛=100. |
+| 𝚊𝚍𝚍 -𝟷𝟶  | 𝟶    | The answer to "add -10" is "0". This means that the addition command was not successful as 𝑥+𝑦=9+(−10)≤0, and 𝑥 remains 9 after the command |
+| 𝚊𝚍𝚍 𝟷    | 𝟷    | The answer to "add 1" is "1". This means that the addition command was successful as 𝑥+𝑦=9+1=10, and 𝑥 changes to 10 after the command. |
+| 𝚖𝚞𝚕 𝟷𝟶   | 𝟷    | The answer to "mul 10" is "1". This means that the multiplication command was successful as 𝑥⋅𝑦=10⋅10=100, and 𝑥 changes to 100 after the command. |
+| !        | 𝟷    | The answer to "!" is "1". This means you have determined that 𝑥 equals 𝑛. |
+|          | 𝟻    | In the second test case, the unknown integer 𝑥=1234 and we have to make it equal to 𝑛=5. |
+| 𝚍𝚒𝚐𝚒𝚝    | 𝟷    | The answer to "digit" is "1". This means that 𝑥 turned into the sum of its digits 1+2+3+4=10, and 𝑥changes to 10 after the command. |
+| 𝚍𝚒𝚟 𝟸    | 𝟷    | The answer to "div 2" is "1". This means that the division command was successful as 𝑦=2 is a divisor of 𝑥=10, and 𝑥 changes to 𝑥𝑦=102=5 after the command. |
+| !        | 𝟷    | The answer to "!" is "1". This means you have determined that 𝑥 equals 𝑛. |
+
+Note that the empty lines in the example input and output are for the sake of clarity, and do not occur in the real interaction.
+
+
+
+【尹显齐 2500011456 物理学院】
+
+这一问主要是奠定基础。   
+想要将一个未知的数变成 $n$ ，能想到的方法只能是先将它变成一个你能确定的数 $x_{0}$ ，再加上 $n-x_{0}$
+。分析一下命令特点：第一个"add y"，如果我们知道未知数所在范围，可以将它的范围缩小到原来一半；第二个"mul y"，目前不知道干嘛，因为它只能增大原来的数；第三个"div y"，纯废物命令，我都不知道未知数能被哪些数整除，有啥用？第四个"digit"，在数很大时能快速缩小数。考虑到 digit 命令能快速缩小数，便有了如下方法：   
+
+- 第一步：为 $x \to S(x)$ ，由于 $1\leq x \leq 10^9$ ，所以得到的数不超过 $81$
+- 第二步：依旧是 $x \to S(x)$ ，由于 $1\leq x \leq 81$ ，所以得到的数不超过 $16$
+- 第三步：接下来再用digit就不好了，因为有个位数的存在。此时对半的减下去，效果最好。所以命令是 $x\to x-8$ ，此时 $x$ 范围在 $[1,8]$ 。同理有：
+- 第四步：为 $x \to x-4$，此时 $x$ 范围在 $[1,4]$
+- 第五步：为 $x \to x-2$，此时 $x$ 范围在 $[1,2]$
+- 第六步：为 $x \to x-1$，此时 $x$ 范围在 $[1,1]$
+  此时未知数 $x$ 已经确定地变成 $1$ 了，加上 $n-1$ 即可。这样我们就在 $7$ 步内解决了这个问题。 
+
+代码： 
+
+```python
+for _ in range(int(input())):
+    n = int(input())
+    print("digit")
+    input()
+    print("digit")
+    input()
+    print("add -8")
+    input()
+    print("add -4")
+    input()
+    print("add -2")
+    input()
+    print("add -1")
+    input()
+    print(f"add {n-1}")
+    input()
+    print("!")
+    input()
+```
+
+
+## 2109C2. Hacking Numbers (Medium Version)
+
+consructive algorithms, interactive, math, number theory, 1700,
+
+https://codeforces.com/problemset/problem/2109/C2
+
+**This is the medium version of the problem. In this version, you can send at most \**4\** commands. You can make hacks only if all versions of the problem are solved.**
+
+*This is an interactive problem.*
+
+Welcome, Duelists! In this interactive challenge, there is an unknown integer 𝑥 (1≤𝑥≤109). You must make it equal to a given integer in the input 𝑛. By harnessing the power of "Mathmech" monsters, you can send a command to do one of the following:
+
+| **Command** | **Constraint** | **Result** | **Case**       | **Update** | **Jury's response** |
+| ----------- | -------------- | ---------- | -------------- | ---------- | ------------------- |
+| "add 𝑦"     | −1018≤𝑦≤1018   | res=𝑥+𝑦    | if 1≤res≤1018  | 𝑥←res      | "1"                 |
+| else        | 𝑥←𝑥            | "0"        |                |            |                     |
+| "mul 𝑦"     | 1≤𝑦≤1018       | res=𝑥⋅𝑦    | if 1≤res≤1018  | 𝑥←res      | "1"                 |
+| else        | 𝑥←𝑥            | "0"        |                |            |                     |
+| "div 𝑦"     | 1≤𝑦≤1018       | res=𝑥/𝑦    | if 𝑦 divides 𝑥 | 𝑥←res      | "1"                 |
+| else        | 𝑥←𝑥            | "0"        |                |            |                     |
+| "digit"     | —              | res=𝑆(𝑥)∗  | —              | 𝑥←res      | "1"                 |
+
+You have to make 𝑥 equal to 𝑛 using **at most** **4** commands.
+
+∗𝑆(𝑛) is a function that returns the sum of all the individual digits of a non-negative integer 𝑛. For example, 𝑆(123)=1+2+3=6
+
+**Input**
+
+Each test contains multiple test cases. The first line contains the number of test cases 𝑡 (1≤𝑡≤5000). The description of the test cases follows. 
+
+The first and only line of each test case contains one integer 𝑛 (1≤𝑛≤109).
+
+**Interaction**
+
+The interaction for each test case begins by reading the integer 𝑛.
+
+To send a command, output a line in the following format:
+
+- "add 𝑦" Add some integer 𝑦 (−1018≤𝑦≤1018) to 𝑥.
+
+  The jury will output "1" if 𝑥+𝑦 is within [1,1018] (**successful**), and "0" otherwise. If successful, update 𝑥←𝑥+𝑦.
+
+- "mul 𝑦" Multiply 𝑥 by a positive integer 𝑦 (1≤𝑦≤1018).
+
+  The jury will output "1" if 𝑥⋅𝑦 is within [1,1018] (**successful**), and "0" otherwise. If successful, update 𝑥←𝑥⋅𝑦.
+
+- "div 𝑦" Divide 𝑥 by a positive integer 𝑦 (1≤𝑦≤1018).
+
+  The jury will output "1" if 𝑦 is a divisor of 𝑥 (**successful**), and "0" otherwise. If successful, update 𝑥←𝑥𝑦.
+
+- "digit" Make 𝑥 equal to the sum of its digits.
+
+  The jury will always output "1" and update 𝑥←𝑆(𝑥).
+
+Note that commands are **case sensitive**. 
+
+When you have determined that 𝑥 is equal to 𝑛, output a line in the following format:
+
+- "!" — where the jury will output a "1" if 𝑛 is equal to 𝑥, and "-1" otherwise. 
+
+Note that answering **does not count** toward your limit of **4** commands.
+
+If your program makes more than **4** commands for one test case, or makes an invalid command, then the response to the command will be "-1". After receiving such a response, your program should immediately terminate to receive the verdict **Wrong Answer**. Otherwise, it may receive any other verdict.
+
+After printing a command, do not forget to output the end of the line and flush the output. Otherwise, you will get Idleness limit exceeded. To do this, use:
+
+- fflush(stdout) or cout.flush() in C++; 
+- System.out.flush() in Java; 
+- sys.stdout.flush() in Python; 
+- std::io::stdout().flush() in Rust; 
+- see the documentation for other languages. 
+
+The interactor is **non-adaptive**. The unknown integer 𝑥 **does not change** during the interaction.
+
+**Hacks**
+
+To hack, use the following format.
+
+The first line should contain a single integer 𝑡 (1≤𝑡≤5000) — the number of test cases.
+
+The first line of each test case should contain two positive integers 𝑛 and 𝑥 (1≤𝑛,𝑥≤109) — denoting the unknown integer and the target value to which it should be made equal, respectively.
+
+Example
+
+input
+
+```
+2
+100
+
+0
+
+1
+
+1
+
+1
+
+5
+
+1
+
+1
+
+1
+```
+
+output
+
+```
+add -10
+
+add 1
+
+mul 10
+
+!
+
+digit
+
+div 2
+
+!
+```
+
+Note
+
+| Solution | Jury | Explanation                                                  |
+| -------- | ---- | ------------------------------------------------------------ |
+|          | 𝟸    | There are 2 test cases.                                      |
+|          | 𝟷𝟶𝟶  | In the first test case, the unknown integer 𝑥=9 and we have to make it equal to 𝑛=100. |
+| 𝚊𝚍𝚍 -𝟷𝟶  | 𝟶    | The answer to "add -10" is "0". This means that the addition command was not successful as 𝑥+𝑦=9+(−10)≤0, and 𝑥 remains 9 after the command |
+| 𝚊𝚍𝚍 𝟷    | 𝟷    | The answer to "add 1" is "1". This means that the addition command was successful as 𝑥+𝑦=9+1=10, and 𝑥 changes to 10 after the command. |
+| 𝚖𝚞𝚕 𝟷𝟶   | 𝟷    | The answer to "mul 10" is "1". This means that the multiplication command was successful as 𝑥⋅𝑦=10⋅10=100, and 𝑥 changes to 100 after the command. |
+| !        | 𝟷    | The answer to "!" is "1". This means you have determined that 𝑥 equals 𝑛. |
+|          | 𝟻    | In the second test case, the unknown integer 𝑥=1234 and we have to make it equal to 𝑛=5. |
+| 𝚍𝚒𝚐𝚒𝚝    | 𝟷    | The answer to "digit" is "1". This means that 𝑥 turned into the sum of its digits 1+2+3+4=10, and 𝑥changes to 10 after the command. |
+| 𝚍𝚒𝚟 𝟸    | 𝟷    | The answer to "div 2" is "1". This means that the division command was successful as 𝑦=2 is a divisor of 𝑥=10, and 𝑥 changes to 𝑥𝑦=102=5 after the command. |
+| !        | 𝟷    | The answer to "!" is "1". This means you have determined that 𝑥 equals 𝑛. |
+
+Note that the empty lines in the example input and output are for the sake of clarity, and do not occur in the real interaction.
+
+
+
+【尹显齐 2500011456 物理学院】
+
+**本关考验你的小学奥数能力！**   
+现在，我们最多使用 $\boldsymbol{3}$ 次操作，将一个未知的数变成一个确定的数。我们仍要将中心放在digit这一个指令上。由于之前面对的是一个完全未知的数，所以digit的作用有限。我们可以预处理这个未知的数使得它的性质更好，所以：  
+
+- 第一步：**不是digit**
+  有一个能联系这个数本身和他的digit的性质：在小学时，我们就学过，如果一个数能被 $3,9$ 整除，那么它的各位数之和也能被 $3,9$ 整除，所以我们的！  
+- 第一步是：$x\to 9x$ 
+- 第二步：为 $x \to S(x)$，由于 $1\leq x \leq 10^{10}$ ，所以得到的数不超过 $90$。
+- 第三步： 由于上一步我们已经把数限制在 $90$ 以内，并且它一定能被 $9$ 整除，所以我们可以将 $x\to S(x)$ ，此时一定会得到 $9$ 。
+  接下来加上 $n-9$ 即可。
+
+代码：
+
+```python
+for _ in range(int(input())):
+    n = int(input())
+    print("mul 9")
+    input()
+    print("digit")
+    input()
+    print("digit")
+    input()
+    print(f"add {n-9}")
+    input()
+    print("!")
+    input()
+```
+
+
+## 2109C3. Hacking Numbers (Hard Version)（借鉴原题解）
+
+consructive algorithms, interactive, math, number theory, 2600,
+
+https://codeforces.com/problemset/problem/2109/C3
+
+**This is the hard version of the problem. In this version, the limit of commands you can send is described in the statement. You can make hacks only if all versions of the problem are solved.**
+
+*This is an interactive problem.*
+
+Welcome, Duelists! In this interactive challenge, there is an unknown integer 𝑥 (1≤𝑥≤109). You must make it equal to a given integer in the input 𝑛. By harnessing the power of "Mathmech" monsters, you can send a command to do one of the following:
+
+| **Command** | **Constraint** | **Result** | **Case**       | **Update** | **Jury's response** |
+| ----------- | -------------- | ---------- | -------------- | ---------- | ------------------- |
+| "add 𝑦"     | −1018≤𝑦≤1018   | res=𝑥+𝑦    | if 1≤res≤1018  | 𝑥←res      | "1"                 |
+| else        | 𝑥←𝑥            | "0"        |                |            |                     |
+| "mul 𝑦"     | 1≤𝑦≤1018       | res=𝑥⋅𝑦    | if 1≤res≤1018  | 𝑥←res      | "1"                 |
+| else        | 𝑥←𝑥            | "0"        |                |            |                     |
+| "div 𝑦"     | 1≤𝑦≤1018       | res=𝑥/𝑦    | if 𝑦 divides 𝑥 | 𝑥←res      | "1"                 |
+| else        | 𝑥←𝑥            | "0"        |                |            |                     |
+| "digit"     | —              | res=𝑆(𝑥)∗  | —              | 𝑥←res      | "1"                 |
+
+Let 𝑓(𝑛) be the minimum integer such that there is a sequence of 𝑓(𝑛) commands that transforms 𝑥 into 𝑛 for all 𝑥(1≤𝑥≤109). You do not know the value of 𝑥 in advance. Find 𝑓(𝑛) such that, no matter what 𝑥 is, you can always transform it into 𝑛 using at most 𝑓(𝑛)commands.
+
+Your task is to change 𝑥 into 𝑛 using **at most** 𝑓(𝑛) commands.
+
+∗𝑆(𝑛) is a function that returns the sum of all the individual digits of a non-negative integer 𝑛. For example, 𝑆(123)=1+2+3=6
+
+**Input**
+
+Each test contains multiple test cases. The first line contains the number of test cases 𝑡 (1≤𝑡≤5000). The description of the test cases follows. 
+
+The first and only line of each test case contains one integer 𝑛 (1≤𝑛≤109).
+
+**Interaction**
+
+The interaction for each test case begins by reading the integer 𝑛.
+
+To send a command, output a line in the following format:
+
+- "add 𝑦" Add some integer 𝑦 (−1018≤𝑦≤1018) to 𝑥.
+
+  The jury will output "1" if 𝑥+𝑦 is within [1,1018] (**successful**), and "0" otherwise. If successful, update 𝑥←𝑥+𝑦.
+
+- "mul 𝑦" Multiply 𝑥 by a positive integer 𝑦 (1≤𝑦≤1018).
+
+  The jury will output "1" if 𝑥⋅𝑦 is within [1,1018] (**successful**), and "0" otherwise. If successful, update 𝑥←𝑥⋅𝑦.
+
+- "div 𝑦" Divide 𝑥 by a positive integer 𝑦 (1≤𝑦≤1018).
+
+  The jury will output "1" if 𝑦 is a divisor of 𝑥 (**successful**), and "0" otherwise. If successful, update 𝑥←𝑥𝑦.
+
+- "digit" Make 𝑥 equal to the sum of its digits.
+
+  The jury will always output "1" and update 𝑥←𝑆(𝑥).
+
+Note that commands are **case sensitive**. 
+
+When you have determined that 𝑥 is equal to 𝑛, output a line in the following format:
+
+- "!" — where the jury will output a "1" if 𝑛 is equal to 𝑥, and "-1" otherwise. 
+
+Note that answering **does not count** toward your limit of commands.
+
+If your program makes more than 𝑓(𝑛) commands (𝑓(𝑛) is described above) for one test case, or makes an invalid command, then the response to the command will be "-1". After receiving such a response, your program should immediately terminate to receive the verdict **Wrong Answer**. Otherwise, it may receive any other verdict.
+
+After printing a command, do not forget to output the end of the line and flush the output. Otherwise, you will get Idleness limit exceeded. To do this, use:
+
+- fflush(stdout) or cout.flush() in C++; 
+- System.out.flush() in Java; 
+- sys.stdout.flush() in Python; 
+- std::io::stdout().flush() in Rust; 
+- see the documentation for other languages. 
+
+The interactor is **non-adaptive**. The unknown integer 𝑥 **does not change** during the interaction.
+
+**Hacks**
+
+To hack, use the following format.
+
+The first line should contain a single integer 𝑡 (1≤𝑡≤5000) — the number of test cases.
+
+The first line of each test case should contain two positive integers 𝑛 and 𝑥 (1≤𝑛,𝑥≤109) — denoting the unknown integer and the target value to which it should be made equal, respectively.
+
+Example
+
+**input**
+
+```
+2
+100
+
+0
+
+1
+
+1
+
+1
+
+5
+
+1
+
+1
+
+1
+```
+
+**output**
+
+```
+add -10
+
+add 1
+
+mul 10
+
+!
+
+digit
+
+div 2
+
+!
+```
+
+Note
+
+| Solution | Jury | Explanation                                                  |
+| -------- | ---- | ------------------------------------------------------------ |
+|          | 𝟸    | There are 2 test cases.                                      |
+|          | 𝟷𝟶𝟶  | In the first test case, the unknown integer 𝑥=9 and we have to make it equal to 𝑛=100. |
+| 𝚊𝚍𝚍 -𝟷𝟶  | 𝟶    | The answer to "add -10" is "0". This means that the addition command was not successful as 𝑥+𝑦=9+(−10)≤0, and 𝑥 remains 9 after the command |
+| 𝚊𝚍𝚍 𝟷    | 𝟷    | The answer to "add 1" is "1". This means that the addition command was successful as 𝑥+𝑦=9+1=10, and 𝑥 changes to 10 after the command. |
+| 𝚖𝚞𝚕 𝟷𝟶   | 𝟷    | The answer to "mul 10" is "1". This means that the multiplication command was successful as 𝑥⋅𝑦=10⋅10=100, and 𝑥 changes to 100 after the command. |
+| !        | 𝟷    | The answer to "!" is "1". This means you have determined that 𝑥 equals 𝑛. |
+|          | 𝟻    | In the second test case, the unknown integer 𝑥=1234 and we have to make it equal to 𝑛=5. |
+| 𝚍𝚒𝚐𝚒𝚝    | 𝟷    | The answer to "digit" is "1". This means that 𝑥 turned into the sum of its digits 1+2+3+4=10, and 𝑥changes to 10 after the command. |
+| 𝚍𝚒𝚟 𝟸    | 𝟷    | The answer to "div 2" is "1". This means that the division command was successful as 𝑦=2 is a divisor of 𝑥=10, and 𝑥 changes to 𝑥𝑦=102=5 after the command. |
+| !        | 𝟷    | The answer to "!" is "1". This means you have determined that 𝑥 equals 𝑛. |
+
+Note that the empty lines in the example input and output are for the sake of clarity, and do not occur in the real interaction.
+
+
+
+
+
+**本关考验你的突发奇想能力！**    
+
+---
+
+**提示1：**   
+
+Medium Version的另一种解法是
+
+```txt
+digit
+mul 99
+digit
+add n-18
+```
+
+试说明这个方法的原理。  
+
+---
+
+**提示2：** 
+
+$f(n)$ 几乎是一个常值函数。
+
+---
+
+**提示3：**  
+
+数据范围并非一无所用！
+
+---
+
+**解析：** 在小学的时候我们就学过两位数乘以 $99$ 的简便算法，先写这个两位数减 $1$ ，再接着后面写上 $100$ 减去这个两位数，这样做的原理应该无需多言了。那么，如果我们来考察这个乘积的digit值呢？我们发现这个四位数 $\overline{abcd}$ 满足 $\overline{ab}+\overline{cd}=99$ ，并且由于没有进位，所以 $a+b+c+d\equiv 18$ 。也就是说，对于两位数，我们只用乘以 $99$ 再取digit就能把它变成 $18$ 。也就是说，对于两位数，我们只用乘以 $99$ 再取digit就能把它变成 $18$。同理地，乘的这个数不止可以是 $99$ ，对于三位数，我们只用乘以 $999$ 再取digit就能把它变成 $27$；对于四位数，我们只用乘以 $9999$ 再取digit就能把它变成 $36\dots$ 对于 $n$ 位数，我们只用乘以 $10^n-1$ 再取digit就能把它变成 $9n$ 。Wait！这个题不是保证了 $x$ 是一个 $9$ 位数吗？那我们只用乘以 $999999999$ 就可以了！况且题目要求乘以后的结果在 $1\backsim 10^{18}$ 之间，恰好满足要求！所以我们的做法就呼之欲出了。   
+
+- 第一步：为 $x\to 999999999x$ 
+- 第二步：为 $x\to S(x)$ ，此时一定得到 $81$
+- 第三步：（如果 $x\neq 81$ ）加上 $n-81$ 即可
+
+代码：
+
+```python
+for _ in range(int(input())):
+    n = int(input())
+    print("mul 999999999")
+    input()
+    print("digit")
+    input()
+    if n != 81:
+        print(f"add {n-81}")
+        input()
+    print("!")
+    input()
+```
+
+
+
+
 
 
 
@@ -15139,6 +15863,319 @@ for _ in range(int(input())):
     print(10**(n+1)-1-x)
 
 ```
+
+
+
+## 2171G. Sakura Adachi and Optimal Sequences
+
+bitmasks, combinatorics, greedy, math, 2000
+
+https://codeforces.com/problemset/problem/2171/G
+
+*Adachi is in the middle of a generational crashout... over, uh, this problem! Yep, that's definitely it... anyways, please help her solve it!*
+
+You are given two arrays 𝑎 and 𝑏 of length 𝑛 (1≤𝑎𝑖≤𝑏𝑖).
+
+In one operation, you may either: 
+
+- choose an index 𝑖 (1≤𝑖≤𝑛) and set 𝑎𝑖:=𝑎𝑖+1, or 
+- double all elements of 𝑎. 
+
+Let 𝑥 denote the minimum number of operations needed to make 𝑎=𝑏. Two arrays 𝑎 and 𝑏 of length 𝑛 are considered equal if 𝑎𝑖=𝑏𝑖for all 1≤𝑖≤𝑛.
+
+Find the value of 𝑥. Additionally, count the number of sequences of operations that make 𝑎=𝑏 using exactly 𝑥 operations. Two such sequences of operations are considered different if, for any 1≤𝑗≤𝑥, the 𝑗-th operation of each sequence differs (either in the type of operation selected or the index chosen, if applicable).
+
+Since the number of sequences may be large, output it modulo 106+3. Note that 106+3 is a prime number.
+
+**Input**
+
+The first line contains a single integer 𝑡 (1≤𝑡≤104)  — the number of test cases.
+
+The first line of each test case contains a single integer 𝑛 (2≤𝑛≤2⋅105).
+
+The second line of each test case contains 𝑛 integers, 𝑎1,𝑎2,…,𝑎𝑛 (1≤𝑎𝑖≤106).
+
+The third line of each test case contains 𝑛 integers, 𝑏1,𝑏2,…,𝑏𝑛 (𝑎𝑖≤𝑏𝑖≤106).
+
+It is guaranteed that the sum of 𝑛 over all test cases does not exceed 2⋅105.
+
+**Output**
+
+For each test case, output two integers, the value of 𝑥, and the number of sequences of operations that make 𝑎=𝑏 using exactly 𝑥operations, modulo 106+3. The value of 𝑥 should be printed exactly; that is, it should **not** be taken modulo 106+3.
+
+Example
+
+input
+
+```
+8
+6
+1 3 6 4 3 2
+3 7 10 4 4 8
+2
+1 1
+4 3
+5
+2 3 2 5 1
+18 13 10 30 7
+5
+5 4 3 6 2
+100 125 231 113 107
+4
+2 2 2 2
+2 2 2 2
+4
+1 1 1 1
+2 2 2 2
+7
+1 1 1 1 1 1 200000
+200000 200000 200000 200000 200000 200000 200000
+3
+542264 174876 441510
+641112 325241 995342
+```
+
+output
+
+```
+17 827116
+3 1
+12 288
+35 567812
+0 1
+1 1
+1199994 0
+803045 366998
+```
+
+Note
+
+In the second sample, it is possible to convert 𝑎 into 𝑏 using only three operations. There is only one way to do so, namely: 
+
+- Add 1 to 𝑎1, yielding 𝑎=[2,1]. Then double all elements of 𝑎, yielding 𝑎=[4,2]. Then add 1 to 𝑎2, yielding 𝑎=[4,3]. Then we have that 𝑎=𝑏, as desired. 
+
+It can be shown that it is impossible to convert 𝑎 into 𝑏 using fewer than three operations.
+
+
+
+【尹显齐 2500011456 物理学院】
+
+记 $N=10^6+3$
+首先，所有操作一定是由一些 $+1$ 和总体 $\times 2$ 形成的，由于每次 $+1$ 作用的元素不同，所以交换这些 $+1$ 的顺序就会产生不同的操作。  
+从正面直接寻找步数最少的操作方式是比较困难的，我们可以反向思考：我们可以对 $b$ 的某一个元素 $-1$ ，或者在 $b$ 的所有元素为偶数时对所有元素除以 $2$ ，要求得到 $a$ 数组。最优的操作方式肯定是尽可能多，尽可能早的除以 $2$ ，所以我们在保证 $b_{i}\geq 2 a_{i},\forall i$ 的情况下先对所有奇数 $-1$ ，然后整体除以 $2$ ，当不满足前述条件时就只能一直减 $1$ 。
+在一个对 $a$ 数组的一些数 $+1$ 的过程中，假设对第 $i$ 个数需要加 $x_{i}$ ，那么这一过程的种类数为
+$$
+\dfrac{\left( \sum_{i=1}^n x_{i} \right)!}{\prod_{i=1}^n x_{i}!}
+$$
+
+当 $\sum_{i=1}^n x_{i}\geq N$ 时，上式对 $N$ 的余数为 $0$ ，否则我们需要计算。最后把所有的结果乘起来即得到总种类数量
+
+```python
+MOD = 10**6+3
+# 预计算1到MOD的阶乘和对应逆元
+fact = [1] * (MOD)
+inv_fact = [1] * (MOD)
+for i in range(1,MOD):
+    fact[i] = (fact[i-1] * i) % MOD
+# 用费马小定理求逆元
+inv_fact[MOD-1] = pow(fact[MOD-1],MOD-2,MOD)
+for i in range(MOD-1,0,-1):
+    inv_fact[i-1] = (inv_fact[i] * i) % MOD
+# 定义计算单次+1过程的种类数的方法
+def calc(a,total):
+    res = fact[total]
+    for val in a:
+        res = (res * inv_fact[val]) % MOD
+    return res
+for _ in range(int(input())):
+    n = int(input())
+    a = list(map(int,input().split()))
+    b = list(map(int,input().split()))
+    # 求解能乘以2的次数
+    maxmul = 30
+    for i in range(n):
+        curmul = 0
+        ai = a[i]
+        while curmul < maxmul:
+            if ai*2 <= b[i]:
+                curmul += 1
+                ai *= 2
+            else:
+                break
+        maxmul = curmul
+    step = 0# 总步数
+    kinds = 0
+    delta = []# 存b_i<2a_i时两者的差
+    oper = [0]*maxmul
+    for i in range(n):
+        bi = b[i]
+        for m in range(maxmul):
+            oper[m] += bi%2# 是否需要-1？
+            bi //= 2
+        step += bi-a[i]
+        delta.append(bi-a[i])
+    kinds = calc(delta,step) if step < MOD else 0
+    step += maxmul# 加上*2所需步数
+    for i in range(maxmul):
+        step += oper[i]
+        if kinds:
+            kinds = kinds * fact[oper[i]] % MOD
+    print(step,kinds)
+```
+
+
+
+## 2173E. Shiro's Mirror Duel
+
+constructive algorithms, greedy, interactive, probabilities, sortings, 2200,
+
+https://codeforces.com/problemset/problem/2173/E
+
+*There's no such thing as luck in this world. The victor is decided before the game even starts.*
+
+— *No Game No Life*
+
+*This is an interactive problem.*
+
+One day, Sora and Shiro feel bored again, so they decide to settle it with a game.
+
+At the beginning, Sora gives Shiro a permutation∗ 𝑝1,𝑝2,…,𝑝𝑛 of length 𝑛. In each operation, Shiro may select two distinct indices 𝑥and 𝑦 (1≤𝑥≠𝑦≤𝑛). Then Sora flips a fair coin:
+
+- With probability 0.5, Sora swaps 𝑝𝑥 and 𝑝𝑦; 
+- With probability 0.5, Sora swaps 𝑝𝑛−𝑥+1 and 𝑝𝑛−𝑦+1. 
+
+After the operation, Sora replies with the actual pair of indices that were swapped, so that Shiro can update her local permutation accordingly. 
+
+Shiro's goal is to sort the permutation 𝑝 in ascending order by using at most ⌊2.5𝑛+800⌋ operations. Help her!
+
+∗A permutation of length 𝑛 is an array consisting of 𝑛 distinct integers from 1 to 𝑛 in arbitrary order. For example, [2,3,1,5,4] is a permutation, but [1,2,2] is not a permutation (2 appears twice in the array), and [1,3,4] is also not a permutation (𝑛=3 but there is 4 in the array). 
+
+**Input**
+
+Each test contains multiple test cases. The first line contains the number of test cases 𝑡 (1≤𝑡≤100). The description of the test cases follows. 
+
+The first line of each test case contains a single integer 𝑛 (1≤𝑛≤4000) — the length of 𝑝.
+
+The second line contains 𝑛 integers 𝑝1,𝑝2,…,𝑝𝑛 — the elements of 𝑝.
+
+It is guaranteed that the sum of 𝑛 over all test cases does not exceed 2⋅104. 
+
+**It is guaranteed that there are 50 tests in this problem.**
+
+**Interaction**
+
+For each test case, you can use at most ⌊2.5𝑛+800⌋ moves to sort the permutation 𝑝 in ascending order.
+
+To make a move, you should print a new line in the following format:
+
+- ?𝑥𝑦 (1≤𝑥≠𝑦≤𝑛) — the two indices that Shiro selects in this move. 
+
+As a response to the move, you will receive two integers 𝑢 and 𝑣 — the actual pair of indices that Sora swapped. It is guaranteed that (𝑢,𝑣) is randomly selected from (𝑥,𝑦) and (𝑛−𝑥+1,𝑛−𝑦+1) with equal probability.
+
+To report that the permutation has been sorted in ascending order, you should print a new line with a single character !. This does **not**count as one of the ⌊2.5𝑛+800⌋ moves. 
+
+After that, proceed to the next test case or terminate the program if it was the last test case.
+
+After printing each query do not forget to output the end of line and flush∗ the output. Otherwise, you will get Idleness limit exceeded verdict.
+
+If, at any interaction step, you read −1 instead of valid data, your solution must exit immediately. This means that your solution will receive Wrong answer because of an invalid query or any other mistake. Failing to exit can result in an arbitrary verdict because your solution will continue to read from a closed stream. 
+
+**Hacks are disabled in this problem.**
+
+∗To flush, use: 
+
+- fflush(stdout) or cout.flush() in C++; 
+- sys.stdout.flush() in Python; 
+- see the documentation for other languages. 
+
+Example
+
+input
+
+```
+2
+5
+5 1 3 4 2
+
+1 5
+
+2 1
+
+2
+1 2
+```
+
+output
+
+```
+? 1 5
+
+? 4 5
+
+!
+
+
+!
+```
+
+Note
+
+In the first test case, 𝑛=5 and the initial permutation is [5,1,3,4,2]. 
+
+- We print ? 1 5. The judge replies 1 5, meaning positions 1 and 5 are swapped (no mirroring). The array becomes [2,1,3,4,5]. 
+- We print ? 4 5. The judge replies 2 1, which is the mirror of 4,5 because with 𝑛=5 we have 𝑛−4+1=2 and 𝑛−5+1=1. Thus we must swap positions 2 and 1. The array becomes [1,2,3,4,5]. 
+- The permutation is now sorted, so we print !. The answer line does not count toward the operation limit. 
+
+In the second test case, the given permutation is already increasing, so we just need to output !.
+
+
+
+【尹显齐 2500011456 物理学院】
+
+因为有可能在两个对称的位置进行交换，所以我们的排序必须从两头向中间进行。假设现在我们要将 $a_{i}$ 和 $a_{n-i}$ 同时变成 $i$ 和 $n-i$ 。
+
+- 第一步：先将 $a_{i}$ 变成 $i$ ，输入的操作为交换 $i$ 和 $a_{i}$ 即可。平均需要 $2$ 步。
+- 第二步：保持 $i$ 位置不动的同时让 $a_{{n-i}}$ 变成 $n-i$ 。输入的操作为交换 $n-i$ 和 $a_{n-i}$ 。假设平均需要 $x$ 步完成，下一步有可能将 $a_{n-i}$ 换到指定位置上，也有可能将 $i$ 换走。在第二种情况下，再操作一步，一定会有一个数在自己对应位置上。所以可以列出等式
+
+$$
+x=0.5+0.5(2+x)
+$$
+
+计算得出平均需要 $3$ 步。  
+所以，在此方法下，将 $2$ 个数排好位置，平均需要 $5$ 步，那么将 $n$ 个数全部排好，平均需要 $2.5n$ 步，满足题目要求。
+
+代码：
+
+```python
+for _ in range(int(input())):
+    n = int(input())
+    arr = list(map(int,input().split()))
+    data = {}# 用data存储所有数的位置，便于输出
+    for i,a in enumerate(arr):
+        data[a] = i
+    i = 0
+    while i <= (n-1)//2:
+        if arr[i] != i+1 or arr[n-1-i] != n-i:
+        # 先排好第一个数
+            while arr[i] != i+1:
+                print(f"? {data[i+1]+1} {i+1}")
+                x,y = map(int,input().split())
+                data[arr[x-1]] = y-1
+                data[arr[y-1]] = x-1
+                arr[x-1],arr[y-1] = arr[y-1],arr[x-1]
+            a = data[n-i]+1
+        # 接着排第二个数
+            while arr[n-1-i] != n-i or arr[i] != i+1:
+                print(f"? {a} {n-i}")
+                x,y = map(int,input().split())
+                data[arr[x-1]] = y-1
+                data[arr[y-1]] = x-1
+                arr[x-1],arr[y-1] = arr[y-1],arr[x-1]    
+        i += 1
+    print("!")
+```
+
+
 
 
 
@@ -15785,6 +16822,325 @@ if __name__ == '__main__':
    - `cost[u]`：叶子为 1，非叶子为 `cost[l] + cost[r] + 3`。
    - `tau[u]`：`init_u + tau[parent]`，其中 `init_u` 为 1（叶子）或 `cost[u]`（非叶子）。
 5. **复杂度**：时间复杂度 $O(N)$，空间复杂度 $O(N)$，完全满足题目限制。
+
+
+
+## 2195H. Codeforces Heuristic Contest 001（Enhanced)
+
+Brute force, constructive algorithms, georgetry, implementation 
+
+https://codeforces.com/problemset/problem/2195/H
+
+There is a grid of 3𝑛×3𝑛 points, consisting of all integer points (𝑥,𝑦) such that 1≤𝑥,𝑦≤3𝑛.
+
+Find a **largest** set of triangles satisfying the following conditions:
+
+- Each triangle has its vertices on **exactly three** points on the grid. 
+- Each triangle has an area of exactly 12. Note that they **do not** have to be right triangles. 
+- No two triangles share a common intersection point, including their vertices. 
+
+If there exist multiple largest such sets of triangles, you may output any of them.
+
+Input
+
+Each test contains multiple test cases. The first line contains the number of test cases 𝑡 (1≤𝑡≤30). The description of the test cases follows. 
+
+The only line of each test case contains a single integer 𝑛 (1≤𝑛≤166).
+
+It is guaranteed that the sum of 𝑛2 over all test cases does not exceed 1662.
+
+Output
+
+Output the **maximum** size 𝑚 of the set of triangles on one line (0≤𝑚≤3𝑛2).
+
+Then, output 𝑚 lines in the following format:
+
+- 𝑥𝑖,1𝑦𝑖,1𝑥𝑖,2𝑦𝑖,2𝑥𝑖,3𝑦𝑖,3: The vertices of the 𝑖-th triangle are (𝑥𝑖,1,𝑦𝑖,1), (𝑥𝑖,2,𝑦𝑖,2), (𝑥𝑖,3,𝑦𝑖,3). 
+
+You may output the vertices of one triangle in any order (clockwise or counterclockwise).
+
+Your output will be accepted if it satisfies all conditions and the maximum size given is correct.
+
+Example
+
+input
+
+Copy
+
+```
+2
+1
+2
+```
+
+output
+
+Copy
+
+```
+2
+1 1 1 2 2 1
+2 3 3 2 3 3
+12
+1 1 1 2 2 1
+2 2 3 2 3 1
+1 3 1 4 2 3
+2 4 3 4 3 3
+1 5 1 6 2 5
+2 6 3 6 3 5
+4 1 4 2 5 1
+5 2 6 2 6 1
+4 3 4 4 5 3
+5 4 6 4 6 3
+4 5 4 6 5 5
+5 6 6 6 6 5
+```
+
+Note
+
+In the first test case, the example output has 2 triangles as shown in the following image:
+
+![img](https://espresso.codeforces.com/91685b30b8b9b30b68d7cabc8aa5bdd91434b214.png)
+
+In the second test case, the example output has 12 triangles as shown in the image on the left:
+
+| ![img](https://espresso.codeforces.com/7077bbe8222b559a4f66c9fb949479f6eff1fdcd.png) | ![img](https://espresso.codeforces.com/a0141e7b204e64817c88b9b22b7b54d7bcf629ac.png) |
+| ------------------------------------------------------------ | ------------------------------------------------------------ |
+|                                                              |                                                              |
+
+As the triangles are not required to be right triangles, the set of triangles shown in the image on the right will also be considered valid.
+
+
+
+【尹显齐 2500011456 物理学院】
+
+（在加强版中，你只能使用三边长度分别为 $1,1,\sqrt{ 2 }$ 的三角形）  
+
+**本关考验你的连线能力！**
+首先，我们要明确答案。当 $n=1$ 时，明显只能放下两个三角形。当 $n$ 为偶数时，明显能通过不断在 $3\times 2$ 的点阵里放两个三角形占据所有点。问题就是当 $n$ 是除了 $1$ 以外的奇数时，能否放满。容易看出，如果我们能将一个 $x\times 3y$ （均为奇数）的点阵用三角形占满，就能利用 $3\times 2$ 的点阵里能放两个三角形占据所有点的性质先扩展成 $(x+2a) \times 3y$ 的点阵，再扩展成 $(x+2a)\times 3(y+b)$ 的点阵，从而满足题目要求。所以关键就是寻找能将一个 $x\times 3y$ （均为奇数）的点阵用三角形占满的方法。显然，我们发现 $y$ 的最小值为 $3$ ，于是我们可以一个一个试 $x$ （推荐用几何画板，能自动吸附格点），在 $x=5$ 时，有如下方法：
+![[Pasted image 20260305230104.png|center|600]]
+故问题得以解决。
+
+代码：（仅供参考，且与上图不对应）
+
+```python
+ans = [[1,1,1,2,2,1],[3,1,2,2,3,2],[4,1,4,2,5,1],[5,2,6,1,7,1],[7,2,8,1,9,1],[1,3,2,3,1,4],[3,3,3,4,4,3],[5,3,6,2,5,4],[6,3,7,3,7,4],[8,2,9,2,9,3],[1,5,2,4,2,5],[3,5,4,4,4,5],[5,5,6,4,6,5],[7,5,8,4,8,5],[8,3,9,4,9,5]]
+for _ in range(int(input())):
+    n = int(input())
+    if n == 1:
+        print(2)
+        print("1 1 1 2 2 1")
+        print("2 3 3 2 3 3")
+    elif n % 2 == 0:
+        print(3*n**2)
+        for i in range(n):
+            for j in range(3*n//2):
+                s = (3*i,2*j)
+                print(f"{s[0]+1} {s[1]+1} {s[0]+1} {s[1]+2} {s[0]+2} {s[1]+1}")
+                print(f"{s[0]+2} {s[1]+2} {s[0]+3} {s[1]+1} {s[0]+3} {s[1]+2}")
+    else:
+        print(3*n**2)
+        for i in range(15):
+            print(*ans[i])
+        for i in range((3*n-9)//2):
+            for j in range(n):
+                s = (2*i+9,3*j)
+                print(f"{s[0]+1} {s[1]+1} {s[0]+1} {s[1]+2} {s[0]+2} {s[1]+1}")
+                print(f"{s[0]+2} {s[1]+2} {s[0]+1} {s[1]+3} {s[0]+2} {s[1]+3}")
+        for i in range(3):
+            for j in range((3*n-5)//2):
+                s = (3*i,2*j+5)
+                print(f"{s[0]+1} {s[1]+1} {s[0]+1} {s[1]+2} {s[0]+2} {s[1]+1}")
+                print(f"{s[0]+2} {s[1]+2} {s[0]+3} {s[1]+1} {s[0]+3} {s[1]+2}")
+```
+
+
+
+
+
+## 2200G. Operation Permutation
+
+Combinatorics, dp, math, probabilities
+
+https://codeforces.com/problemset/problem/2200/G
+
+AksLolCoding has an integer 𝑥 and a list of 𝑛 operations. Each operation is a string starting with one of the symbols +,-,x, or /(representing addition, subtraction, multiplication, and real number division respectively), followed immediately by a positive integer 𝑦 (1≤𝑦≤109). For example, the operation x3 represents multiplying 𝑥 by 3.
+
+AksLolCoding will randomly permute the operations and then apply all operations sequentially to 𝑥 in the permuted order. Help AksLolCoding compute the expected∗ final value of 𝑥 modulo 109+7.
+
+Formally, let 𝑀=109+7. It can be shown that the answer can be expressed as an irreducible fraction 𝑝𝑞, where 𝑝 and 𝑞 are integers and 𝑞≢0(mod𝑀). Output the integer equal to 𝑝⋅𝑞−1(mod𝑀). In other words, output such an integer 𝑎 that 0≤𝑎<𝑀 and 𝑎⋅𝑞≡𝑝(mod𝑀).
+
+∗The expected final value of 𝑥 is the average of the final value of 𝑥 over all 𝑛! permutations.
+
+**Input**
+
+The first line contains a single integer 𝑡 (1≤𝑡≤1000), the number of test cases.
+
+For each test case, the first line contains two integers 𝑛 and 𝑥 (1≤𝑛≤3000, 1≤𝑥≤109).
+
+The second line of each test case contains 𝑛 strings, each representing an operation in the format described above.
+
+The sum of 𝑛2 over all test cases does not exceed 30002.
+
+**Note:** x is used to represent multiplication, not *
+
+**Output**
+
+For each test case, output a single integer: the expected final value of 𝑥 modulo 109+7.
+
+Example
+
+input
+
+```
+4
+2 10
+x2 -10
+4 2
++6 +7 /1 -13
+8 1
++1 x2 x3 +4 +5 +6 -7 -8
+9 864209753
+-918273645 x564738291 /365107362 x734582911 -654321789 x998244353 +172519103 /482193765 /482091376
+```
+
+output
+
+```
+5
+2
+166666677
+601980218
+```
+
+Note
+
+In the first test case, 𝑥 can either be (10⋅2)−10=10 or (10−10)⋅2=0, resulting in an expected value of 5.
+
+In the second test case, all possible permutations result in 𝑥=2.
+
+In the third test case, the expected value of 𝑥 is 556.
+
+
+
+【尹显齐 2500011456 物理学院】
+
+数学基础：费马小定理
+$$
+a^{p-1} \equiv 1 (\text{对}p\text{取余，当}\gcd(a,p)=1)
+$$
+
+我们可以利用它求逆元：
+
+$$
+a^{-1} \equiv a^{p-2}(\text{对}p\text{取余})
+$$
+
+此题中，模数 $p=10^9+7$ 。  
+最trivial的方法的时间复杂度是 $O(n!)$ ，明显不行。  
+首先，我们应当意识到，本质上我们只进行 $+$ 和 $*$ 两种运算。减去 $a$ 相当于加 $-a$ ，除以 $a$ 相当于乘 $a^{p-2}$ 。接下来，与其按照式子顺序计算最终值。我们考察加上的每一个数在之后的变化。即：对于一个具体的式子，如果加上的每个数为
+
+$$
+a_{1},\dots,a_{m}
+$$
+
+那么最终的结果一定可以表示为
+
+$$
+res=x+k_{1}a_{1}+\dots+k_{m}a_{m}
+$$
+
+注意到，在某一步加上的数 $a_{i}$ 只会受到之后所有乘法的作用，那么为计算这个数对平均值的贡献我们可以这样考虑：假设所有乘数
+
+$$
+b_{1},\dots,b_{l}
+$$
+
+排成一个特定顺序，此时我们在这个序列中随机地插入 $a_{i}$ ，则在这个特定序列下它的贡献的平均值为
+
+$$
+\mathbb{E}[a_{i}]_{{b_{1},\dots,b_{l}}}=\frac{a_{i}\sum_{j=1}^l\left(\Pi_{k=j}^{l}b_{k}\right)+a_{i}}{l+1}
+$$
+
+现在，考虑这个值对所有乘数排成的序列的平均值。序列总共有 $l!$ 种，对于最后 $k$ 个数确定（但相对未知不确定）的情况，共有
+$$
+k!\cdot(l-k)!
+$$
+种序列，那么如果我们能计算出所有不同方式得到的 $k$ 个数的乘积的总和 $S(k)$ ，那么就有
+
+$$
+\overline{\Pi_{k=j}^{l}b_{k}}=\dfrac{k!\cdot(l-k)!\cdot S(k)}{l!}
+$$
+
+注意到 $S(0) = 1$，那么有 $a_{i}$ 的贡献的平均值为
+
+$$
+\mathbb{E}[a_{i}]=\frac{a_{i}\sum_{j=0}^lk!\cdot(l-k)!\cdot S(k)}{(l+1)l!}
+$$
+
+那么答案就是对 $a_{i}$ 求和，加上初始值 $x$ 的贡献：
+
+$$
+ans = \frac{\sum_{i=1}^{n-l}a_{i}\sum_{j=0}^lk!\cdot(l-k)!\cdot S(k)}{(l+1)l!}+x\prod_{{i=1}}^{l}b_{i}
+$$
+
+而计算 $S(k)$ 则可以采用二维dp的方式。令 $dp(i,j)$ 为前 $i$ 个数中所有不同的 $j$ 个数的乘积之和，则有
+
+$$
+dp(i,j) = dp(i-1,j-1)\cdot b_{i}+dp(i-1,j)
+$$
+
+那么
+
+$$
+S(k)=dp(l,k)
+$$
+
+实际计算时，除以分母都采用乘以分母的逆元。这样，我们就在 $O(n^2)$ 的时间复杂度内解决了此问题。
+
+```python
+MOD = 10**9+7 # 模数
+N = 3000 # n最大值、
+# 预计算1到3000的阶乘值
+fact = [1]*(N+1)
+for i in range(1,N+1):
+    fact[i] = fact[i-1]*i%MOD
+# 主程序
+for _ in range(int(input())):
+    n,x = map(int,input().split())
+    oper = input().split()
+    ans = 0 # 记录所有加减之和
+    mul = [] # 记录所有乘数
+    for op in oper:
+        a,b = op[0],int(op[1:])
+        if a == "+":
+            ans += b
+        elif a == "-":
+            ans -= b
+        elif a == "x":
+            mul.append(b)
+        else:# 是除法，乘以其逆元
+            mul.append(pow(b,MOD-2,MOD))
+    ans %= MOD
+    l = len(mul)#乘数个数
+    dp = [[0]*(l+1) for _ in range(l+1)]#dp计算S(k)
+    dp[0][0] = 1#初始化
+    for i in range(1,l+1):
+        for j in range(i+1):
+            dp[i][j] = (dp[i-1][j]+(dp[i-1][j-1]*mul[i-1])%MOD)%MOD
+    #下面过程和上方式子一一对应
+    mulans = 0
+    for i in range(l+1):
+        mulans += dp[l][i]*(fact[i]*fact[l-i])%MOD
+        mulans %= MOD
+    mulans *= pow(l*fact[l]%MOD,MOD-2,MOD)
+    mulans %= MOD
+    print(((x*dp[l][l])%MOD + (ans*mulans)%MOD)%MOD)
+```
+
+
+
+
 
 
 
