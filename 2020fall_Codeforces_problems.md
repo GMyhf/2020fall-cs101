@@ -1,6 +1,6 @@
 # Problems in Codeforces.com
 
-*Updated 2026-03-16 16:55 GMT+8*
+*Updated 2026-03-18 11:07 GMT+8*
  *Compiled by Hongfei Yan (2020 Fall)*
 
 
@@ -16952,6 +16952,74 @@ for _ in range(int(input())):
                 s = (3*i,2*j+5)
                 print(f"{s[0]+1} {s[1]+1} {s[0]+1} {s[1]+2} {s[0]+2} {s[1]+1}")
                 print(f"{s[0]+2} {s[1]+2} {s[0]+3} {s[1]+1} {s[0]+3} {s[1]+2}")
+```
+
+
+
+## 2196A: Game with a Fraction
+
+games, math, https://codeforces.com/problemset/problem/2196/A
+
+【汤立祥 25物理学院 】思路：把把博弈题，好玩又简单的小巧思。整个博弈的核心就在于注意到两人可以通过交替减不同的数来保证 $q-p$ 始终为定值。由此，如果一开始 $q-p=a$，那么 Bob 只需要将 $q$ 减到 $2a$，$p$ 减到 $3a$，那么就轻松胜利。因此我们只需要判断 $q\geq2a,p\geq3a$ 即可知道Bob一定赢。
+
+```python
+def solve():
+	p, q = tuple(map(int, input().split()))
+	if p >= q:
+		print("Alice")
+	else:
+		diff = q - p
+		if p >= diff*2 and q >= diff*3:
+			print("Bob")
+		else:
+			print("Alice")
+
+t = int(input())
+for _ in range(t):
+	solve()
+```
+
+
+
+## 2196B: Another Problem about Beautiful Pairs
+
+brute force, math, two pointers, https://codeforces.com/problemset/problem/2196/B
+
+【汤立祥 25物理学院 】思路：这道神秘的题目我一开始以为是在写一个 $\mathcal{O}(n^2)$ 的算法之后使用猛烈的剪枝让它过样例的，在尽力之后过了16/29个样例才TLE。核心思想如下：对于 $a[i]$，如果想要找到与之能组成 Beautiful Pair 的对，那么我们需要搜索引索 $j=i+k \cdot a[i]$，因此我们至多只需要遍历 $\left\lceil  \frac{n}{a[i]}  \right\rceil$ 个数据点。当 $a[i]$ 足够大时，这样子的遍历的确能省掉很多空间，但当 $a[i]$ 很小时，就几乎要遍历整个列表。
+
+苦思冥想好几天之后点开Tutorial，发现给了一个非常巧妙的办法，就是利用 $\sqrt{n}$ 作为大小的分界线。对于 $a[i] \ge \sqrt{n }$ 的引索，搜索全部可能的 $k$，对于 $a[i] < \sqrt{n}$ 的引索，搜索小于 $\sqrt{n}$ 的 $k$。这样子：
+
+- 若 $a[i]\geq \sqrt{ n },a[j]\geq \sqrt{ n }$，有 $a[i] a[j]\geq n>n-1$，不可能存在这样的对；
+- 若 $a[i]\geq \sqrt{ n },a[j] < \sqrt{ n }$，会被第一种方式搜到；
+- 若 $a[i]< \sqrt{ n },a[j]< \sqrt{ n }$，因此有 $k=a[j]<\sqrt{ n }$，一定能被第二种方法搜到。
+  这样子整个算法就能在 $\mathcal{O}(n^{3/2})$ 的速度下完成计算。
+
+这道题目的思路让我感觉是一种“Meet In Between"的思路。就是你有两种搜索方案，一共要完成 $n$ 的搜索任务，要么是给两者分别分配 $\mathcal{O}(n)$ 与 $\mathcal{O}(1)$ 的任务量，要么是给两者分配 $\mathcal{O}(\sqrt{n})$ 的工作量。显然后面这种更优秀。这种方式在魔方求解最短步数的计算机解法里面也有利用，就是分别从初始状态与最终完成两个点进行bfs，看什么时候两者相遇。
+代码：
+
+```python
+from math import sqrt, ceil
+def solve():
+	n = int(input())
+	sqn = ceil(sqrt(n))
+	a = list(map(int, input().split()))
+	count = 0
+	for i in range(n):
+		current = a[i]
+		if current >= sqn:
+			for j in range(i % current, n, current):
+				if a[i] * a[j] == abs(j - i):
+					count += 1
+		else:
+			for j in range(i + current, min(i + sqn * current, n), current):
+				if a[i] * a[j] == j - i:
+					count += 1
+
+	print(count)
+
+t = int(input())
+for _ in range(t):
+	solve()
 ```
 
 
