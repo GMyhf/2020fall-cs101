@@ -17208,6 +17208,240 @@ for _ in range(int(input())):
 
 
 
+## T2201G. Codeforces Heuristic Contest 1001
+
+constructive algorithms, https://codeforces.com/problemset/problem/2201/G
+
+There is a graph of 𝑛^2 vertices, where vertices are labeled by integer pairs (𝑟,𝑐) such that 1≤𝑟,𝑐≤𝑛. Vertices (𝑟1,𝑐1) and (𝑟2,𝑐2) are **directly** connected if and only if (𝑟1−𝑟2)^2+(𝑐1−𝑐2)^2=13. This graph is called the **Zebra Graph** of dimensions 𝑛×𝑛.
+
+Please find a subset of vertices 𝑆 in the Zebra Graph of dimensions 𝑛×𝑛, which satisfies the following condition.
+
+- The graph induced∗ by the subset 𝑆 is isomorphic to a cycle graph of at least ⌊𝑛2𝑒⌋ vertices†. 
+
+It can be shown that such a subset of vertices exists under the constraints of this problem.
+
+∗The induced graph of a subset of vertices 𝑋 is a graph that contains all vertices in 𝑋 and all edges whose both endpoints are in 𝑋.
+
+†Here, 𝑒 is the mathematical constant equal to the limit lim𝑛→∞(1+1/𝑛)^𝑛≈2.71828182. Note that the value of 1/𝑒 is approximately 0.36787944.
+
+**Input**
+
+The first and only line of input contains a single integer 𝑛 (𝑛∈{5,1001}).
+
+**There are only two input files for this problem**:
+
+- The first input file (the example input) has 𝑛=5; 
+- The second input file has 𝑛=1001. 
+
+**Hacks are disabled for this problem.**
+
+**Output**
+
+Output 𝑛 lines, each containing a string 𝑠𝑖 of length 𝑛 denoting the 𝑖-th row of the graph. If the vertex (𝑟,𝑐) is an element of 𝑆, then the 𝑐-th letter of 𝑠𝑟 should be '1'. Otherwise, the 𝑐-th letter of 𝑠𝑟 should be '0'.
+
+If there are multiple solutions, print any of them.
+
+Example
+
+input
+
+```
+5
+```
+
+output
+
+```
+01110
+11011
+10001
+11011
+01110
+```
+
+Note
+
+For the example output, the induced graph corresponding to the subset 𝑆 is shown below.
+
+![img](https://raw.githubusercontent.com/GMyhf/img/main/img/03c667eeb59a0967db001258852881799d89b382.png)
+
+This graph is isomorphic to the cycle graph 𝐶_16 consisting of 16 vertices. As 16≥⌊𝑛^2/𝑒⌋=9, the output satisfies the problem's condition.
+
+
+
+【尹显齐 25物理学院】
+
+题目大意：现在有一个 $1001\times 1001$ 的点阵，你需要选择里面的一些点，使得将所有能用长度为 $\sqrt{ 13 }$ 的线段连接起来的点被连接后满足：1.所有的点都是相通的，2.每个点有且仅有 $\boldsymbol{2}$ 条线段与之相连，3.点的个数不小于 $\left\lfloor  \frac{1001^2}{e}  \right\rfloor$ 。
+
+---
+
+前言：这个题的自由度很大，希望你能在充分思考后决定是否观看题解。并且题解不会包含所有细节与具体方法。
+
+这里有ds写的一个检查程序，可以帮你看看你的构造是否有效。
+
+```python
+def check_pattern(n, matrix):
+    """
+    检查矩阵是否满足要求
+    n: 矩阵大小
+    matrix: 二维矩阵
+    """
+    if n == 5:
+        # 检查5x5的固定图案
+        expected = [[0,1,1,1,0],[1,1,0,1,1],[1,0,0,0,1],[1,1,0,1,1],[0,1,1,1,0]]
+        for i in range(5):
+            for j in range(5):
+                if matrix[i][j] != expected[i][j]:
+                    return False, f"位置({i},{j})的值不正确"
+        return True, "5x5图案正确"
+    
+    elif n == 1001:
+        # 找出所有为1的点
+        points = []
+        for i in range(1001):
+            for j in range(1001):
+                if matrix[i][j] == 1:
+                    points.append((i, j))
+        
+        print(f"总共找到{len(points)}个为1的点")
+        
+        # 距离为√13的偏移量（平方和为13）
+        # 可能的偏移组合：2^2+3^2=13
+        offsets = [
+            (2, 3), (3, 2), (2, -3), (3, -2),
+            (-2, 3), (-3, 2), (-2, -3), (-3, -2)
+        ]
+        
+        # 将点转换为集合，便于快速查找
+        point_set = set(points)
+        
+        # 检查1：每个点是否有且仅有两条边与之相连
+        all_degree_2 = True
+        invalid_points = []
+        
+        for x, y in points:
+            degree = 0
+            # 检查8个方向的点是否存在
+            for dx, dy in offsets:
+                nx, ny = x + dx, y + dy
+                if 0 <= nx < 1001 and 0 <= ny < 1001 and (nx, ny) in point_set:
+                    degree += 1
+            
+            if degree != 2:
+                all_degree_2 = False
+                invalid_points.append(((x, y), degree))
+        
+        if not all_degree_2:
+            print("度数不为2的点：")
+            for point, degree in invalid_points[:10]:  # 只显示前10个
+                print(f"  点{point}，度数为{degree}")
+            return False, f"存在度数不为2的点，共有{len(invalid_points)}个"
+        
+        # 检查2：所有点是否互相连通（BFS，只遍历边，即距离为√13的点）
+        from collections import deque
+        
+        visited = set()
+        queue = deque([points[0]])
+        visited.add(points[0])
+        
+        while queue:
+            x, y = queue.popleft()
+            # 只检查距离为√13的邻居
+            for dx, dy in offsets:
+                nx, ny = x + dx, y + dy
+                if 0 <= nx < 1001 and 0 <= ny < 1001:
+                    neighbor = (nx, ny)
+                    if neighbor in point_set and neighbor not in visited:
+                        visited.add(neighbor)
+                        queue.append(neighbor)
+        
+        if len(visited) != len(points):
+            return False, f"图不连通，只有{len(visited)}/{len(points)}个点连通"
+        
+        return True, f"检查通过！共有{len(points)}个点，每个点度数均为2，且全部连通"
+    
+    else:
+        return False, f"不支持的矩阵大小: {n}"
+
+def main():
+    # 直接读取你的程序输出
+    n = int(input())
+    matrix = []
+    for _ in range(n):
+        row = list(map(int, input().strip()))
+        matrix.append(row)
+    
+    result, message = check_pattern(n, matrix)
+    print(message)
+
+if __name__ == "__main__":
+    main()
+```
+
+---
+
+提示：伸缩门
+
+---
+
+说明：对于 $n\times n$ 的点阵，且当 $n$ 足够大时，本方法可覆盖约 $\frac{4}{9}n^{2}$ 个点。
+
+---
+
+正式开始！
+我的方法主要基于一个思想，就是使用不断重复的小单元去密铺整个平面，在多次尝试后，我找到了如下方法：
+
+<img src="https://raw.githubusercontent.com/GMyhf/img/main/img/fb5c8b979c1807076cb1f933419d90ea.png" alt="fb5c8b979c1807076cb1f933419d90ea" style="zoom:50%;" />
+
+这种形状像伸缩门的形状可以轻松密铺平面，现在只需要把它的各个端点接起来即可（这并不容易！），最终效果如图：
+
+<img src="https://raw.githubusercontent.com/GMyhf/img/main/img/5c3e565a88a4135dfe8bf9d71532a547.png" alt="5c3e565a88a4135dfe8bf9d71532a547" style="zoom:50%;" />
+
+至于这个东西我也不知道叫啥，看到题解的人可以顺便想个名字。
+
+最终，我成功覆盖了 $434312$ 个点，超出了题解五万多。 
+
+代码：
+
+```python
+def out(i,arr):
+    for j in range(i):
+        print(*arr[j],sep = "")
+n = int(input())
+pat = [[0,1,1,1,0],[1,1,0,1,1],[1,0,0,0,1],[1,1,0,1,1,],[0,1,1,1,0]]
+if n == 5:
+    out(5,pat)
+else:
+    ans = [[0]*1001 for _ in range(1001)]
+    corn = [(0,2),(1,1),(2,0),(2,2),(2,5),(5,2),(3,4),(4,3),(4,5),(5,4),(8,4),(4,8)]# 其他三个角
+    tail = [(0,11),(11,0),(2,8),(8,2),(3,9),(9,3),(4,10),(10,4),(1,12),(12,1),(4,11),(11,4)]# 尾部（右下角）
+    # 主体部分
+    for i in range(328):
+        for j in range(328):
+            for rx,ry in [(1,0),(0,1),(2,1),(1,2)]:
+                ans[i*3+rx+8][j*3+ry+8] = 1
+    # 边上延展出去
+    for i in range(328):
+        for k in [0,2]:
+            ans[i*3+k+8][6] = 1
+            ans[i*3+k+8][993] = 1
+            ans[6][i*3+k+8] = 1
+            ans[993][i*3+k+8] = 1
+    for i in range(1,327):
+        ans[i*3+9][3] = 1
+        ans[i*3+9][996] = 1
+        ans[3][i*3+9] = 1
+        ans[996][i*3+9] = 1
+    for a,b in [(1,1),(-1,1),(1,-1),(-1,-1)]:
+        if a > 0 or b > 0:
+            for cx,cy in corn:
+                ans[int(a<0)*999+a*cx][int(b<0)*999+b*cy] = 1
+        else:
+            for cx,cy in tail:
+                ans[1000+a*cx][1000+b*cy] = 1
+    out(1001,ans)
+```
+
 
 
 
