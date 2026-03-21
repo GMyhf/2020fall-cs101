@@ -1,6 +1,6 @@
 # Problems in Codeforces.com
 
-*Updated 2026-03-18 11:07 GMT+8*
+*Updated 2026-03-21 17:38 GMT+8*
  *Compiled by Hongfei Yan (2020 Fall)*
 
 
@@ -16983,7 +16983,63 @@ for _ in range(t):
 
 ## 2196B: Another Problem about Beautiful Pairs
 
-brute force, math, two pointers, https://codeforces.com/problemset/problem/2196/B
+brute force, math, two pointers, 1600, https://codeforces.com/problemset/problem/2196/B
+
+
+In the array 𝑎, we call a pair of indices 𝑖, 𝑗 *beautiful* if the following condition holds:
+
+- 𝑎𝑖⋅𝑎𝑗=𝑗−𝑖. 
+
+Count the number of *beautiful* pairs in the array 𝑎.
+
+**Input**
+
+Each test contains multiple test cases. The first line contains the number of test cases 𝑡 (1≤𝑡≤10^4). The description of the test cases follows. 
+
+The first line of each test case contains a single integer 𝑛 (2≤𝑛≤2⋅10^5).
+
+The second line of each test case contains 𝑛 integers 𝑎𝑖 (1≤𝑎𝑖≤10^9).
+
+Additional constraints on the input: 
+
+- The sum of 𝑛 across all test cases does not exceed 2⋅10^5. 
+
+**Output**
+
+For each test case, output a single integer — the answer to the problem.
+
+Example
+
+input
+
+```
+4
+5
+1 1 2 100 4
+6
+2 2 1 1 2 2
+10
+1 1 2 3 4 1 1 7 3 9
+2
+1000000000 1000000000
+```
+
+output
+
+```
+3
+7
+10
+0
+```
+
+Note
+
+In the first example, there are 3 *beautiful* pairs: (1,2), (1,3), and (1,5).
+
+In the second example, there are 7 *beautiful* pairs: (1,3), (1,5), (2,4), (2,6), (3,4), (3,5), and (4,6).
+
+
 
 【汤立祥 25物理学院 】思路：这道神秘的题目我一开始以为是在写一个 $\mathcal{O}(n^2)$ 的算法之后使用猛烈的剪枝让它过样例的，在尽力之后过了16/29个样例才TLE。核心思想如下：对于 $a[i]$，如果想要找到与之能组成 Beautiful Pair 的对，那么我们需要搜索引索 $j=i+k \cdot a[i]$，因此我们至多只需要遍历 $\left\lceil  \frac{n}{a[i]}  \right\rceil$ 个数据点。当 $a[i]$ 足够大时，这样子的遍历的确能省掉很多空间，但当 $a[i]$ 很小时，就几乎要遍历整个列表。
 
@@ -17210,7 +17266,7 @@ for _ in range(int(input())):
 
 ## T2201G. Codeforces Heuristic Contest 1001
 
-constructive algorithms, https://codeforces.com/problemset/problem/2201/G
+constructive algorithms, 3500, https://codeforces.com/problemset/problem/2201/G
 
 There is a graph of 𝑛^2 vertices, where vertices are labeled by integer pairs (𝑟,𝑐) such that 1≤𝑟,𝑐≤𝑛. Vertices (𝑟1,𝑐1) and (𝑟2,𝑐2) are **directly** connected if and only if (𝑟1−𝑟2)^2+(𝑐1−𝑐2)^2=13. This graph is called the **Zebra Graph** of dimensions 𝑛×𝑛.
 
