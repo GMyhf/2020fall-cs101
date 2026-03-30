@@ -1,6 +1,6 @@
 # Problems in Codeforces.com
 
-*Updated 2026-03-21 17:38 GMT+8*
+*Updated 2026-03-30 17:09 GMT+8*
  *Compiled by Hongfei Yan (2020 Fall)*
 
 
@@ -17878,6 +17878,458 @@ int main() {
     return 0;
 }
 
+```
+
+
+
+## 2208C. Stamina and Tasks
+
+dp, greedy, math, https://codeforces.com/problemset/problem/2208/C
+
+There are 𝑛 tasks for you. Task 𝑖 has an integer value of 𝑐𝑖 and a difficulty of 𝑝𝑖. Also, you have an initial stamina of 1, which is denoted as 𝑆. You should process the tasks from task 1 to task 𝑛. For each task, you have two choices. 
+
+- Give up the task. This way, nothing will happen. 
+- Complete the task. This way, you will gain 𝑆⋅𝑐𝑖 points. However, 𝑆 will drop to 𝑆⋅(1−𝑝𝑖100) **after** the task is completed. 
+
+You need to maximize your points after you finish the process.
+
+**Input**
+
+Each test contains multiple test cases. The first line contains the number of test cases 𝑡 (1≤𝑡≤10^3). The description of the test cases follows. 
+
+The first line of each test cases contain an integer 𝑛 (1≤𝑛≤10^5) denoting the number of tasks.
+
+The following 𝑛 lines contain two integers each, denoting 𝑐𝑖 (1≤𝑐𝑖≤100) and 𝑝𝑖 (0≤𝑝𝑖≤100).
+
+It is guaranteed that the sum of 𝑛 over all test cases does not exceed 10^5.
+
+**Output**
+
+For each test case, output a single real number — the maximum possible points you can get. Your answer is considered correct if its absolute or relative error does not exceed 10^−6.
+
+Formally, let your answer be 𝑎, and the jury's answer be 𝑏. Your answer is accepted if and only if |𝑎−𝑏|max(1,|𝑏|)≤10^−6.
+
+Example
+
+input
+
+```
+2
+2
+10 0
+20 5
+3
+10 5
+10 80
+20 5
+```
+
+output
+
+```
+30.0000000000
+29.0000000000
+```
+
+Note
+
+In the first test case, it's optimal to complete task 1 and 2 in order, gaining points of 10+20=30.
+
+In the second test case, it's optimal to complete task 1, give up task 2, and complete task 3. Before completing task 3, your stamina has dropped to 1−5100=0.95. So your gain is 10+20⋅0.95=29 points in total.
+
+
+
+【尹显齐 物院】水题。
+
+假设 $S=1$ 时只选后面 $k$ 个题的最大收益为 $f(k)$ ，那么我们考虑新添加一个题 $(s_{k+1},p_{k+1})$，此时最大收益 $f(k+1)$ 满足
+
+$$
+f(k+1)=\max\left( f(k),s_{k+1}\left( 1-\frac{p_{k+1}}{100} \right) f(k)\right)
+$$
+
+递推即可。
+
+```python
+for _ in range(int(input())):
+    n = int(input())
+    c,p = [],[]
+    for i in range(n):
+        ci,pi = map(int,input().split())
+        c.append(ci)
+        p.append(pi)
+    ans = [0]*(n+1)
+    for i in range(n-1,-1,-1):
+        ans[i] = max(c[i]+(1-p[i]/100)*ans[i+1],ans[i+1])
+    print(ans[0])
+```
+
+
+
+
+
+## T2208D1. Tree Orientation (Easy Version)
+
+constructive algorithms, dfs and similar, dsu, graphs, greedy, matrix, trees, https://codeforces.com/problemset/problem/2208/D1
+
+**This is the easy version of the problem. The difference between the versions is that in this version, the constraint on 𝑛 is lower. You can hack only if you solved all versions of this problem.**
+
+You once had an undirected tree with 𝑛 nodes. To make the tree look more interesting, you decided to assign an arbitary direction to each of the 𝑛−1 edges.
+
+As time goes by, you forgot the structure of your tree. However, you found a note which recorded **after** the direction of the edges have been assigned, whether 𝑢 can reach 𝑣∗ for all ordered pairs of (𝑢,𝑣) which satisfies 1≤𝑢,𝑣≤𝑛. 
+
+You want to find out the structure of the tree and the direction of the edges from the information given by the note. Determine if there is possible solution and construct one. If there are multiple solutions, you only need to find one of them.
+
+∗For a directed graph, we say that 𝑥 can reach 𝑦 if and only if there exists a sequence of nodes 𝑢1,𝑢2,…,𝑢𝑘 such that 𝑢1=𝑥,𝑢𝑘=𝑦 and for all 𝑖 from 2 to 𝑘, the directed edge 𝑢𝑖−1→𝑢𝑖 exists. In particular, a node can always reach itself.
+
+**Input**
+
+Each test contains multiple test cases. The first line contains the number of test cases 𝑡 (1≤𝑡≤10^4). The description of the test cases follows. 
+
+The first line of each test cases contain an integer 𝑛 (2≤𝑛≤500) denoting the number of nodes your tree have.
+
+The following 𝑛 lines contain a string 𝑠𝑖. 𝑠𝑖 is of length 𝑛 and consists only of 0 and 1. The 𝑗-th character of 𝑠𝑖 is 1 if and only if 𝑖 can reach 𝑗 after the edges are directed. 
+
+It is guaranteed that the sum of 𝑛^3 over all test cases does not exceed 500^3.
+
+**Output**
+
+For each testcase, output 𝚈𝚎𝚜 if a solution exists, otherwise print 𝙽𝚘. If the answer is 𝚈𝚎𝚜, on the following lines output a description of the edges constructed.
+
+Output 𝑛−1 lines denoting the directed edges. Each line should contain two integers 𝑥 and 𝑦, denoting that after the edges are directed, the directed edge 𝑥→𝑦 exists. If there are multiple solutions, print any of them.
+
+You can output the answer in any case (upper or lower). For example, the strings "yEs", "yes", "Yes", and "YES" will be recognized as positive responses. 
+
+**Example**
+
+input
+
+```
+11
+4
+1000
+1111
+1010
+0001
+4
+1111
+0111
+0010
+0111
+4
+0011
+0111
+0011
+0001
+4
+1000
+0110
+0010
+1111
+4
+1000
+0110
+1010
+1111
+5
+10000
+01011
+00111
+00010
+00001
+5
+10000
+11000
+10101
+10111
+00001
+5
+10000
+01101
+00100
+01110
+10001
+4
+1100
+0100
+0011
+0001
+4
+1110
+0100
+0010
+0101
+3
+100
+111
+101
+```
+
+output
+
+```
+Yes
+2 3
+2 4
+3 1
+No
+No
+Yes
+2 3
+4 1
+4 2
+No
+No
+Yes
+2 1
+3 1
+3 5
+4 3
+No
+No
+Yes
+1 2
+1 3
+4 2
+Yes
+2 3
+3 1
+```
+
+Note
+
+For the first test case, nodes 1 and 4 can only reach themselves, node 2 can reach every node, node 3 can only reach node 1 and 3. The constructed edges satisfy this constraint.
+
+For the second test case, it can be proven that no possible solution exists.
+
+
+
+【尹显齐 物院】对于这种矩阵，我们先判断它能不能形成一个有效的结构，即满足自洽性。我们用 $arr(i,j)$ 表示第 $i$ 行第 $j$ 列的位置，首先，必须有 $arr(i,i)=1$ ，具体原因无需多说；接着，如果 $arr(i,k)=arr(k,j) = 1$ ，那么 $arr(i,j)=1$ 必须成立，不然就不自洽了。
+
+判断完自洽性以后，我们就可以开始连线了。我们的目标是找到直接连接两个点的所有边，容易得到，对于两个点 $i,j$ ，它们要相连，必须有 $arr(i,j)=1$ 成立，并且由于两点之间只能有唯一的一条路径（假设从 $i$ 到 $j$ 有 $d$ 条不重合的路径，总共包含 $m$ 个节点，则连线数量为
+
+$$
+\frac{2(m-2)+2d}{2}=m-2+d
+$$
+
+从这个图形不断新增点与连线，就可形成所有 $n$ 个点所构成的图形，由于每添加一个点，必须添加一条边（否则无法连通），所有最终的图形会有 $n-2+d$ 条边。明显只有当 $d=1$ 时满足题目条件。）所以不可能存在 $k$ 使得 $arr(i,k)=arr(k,j)=1$ 成立。这就是我们判断出两个点是否有边连接的方式。
+
+连好所有边之后，我们就要检查它是否是一个树了，首先，边数一定是 $n-1$ ，其次我们要判断 $n$ 个点是否都连通，我们只要把有向边改成无向边，再用bfs/dfs从某个节点遍历一次，看能不能遍历到所有点即可。
+
+主要难点：代码量大。
+
+```python
+for _ in range(int(input())):
+    n = int(input())
+    arr = []
+    for _ in range(n):
+        s = input()
+        row = [int(ch) for ch in s]
+        arr.append(row)
+    found = 0
+    # 判断是否是自洽的矩阵
+    for i in range(n):
+        if arr[i][i] != 1:
+            found = 1
+            break
+    if found:
+        print("No")
+        continue
+    for i in range(n):
+        for k in range(n):
+            if arr[i][k] == 0:
+                continue
+            for j in range(n):
+                if arr[k][j] and arr[i][j] != 1:
+                    found = 1
+                    break
+            if found:
+                break
+        if found:
+            break
+    if found:
+        print("No")
+        continue
+    # 连边
+    edges = []
+    for i in range(n):
+        for j in range(n):
+            if i == j or arr[i][j] == 0:
+                continue
+            is_direct = 1
+            for k in range(n):
+                if k != i and k != j and arr[i][k] and arr[k][j]:
+                    is_direct = 0
+                    break 
+            if is_direct:
+                edges.append((i,j))
+    if len(edges) != n-1:
+        print("No")
+        continue
+    # 建无向边图
+    graph = [[] for _ in range(n)]
+    for u,v in edges:
+        graph[u].append(v)
+        graph[v].append(u)
+    visited = [0] * n
+    stack = [0]
+    visited[0] = 1
+    count = 1
+    while stack:
+        u = stack.pop()
+        for v in graph[u]:
+            if not visited[v]:
+                visited[v] = 1
+                count += 1
+                stack.append(v)
+    if count == n:
+        print("Yes")
+        for u,v in edges:
+            print(u+1,v+1)
+    else:
+        print("No")
+```
+
+
+
+
+
+## 2209C. Find the Zero
+
+constructive algorithms, interactive,https://codeforces.com/problemset/problem/2209/C
+
+*This is an interactive problem.*
+
+You are given an integer 𝑛. There is a hidden array 𝑎 of length 2𝑛. Each integer from 1 to 𝑛 appears **exactly once** in 𝑎. The rest of the elements are all 0.
+
+You can make the following type of query:
+
+- Choose two integers 𝑖 and 𝑗 (1≤𝑖,𝑗≤2𝑛, 𝑖≠𝑗). The judge will respond with 1 if 𝑎𝑖=𝑎𝑗, and will respond with 0 otherwise. 
+
+Find any integer 𝑘 (1≤𝑘≤2𝑛) such that 𝑎𝑘=0 in no more than 𝑛+1 queries. Note that the interactor is **adaptive**, which means that the hidden array 𝑎 may change depending on your queries but will not contradict previous queries.
+
+**Input**
+
+Each test contains multiple test cases. The first line contains the number of test cases 𝑡 (1≤𝑡≤103). The description of the test cases follows. 
+
+The first line of each test case contains an integer 𝑛 (2≤𝑛≤104). The length of the hidden array 𝑎 will be 2𝑛.
+
+It is guaranteed that the sum of 𝑛 over all test cases does not exceed 104. 
+
+Interaction
+
+To make a query, output a line in the following format:
+
+- ?𝑖𝑗 (1≤𝑖,𝑗≤2𝑛, 𝑖≠𝑗) 
+
+As a response to the query, you will get:
+
+- 1 if 𝑎𝑖=𝑎𝑗;
+- 0 if 𝑎𝑖≠𝑎𝑗;
+- −1 if you made an invalid query or if you exceed the limit of 𝑛+1 queries. 
+
+To report the answer, output a line in the following format:
+
+- !𝑘 (1≤𝑘≤2𝑛) 
+
+After this, proceed to the next test case or terminate if this is the last test case.
+
+Note that reporting the answer does not count towards the 𝑛+1 queries.
+
+The interactor is **adaptive**. This means that the hidden array 𝑎 may change depending on your queries but will not contradict previous queries.
+
+After printing each query do not forget to output the end of line and flush∗ the output. Otherwise, you will get Idleness limit exceeded verdict. If, at any interaction step, you read −1 instead of valid data, your solution must exit immediately. This means that your solution will receive Wrong answer because of an invalid query or any other mistake. Failing to exit can result in an arbitrary verdict because your solution will continue to read from a closed stream. 
+
+**For this problem, hacks are disabled.**
+
+∗To flush, use: 
+
+- fflush(stdout) or cout.flush() in C++; 
+- sys.stdout.flush() in Python; 
+- see the documentation for other languages. 
+
+Example
+
+input
+
+```
+2
+2
+
+0
+
+1
+
+3
+
+1
+
+0
+
+0
+```
+
+output
+
+```
+? 1 2
+
+? 3 1
+
+! 3
+
+? 5 6
+
+? 2 4
+
+? 1 3
+
+! 6
+```
+
+Note
+
+In the first example test case, the hidden array 𝑎 is [0,1,0,2]:
+
+- In the first query, (𝑖,𝑗)=(1,2). Since 𝑎1=0, 𝑎2=1, 𝑎1≠𝑎2, the judge responds with 0.
+- In the second query, (𝑖,𝑗)=(3,1). Since 𝑎3=0, 𝑎1=0, 𝑎3=𝑎1, the judge responds with 1.
+- The program reports 𝑘=3 as an answer. Since 𝑎3=0, the answer is correct. 
+
+In the second example test case, the hidden array 𝑎 is [3,2,0,1,0,0]:
+
+- In the first query, (𝑖,𝑗)=(5,6). Since 𝑎5=0, 𝑎6=0, 𝑎5=𝑎6, the judge responds with 1.
+- In the second query, (𝑖,𝑗)=(2,4). Since 𝑎2=2, 𝑎4=1, 𝑎2≠𝑎4, the judge responds with 0.
+- In the third query, (𝑖,𝑗)=(1,3). Since 𝑎1=3, 𝑎3=0, 𝑎1≠𝑎3, the judge responds with 0.
+- The program reports 𝑘=6 as an answer. Since 𝑎6=0, the answer is correct.
+
+
+
+【尹显齐 物院】看到这个题，我瞬间产生了两种思路：
+
+一、询问第 $2i$ 和第 $2i+1$ 个是否相同，如果相同就直接找到了，如果总共的 $n$ 次询问都不同，这说明所有的第 $2i$ 和第 $2i+1$ 个必定只有一个 $0$ ，此时再询问两次就能确定一个 $0$ 。但是这样使用了 $n+2$ 次询问。
+
+二、每三个数两两询问一次，共三次，如果里面有一组相同，那么里面有两个 $0$ ，并且可以确定位置。这个方法需要大约 $1.5n$ 次，也不行。
+
+所以，我们只要组合这两个方法就可以了，对前三个数，两两询问一次，共三次。如果没有数相等，说明这三个数里至多一个 $0$ 。对后面 $2n-4$ 个数，使用方法一。这样，我们进行了 $n+1$ 次询问，并且能确定 $0$ 的位置：如果前面出现过相等的结果，那么不用多说；如果这 $n+1$ 的询问结果都是不同，那么前面必定有 $n-1$ 个 $0$ ，也即最后一个必定是 $0$ 。
+
+```python
+for _ in range(int(input())):
+    n = int(input())
+    found = 0
+    for i,j in [(1,2),(1,3),(2,3)]:
+        print(f"? {i} {j}")
+        if int(input()):
+            print(f"! {i}")
+            found = 1
+            break
+    if not found:
+        for k in range(n-2):
+            print(f"? {4+2*k} {5+2*k}")
+            if int(input()):
+                print(f"! {4+2*k}")
+                found = 1
+                break
+    if not found:
+        print(f"! {2*n}")
 ```
 
 
