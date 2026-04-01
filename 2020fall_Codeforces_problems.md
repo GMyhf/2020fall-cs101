@@ -1,6 +1,6 @@
 # Problems in Codeforces.com
 
-*Updated 2026-03-30 17:09 GMT+8*
+*Updated 2026-04-01 21:31 GMT+8*
  *Compiled by Hongfei Yan (2020 Fall)*
 
 
@@ -18334,7 +18334,119 @@ for _ in range(int(input())):
 
 
 
+## 2209E. A Trivial String Problem
 
+brute force, dp, hashing, string suffix structure, strings, https://codeforces.com/problemset/problem/2209/E
+
+Define 𝑓(𝑡) as the maximum number of parts 𝑡 can be split into such that each part is a non-empty prefix of 𝑡. In other words, 𝑓(𝑡) is the maximum positive integer 𝑘 that satisfies the following condition:
+
+- There exist 𝑘 strings 𝑝1,𝑝2,…,𝑝𝑘, which are prefixes of 𝑡, such that 𝑡=𝑝1+𝑝2+…+𝑝𝑘. Here + denotes the string concatenation.
+
+You are given a string 𝑠 of length 𝑛, consisting of only lowercase English letters. Let 𝑠[𝑥..𝑦] represent the substring∗ of 𝑠 from the 𝑥-th to the 𝑦-th character (inclusive). You need to answer 𝑞 queries. The 𝑖-th query provides two integers 𝑙𝑖 and 𝑟𝑖, and you need to find
+
+$\sum_{j=l_i}^{r_i} f(s[l_i..j]).$
+
+∗A string 𝑎 is a substring of a string 𝑏 if 𝑎 can be obtained from 𝑏 by the deletion of several (possibly, zero or all) characters from the beginning and several (possibly, zero or all) characters from the end.
+
+**Input**
+
+Each test contains multiple test cases. The first line contains the number of test cases 𝑡 (1≤𝑡≤10^3). The description of the test cases follows.
+
+The first line of each test case contains two integers 𝑛 and 𝑞 (1≤𝑛≤10^6, 1≤𝑞≤100).
+
+The second line contains the string 𝑠 of length 𝑛, consisting of only lowercase English letters.
+
+The 𝑖-th of the next 𝑞 lines contains two integers 𝑙𝑖 and 𝑟𝑖 (1≤𝑙𝑖≤𝑟𝑖≤𝑛), representing the 𝑖-th query.
+
+It is guaranteed that the sum of 𝑛 over all test cases does not exceed 10^6.
+
+**Output**
+
+For each query, output an integer representing the value of the expression.
+
+Example
+
+Input
+
+```
+6
+1 1
+a
+1 1
+5 2
+aaaaa
+1 5
+2 4
+6 2
+abcdef
+1 6
+3 5
+6 3
+abaaba
+1 6
+1 3
+2 6
+7 3
+abcabca
+1 7
+2 7
+4 7
+8 3
+aababaac
+1 8
+2 8
+3 7
+```
+
+Output
+
+```
+1
+15
+6
+6
+3
+14
+4
+7
+12
+9
+5
+13
+14
+7
+```
+
+Note
+
+In the first test case, 𝑓(𝚊)=1.
+
+In the second test case, 𝑓(𝚊)+𝑓(𝚊𝚊)+𝑓(𝚊𝚊𝚊)+𝑓(𝚊𝚊𝚊𝚊)+𝑓(𝚊𝚊𝚊𝚊𝚊)=1+2+3+4+5=15 and 𝑓(𝚊)+𝑓(𝚊𝚊)+𝑓(𝚊𝚊𝚊)=1+2+3=6.
+
+In the third test case, 𝑓(𝚊)+𝑓(𝚊𝚋)+𝑓(𝚊𝚋𝚌)+𝑓(𝚊𝚋𝚌𝚍)+𝑓(𝚊𝚋𝚌𝚍𝚎)+𝑓(𝚊𝚋𝚌𝚍𝚎𝚏)=1+1+1+1+1+1=6 and 𝑓(𝚌)+𝑓(𝚌𝚍)+𝑓(𝚌𝚍𝚎)=1+1+1=3.
+
+
+
+**【黄宇曦 地球与空间科学学院】题意**
+
+给定字符串 $s$，定义 $f(s)$ 表示用若干 $s$ 的前缀拼成 $s$ 的所有方法中，前缀数量的最大值。给定 $q$ 次询问，每次询问给定 $l_i,r_i$，求
+$$
+\sum_{j=l_i}^{r_i} f(s[l_i..j]).
+$$
+
+其中 $s[i..j]$ 表示从 $s[i]$ 到 $s[j]$ 的子串。保证 $q\leq 100, n\leq 10^6$。
+
+**思路**
+
+首先注意到 $O(nq)$ 能过，于是直接思考每次询问怎么暴力。显然我们期待一个 $O(n)$ 的算法，然后这又是一个子串，所以思考假如我有了前面的信息怎么拼当前的信息。
+
+然后发现这就是一个 KMP，我们要的就是所有前后缀相等的长度。记 $a_{i,j}=\text{nxt}(a_{i,j-1}),a_{i,0}=i$。然后不难发现转移
+$$dp_i=\max_{t\in\{a_{i,j}\mid j\in\mathbb Z_+,a_{i,j}>0\}}\{dp_{i-t}+1\}.$$
+通俗来讲就是全体由 $i$ 的 `nxt` 生成的数转移过来。但是这是 $O(n^2)$ 的，我们要思考怎么优化转移。
+
+冷静思考一下可以发现肯定最后面的越短越好。如不然，那考虑最后那一段可以拆成的 border，至少会贡献 2 个前缀，然而我只计入了 1 个，因而只保留当前的最短的 border，答案肯定不劣。因此我 KMP 预处理完成之后每个 `nxt` 数组直接跳到 `nxt` 数组的非零最短的地方就可以了（如果 `nxt` 非零）。
+
+看懂了上面的思路代码是容易的。
 
 
 
