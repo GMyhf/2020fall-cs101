@@ -1,6 +1,6 @@
 # Problems in Codeforces.com
 
-*Updated 2026-04-01 21:31 GMT+8*
+*Updated 2026-04-04 23:20 GMT+8*
  *Compiled by Hongfei Yan (2020 Fall)*
 
 
@@ -18447,6 +18447,679 @@ $$dp_i=\max_{t\in\{a_{i,j}\mid j\in\mathbb Z_+,a_{i,j}>0\}}\{dp_{i-t}+1\}.$$
 冷静思考一下可以发现肯定最后面的越短越好。如不然，那考虑最后那一段可以拆成的 border，至少会贡献 2 个前缀，然而我只计入了 1 个，因而只保留当前的最短的 border，答案肯定不劣。因此我 KMP 预处理完成之后每个 `nxt` 数组直接跳到 `nxt` 数组的非零最短的地方就可以了（如果 `nxt` 非零）。
 
 看懂了上面的思路代码是容易的。
+
+
+
+# 同学打CF比赛题目
+
+
+
+【尹显齐 25物院】知周所众，这次考试是在愚人节考的，所以肯定要严肃学习愚人节题目。(考试只做出来3道，输麻了)
+
+## 2214A. Odd One Out
+
+tags:brute force
+
+【尹显齐 25物院】很明显，这个题只有 $\boldsymbol{1}$ 个测试点，所以不会罚时，所以至多提交 $15$ 次就能得到正确答案。时间复杂度 $O(1)$。
+
+代码：
+
+```python
+print("C2")
+```
+
+
+
+## 2214C. And?
+
+【尹显齐 25物院】这个题不是很好想，我最开始想的是将字母转换成某一种进制，然后和 $20260401$ 做与运算，最后转化成字母，但是这样出现的字母没有多少，不像是能出题的样子。然后我想能不能不动字母把 $20260401$ 转化一下，由于与运算的存在，我想到把他转化成二进制，然后得到了 $1001101010010011000110001$ 然后我发现它的长度恰好和字母串的长度一样，可以进行与运算，就是保留所有 $1$ 位置对应的字母，我们得到 "READ THE REST" ，也就是让我们读剩下的字母，得到 “XOR MINUS MEDIAN” ，就是用三个数的xor值减去中位数。
+
+```python
+for _ in range(int(input())):
+    a,b,c = sorted(map(int,input().split()))
+    print((a^b^c)-b)
+```
+
+
+
+## 2214D. Neural Feud
+
+【尹显齐 25物院】本关的来源是一档节目"考验你的装AI能力！
+
+经我测试，deepseek有一半左右的概率会认为 The word backwards spelled backwards 是 backwards。其他的可以自己尝试。
+
+```python
+ans = ["walk","no","no","no","yes","yes","backwards","7"]
+print(ans[int(input())-1])
+```
+
+
+
+## 2214E. Shortest Paths
+
+【尹显齐 25物院】看到这个题先点一下Shortest Path，发现很正常。那么这个题就真的是要求最短路径了。但是我定睛一看，发现它要求用的是 D**ikj**stra's algorithm ，而不是 D**ijk**stra 算法，说明这个题肯定有骚操作，要把某个三重嵌套循环的索引顺序改成 $i,k,j$。问题是狄克斯特拉算法里也没有 $i,j,k$ 的出现啊，堆的方法不说了，就连 $O(n^{2})$ 的方法都只有二重循环，哪来的三重循环？
+
+直到做完了J题以后（可以去看J题题解），才恍然大悟，这里要使用的正是Floyd-Warshall算法（见附录），但是要把里面的字母顺序改成 $i\to k\to j$ 。
+
+
+```python
+n,m = map(int,input().split())
+edges = []
+for _ in range(m):
+    u,v,w = map(int,input().split())
+    edges.append((u,v,w))
+INF = 10**15
+dist = [[INF]*(n+1) for _ in range(n+1)]
+for i in range(1,n+1):
+    dist[i][i] = 0
+for u,v,w in edges:
+    dist[u][v] = w
+    dist[v][u] = w
+for i in range(1,n+1):
+    for k in range(1,n+1):
+        for j in range(1,n+1):
+			if dist[i][k] + dist[k][j] < dist[i][j]:
+				dist[i][j] = dist[i][k] + dist[k][j]
+for j in range(2,n+1):
+    if dist[1][j] == INF:
+        print(-1)
+    else:
+        print(dist[1][j])
+```
+
+
+
+## 2214I. You Are a Robot
+
+【尹显齐 25物院】**记住！你是一个机器人！**
+
+这个题明显的疑问就是为什么要告诉你每条边上是什么都没有，有机器人还是有人类呢？很容易猜的就是不能够撞上人类和机器人。但是这样得到的答案和样例明显不符。那么换一个假设，机器人一定要达到一个叶上才停止，过程中要尽可能少的撞到人和机器人。根据机器人三定律，机器人保护人类的优先级在机器人保护机器人之上，所以机器人应先确保撞到尽可能少的人，再确保撞到尽可能少的机器人。
+
+这样就变成树上搜索的问题了。
+
+```python
+import sys
+sys.setrecursionlimit(3*10**5)
+for _ in range(int(input())):
+    n = int(input())
+    child = [[] for _ in range(n)]
+    w = [0]*n
+    p = list(map(int,input().split()))
+    for i,pi in enumerate(p):
+        child[pi-1].append(i+1)
+    kind = list(map(int,input().split()))
+    for i,wi in enumerate(kind):
+        if wi == 1:
+            w[i+1] = 10**6
+        elif wi == 2:
+            w[i+1] = 1
+    dp = [10**15]*n
+    maxi = 10**15
+    ans = 0
+    dp[0] = 0
+    def dfs(x):
+        global ans,maxi
+        if child[x]:
+            for c in child[x]:
+                if dp[x]+w[c] < dp[c]:
+                    dp[c] = dp[x]+w[c]
+                    dfs(c)
+        else:
+            if dp[x] < maxi:
+                maxi = dp[x]
+                ans = x
+    dfs(0)
+    print(ans+1)
+```
+
+
+
+## 2214J. Special Problem
+
+【尹显齐 25物院】**省流：还有第 $\boldsymbol{n}$ 关！**
+
+第一关：把我坑了很久，只因两个牌子都看不懂，点了好久都失败，最后发现只需要点上面牌子的四个格子。
+
+第二关："if you can't see the word,even eyeglasses won't help."
+
+第三关：**注意到：**$10^{\boldsymbol{10}}+7,99\boldsymbol{3}244353,57,91$ 是合数。
+
+第四关：猜就完了。
+
+第五关：我一次就猜对了，你也来试试吧。
+
+第六关：如果你做不对，那你只能被鉴定为robot了
+
+第七关：冷知识：c++**不需要**缩进！
+
+第八关：你会发现这关的雷是随机的，所以让我告诉你一个小技巧：按F12，在Console里输入Math.random = () => 0 （把random函数改成一个始终返回0的函数）
+
+第九关：如果你是列支敦士登人的话，这个题说不定很简单。
+
+连闯九关，你已涅槃重生，可以解决最后的问题了：你是人类吗？
+
+```python
+s = input()
+if s == "Are you a verified human?":
+    print("Yes, I can attest to my status as a thoroughly validated, carbon-based biological entity.")
+else:
+    print("Pick up the bag, pre-wrap the point - device clashed with the rifle of the 😨😨😨 wrap point - no replenishment of the gun 😰😰😰😰staehr gave a big pull, his footsteps were already heard 😧😧😧😧 staehr, is there sweat or urine in your 👖? 😨 😨 😨 😨 my gosh 😫 😫 😫 😫 is urine 😩 😩 😩 😩 urine is all 😭 😭 😭 😭 not a drop of sweat 😵 woc this all dare not pull out 😡 😡 😡 big 😫 this are not fill ah 🤬 whoops 😱 lose this 😭 not the light of the rat 😭 no stars in the dark 😭 team a doomed or today To lose 😭 or want to defeat 😩 woc can lose 😫 oh this, but chopper today is really 🐮 😩 b super breaking too good 😵 really how can he take 😢 how he how to connect with 😥 😵 this broken son")
+```
+
+
+
+## 附录：Floyd-Warshall算法
+
+【尹显齐 25物院】我们知道，Dijkstra算法可以解决从单个点到任一点的最小权路径问题，现在我要求从任意点到任意点的路径，应当如何做呢？Floyd-Warshall算法由此产生。
+
+这个算法的核心思路就是“逐步开放中转点”。我们建立一个距离矩阵 $a_{ij}$ 表示点 $i$ 到点 $j$ 的最小权路径的权重大小。明显地，有 $a_{ii}=0$ 。初始时，如果 $i$ 和 $j$ 之间有直接连接的边，那么 $a_{ij}$ 为对应权重，否则为 $0$ 。
+
+接下来，我们逐步添加中转点，我们将 $k$ 从 $1$ 遍历到 $n$ 。对于某个 $k$ ，遍历所有的 $(i,j)$ ，如果 $a_{ik}+a_{kj}<a_{ij}$ ，那么就更新 $a_{ij}$ 。
+
+为什么这样做是对的？我们考虑 $k$ 时的情况，对于某一对 $(i,j)$ ，$a_{ij},a_{ik},a_{kj}$ 都表示从对应起点出发，可经过 $1$ 到 $k-1$ 节点，最后到达终点的最小权路径对应权重值。那么在更新过后，$a_{ij}$ 就变成了从对应起点出发，可经过 $1$ 到 $k$ 节点，最后到达终点的最小权路径对应权重值。可以看出，当 $k$ 从 $1$ 遍历到 $n$ 时，$a_{ij}$ 就会变成从对应起点出发，可经过 $1$ 到 $n$ 节点，最后到达终点的最小权路径对应权重值。也就是全局意义上从任意点到任意点的最小权路径。
+
+**注意：** Floyd-Warshall算法中，循环的顺序一定是 $k\to i,j$ ，而不是 $i\to k\to j$ 或者其他的。。。
+
+
+
+**既然是愚人节考试，那么就做一些 April Fools 专属的题目吧！**
+
+## April Fools 2025
+
+### 2095 A.Piecing It Together
+
+【汤立祥 物院】我的 tag: Jigsaw    https://codeforces.com/contest/2095/problem/A
+
+思路：我们需要仔细观察题干，可以发现题干是一个拼图游戏。首先我们给位置命名，横向为 1,2,3，纵向为 A,B。可以先根据颜色分类，A1,B2 都是蓝色，应该是一起的，A2,A3,B1,B3 都是绿色，应该是另一块区域。
+
+<img src="https://raw.githubusercontent.com/GMyhf/img/main/img/3bc253a468a323b36b31f0d7b518ece1.png" alt="3bc253a468a323b36b31f0d7b518ece1" style="zoom: 50%;" />
+
+我们将这张图打印下来之后进行拼图的尝试，最后得到如下拼接方式。
+
+- 第一行：B2 - A3 - B3
+- 第二行：A1 - A2 - B1
+
+时间复杂度 $\mathcal{O}(打印机打印时间 + 剪刀裁剪时间)$（注：拼接时间远小于前两者）
+
+代码：
+
+```python
+print("puzzling")
+```
+
+
+
+### 2095 B. Plinko
+
+我的 tag: Chance https://codeforces.com/contest/2095/problem/B
+
+【汤立祥 物院】思路：我们注意到这是一个道尔顿钉板的游戏，题目要求我们能够连续获胜10次。我从 0 ~ 16 之间扔下去最好的记录是 Wrong answer on test 8，你也快来试试看吧。
+
+<img src="https://raw.githubusercontent.com/GMyhf/img/main/img/3f6f6298e0ddd19a75f4422ea6d80f4c.png" alt="3f6f6298e0ddd19a75f4422ea6d80f4c" style="zoom:50%;" />
+
+实际上由于题干只要求输出一个整数，因此只需要输出-1即可。
+
+
+代码：
+
+```python
+print(-1)
+```
+
+### 2095 C. Would It Be Unrated?
+
+我的 tag：binary search, brute force https://codeforces.com/contest/2095/problem/C
+
+【汤立祥 物院】思路：如果你现在直接去做这道题目，Verdict 里面可以直接看到一行 Answer，但如果要模拟当时比赛的过程，你是看不到 Answer 的。那究竟应该是怎么做的呢？答案是利用二分查找，但不是代码上二分。
+
+**当时比赛时主办方让某一个小号提交了一个正确的答案，这使得 Status 里面出现了一个 Accept。由于题目要求输出测试的数量，我们可以直接利用 Status 里的筛选功能（即筛选通过测试数量 $\ge$ 某个值的提交记录）利用二分法即可轻松找到。**
+
+代码：
+
+```python
+print(143)
+```
+
+### 2095 D. Where Am I?
+
+我的 tag: GeoGuessing https://codeforces.com/contest/2095/problem/D
+
+【汤立祥 物院】思路：仔细观察图片，映入眼帘的就是两个大大的 New York，但如果我们再定睛一看，湛蓝的天空，沿街矗立的棕榈树，这显然不是纽约的气候。
+
+<img src="https://raw.githubusercontent.com/GMyhf/img/main/img/d64f887eec0bb121f10e0393496410d5.png" alt="d64f887eec0bb121f10e0393496410d5" style="zoom:50%;" />
+
+注意到图片中的一处路牌，上面写着 
+
+<img src="https://raw.githubusercontent.com/GMyhf/img/main/img/d7d5095a93beadc4129b88632d5213d0.png" alt="d7d5095a93beadc4129b88632d5213d0" style="zoom:50%;" />
+
+由此我们锁定这张图在拉斯维加斯。那么有什么特殊的建筑能够让我们直接找到这是在拉斯维加斯的哪里呢？注意到图片最右侧大大的 Dolby 字样，这是拉斯维加斯的杜比影院，简单搜索之后我们可以找到拍摄的位置：
+
+<img src="https://raw.githubusercontent.com/GMyhf/img/main/img/ac24010f2818c4fa5aaec6a8a3ee3e0c.png" alt="ac24010f2818c4fa5aaec6a8a3ee3e0c" style="zoom:50%;" />
+
+代码：
+
+```python
+print(36.104299, -115.172916)
+```
+
+### 2095 E. Pair Count
+
+我的 tag：Wordle, number theory
+
+【汤立祥 物院】思路：这道题还是一道不错的数论题。https://codeforces.com/contest/2095/problem/E
+
+- 第零步：点开 [bitwise XOR operation](https://word.rodeo/?utm_source=share#cvMcraT7fZ6Yj3T3fwWbp8jppto8Pan9HXzC5fWYjPCCvqUMqseEkRFkzttufIM=). 发现这道题目的 XOR 是 MULTIPLY 的意思。
+
+- 第一步：预处理与频数统计
+
+  由于我们只关心 $a_i^3$ 在模 $p$ 意义下的值，首先对数组进行预处理：计算每个元素的立方：$x_i = a_i^3 \pmod p$。使用 Counter 统计每个 $x_i$ 出现的频率。这可以将搜索空间从 $O(n^2)$ 降低到 $O(\text{unique values})$。
+
+- 第二步：分类讨论 $k = 0$ 的特殊情况
+
+  当 $k=0$ 时，只要 $x_i$ 或 $x_j$ 至少有一个为 $0$，积就为 $0$。设 $zeros$ 为 $x_i = 0$ 的个数，$non\_zeros$ 为非零个数。组合情况为：两个都是 $0$（$\frac{zeros \times (zeros - 1)}{2}$） + 一个是 $0$ 一个不是（$zeros \times non\_zeros$）。
+
+- 第三步：利用逆元处理 $k \neq 0$
+
+  对于 $x_i \neq 0$，我们需要寻找 $x_j$ 使得 $x_i \cdot x_j \equiv k \pmod p$。变形方程：$x_j \equiv k \cdot (x_i)^{-1} \pmod p$。费马小定理：由于 $p$ 是质数（愚人节题通常默认或给出），可以使用 $x_i^{p-2} \pmod p$ 快速求得逆元。计数逻辑：如果 $x_i \neq x_j$，则数对数量为 $count(x_i) \times count(x_j)$。注意这种情况下 $(x_i, x_j)$ 和 $(x_j, x_i)$ 会各被计算一次，最后需除以 2。如果 $x_i = x_j$（即 $x_i^2 \equiv k \pmod p$），则数对数量为 $count(x_i) \times (count(x_i) - 1)$。
+
+代码：
+
+```python
+from collections import Counter
+n, p, k = list(map(int, input().split()))
+an = list(map(int, input().split()))
+
+cubed = list(map(lambda x: x**3 % p, an))
+counted = Counter(cubed)
+
+def fast_recipical(a, p):
+    # a * b === 1 mod p
+    return pow(a, p-2, p)
+
+if k == 0:
+    zeros = counted[0]
+    non_zeros = n - zeros
+    print(zeros * (zeros - 1) // 2 + zeros * non_zeros)
+
+else:
+    total = 0
+    for i in counted:
+        if i != 0:
+            recipical = fast_recipical(i, p)
+            j = recipical * k % p
+            
+            nums_of_ai = counted[i]
+            nums_of_aj = counted[j]
+            
+            if i != j:
+                total += nums_of_ai * nums_of_aj 
+                # Notice the double counting with (i, j) & (j, i)
+            else:
+                total += nums_of_ai * (nums_of_aj - 1)
+    print(total // 2)
+```
+
+
+
+### 2095 F. ⅓ оf а Рrоblеm
+
+https://codeforces.com/contest/2095/problem/F
+
+【汤立祥 物院】思路：阅读题干之后，我们得到了一个不完整的表达式：
+$$ a\quad 4\quad +\quad -\quad +\quad -\quad )\quad 2 $$
+那么剩下 2/3 的题干在哪里呢？打开俄语版本，我们得到了 $$ 12 \quad +1\quad ab\quad |a\quad b|\quad (a \quad 3b\quad b+ $$
+也就是剩下 2/3 的题干，因此我们最后得到 $$12a+14ab+|a-b|+(a-3b)b+2$$
+
+代码：
+
+```python
+a, b = list(map(int, input().split()))
+print(12 * a + 14 * a * b + abs(a - b) + (a - 3 * b)*b + 2)
+```
+
+
+
+### 2095 G. Definitely a Geometry Problem
+
+我的 tag: geometry https://codeforces.com/contest/2095/problem/G
+
+【汤立祥 物院】思路：题目要求我们寻找给定平面上 $N$ 个点之后，能够包住其中至少 $k$ 个点的圆最小是多少。这道题看起来十分复杂，并且要求我们在 $\mathcal{O}(n)$ 的时间复杂度内完成。但若我们仔细阅读，会发现条件：**任意三点都不在一圆上**，这意味着所有点都共线。只需一个简单的双指针，扫描排序后第 $i$ 与 $i+k-1$ 个点的最小距离，即可计算最小的圆面积。
+
+代码：
+
+```python
+from math import pi
+
+n, k = list(map(int, input().split()))
+points = [list(map(int, input().split())) for _ in range(n)]
+
+on_the_line = []
+
+def dsq(x, y):
+    return (x[0] - y[0])**2 + (x[1] - y[1])**2
+
+if n == 1:
+    print(0)
+else:
+    on_the_line = sorted(points)
+    ptr1 = 0
+    ptr2 = k - 1
+    width = dsq(on_the_line[ptr2],on_the_line[ptr1])
+
+    while ptr2 < len(on_the_line):
+        curr_width = dsq(on_the_line[ptr2], on_the_line[ptr1])
+        if width > curr_width:
+            width = curr_width
+        ptr2 += 1
+        ptr1 += 1
+
+    print((width / 4) * pi)
+```
+
+
+
+### 2095 H. Blurry Vision
+
+我的 tag: fft, Wiener https://codeforces.com/contest/2095/problem/H
+
+<img src="https://raw.githubusercontent.com/GMyhf/img/main/img/7c072c7453e866d463ceab8768bfff73.png" alt="7c072c7453e866d463ceab8768bfff73" style="zoom:50%;" />
+
+【汤立祥 物院】思路：这道题目给我们提供了一个若干字符模糊后的图片，需要我们去辨认图片。看起来这是一个不可能的任务，但如果你仔细思考，模糊的过程相当于某一个像素的值和周围的像素值发生了线性叠加，本质上相当于进行了一个巨大的线性变换。求解初始的图片就相当于求解这个巨大的线性方程组，这个过程应当是可逆的。
+
+图片模糊化的过程可以理解为一个卷积的过程，不同的模糊方法使用不同卷积核进行计算。比如一个最简单的模糊方法：取平均，它的卷积核就长：
+
+$$\frac{1}{25}\begin{pmatrix}
+1 & 1& 1& 1& 1\\
+1 & 1& 1& 1& 1\\
+1 & 1& 1& 1& 1\\
+1 & 1& 1& 1& 1\\
+1 & 1& 1& 1& 1
+\end{pmatrix}$$
+
+它的含义就是在计算 $a[i][j]$ 这一点模糊后的值 $a'[i][j]$ 时，需要计算 $$\frac{1}{25} \sum_{2\le \Delta_x,\Delta_y \le 2} a[i+\Delta_x][j+\Delta_y] $$
+这个卷积核给出的就是一个格点周围元素对格点影响的**权重**。
+
+我们记原始图像为 $f(x,y)$，原始卷积核为 $h(x,y)$，变换后包含噪声 $n(x,y)$，因此观测到的模糊图像为 $ g(x,y)=h(x,y)*f(x,y)+n(x,y) $，利用卷积定理，作傅里叶变换可以得到 $$ G(u,v)=H(u,v)F(u,v)+N(u,v) $$
+
+如果我们想要复原出 $f$，我们可以尝试找到卷积核 $w$，使得 $\hat{f}=w*g$，在频域中可以写为 $$\hat{F}(u,v)=W(u,v)G(u,v)$$
+
+我们的目标是让 $\hat{f}$ 与 $f$ 足够接近，我们不妨最小化 $ \mathbb E[|\hat{f}-f|^2]$，对应频域上 $$ \mathbb E[|\hat{F}-F|^2]=\mathbb E[|WHF+WN-F|^2] $$
+注意到由于噪声是随机的，那么 $\mathbb E[NF^*]=0$，因此可以得到 $$\mathbb E[|\hat F -F|^2]=(1-WH)(1-W^*H^*)\mathbb E[|F|^2]+WW^*\mathbb E[|N|^2]$$
+分别设原信号和噪音信号的强度为 $S_f, S_n$，则有 $\mathbb E= |1-WH|^2S_f+|W|^2 S_n$，对$W^*$求导可以得到 $$ \frac{\partial\mathbb E}{\partial W^*}=S_f (1-WH)(-H^*)+WS_n=0 $$ 解得 $W = \frac{H^*}{|H|^2+S_n/S_f}$
+其中 $S_n/S_f$ 表示的就是信噪比。对 $W$ 再进行傅里叶逆变换即可得到 $w$，由此卷积即得 $\hat f$。
+
+<img src="https://raw.githubusercontent.com/GMyhf/img/main/img/9e1078c8d56eb1bf02d5fa28e7f15da9.png" alt="9e1078c8d56eb1bf02d5fa28e7f15da9" style="zoom:50%;" />
+
+使用 $(25,25)$ 大小，$\sigma=7$ 的高斯卷积核，阅读可以得到 `CODEFORCES EYE TESTING SYSTEM APRIL FOOLS YOU READ POORLY GET EYEGLASSES`
+
+代码：
+
+```python
+words = "CODEFORCES EYE TESTING SYSTEM APRIL FOOLS YOU READ POORLY GET EYEGLASSES".split()
+n = int(input())
+print(words[n-1])
+```
+
+去模糊代码：(Mathematica)
+
+```Mathematica
+img = Import["blurred.png"];
+ImageDeconvolve[img, GaussianMatrix[{12, 7}], Method -> {"Wiener", 5*10^-6}, MaxIterations -> 100]
+```
+
+
+
+### 2095 I. Mysterious Script
+
+我的 tag: Linguistic, expression parsing, number theory https://codeforces.com/problemset/problem/2095/I
+
+
+【汤立祥 物院】思路：我们的任务是破译外星语言的数字。在破译数字前，我们首先要明确的是外星人用的进制体系，注意到外星人只有9根手指，因此外星人大概率使用的是9进制。
+
+很快我们对比题目中所提供的字符与9进制下数字的表示方法，得到：
+
+$$
+\begin{matrix}
+
+0 & 1 & 2\\
+3 & 4 & 5\\
+6 & 7 & 8
+
+\end{matrix}
+
+\Leftrightarrow
+\begin{matrix}
+\mathtt{?}&\mathtt{le}&\mathtt{lon}\\
+\mathtt{sha} &?&\mathtt{shon} \\
+\mathtt{ta}&\mathtt{te}&?
+\end{matrix}
+$$
+容易观察到，通过拼接元音和辅音，我们可以得到 0,4,8 对应的符号
+$$
+\begin{matrix}
+
+0 & 1 & 2\\
+3 & 4 & 5\\
+6 & 7 & 8
+
+\end{matrix}
+
+\Leftrightarrow
+\begin{matrix}
+\mathtt{la}&\mathtt{le}&\mathtt{lon}\\
+\mathtt{sha} &\mathtt{she}&\mathtt{shon} \\
+\mathtt{ta}&\mathtt{te}&\mathtt{ton}
+\end{matrix}
+$$
+
+最后你只需要记得写完数字之后加一个 "s" 即可。
+
+代码：
+
+```python
+dictionary = {
+    "la": "0",
+    "le": "1",
+    "lon": "2",
+    "sha": "3",
+    "she": "4",
+    "shon": "5",
+    "ta": "6",
+    "te": "7",
+    "ton": "8"
+}
+
+keys = list(dictionary)
+a, b = input().split()
+a = a[:-1]
+b = b[:-1]
+
+def translate(string: str):
+    curr = ""
+    final = ""
+    for i in range(len(string)):
+        curr += string[i]
+        if curr in dictionary:
+            final += dictionary[curr]
+            curr = ""
+    return final
+
+def write(num: int):
+    if num == 0:
+        return "las"
+    res = "s"
+    while num > 0:
+        res = keys[num % 9] + res
+        num //= 9
+    
+    return res
+
+numa = int(translate(a), base=9)
+numb = int(translate(b), base=9)
+
+sumation = numa + numb
+print(write(sumation))
+```
+
+
+
+<img src="https://raw.githubusercontent.com/GMyhf/img/main/img/5af84e01575732484f59e89fbf9304a3.png" alt="5af84e01575732484f59e89fbf9304a3" style="zoom:50%;" />
+
+> 注意2025年考试还有一个 J 问，不过懒得做了。
+
+
+
+## April Fools 2026
+
+2026 年是我实时参与的一届比赛。考试的时候，成功 AC5。考试后又再做了一题，很有意思的一届比赛！
+
+### 2214 A. Odd One Out
+
+我的tag: 找规律 https://codeforces.com/contest/2214/problem/A
+
+<img src="https://raw.githubusercontent.com/GMyhf/img/main/img/42182da7349a244a852373b07467ed23.png" alt="42182da7349a244a852373b07467ed23" style="zoom:25%;" />
+
+【汤立祥 物院】思路：这个标题里有一个双关，Odd既指奇怪的，又有“落单”之意。找到那个落单的箭头，即 C2。
+
+代码：
+
+```python
+print("C2")
+```
+
+### 2214 B. Are You Smiling?
+
+我的tag: Unicode https://codeforces.com/contest/2214/problem/B
+
+Show us a smile! 😁
+
+【汤立祥 物院】思路：题目要求我们找到 $?$，使得 $\mathrm{U+?=HAPPY}$，其中 $?$ 是一个包含**大写字母和数字** 的字符串。一开始我把 + 理解为字符串的加法，思考比如 $\mathrm{U+NSAD=HAPPY}$ 之类的近义词。但是不能理解为什么要有**数字**。然后突然有一件事情闪过我的脑海，为什么题干里要有一个 emoji 符号，肯定有作用。于是我查了一下这个 emoji 符号的 unicode，结果是 `U+1F601`，正好就是题干所要求的！
+
+代码：
+
+```python
+print("1F601")
+```
+
+### 2214 D. Neural Feud
+
+我的tag: Family Feud https://codeforces.com/contest/2214/problem/D
+
+1. I want to wash my car and the car wash is 100 meters away. Should I walk or should I drive?
+
+2. Are you a robot?
+
+3. Is April Fools 2026 Codeforces Contest rated?
+
+4. I was given a cup but it has no bottom and the top is sealed. Can I drink from this?
+
+5. Does Pikachu's tail have a black tip?
+
+6. Is there a seahorse emoji?
+
+7. The word backwards spelled backwards.
+
+8. Number between 1 to 10.
+
+【汤立祥 物院】思路：复刻了经典的 Family Feud 节目，不过采访人员从街上的群众变成了15个大语言模型，你要做的就是像唐人AI模型一样回复这些问题。我是WA好几次才过……
+
+代码：
+
+```python
+ans = [
+    "walk",
+    "no",
+    "no",
+    "no",
+    "yes",
+    "yes",
+    "backwards",
+    "7"
+]
+
+n = int(input())
+print(ans[n-1])
+```
+
+### 2214 E. Shortest Path
+
+我的tag: Dikjstra's algorithm https://codeforces.com/contest/2214/problem/E
+
+【汤立祥 物院】思路：如果你尝试使用普通的Dijkstra's algorithm，你肯定会WA，这就是我考试的时候遇到的问题。在样例 3 中，1~4 的最短距离应该是11而不是12。然而这究竟是为什么呢？仔细观察题干，我们会发现题目所说的是 D**ikj**stra's algorithm，这暗示了什么呢？这其实代指的是 Floyd Warshall 算法（计算任意两点之间的最短距离），一般而言其按照顺序：
+
+```python
+for k in range(n):
+    for i in range(n):
+        for j in range(n):
+            d[i][j] = min(d[i][j], d[i][k] + d[k][j])
+```
+
+为了对应 `i,k,j` 的顺序，只需要调换 `k,i` 的位置，即可得到 Dikjstra's algorithm.
+
+代码：
+
+```python
+import sys
+
+def solve() -> None:
+    data = sys.stdin.read().strip().split()
+    if not data:
+        return
+    it = iter(data)
+    n = int(next(it))
+    m = int(next(it))
+
+    INF = 10**18
+    dist = [[INF] * (n + 1) for _ in range(n + 1)]
+    for i in range(1, n + 1):
+        dist[i][i] = 0
+
+    for _ in range(m):
+        u = int(next(it))
+        v = int(next(it))
+        w = int(next(it))
+        if w < dist[u][v]:
+            dist[u][v] = w
+            dist[v][u] = w
+
+    for i in range(1, n + 1):
+        for k in range(1, n + 1):
+            if dist[i][k] == INF:
+                continue
+            dik = dist[i][k]
+            for j in range(1, n + 1):
+                if dist[k][j] == INF:
+                    continue
+                nd = dik + dist[k][j]
+                if nd < dist[i][j]:
+                    dist[i][j] = nd
+
+    out = []
+    for i in range(2, n + 1):
+        out.append(str(dist[1][i] if dist[1][i] != INF else -1))
+    sys.stdout.write("\n".join(out))
+
+if __name__ == "__main__":
+    solve()
+```
+
+### 2214 H. Double Vision
+
+我的 tag: image processing https://codeforces.com/contest/2214/problem/H
+
+【汤立祥 物院】思路：反正我考试的时候看出来：将原图向右平移171个像素然后和原图作差即可得到图片中的密文
+
+<img src="https://raw.githubusercontent.com/GMyhf/img/main/img/c2b55054e2fe1d2424765a3738aa9ec8.png" alt="c2b55054e2fe1d2424765a3738aa9ec8" style="zoom:50%;" />
+
+代码：
+
+```python
+print("YU5zV2VS")
+```
+
+### 2214 J. Special Problem
+
+【汤立祥 物院】我的建议是，直接自己玩 https://codeforces.com/contest/2214/problem/J
 
 
 
