@@ -1,6 +1,6 @@
 # Problems in Codeforces.com
 
-*Updated 2026-04-04 23:20 GMT+8*
+*Updated 2026-04-06 20:53 GMT+8*
  *Compiled by Hongfei Yan (2020 Fall)*
 
 
@@ -19120,6 +19120,369 @@ print("YU5zV2VS")
 ### 2214 J. Special Problem
 
 【汤立祥 物院】我的建议是，直接自己玩 https://codeforces.com/contest/2214/problem/J
+
+
+
+## CF Round 1090 (Div. 4)
+
+【汤立洋 物院】把 CF Round 1090 (Div. 4) 的题目都做了一下，其中前六道都是很简单的秒杀题，全都无伤通关，最后一道算法想出了一个 $\mathcal{O}(n)$ 的算法，但是竟然 TLE。和 G 老师交流之后了解到 Python 的一堆神秘耗时操作，从 2000ms+ 直接压到 125ms！
+
+### 2218 A. The 67th Integer Problem
+
+brute force, games, implementation, math, https://codeforces.com/contest/2218/problem/A
+
+思路：输出 $y\ge x$ 即可 
+
+代码：
+
+```python
+t = int(input())
+for _ in range(t):
+    print(input())
+```
+
+
+
+### 2218 B. The 67th 6-7 Integer Problem
+
+greedy, math, https://codeforces.com/contest/2218/problem/B
+
+思路：懒得思考了，直接 brute force.
+
+代码：
+
+```python
+def solve():
+    a1, a2, a3, a4, a5, a6, a7 = list(map(int, input().split()))
+    return max([
+        -a1-a2-a3-a4-a5-a6+a7,
+        -a1-a2-a3-a4-a5+a6-a7,
+        -a1-a2-a3-a4+a5-a6-a7,
+        -a1-a2-a3+a4-a5-a6-a7,
+        -a1-a2+a3-a4-a5-a6-a7,
+        -a1+a2-a3-a4-a5-a6-a7,
+        +a1-a2-a3-a4-a5-a6-a7,
+        ])
+ 
+t = int(input())
+for _ in range(t):
+    print(solve())
+```
+
+### 2218 C. The 67th Permutation Problem
+
+constructive algorithms, greedy, math, https://codeforces.com/contest/2218/problem/C
+
+思路：使用贪心的策略，尽可能让每一组的中位数最大，那么从 $3n$ 往下数，首先是 $(\text{很小的}, 3n-1, 3n)$，然后是 $(很小的, 3n-3, 3n-2)$，因此每一个triplet输出 $(i, 2i+n-1, 2i+n)$ 即可实现最优策略。
+
+代码：
+
+```python
+def solve():
+    n = int(input())
+    for i in range(1, n+1):
+        print(i, 2*i+n-1,2*i+1+n-1, end=" ")
+    print()
+t = int(input())
+for _ in range(t):
+    solve()
+```
+
+
+
+### 2218 D. The 67th OEIS Problem
+
+constructive algorithms, greedy, math, number theory, https://codeforces.com/contest/2218/problem/D
+
+思路：注意到 $\gcd(2n+1, 2n + 5) = \gcd(4, 2n+1) = 1$，因此考察数列 $a_i = (2i+1)\cdot (2i-1)$，有 $\gcd(a_i, a_{i+1}) = 2i+1$，对于任意的 $i\ge 1$ 不可能存在相等的最小公因数，因此直接过关。
+
+代码：
+
+```python
+def solve():
+    n = int(input())
+    lst = [i * (i+2) for i in range(1, 2*n, 2)]
+    print(*lst)
+
+t = int(input())
+for _ in range(t):
+    solve()
+```
+
+### 2218 E. The 67th XOR Problem
+
+binary search, bitmasks, brute force, https://codeforces.com/contest/2218/problem/E
+
+思路：我们来观察一下连续两次，分别选取 $a_1, a_2$ 进行操作之后的列表。
+$$[a_1,a_2,a_3,a_4,\cdots,a_n] \mapsto [a_2\oplus a_1, a_3\oplus a_1, \cdots, a_n \oplus a_1]$$
+$$\mapsto [a_3\oplus a_1\oplus a_2\oplus a_1, \cdots a_n\oplus a_1\oplus a_2\oplus a_1]$$
+注意到 $a_1\oplus a_1=0$，因此操作第二次之后，$a_1$ 的效果就完全消失了，列表最后的结果只取决于最后一次操作，即 $\max_\text{op} (l) = \max_{i\ne j}a_i \oplus a_j$，直接遍历 $i,j$ 即可找到最大值，复杂度 $\mathcal{O}(n^2)$。
+
+代码：
+
+```python
+r = lambda: list(map(int, input().split()))
+def solve():
+    n = int(input())
+    ls = r()
+    maximal = 0
+    for i in range(n):
+        for j in range(i+1, n):
+            calcu = ls[i] ^ ls[j]
+            if calcu > maximal:
+                maximal = calcu
+    print(maximal)
+ 
+t = int(input())
+for _ in range(t):
+    solve()
+```
+
+实际上有更快的算法（贪心）可以找到这个最大值。想要让异或最大，我们肯定希望每一位不一样，思路就是对于所有的 $a_i$，从高位向下比较。如果存在元素在第一位和 $a_i$ 二进制不一样，就选择它；再看第二位，如果还不一样，就再选择它，……依次类推，可以在一个树上实现 $\mathcal{O}(n k)$ 复杂度的算法，其中 $k$ 是整数的位数。
+
+代码：
+
+```python
+import sys
+
+# 增加递归深度，虽然这个实现用的是循环
+sys.setrecursionlimit(2000)
+
+class TrieNode:
+    def __init__(self):
+        # children[0] 代表 0 节点，children[1] 代表 1 节点
+        self.children = [None, None]
+
+class Trie:
+    def __init__(self):
+        self.root = TrieNode()
+
+    def insert(self, val):
+        node = self.root
+        # 从第 30 位开始往下存（假设数字在 2^31-1 范围内）
+        for i in range(30, -1, -1):
+            bit = (val >> i) & 1
+            if not node.children[bit]:
+                node.children[bit] = TrieNode()
+            node = node.children[bit]
+
+    def query(self, val):
+        node = self.root
+        res = 0
+        for i in range(30, -1, -1):
+            bit = (val >> i) & 1
+            # 贪心策略：尝试走相反的路
+            target = 1 - bit
+            if node.children[target]:
+                res |= (1 << i) # 这一位异或后可以得到 1
+                node = node.children[target]
+            else:
+                # 没得选，只能走相同的路
+                node = node.children[bit]
+        return res
+
+def solve():
+    try:
+        line1 = sys.stdin.readline()
+        if not line1: return
+        n = int(line1.strip())
+        ls = list(map(int, sys.stdin.readline().split()))
+    except ValueError:
+        return
+
+    trie = Trie()
+    max_xor = 0
+    
+    # 先插入第一个数
+    trie.insert(ls[0])
+    
+    # 从第二个数开始，边查询边插入
+    for i in range(1, n):
+        max_xor = max(max_xor, trie.query(ls[i]))
+        trie.insert(ls[i])
+        
+    print(max_xor)
+
+# 快速读入处理多组数据
+line = sys.stdin.readline()
+if line:
+    t = int(line.strip())
+    for _ in range(t):
+        solve()
+```
+
+
+
+### 2218 F. The 67th Tree Problem
+
+constructive algorithms, implementation, trees, https://codeforces.com/contest/2218/problem/F
+
+思路：构造即可，我的构造如下两图所示，
+
+<img src="https://raw.githubusercontent.com/GMyhf/img/main/img/ff0d70993737532602975b71b84d1b6f.png" alt="ff0d70993737532602975b71b84d1b6f" style="zoom: 50%;" />
+
+其中分别要求：当 $x+y$ 为奇数时，$y-x-1\ge 0$，当 $x+y$ 为偶数时，$x-1\ge 0, y-x+1\ge 0$。
+
+**Proof** 为什么这个条件是充分的？
+
+对于节点 $1$，其子树的大小即为 $x+y$，接下来分类讨论：
+
+- 若 $x+y$ 为偶数，则节点 $1$ 子树大小为偶数，因此要求 $\boxed{x\ge 1}$，还剩下 $x-1$ 个偶数节点。最小的正偶数为 $2$，因此构建这些偶数节点这里至少需要 $2(x-1)$ 个节点。因此给出不等式 $x+y \ge 2(x-1)+1$，即 $\boxed{y-x+1\ge 0}$。
+
+- 若 $x+y$ 为奇数，则节点 $1$ 子树大小为奇数，这要求 $\boxed{y\ge 1}$，还剩下 $y-1$ 个奇数节点。同样的，构建偶数节点至少需要 $2x$ 个节点。因此给出不等式 $x+y\ge 2x+1$，即 $\boxed{y-x-1\ge 0}$。注意到由于 $x\ge 0$，因此前者是冗余的。
+
+代码：
+
+```python
+def solve():
+    x, y = list(map(int, input().split()))
+    if (x + y) % 2 == 0:
+        if x - 1 >= 0 and y >= x - 1:
+            print("YES")
+            for i in range(2, x+1):
+                print(1, i)
+                print(i, i+(x-1))
+            for j in range(2*x,x+y+1):
+                print(1, j)
+        else:
+            print("NO")
+    else:
+        if y >= x + 1:
+            print("YES")
+            for i in range(2, x+2):
+                print(1, i)
+                print(i, i+x)
+            for j in range(2*x+2,x+y+1):
+                print(1, j)
+        else:
+            print("NO")
+
+t = int(input())
+for _ in range(t):
+    solve()
+```
+
+### ⭐2218 G. The 67th Iteration of "Counting is Fun"
+
+implementation, math, https://codeforces.com/contest/2218/problem/G
+
+思路：**这是一道非常有趣的题目！建议大家一起来思考！**
+
+> 以下为 spoiler
+
+思考为什么一个人不在一开始坐下去，无非有两个原因：
+
+- 人数限制早早就达到了，旁边的人一坐下去诱导你坐下去；（表现为相邻两个人坐下去的时间差为 1，即 $b_i - b_{i-1} = 1$ 或 $b_i-b_{i+1} = 1$）
+- 旁边的人已经做下去，但是你的人数限制还没达到。（表现为相邻两个人做下去的时间差大于 1，即 $b_i-b_{i-1} > 1$ 或 $b_i-b_{i+1} > 1$）
+
+这两个原因导致了本质上不同的推论：
+
+- 如果是由于你苦苦等不到边上人坐下去，等到了才坐下去的话，你的尴尬等级 $a_i$ 可以最低取到 1；
+- 如果是由于人数限制还没达到，那么意味着只有在 $t=b_{i}-1$ 时刻，坐下的人数才将将超过你的尴尬等级 $a_i$，而在 $t=b_{i}-2$ 时刻，坐下的人数还没到你的尴尬等级。你的尴尬等级最低可以取到 $\# (b_{i}-2) 时刻坐下的人数+1$。
+
+由此给出了 $a_i$ 的下限。
+
+还有一点需要注意，你在 $b_i$ 时刻坐了下去，意味着 $t=b_i-1$ 时刻坐下人数超过了尴尬等级，因此 $a_i$ 有上限 $\# (b_i-1) 时刻坐下的人数$。由此给出了 $a_i$ 的上限。
+
+由此我们知道了所有 $a_i$ 的可取值，乘起来即可得到总可能数。
+
+由此你也能够理解什么情况下是无解的，即 $b_i$ 中出现了“局部非0极小值”，这意味着某一个人不在第一时刻，不知道为什么（没有两边任何一个人坐下）就坐下去了，这就意味着总可能数为 0。
+
+> Gemini 说：
+> 这段代码虽然在逻辑上接近 $\mathcal{O}(n)$，但在 Python 中频繁使用 `input().split()`、创建小列表（如 `neigh`）以及在大循环中执行多次算术运算，会导致常数项过大从而引起 TLE (Time Limit Exceeded)。 
+> 以下是针对性的优化方案：
+>
+> - **输入输出**：使用 `sys.stdin.read().split()` 一次性读取所有数据，比多次调用 `input()` 快得多。
+> - **减少重复计算**：循环内的 `max([ls[i] - ls[q] for q in neigh])` 会创建新列表并迭代，开销很大。我们可以直接展开逻辑。
+> - **模运算**： 尽量只在最后或者乘法可能溢出时取模，但在 Python 中，大数运算也费时，需保持平衡。
+> - **避免冗余列表**： `sit_downs_at_t` 可以直接通过前缀和逻辑简化。
+
+```python
+import sys
+
+def solve():
+    # 使用快读
+    input_data = sys.stdin.read().split()
+    if not input_data:
+        return
+    
+    idx = 0
+    t = int(input_data[idx])
+    idx += 1
+    
+    MODER = 676767677
+    results = []
+    
+    for _ in range(t):
+        n = int(input_data[idx])
+        m = int(input_data[idx + 1])
+        idx += 2
+        ls = [int(x) for x in input_data[idx : idx + n]]
+        idx += n
+        
+        # 边界情况处理
+        if n == 1:
+            results.append("1" if ls[0] == 0 else "0")
+            continue
+
+        # 合法性检查：局部极小值检测
+        is_valid = True
+        if (ls[0] != 0 and ls[0] <= ls[1]) or (ls[-1] != 0 and ls[-1] <= ls[-2]):
+            is_valid = False
+        else:
+            for i in range(1, n - 1):
+                if ls[i] != 0 and ls[i] <= ls[i-1] and ls[i] <= ls[i+1]:
+                    is_valid = False
+                    break
+        
+        if not is_valid:
+            results.append("0")
+            continue
+
+        # 统计计数
+        tally = [0] * m
+        for p in ls:
+            tally[p] += 1
+            
+        # 计算前缀和 sit_downs_at_t
+        sit = [0] * m
+        current_sum = 0
+        for i in range(m):
+            current_sum += tally[i]
+            sit[i] = current_sum
+
+        mults = 1
+        # 展开循环，避免在循环内创建 neigh 列表
+        for i in range(n):
+            val = ls[i]
+            if val == 0:
+                continue
+            
+            # 逻辑展开：检查相邻元素的差值
+            # 判断逻辑：是否所有邻居都比当前值小 1 以上
+            is_large_gap = False
+            if i == 0:
+                if val - ls[1] > 1: is_large_gap = True
+            elif i == n - 1:
+                if val - ls[i-1] > 1: is_large_gap = True
+            else:
+                if (val - ls[i-1] > 1) or (val - ls[i+1] > 1):
+                    is_large_gap = True
+            
+            if not is_large_gap:
+                mults = (mults * sit[val - 1]) % MODER
+            else:
+                mults = (mults * tally[val - 1]) % MODER
+
+        results.append(str(mults))
+
+    sys.stdout.write("\n".join(results) + "\n")
+
+if __name__ == "__main__":
+    solve()
+```
+
+
 
 
 
