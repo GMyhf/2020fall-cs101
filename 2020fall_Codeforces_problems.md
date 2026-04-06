@@ -19123,7 +19123,7 @@ print("YU5zV2VS")
 
 
 
-## CF Round 1090 (Div. 4)
+## CF Round 1090 (Div. 4)-TANGLixiang
 
 【汤立洋 物院】把 CF Round 1090 (Div. 4) 的题目都做了一下，其中前六道都是很简单的秒杀题，全都无伤通关，最后一道算法想出了一个 $\mathcal{O}(n)$ 的算法，但是竟然 TLE。和 G 老师交流之后了解到 Python 的一堆神秘耗时操作，从 2000ms+ 直接压到 125ms！
 
@@ -19480,6 +19480,290 @@ def solve():
 
 if __name__ == "__main__":
     solve()
+```
+
+
+
+## 征战（也许最后一场）1090 Div.4-YINXianqi
+
+【尹显齐 25 物理学院】怒砍AC5，后面一个多小时直接被寝室同学吵爆了，差10分钟做出G。E题没用pypy而是用的python，直接遗憾离场。最终 $\boldsymbol{67}$ 考试仅加 $\boldsymbol{78}$ 分。唯一进步是成功给一个人做局了。
+
+![73d1a2eb655a827f308540454a33ed43](https://raw.githubusercontent.com/GMyhf/img/main/img/73d1a2eb655a827f308540454a33ed43.png)
+
+
+
+做局代码：
+
+```python
+n = 200000
+mask = (1<<17) - 1
+fill = int((1<<15)*1.3+1)
+arr = [mask+2]*2
+x = 6
+for i in range(1,fill):
+    arr.append(x)
+    x = x * 5 + 1
+    x = x & mask
+arr.sort()
+brr = set(arr)
+crr = []
+cur = 0
+for i in range(0,131293):
+    if i not in brr:
+        crr.append(i)
+        cur += 1
+arr.extend([131293]*(n-len(arr)-cur))
+arr.extend(crr)
+print(1)
+print(n,131294)
+print(*arr)
+```
+
+接下来我将给出 $6$ $\boldsymbol{or}$ $7$ 道题的题解。 （ABC太水可忽略）
+
+### 2218D. The 67th OEIS Problem
+
+我们要让相邻两个数的最大公因数均不同，容易想到让第 $i$ 个数等于 $p[i]\cdot p[i+1]$ ，其中 $p[i]$ 是第 $i-1$ 个质数，$p[0] = 1$ ，这样第 $i$ 个数和第 $i+1$ 个数的最大公因数一定为 $p[i+1]$，不重复。
+
+```python
+def sieve(n):
+    is_prime = [1]*(n+1)
+    is_prime[0] = is_prime[1] = 0
+    for i in range(2,int(n**0.5)+1):
+        if is_prime[i]:
+            for j in range(i*i,n+1,i):
+                is_prime[j] = 0
+    primes = [i for i in range(2,n+1) if is_prime[i]]
+    return primes
+p = sieve(2*10**5)
+for _ in range(int(input())):
+    n = int(input())
+    arr = [2]
+    for i in range(n-1):
+        arr.append(p[i+1]*p[i])
+    print(*arr)
+```
+
+### 2218E. The 67th XOR Problem
+
+由于 xor 运算满足交换律和结合率，所以最后的结果一定是形如
+
+$$
+(a_{1}^{b_{1}}\oplus\dots\oplus a_{n}^{b_{n}})
+$$
+
+这里的乘方指的是异或乘方，即：
+
+$$
+a^n =\begin{cases}
+a,n\text{为奇数} \\
+0,n\text{为偶数}
+\end{cases}
+$$
+
+我们考察一下在第 $n-i$ 步选择的数 $a_{n-i}$ 最终出现的次数 $b_{n-i}$ ，经过 $1$ 轮，变成 $i$ 个，下一轮又会选择一个数，而这个数的 xor 表达式一定只含有一个 $a_{n-i}$ ，所以剩下的数又会多 xor 一个 $a_{n-i}$ ，总数量就变成了 $2(i-1)$ ，下下一轮同理，总数量变成 $4(i-2)$ ...，最终在第 $i-1$ 轮结束，总数量为 $2^{i-1}(i-i+1)=2^{i-1}$ ，那么就是说，只要 $i\neq 1$ ，总数量就是偶数，对总 xor 值，没有贡献。所以我们发现，答案就是最后两个数的 xor 值，只需要枚举两个数的 xor 值即可。
+
+```python
+for _ in range(int(input())):
+    n = int(input())
+    arr = list(map(int,input().split()))
+    ans = 0
+    for i in range(n):
+        for j in range(i):
+            ans = max(ans,arr[i]^arr[j])
+    print(ans)
+```
+
+### 2218F. The 67th Tree Problem
+
+首先我们明白一点：一个偶节点不可能作为叶子，所以它下面一定有节点连接，考虑它的所有子节点这些子节点对应的子树的大小之和为奇数，所以一定有一个子树的大小是奇数，也就是说一定有一个子节点是奇节点。所以我们得到定理：
+
+**如果一个节点是偶节点，那么它一定有至少一个子节点，并且至少一个子节点是奇节点。**
+
+对于整棵树，我们可以得到：
+
+**偶节点数量不大于奇节点数量。即** $\boldsymbol{x\leq y}$
+
+这就是我们判断能否形成树的条件。接下来，我们给出树的构造：先用链状结构连接前 $2x$ 个节点，然后剩下 $y-x$ 个节点均连接在 $2x$ 号节点上。
+
+为了证明这个构造的合理性，我们进行奇偶性填充。首先从 $2x+1$ 到 $x+y$ 号节点都是奇节点，接下来就按照奇-偶-奇-偶的方式由下往上填充，由于还剩下 $2x$ 个节点，所以一定是奇节点和偶节点各一半。这样就实现了 $y$ 个奇节点和 $x$ 个偶节点的填充。
+
+注意到上述方式在 $x=0$ 时失效，需要特判。此时如果 $y$ 为奇数则可以形成（与上面同理），否则不能。
+
+```python
+for _ in range(int(input())):
+    x,y = map(int,input().split())
+    n = x+y
+    if y >= x:
+        if x == 0:
+            if y%2:
+                print("YES")
+                for i in range(n-1):
+                    print(1,i+2)
+            else:
+                print("NO")
+        else:
+            print("YES")
+            for i in range(1,2*x):
+                print(i,i+1)
+            for i in range(2*x+1,x+y+1):
+                print(x*2,i)
+    else:
+        print("NO")
+```
+
+### 2218G. The 67th Iteration of "Counting is Fun"
+
+我们首先可以用前缀和快速预处理在 $t$ 时刻时已有多少人坐下，记为 $f(t)$，接下来，对于每一个没有在 $t=0$ 时坐下的人，我们看他的邻居，如果他坐下的时间比两个邻居都早，说明这个情况不可能发生；如果他坐下的时间恰巧是坐的较早的邻居坐下的时间 $t$ 再加一 ，那么说明他的坐下主要受到邻居的制约，$a_{i}$ 只用小于等于 $f(t)$ 即可，可以取 $f(t)$ 个值；否则他的坐下主要受到 $a_{i}$ 的制约，如果他在时间 $t$ 坐下，那么 $a_{i}$ 要满足 $f(t-2)<a_{i}\leq f(t-1)$ ，可以取 $f(t-1)-f(t-2)$ 个值。这样就可算出每一个 $a_{i}$ 可取多少个值，最后累乘即可。
+
+```python
+from collections import Counter
+for _ in range(int(input())):
+    n,m = map(int,input().split())
+    arr = input().split()
+    if n == 1:
+        print(1)
+        continue
+    c = Counter(arr)# 依旧字符串
+    dic = {}
+    dic[-1] = 0
+    for i in range(m):
+        dic[i] = dic[i-1] + c[str(i)]
+    fnl = 1
+    found = 1
+    arr = list(map(int,arr))
+    for i in range(n):
+        nei = []
+        for j in [-1,1]:
+            if 0 <= i+j < n:
+                nei.append(arr[i+j])
+        if 0<arr[i] <= min(nei):
+            found = 0
+            break
+        elif arr[i] == min(nei) + 1:
+            fnl *= dic[min(nei)]
+            fnl %= 676767677
+        elif arr[i]:
+            fnl *= dic[arr[i]-1] - dic[arr[i]-2]
+            fnl %= 676767677
+    if found == 0:
+        print(found)
+    else:
+        print(fnl)
+```
+
+### 2201B. Recollect Numbers
+
+通过观察样例可以发现使得对于某个 $n$ 时，使 $k$ 最大的方法。就是如下数组：
+
+$$
+1,2,3,1,4,2,5,3,\dots,n-1,n-3,n,n-2,n-1,n
+$$
+
+此时需要 $2n-1$ 个回合。
+下面严格证明 $k$ 的最大值只可能是 $2n-1$ ，如下：  
+对于两个相同的数，至多花四步就能消除它们：发现第一个数，发现第二个数（该回合第二步，否则会和第一个数一起被直接消除），消除第一个数和第二个数。所以 $k$ 不可能超过 $2n$ 。现在考察倒数第二个数，如果它第一次出现，那么倒数第一个数一定也等于它，它们俩直接就会被消掉，这让 $k$ 小于了 $2n$ ；如果它第二次出现，按照题目会将它与第一次出现的它消掉，这也让 $k$ 小于了 $2n$ 。总的来说，$k$ 也不可能等于 $2n$ 。  
+容易得出对于某个 $n$ 时，使 $k$ 最小的方法。就是如下数组：
+
+$$
+1,1,2,2,\dots n-1,n-1,n,n
+$$
+
+此时需要 $n$ 个回合。
+
+所以，当 $n\leq k\leq 2n-1$ 时，有方案；方案就是把上述两个数列结合，如下：
+
+$$
+1,2,3,1,4,2,\dots,k-n+1,k-n-1,k-n,k-n+1,k-n+2,k-n+2,\dots,n,n
+$$
+
+回合数恰为 $2(k-n)+1+2n-k-1=k$ 。反之不存在方案。
+
+```python
+for _ in range(int(input())):
+    n,k = map(int,input().split())
+    if n <= k <= 2*n-1:
+        print("YES")
+        d = k-n
+        if k == n:
+            ans = []
+            for i in range(1,n+1):
+                ans.append(i)
+                ans.append(i)
+        else:
+            ans = [1,2]
+            for i in range(1,d):
+                ans.append(2+i)
+                ans.append(i)
+            ans.append(d)
+            ans.append(d+1)
+            for i in range(n-d-1):
+                ans.append(d+2+i)
+                ans.append(d+2+i)
+        print(*ans)
+    else:
+        print("NO")
+```
+
+好的，开胃小菜结束了，来点爆的。
+
+### 2210D. A Simple RBS Problem
+
+题目名字很简单，实际内容并非如此。
+
+我们可以想象将嵌套的括号转化成树来分析问题。一对括号代表一个节点，该对括号和它里面包含的所有括号形成子树。问题就转化为：随意地交换某两个节点的一些子节点的子树（不重合），能否从树 $a$ 变成树 $b$ ？
+
+我们先进行初步分析，我们发现叶子节点的个数不变。这很明显，因为如果一个节点原本有子节点，那么无论如何**交换**它的子节点也不能把它的子节点变消失，对于原本没有子节点的节点，也不能凭空创造子节点。
+
+接下来，我们要规避链式结构的影响，因为对于从根引出的链式结构，你无法进行任何交换（做不到不重合），所以我们发现链式结构的长度也不能变，具体地说，就是第一个有多于一个子节点的节点的深度不能变。
+
+处理以上两点，我们只用建立每个点的出度表就能轻松完成。
+
+接下来证明，这两个特殊条件是充分的。我们要将任意满足上述两条件的树转化为完全相同的一个特殊的树。我们考虑能否将任意的第一个有多于一个子节点的节点 $u$ 的深度为 $d$ ，叶节点数量为 $n$ 的树转化成一个链式结构，再在深度为 $d$ 的点上额外连上 $n-1$ 个节点所形成的树。我们的方法是先让节点 $u$ 只连接 $n$ 条链：如果存在 $u$ 的一个子节点 $v$ 有多个叶子（形成非链结构），取出深度最大的那个 $v$ （此时它一定有多个子节点）把他的所有子节点形成的子树与一个非 $v$ 祖先的 $u$ 的子节点的子树交换，这样，我们就增加了 $u$ 的子节点数量，最终能让 $u$ 有 $n$ 个子节点，也就是连接 $n$ 条链。然后，我们调整这些链的长度使得只有一条链的长度不为 $1$ ，这只要一一把其他所有子节点的子树与一个叶节点交换即可。于是我们证明了条件的充分性。
+
+```python
+def edges(s):
+    global n
+    match = {}
+    stack = []
+    # 预处理配对括号的位置
+    for i,ch in enumerate(s):
+        if ch == '(':
+            stack.append(i)
+        elif ch == ')':
+            left = stack.pop()
+            match[left] = i
+            match[i] = left
+    # 计算出度
+    outs = []
+    for i in range(n+2):
+        if s[i] == '(':#左括号对应一个节点
+            count = 0
+            j = i + 1
+            while j < match[i]:
+                if s[j] == '(':
+                    count += 1
+                    j = match[j] + 1
+                else:
+                    j += 1
+            outs.append(count)
+    return outs
+for _ in range(int(input())):
+    n = int(input())
+    s1 = "("+input()+")"
+    s2 = "("+input()+")"
+    ans1,ans2 = edges(s1),edges(s2)
+    judge = 1
+    # 单独判断链式情况
+    for i in range(n//2):
+        if ans1[i] > 1 and ans2[i] > 1:
+            break
+        elif ans1[i] == 1 and ans2[i] == 1:
+            continue
+        else:
+            judge = 0
+            break
+    print("YES" if ans1.count(0) == ans2.count(0) and judge else 'NO') 
 ```
 
 
