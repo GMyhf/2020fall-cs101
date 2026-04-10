@@ -1,6 +1,6 @@
 # Problems in Codeforces.com
 
-*Updated 2026-04-06 20:53 GMT+8*
+*Updated 2026-04-10 12:40 GMT+8*
  *Compiled by Hongfei Yan (2020 Fall)*
 
 
@@ -1593,7 +1593,7 @@ print(k)
 4. **累加和判断**：
    - `for i in a:`：遍历排序后的硬币列表，时间复杂度为 O(n)。但在实际运行中，由于存在 `if b > c/2: break` 的条件，循环可能会提前终止，具体取决于硬币的分布情况。然而，在最坏的情况下，这个循环仍然需要遍历整个列表，所以时间复杂度仍为 O(n)。
 
-综合以上各部分，这段代码的时间复杂度主要由排序操作决定，即 **O(n log n)**。这是因为排序操作的时间复杂度通常高于其他部分的操作，如输入处理、求和和累加判断等。
+   综合以上各部分，这段代码的时间复杂度主要由排序操作决定，即 **O(n log n)**。这是因为排序操作的时间复杂度通常高于其他部分的操作，如输入处理、求和和累加判断等。
 
 
 
@@ -5055,7 +5055,7 @@ In the fourth test case of the example, we can choose last three openning bracke
 - 如果 `bal` 出现过负数，最小值 `min_bal` 就表示右括号超前多少个。
   答案就是 `-min_bal`（需要把多少个右括号挪到后面）。
 
-代码
+  代码
 
 ```python
 t = int(input())
@@ -5817,7 +5817,7 @@ if __name__ == "__main__":
 > 3. 路径回溯：
 >    - 从终点 `n` 回溯 `prev` 直到 `1`，然后反转路径。
 >
-> 时间复杂度
+>    时间复杂度
 >
 > - **O((n + m) log n)**，适用于 `n, m ≤ 10⁵`。
 
@@ -6700,7 +6700,7 @@ for i in range(n):
 >    - 对于每个已知的素数 `p`，如果 `i * p` 不超过 n，将 `i * p` 标记为合数（设置 `is_prime[i * p]` 为 `False`）。
 >    - 如果 `i` 能被 `p` 整除（即 `i % p == 0`），则停止当前的内层循环。这是因为 `i * p` 之后的合数会被 `i` 的更大倍数筛除，不需要重复标记。
 >
-> **代码实现**
+>    **代码实现**
 >
 > ```python
 > def euler_sieve(n):
@@ -11193,7 +11193,7 @@ sys.stdout.write("\n".join(out))
 > - `i=4`：`spf[4]=2`（之前标过）
 >   - 内循环：`p=2` → `v=8` → `spf[8]=2` → `p==spf[4]`，停止。
 >
-> 这样，最终 `spf` 数组：
+>   这样，最终 `spf` 数组：
 >
 > ```
 > spf[2]=2, spf[3]=3, spf[4]=2, spf[5]=5, spf[6]=2,
@@ -13256,7 +13256,7 @@ for _ in range(T):
   `v = [0, 1, 2, ..., n]`
   ⇒ `MEX(v) = n + 1`
 
-📈 所以当 `n < m−1` 时：
+  📈 所以当 `n < m−1` 时：
 
 > 最大美丽度 = **n + 1**
 
@@ -13267,7 +13267,7 @@ for _ in range(T):
 - **能构造出**一个矩阵，使得列 MEX 的集合为 `[0,1,2,…,m−1]`，
   因此最终 $s=MEX(v)=m$。
 
-📈 所以当 `n ≥ m−1` 时：
+  📈 所以当 `n ≥ m−1` 时：
 
 > 最大美丽度 = **m**
 
@@ -15147,7 +15147,7 @@ Note that the empty lines in the example input and output are for the sake of cl
 - 第六步：为 $x \to x-1$，此时 $x$ 范围在 $[1,1]$
   此时未知数 $x$ 已经确定地变成 $1$ 了，加上 $n-1$ 即可。这样我们就在 $7$ 步内解决了这个问题。 
 
-代码： 
+  代码： 
 
 ```python
 for _ in range(int(input())):
@@ -15327,7 +15327,7 @@ Note that the empty lines in the example input and output are for the sake of cl
 - 第三步： 由于上一步我们已经把数限制在 $90$ 以内，并且它一定能被 $9$ 整除，所以我们可以将 $x\to S(x)$ ，此时一定会得到 $9$ 。
   接下来加上 $n-9$ 即可。
 
-代码：
+  代码：
 
 ```python
 for _ in range(int(input())):
@@ -16177,6 +16177,355 @@ for _ in range(int(input())):
 
 
 
+## T2184F. Cherry Tree
+
+ dfs and similar, dp, graphs, trees, 1900,  https://codeforces.com/problemset/problem/2184/F
+
+You are given a rooted tree with 𝑛 vertices∗. The vertices of the tree are numbered with integers from 1 to 𝑛. The root of the tree is vertex number 1.
+
+In each leaf† of the tree, there grows one cherry. You want to collect all the cherries, and to do this, you perform the following action several times:
+
+You choose any vertex of the tree 𝑣 (including the root or a leaf) and "shake" it. After that, cherries fall from all the leaves that are descendants‡ of vertex 𝑣 (if vertex 𝑣 itself is a leaf, then a cherry falls from it). If cherries have already fallen from any leaf before, the tree will break, so such a situation must be avoided.
+
+According to an ancient legend of the cherry orchard, the number of vertices you shake should be a multiple of three.
+
+Is it possible to collect all the cherries in this way?
+
+∗A tree with 𝑛 vertices is an undirected connected graph with 𝑛 vertices and 𝑛−1 edges. A rooted tree is a tree in which one of the vertices is special and is called the root.
+
+†A leaf is a vertex that has no descendants.
+
+‡The descendants of vertex 𝑣 are all vertices 𝑢≠𝑣 such that on the shortest path from the root to 𝑢, vertex 𝑣 is encountered.
+
+**Input**
+
+Each test consists of several test cases. The first line contains a single integer 𝑡 (1≤𝑡≤104) — the number of test cases. The following lines describe the test cases.
+
+The first line of each test case contains a single integer 𝑛 (2≤𝑛≤2⋅105).
+
+The next 𝑛−1 lines of each test case contain two integers 𝑢 and 𝑣 (1≤𝑢,𝑣≤𝑛,𝑢≠𝑣) — the vertices connected by the next edge of the tree.
+
+It is guaranteed that the graph in each data set is a tree.
+
+It is guaranteed that the sum of 𝑛 across all input data sets does not exceed 2⋅105.
+
+**Output**
+
+For each input data set, output "YES" on a separate line if it is possible to collect all the cherries. Otherwise, output "NO".
+
+You can print each letter in any case (upper or lower). For example, "YeS", "no" and "yES" are all acceptable.
+
+Example
+
+input
+
+```
+3
+4
+1 2
+1 3
+1 4
+3
+1 2
+1 3
+9
+1 2
+3 1
+2 4
+5 2
+5 6
+3 7
+8 3
+8 9
+```
+
+output
+
+```
+YES
+NO
+YES
+```
+
+Note
+
+In the first test case, you can shake vertices 2,3,4.
+
+In the second test case, the only way to shake a number of vertices that is a multiple of three is to shake all the vertices. However, doing so would break the tree, so this is not allowed.
+
+In the third test case, you can, for example, shake vertices 2,7,9.
+
+
+
+ 【江昊中 数学科学学院】思路：
+
+dp 即可, `dp[u][k]` 表示以 `u` 为根的子树，能否用模 `x` 次操作覆盖所有叶子, 且 `x mod 3 = k`
+
+代码
+
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+
+void solve() {
+    int n;
+    cin >> n;
+    vector<vector<int>> adj(n);
+    for (int i = 0; i < n - 1; i++) {
+        int u, v;
+        cin >> u >> v;
+        u--, v--;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+
+    vector<array<bool, 3>> dp(n, {false, false, false});
+
+    auto dfs = [&](auto&& self, int u, int p) -> void {
+        // 处理叶节点
+        if (u != 0 && adj[u].size() == 1) {
+            dp[u] = {false, true, false};
+            return;
+        }
+
+        array<bool, 3> res = {true, false, false};
+        for (int v : adj[u]) {
+            if (v == p) continue;
+            self(self, v, u);
+
+            array<bool, 3> cur = {false, false, false};
+            for (int i = 0; i < 3; i++) {
+                for (int j = 0; j < 3; j++) {
+                    if (dp[v][i] && res[j]) {
+                        cur[(i + j) % 3] = true;
+                    }
+                }
+            }
+            res = cur;
+        }
+        dp[u] = res;
+        dp[u][1] = true;
+    };
+
+    dfs(dfs, 0, -1);
+    cout << ((dp[0][0]) ? "YES" : "NO") << '\n';
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
+```
+
+
+
+
+
+【江昊中 数学科学学院】CF2192D 感觉是一道很漂亮的贪心 + 树形 dp, 难点在于理清思路, 想清楚需要什么量和状态转移就不难. 2184F 也是树形 dp, 但感觉比 2192D 简单 (不懂为什么 2184F 有 1900, 而 2192D 只有 1800)
+
+## T2192D. Cost of Tree
+
+ dp, greedy, trees, 1800,  https://codeforces.com/problemset/problem/2192/D
+
+For a tree 𝑇 with root 𝑟, where each node 𝑢 has a value 𝑎𝑢 associated with it, the cost of the tree defined as:
+
+
+
+∑𝑢∈𝑇(𝑎𝑢⋅𝑑(𝑟,𝑢))
+
+
+
+Here, this sum is taken over all nodes 𝑢 in the tree 𝑇, and 𝑑(𝑟,𝑢) denotes the number of edges on the shortest path from node 𝑟 to node 𝑢 on a tree.
+
+You are given a tree consisting of 𝑛 nodes, rooted at node 1. Each node 𝑖 has a value 𝑎𝑖 assigned to it. For each 𝑟 from 1 to 𝑛, please solve the following problem independently:
+
+Consider the subtree of node 𝑟 with respect to node 1. Formally, the subtree of node 𝑟 is the tree consisting of all nodes 𝑢 such that the shortest path from 1 to 𝑢 contains 𝑟. 
+
+Find the maximum cost of the subtree after performing **at most one** operation of the following type on the subtree:
+
+- Choose any node 𝑢 (𝑢≠𝑟). Remove the edge from 𝑢 to the parent of node 𝑢∗. Then, add an edge from 𝑢 to any node 𝑣 that is still reachable from 𝑟. It can be shown that after this operation, the graph remains a tree. 
+
+As an example, below shows an example of an operation with 𝑟=1,𝑢=5, and 𝑣=4. 
+
+![img](https://espresso.codeforces.com/08cbc8b0340fa37c3036d5842d029b6d770d5775.png)
+
+∗Formally, remove the edge from 𝑢 to 𝑝, where 𝑝 is the unique node satisfying 𝑑(𝑢,𝑝)=1 and 𝑑(𝑢,𝑟)=𝑑(𝑝,𝑟)+1
+
+**Input**
+
+Each test contains multiple test cases. The first line contains the number of test cases 𝑡 (1≤𝑡≤104). The description of the test cases follows. 
+
+The first line of each testcase contains a single integer 𝑛 (1≤𝑛≤2⋅105) — the count of nodes in the tree.
+
+The second line of each testcase contains 𝑛 integers 𝑎1,𝑎2,…,𝑎𝑛 (1≤𝑎𝑖≤2⋅105).
+
+Then 𝑛−1 lines follow, the 𝑖-th line containing two integers 𝑢 and 𝑣 (1≤𝑢,𝑣≤𝑛) — the two nodes that the 𝑖-th edge connects. 
+
+It is guaranteed that the given edges form a tree.
+
+It is guaranteed that the sum of 𝑛 does not exceed 2⋅105 over all test cases.
+
+**Output**
+
+For each test case, print 𝑛 numbers – the answers for 𝑟=1,2,…,𝑛.
+
+Example
+
+input
+
+```
+3
+5
+1 3 2 1 2
+1 2
+2 3
+3 4
+3 5
+7
+1 2 3 1 3 2 1
+1 2
+2 3
+3 4
+4 5
+4 6
+3 7
+5
+5 4 3 2 1
+1 2
+2 3
+3 4
+4 5
+```
+
+output
+
+```
+18 10 5 0 0 
+40 28 18 8 0 0 0 
+20 10 4 1 0 
+```
+
+Note
+
+In the first test case, for 𝑟=1, it is optimal to choose 𝑢=5 and 𝑣=4. The cost of the tree is then 1⋅0+3⋅1+2⋅2+1⋅3+2⋅4=18. It can be shown that a larger cost cannot be obtained over all legal operations.
+
+For 𝑟=4 for example, there is only 1 node in the subtree, so there is no operation possible. The only possible cost of the subtree is 0.
+
+
+
+【江昊中 数学科学学院】思路：
+
+每个节点维护四个量 :
+
+* `depth` : 当前节点到子树中叶节点的最大距离
+
+* `sum` : 以当前节点为根的子树所有节点的 `value` 之和
+
+* `cost` : 不施加操作情况下, 子树的 cost
+
+* `ans` : 至多施加一次操作情况下, 子树的最大 cost
+
+  对于任意一个非叶节点 `u` , 想让一次操作后的 cost 尽可能大, 则只能是以下两种情况 : 
+
+* 在 `u` 的某个子节点 `v` 对应的子树内部进行操作, 这所带来的净增长是 `ans[v] - cost[v]`
+
+* 将 `u` 的某个子节点 `v` 对应的子树整个移动到除 `v` 所在的分支之外，`u` 的其他分支中最深的那个叶子节点下面, 这所带来的净增长是 `sum[v] * (d + 1)`
+
+  代码
+
+```cpp
+#include <bits/stdc++.h>
+using namespace std;
+using ll = long long;
+
+void solve() {
+    int n;
+    cin >> n;
+    vector<vector<int>> adj(n);
+    vector<int> value(n), depth(n);
+    vector<ll> sum(n), cost(n), ans(n);
+    for (int i = 0; i < n; i++) {
+        cin >> value[i];
+    }
+    for (int i = 0; i < n - 1; i++) {
+        int u, v;
+        cin >> u >> v;
+        u--, v--;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+
+    auto dfs = [&](auto&& self, int u, int p) -> void {
+        for (int v : adj[u]) {
+            if (v == p) continue;
+            self(self, v, u);
+        }
+
+        // 找到 u 的两个子树的最大深度 d1 和次大深度 d2
+        int d1 = -1, d2 = -1;
+        for (int v : adj[u]) {
+            if (v == p) continue;
+            if (depth[v] > d1) {
+                d2 = d1;
+                d1 = depth[v];
+            } else if (depth[v] > d2) {
+                d2 = depth[v];
+            }
+        }
+        depth[u] = d1 + 1;
+
+        sum[u] = value[u];
+        for (int v : adj[u]) {
+            if (v == p) continue;
+            sum[u] += sum[v];
+        }
+        cost[u] = sum[u] - value[u];
+
+        for (int v : adj[u]) {
+            if (v == p) continue;
+            cost[u] += cost[v];
+        }
+
+        for (int v : adj[u]) {
+            if (v == p) continue;
+            int d = (depth[v] == d1) ? d2 : d1;
+            // ans[v] - cost[v] 代表操作在 v 的子树内部
+            // sum[v] * (d + 1) 代表操作将 v 的整棵子树移动到其他的深度最大的子树下面
+            ll tmp = max(ans[v] - cost[v], sum[v] * (d + 1));
+            ans[u] = max(ans[u], tmp);
+        }
+        ans[u] += cost[u];
+    };
+
+    dfs(dfs, 0, -1);
+
+    for (int i = 0; i < n; i++) {
+        cout << ans[i] << ' ';
+    }
+    cout << '\n';
+}
+
+int main() {
+    ios::sync_with_stdio(false);
+    cin.tie(nullptr);
+    int t;
+    cin >> t;
+    while (t--) {
+        solve();
+    }
+    return 0;
+}
+```
+
+
+
 
 
 ## M2193D. Monster Game
@@ -16266,7 +16615,7 @@ Consider the first test case. Optimal difficulty to choose is 3. If difficulty i
         *   如果 $P_k \le n$，则计算当前可能的最高分数：$a[P_k - 1] \times k$（注意索引从 0 开始）。
         *   不断更新全局最大分数。
 
-**Python 代码实现**
+        **Python 代码实现**
 
 ```python
 import sys
@@ -16465,7 +16814,7 @@ for _ in range(int(input())):
     -   总的计算量类似于埃氏筛法：对于每个数 $u$，我们执行的乘法次数最多为 $n/u$。
     -   整体时间复杂度为 $O(\sum n \ln n)$。对于 $n = 3 \cdot 10^5$，这个数值大约是 $4 \cdot 10^6$，在 Python 中通过合理优化可以在 3 秒内运行。
 
-**Python 代码实现**
+    **Python 代码实现**
 
 ```python
 import sys
@@ -17050,8 +17399,8 @@ In the second example, there are 7 *beautiful* pairs: (1,3), (1,5), (2,4), (2,6)
 - 若 $a[i]< \sqrt{ n },a[j]< \sqrt{ n }$，因此有 $k=a[j]<\sqrt{ n }$，一定能被第二种方法搜到。
   这样子整个算法就能在 $\mathcal{O}(n^{3/2})$ 的速度下完成计算。
 
-这道题目的思路让我感觉是一种“Meet In Between"的思路。就是你有两种搜索方案，一共要完成 $n$ 的搜索任务，要么是给两者分别分配 $\mathcal{O}(n)$ 与 $\mathcal{O}(1)$ 的任务量，要么是给两者分配 $\mathcal{O}(\sqrt{n})$ 的工作量。显然后面这种更优秀。这种方式在魔方求解最短步数的计算机解法里面也有利用，就是分别从初始状态与最终完成两个点进行bfs，看什么时候两者相遇。
-代码：
+  这道题目的思路让我感觉是一种“Meet In Between"的思路。就是你有两种搜索方案，一共要完成 $n$ 的搜索任务，要么是给两者分别分配 $\mathcal{O}(n)$ 与 $\mathcal{O}(1)$ 的任务量，要么是给两者分配 $\mathcal{O}(\sqrt{n})$ 的工作量。显然后面这种更优秀。这种方式在魔方求解最短步数的计算机解法里面也有利用，就是分别从初始状态与最终完成两个点进行bfs，看什么时候两者相遇。
+  代码：
 
 ```python
 from math import sqrt, ceil
