@@ -8428,7 +8428,7 @@ else:
 
 ## 580C. Kefa and Park
 
-dfs and similar/graphs/trees, 1500,  https://codeforces.com/contest/580/problem/C
+dfs and similar, graphs, trees, 1500,  https://codeforces.com/contest/580/problem/C
 
 Kefa decided to celebrate his first big salary by going to the restaurant.
 
