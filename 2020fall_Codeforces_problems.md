@@ -1,6 +1,6 @@
 # Problems in Codeforces.com
 
-*Updated 2026-04-10 12:40 GMT+8*
+*Updated 2026-04-11 12:04 GMT+8*
  *Compiled by Hongfei Yan (2020 Fall)*
 
 
@@ -13625,7 +13625,42 @@ For the second example, there are 4 of possible pairs of vertices from which app
 
 
 
-蒋子轩23工学院 清晰明了的程序，custom stack.
+【竺景琦 25工学院】思路：叶子数之积，直接统计即可。
+
+```python
+import sys
+sys.setrecursionlimit(10**6)
+t_useless = int(input())
+for _useless in range(t_useless):
+    n = int(input())
+    visited = [0]*n
+    leaves = [0]*n
+    edge = [[] for _ in range(n)]
+    for _ in range(n-1):
+        x,y = map(int,input().split())
+        edge[x-1].append(y-1)
+        edge[y-1].append(x-1)
+    def dfs(p):
+        visited[p] = 1
+        for v in edge[p]:
+            if(visited[v]):continue
+            dfs(v)
+            leaves[p] += leaves[v]
+        if(leaves[p]==0):
+            leaves[p] = 1
+    dfs(0)
+    q = int(input())
+    for _ in range(q):
+        x,y = map(int,input().split())
+        print(leaves[x-1]*leaves[y-1])
+
+```
+
+
+
+
+
+【蒋子轩23工学院】 custom stack.
 
 ```python
 def build_tree(edges):
