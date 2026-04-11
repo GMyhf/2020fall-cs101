@@ -8440,11 +8440,11 @@ Your task is to help Kefa count the number of restaurants where he can go.
 
 **Input**
 
-The first line contains two integers, *n* and *m* (2 ≤ *n* ≤ 10^5^, 1 ≤ *m* ≤ *n*) — the number of vertices of the tree and the maximum number of consecutive vertices with cats that is still ok for Kefa.
+The first line contains two integers, *n* and *m* (2 ≤ *n* ≤ 10^5, 1 ≤ *m* ≤ *n*) — the number of vertices of the tree and the maximum number of consecutive vertices with cats that is still ok for Kefa.
 
-The second line contains *n* integers a~1~, a~2~, ..., a~n~, where each a~i~ either equals to 0 (then vertex *i* has no cat), or equals to 1 (then vertex *i* has a cat).
+The second line contains *n* integers a1, a2, ..., an, where each a~i~ either equals to 0 (then vertex *i* has no cat), or equals to 1 (then vertex *i* has a cat).
 
-Next *n* - 1 lines contains the edges of the tree in the format "x~i~ y~i~" (without the quotes) (1 ≤ x~i~, y~i~ ≤ *n*, x~i~ ≠ y~i~), where x~i~ and y~i~ are the vertices of the tree, connected by an edge.
+Next *n* - 1 lines contains the edges of the tree in the format "xi yi" (without the quotes) (1 ≤ xi, yi ≤ *n*, xi ≠ yi), where xi and yi are the vertices of the tree, connected by an edge.
 
 It is guaranteed that the given set of edges specifies a tree.
 
