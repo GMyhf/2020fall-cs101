@@ -8495,13 +8495,13 @@ Let us remind you that a *tree* is a connected graph on *n* vertices and *n* -
 
 Note to the first sample test:
 
-![img](https://espresso.codeforces.com/785114b4b3f5336f02078c25750f87c5a1d0b4be.png)
+<img src="https://raw.githubusercontent.com/GMyhf/img/main/img/41b46375247a6e5f85ccf4afb28b96b0.png" alt="41b46375247a6e5f85ccf4afb28b96b0" style="zoom:50%;" />
 
 The vertices containing cats are marked red. The restaurants are at vertices 2, 3, 4. Kefa can't go only to the restaurant located at vertex 2.
 
 Note to the second sample test:
 
-![img](https://espresso.codeforces.com/e5c07640680c837aec99126d94287872e69aa09a.png)
+<img src="https://raw.githubusercontent.com/GMyhf/img/main/img/1c57aef0480f99a2ccf94630c425856f.png" alt="1c57aef0480f99a2ccf94630c425856f" style="zoom:50%;" />
 
 
 
