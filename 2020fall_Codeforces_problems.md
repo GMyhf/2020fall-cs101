@@ -1,6 +1,6 @@
 # Problems in Codeforces.com
 
-*Updated 2026-04-11 12:04 GMT+8*
+*Updated 2026-04-14 21:04 GMT+8*
  *Compiled by Hongfei Yan (2020 Fall)*
 
 
@@ -15901,6 +15901,210 @@ for _ in range(int(input())):
 
 
 
+## 2171 D&F. Rae Taylor and Trees（easy & hard）
+
+binary search, constructive algorithms, data structures, dp, dsu, greedy, implementation, 1600,
+
+https://codeforces.com/contest/2171/problem/F
+
+*"To think a commoner would even fathom sitting next to me. Know your place!"*
+
+— Claire François
+
+**This is the hard version of the problem. The only difference between the easy and hard versions is that the hard version asks you to construct an example of a satisfactory tree.**
+
+*As an Earth mage, Rae has mastered the spell of growing trees! But Manaria brags that she can grow a more impressive species of trees. Rae remembers that the most rare type of tree can be grown using a formula represented by a certain permutation — please help her construct it!*
+
+You are given a permutation∗ 𝑝 of length 𝑛.
+
+Determine if there exists an undirected tree with 𝑛 vertices labeled 1,2,…,𝑛, satisfying the following condition: 
+
+- Let 𝑢 and 𝑣 (1≤𝑢<𝑣≤𝑛) be any two vertices connected by an edge. Then 𝑢 appears before 𝑣 in 𝑝. 
+
+Additionally, if there exists such a tree, output any of them.
+
+∗A permutation of length 𝑛 is an array that contains every integer from 1 to 𝑛 exactly once, in any order.
+
+**Input**
+
+The first line contains a single integer 𝑡 (1≤𝑡≤104)  — the number of test cases.
+
+The first line of each test case contains a single integer 𝑛 (2≤𝑛≤2⋅105).
+
+The second line of each test case contains 𝑛 integers, 𝑝1,𝑝2,…,𝑝𝑛 (1≤𝑝𝑖≤𝑛). It is guaranteed that all 𝑝𝑖 are distinct.
+
+It is guaranteed that the sum of 𝑛 over all test cases does not exceed 2⋅105.
+
+**Output**
+
+For each test case, output on a single line "Yes" if there exists a tree satisfying the given condition, and "No" otherwise.
+
+Then, if the answer is "Yes", output 𝑛−1 lines. The 𝑖-th of these lines should contain two integers 𝑢 and 𝑣, denoting an edge connecting vertices 𝑢 and 𝑣.
+
+You may output the answer in any case (upper or lower). For example, the strings "yEs", "yes", "YES", and "yeS" will be recognized as "Yes".
+
+Example
+
+input
+
+```
+9
+6
+1 3 4 5 2 6
+4
+3 4 1 2
+5
+4 3 5 1 2
+4
+1 2 3 4
+7
+4 3 5 7 6 2 1
+6
+2 4 6 1 3 5
+3
+2 1 3
+4
+2 4 1 3
+6
+4 2 6 5 1 3
+```
+
+output
+
+```
+Yes
+3 1
+4 1
+6 5
+6 2
+6 1
+No
+No
+Yes
+2 1
+4 3
+4 1
+No
+Yes
+4 2
+6 2
+3 1
+5 1
+5 2
+Yes
+3 2
+3 1
+Yes
+4 2
+3 1
+3 2
+Yes
+6 4
+6 2
+3 1
+5 4
+2 3
+```
+
+Note
+
+In the first example, we can construct the tree given in the sample output. We have that 
+
+- 1<3, and 1 appears before 3 in 𝑝, 
+- 1<4, and 1 appears before 4 in 𝑝, 
+- 5<6, and 5 appears before 6 in 𝑝, 
+- 2<6, and 2 appears before 6 in 𝑝, 
+- 1<6, and 1 appears before 6 in 𝑝. 
+
+In the second example, it can be shown that there does not exist a tree satisfying the given constraints.
+
+
+
+这道题目分为 easy 和 hard 两个部分，对应 [2171D](https://codeforces.com/contest/2171/problem/D) 和 [2171F](https://codeforces.com/contest/2171/problem/F) 两题，这里直接展示 F。
+
+【汤立祥、物理学院】思路：
+
+**第一步要看什么时候不能连成一颗树：**
+
+如果存在一个位置，将数组分为左右两部分，使得左侧的最小值大于右侧的最大值，那么无论如何都无法构造出满足要求的树，这时直接输出 "NO"。
+
+**第二步我们开始对能连成树的构造：**
+
+使用前缀最小值将序列划分成若干“根区间”，每个区间的第一个元素是当前前缀最小值。在每个区间内部，将该区间的根与后续元素连接；区间之间则通过下一个区间中最大的元素与当前根相连，得到一棵合法的树。
+
+```python
+import sys
+
+class TreeNode:
+    def __init__(self, val):
+        self.val = val
+        self.left = None
+        self.right = None
+
+input_data = list(map(int, sys.stdin.read().split()))
+input_ptr = iter(input_data)
+
+def solve():
+    n = next(input_ptr)
+    lst = [next(input_ptr) for _ in range(n)]
+    
+    prefix_min = [0] * n
+    suffix_max = [0] * n
+    suffix_max_index = [0] * n
+    
+    prefix_min[0] = lst[0]
+    suffix_max[-1] = lst[-1]
+    suffix_max_index[-1] = n-1
+    for i in range(1, n):
+        if prefix_min[i-1] > lst[i]:
+            prefix_min[i] = lst[i]
+        else:
+            prefix_min[i] = prefix_min[i-1]
+    for i in reversed(range(n-1)):
+        if suffix_max[i+1] < lst[i]:
+            suffix_max[i] = lst[i]
+            suffix_max_index[i] = i
+        else:
+            suffix_max[i] = suffix_max[i+1]
+            suffix_max_index[i] = suffix_max_index[i+1]
+    
+    for i in range(n-1):
+        if prefix_min[i] > suffix_max[i+1]:
+            print("NO")
+            return
+    
+    # little_prefix_min_block
+    prefix_min_block = []
+    res = ["YES"]
+    for i in range(n):
+        if prefix_min[i] == lst[i]:
+            prefix_min_block.append(i)
+    prefix_min_block.append(n)
+    
+    for i in range(len(prefix_min_block)-1):
+        block_start = prefix_min_block[i]
+        block_end = prefix_min_block[i+1]
+        
+        for end in range(block_start+1, block_end):
+            res.append(f"{lst[block_start]} {lst[end]}")
+        if i < len(prefix_min_block) - 2:    
+            res.append(f"{lst[block_start]} {lst[suffix_max_index[block_end]]}")
+    print("\n".join(res))
+        
+        
+def main():
+    t = next(input_ptr)
+    for _ in range(t):
+        solve()
+
+if __name__ == "__main__":
+    main()
+```
+
+
+
+
+
 ## 2171G. Sakura Adachi and Optimal Sequences
 
 bitmasks, combinatorics, greedy, math, 2000
@@ -18571,6 +18775,160 @@ for _ in range(int(input())):
             print(u+1,v+1)
     else:
         print("No")
+```
+
+
+
+## 2205 D. Simons and Beating Peaks
+
+data structures, divide and conquer, dp, greedy, implementation, trees, 1700
+
+https://codeforces.com/contest/2205/problem/D
+
+*My loveliest wishes dissolved into the air; At eighteen, I poured my dreams into the mic to share.*
+
+— SHUN, *[720](https://open.spotify.com/track/3bhQrFuaaPk8pMMb7TcU2d)*
+
+We call an array 𝑏 of length 𝑚 *cool* if and only if:
+
+- There exists **no** index 𝑖 (1<𝑖<𝑚) such that 𝑏𝑖=max({𝑏𝑖−1,𝑏𝑖,𝑏𝑖+1}). 
+
+Simons has an array 𝑎 of size 𝑛. Initially, the array is a permutation∗.
+
+He must perform the following operation until the array is *cool*:
+
+- Choose an index 𝑖 (1<𝑖<𝑛) such that 𝑎𝑖=max({𝑎𝑖−1,𝑎𝑖,𝑎𝑖+1}). 
+- Then, he can remove either 𝑎𝑖−1 **or** 𝑎𝑖+1 from the array. After removal, a gap appears in the array, and the left and right sides of the gap will be rejoined. 
+
+Find the minimum number of operations for Simons to perform.
+
+∗A permutation of length 𝑛 is an array consisting of 𝑛 distinct integers from 1 to 𝑛 in arbitrary order. For example, [2,3,1,5,4] is a permutation, but [1,2,2] is not a permutation (2 appears twice in the array), and [1,3,4] is also not a permutation (𝑛=3 but there is 4 in the array). 
+
+**Input**
+
+Each test contains multiple test cases. The first line contains the number of test cases 𝑡 (1≤𝑡≤5⋅104). The description of the test cases follows. 
+
+The first line contains an integer 𝑛 (3≤𝑛≤5⋅105) — the size of 𝑎.
+
+The second line contains 𝑛 integers 𝑎1,𝑎2,…,𝑎𝑛 (1≤𝑎𝑖≤𝑛, all 𝑎𝑖-s are distinct) — the array Simons has initially.
+
+It is guaranteed that the sum of 𝑛 over all test cases does not exceed 5⋅105. 
+
+**Output**
+
+For each test case, print a single integer — the minimum number of operations for Simons to perform.
+
+Example
+
+input
+
+```
+5
+3
+1 2 3
+5
+4 1 3 2 5
+6
+4 5 3 6 2 1
+7
+6 5 1 7 4 2 3
+15
+7 4 10 12 9 14 5 3 8 11 1 15 2 13 6
+```
+
+output
+
+```
+0
+1
+3
+3
+9
+```
+
+Note
+
+In the first test case, the array is *cool* initially, so Simons can't perform any operation. The answer is 0.
+
+In the second test case, Simons can perform as follows:
+
+- Choose index 3, because 𝑎3=max({𝑎2,𝑎3,𝑎4}). Then, he removes 𝑎2 from the array. The array becomes [4,3,2,5]. 
+
+We can see the array is *cool* now. Thus, the answer is 1.
+
+In the third test case, Simons can perform as follows:
+
+- Choose index 2. Then, he removes 𝑎1 from the array. The array becomes [5,3,6,2,1]. 
+- Choose index 3. Then, he removes 𝑎2 from the array. The array becomes [5,6,2,1]. 
+- Choose index 2. Then, he removes 𝑎1 from the array. The array becomes [6,2,1]. 
+
+Thus, Simons makes the array *cool* in 3 operations.
+
+
+
+【汤立祥、物理学院】思路：这道题目很有意思，要看你怎么去思考这个问题。本题要求我们去选择 $a_i = \max\{a_{i-1}, a_{i}, a_{i+1}\}$ 的区间，然后删去 $a_{i-1}$ 或 $a_{i+1}$，直到这类区间不存在。但是你会发现无论怎么删，整个序列的最大值一定不会被删掉。因此我们可以先保留好最大值。
+
+第二个注意点就是最大值一定在边缘上，因为若最大值不是边缘的值，一定就是整个序列中的“峰”，是本题结果不允许的，所以最后的序列肯定就在最大值的左区间或右区间内。我们由此将原先的问题分为两个小问题来解决。
+
+这种解决问题的方式就和二叉树的结构很相似，具体而言，我们可以选取整个序列的最大值为根，其左孩子是左区间的最大值，右孩子是右区间的最大值，……依次类推。（查了一下发现这种树叫做笛卡尔树，有 $\mathcal{O}(n)$ 复杂度的构建算法）。若要进行最少次数的删除，就意味着需要保留最多的元素，最多元素的数量也就是整棵树的高度。
+
+整体上而言，想到分治→二叉树之后就可以轻松解决这个问题了。
+
+代码：
+
+```python
+import sys
+from collections import deque
+class TreeNode:
+    def __init__(self, val):
+        self.val = val
+        self.left = None
+        self.right = None
+    
+    def calc_depth(self):
+        bfs_deque = deque([(self, 1)])
+        max_depth = 1
+        while bfs_deque:
+            curr, depth = bfs_deque.popleft()
+            if depth > max_depth:
+                max_depth = depth
+            if curr.left:
+                bfs_deque.append((curr.left, depth+1))
+            if curr.right:
+                bfs_deque.append((curr.right, depth+1))
+        return max_depth
+        
+input_data = list(map(int, sys.stdin.read().split()))
+input_ptr = iter(input_data)
+
+def build_cartesian_tree(seq) -> TreeNode:
+    stack = []
+    for x in seq:
+        node = TreeNode(x)
+        last = None
+        while stack and stack[-1].val < x:
+            last = stack.pop()
+        node.left = last
+        if stack:
+            stack[-1].right = node
+            
+        stack.append(node)
+    return stack[0] if stack else None
+        
+
+def solve():
+    n = next(input_ptr)
+    lst = [next(input_ptr) for _ in range(n)]
+    cart = build_cartesian_tree(lst)
+    print(n - cart.calc_depth())
+
+def main():
+    t = next(input_ptr)
+    for _ in range(t):
+        solve()
+
+if __name__ == "__main__":
+    main()
 ```
 
 
