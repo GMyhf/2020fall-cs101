@@ -1,6 +1,6 @@
 # Problems in Codeforces.com
 
-*Updated 2026-04-14 21:04 GMT+8*
+*Updated 2026-04-18 18:06 GMT+8*
  *Compiled by Hongfei Yan (2020 Fall)*
 
 
@@ -15901,6 +15901,268 @@ for _ in range(int(input())):
 
 
 
+## 2146D1. Max Sum OR (Easy Version)
+
+bitmasks, constructive algorithms, divide and conquer, greedy, trees, *1500
+
+https://codeforces.com/problemset/problem/2146/D1
+
+**This is the easy version of the problem. The difference between the versions is that in this version, 𝑙=0, and 𝑟<2⋅105. You can hack only if you solved all versions of this problem.**
+
+You are given two integers 𝑙 and 𝑟 (𝑙≤𝑟).
+
+Let 𝑛=𝑟−𝑙+1. We will create two arrays 𝑎 and 𝑏, both consisting of 𝑛 integers. Initially, both 𝑎 and 𝑏 are equal to [𝑙,𝑙+1,…,𝑟]. You have to reorder the array 𝑎 arbitrarily to maximize the following value:
+
+
+
+∑𝑖=1𝑛(𝑎𝑖|𝑏𝑖).
+
+
+
+Here, | denotes the [bitwise OR operation](https://en.wikipedia.org/wiki/Bitwise_operation#OR).
+
+You also need to construct a possible way to reorder the array 𝑎.
+
+**Input**
+
+Each test contains multiple test cases. The first line contains the number of test cases 𝑡 (1≤𝑡≤104). The description of the test cases follows.
+
+The only line of each test case contains two integers 𝑙 and 𝑟 (0=𝑙≤𝑟<2⋅10^5) — the minimum and maximum elements in 𝑎.
+
+Let 𝑛=𝑟−𝑙+1. It is guaranteed that the sum of 𝑛 over all test cases does not exceed 2⋅10^5.
+
+**Output**
+
+For each test case, print a single integer in the first line of output — the maximum value of ∑𝑖=1𝑛(𝑎𝑖|𝑏𝑖).
+
+Then, print 𝑛 distinct integers 𝑎1,𝑎2,…,𝑎𝑛 in the second line — the array 𝑎 after reordering.
+
+If there are multiple answers, you may print any of them.
+
+Example
+
+Input
+
+```
+3
+0 3
+0 9
+0 15
+```
+
+Output
+
+```
+12
+3 2 1 0 
+90
+7 8 5 4 3 2 9 0 1 6
+240
+15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 0 
+```
+
+Note
+
+In the first test case, the reordered array 𝑎 is [3,2,1,0]. The value of the expression is (3|0)+(2|1)+(1|2)+(0|3)=3+3+3+3=12. It can be proved that this is the maximum possible value of the expression.
+
+In the second test case, the reordered array 𝑎 is [7,8,5,4,3,2,9,0,1,6]. The value of the expression is 90. It can be proved that this is the maximum possible value of the expression.
+
+
+
+【尹显齐 25物理学院】可以看出，可能的最大答案是 $n(n-1)$ （即所有数都满足 $a_{i} | b_{i}=a_{i}+b_{i}$ ），下面给出一个构造使得所有数都满足该条件。
+
+我们不难发现，如果两个数加起来等于 $2^k-1$ ，则它们按位与运算的值也是 $2^k-1$ 。于是我们可以这样做：对于当前的 $n$ ，令 $x$ 为比 $n$ 大的第一个形式为 $2^k-1$ 的数，则从 $x-n$ 到 $n$ 的所有数都可以找到对应的数使得它们的和为 $x$ 。然后我们发现接下来只用处理从 $0$ 到 $x-n-1$ 的数就行了，可用递归方便地解决。
+
+```python
+for _ in range(int(input())):
+    l,r = map(int,input().split())
+    n = r-l+1
+    print(n*(n-1))
+    ans = [0]*(n)
+    def sol(k):
+        if k <= 0:
+            return
+        lbt = 2**(k.bit_length())-1-k
+        for i in range(lbt,k+1):
+            ans[i] = 2**(k.bit_length())-1-i
+        sol(lbt-1)
+    sol(n-1)
+    print(*ans)
+```
+
+
+
+## 2171D. Rae Taylor and Trees (easy version)
+
+binary search,data structures,dp,dsu,greedy,implementation,trees,*1400
+
+https://codeforces.com/problemset/problem/2171/D
+
+*"To think a commoner would even fathom sitting next to me. Know your place!"*
+
+— Claire François
+
+**This is the easy version of the problem. The only difference between the easy and hard versions is that the hard version asks you to construct an example of a satisfactory tree.**
+
+*As an Earth mage, Rae has mastered the spell of growing trees! But Manaria brags that she can grow a more impressive species of trees. Rae remembers that the most rare type of tree can be grown using a formula represented by a certain permutation — please help her construct it!*
+
+You are given a permutation∗ 𝑝 of length 𝑛.
+
+Determine if there exists an undirected tree with 𝑛 vertices labeled 1,2,…,𝑛, satisfying the following condition:
+
+- Let 𝑢 and 𝑣 (1≤𝑢<𝑣≤𝑛) be any two vertices connected by an edge. Then 𝑢 appears before 𝑣 in 𝑝.
+
+∗A permutation of length 𝑛 is an array that contains every integer from 1 to 𝑛 exactly once, in any order.
+
+**Input**
+
+The first line contains a single integer 𝑡 (1≤𝑡≤104)  — the number of test cases.
+
+The first line of each test case contains a single integer 𝑛 (2≤𝑛≤2⋅105).
+
+The second line of each test case contains 𝑛 integers, 𝑝1,𝑝2,…,𝑝𝑛 (1≤𝑝𝑖≤𝑛). It is guaranteed that all 𝑝𝑖 are distinct.
+
+It is guaranteed that the sum of 𝑛 over all test cases does not exceed 2⋅105.
+
+**Output**
+
+For each test case, output on a single line "Yes" if there exists a tree satisfying the given condition, and "No" otherwise.
+
+You may output the answer in any case (upper or lower). For example, the strings "yEs", "yes", "YES", and "yeS" will be recognized as "Yes".
+
+Example
+
+Input
+
+```
+9
+6
+1 3 4 5 2 6
+4
+3 4 1 2
+5
+4 3 5 1 2
+4
+1 2 3 4
+7
+4 3 5 7 6 2 1
+6
+2 4 6 1 3 5
+3
+2 1 3
+4
+2 4 1 3
+6
+4 2 6 5 1 3
+```
+
+Output
+
+```
+Yes
+No
+No
+Yes
+No
+Yes
+Yes
+Yes
+Yes
+```
+
+Note
+
+In the first example, we can construct the tree with the following edges:
+
+- {3,1},
+- {4,1},
+- {6,5},
+- {6,2},
+- {6,1}.
+
+Then we have that
+
+- 1<3, and 1 appears before 3 in 𝑝,
+- 1<4, and 1 appears before 4 in 𝑝,
+- 5<6, and 5 appears before 6 in 𝑝,
+- 2<6, and 2 appears before 6 in 𝑝,
+- 1<6, and 1 appears before 6 in 𝑝.
+
+In the second example, it can be shown that there does not exist a tree satisfying the given constraints.
+
+
+
+
+
+【尹显齐 25物理学院】我的思路很暴力，就是把能连的边都连上，最后来判断是不是连通图。因为对于一个连通图，总有一棵树能选取里面的若干条边将所有点连通。
+
+但是直接连所有能连通的点肯定会超时，我们的连接方式是：对每一个点，连接它左边和它不连通的比它小的最小数和它右边比它大的最大数。最后，再判断一次是不是所有点都连通即可。
+
+```python
+class UnionFind:
+    def __init__(self,n):
+        self.p = list(range(n))
+        self.rank = [0]*n
+    def find(self,x):
+        if self.p[x] != x:
+            self.p[x] = self.find(self.p[x])
+        return self.p[x]
+    def union(self,x,y):
+        rx,ry = self.find(x),self.find(y)
+        if rx == ry:
+            return False
+        if self.rank[rx] < self.rank[ry]:
+            self.p[rx] = ry
+        elif self.rank[rx] > self.rank[ry]:
+            self.p[ry] = rx
+        else:
+            self.p[ry] = rx
+            self.rank[rx] += 1
+        return True
+    def judge(self,x,y):
+        return self.find(x) == self.find(y)
+for _ in range(int(input())):
+    n = int(input())
+    arr = list(map(int,input().split()))
+    # 前缀最小值最小值预处理
+    mins = [arr[0]]
+    for i in range(1,n):
+        mins.append(min(arr[i],mins[-1]))
+    # 后缀最大值
+    maxs = [arr[-1]]
+    for i in range(n-2,-1,-1):
+        maxs.append(max(arr[i],maxs[-1]))
+    maxs = maxs[::-1]
+    uf = UnionFind(n)
+    if maxs[1] > arr[0]:
+        uf.union(maxs[1]-1,arr[0]-1)
+    for i in range(1,n-1):
+        for j in range(1,i+1):
+            if mins[i-j] > arr[i]:
+                break
+            if not uf.judge(mins[i-j]-1,arr[i]-1):
+                uf.union(mins[i-j]-1,arr[i]-1)
+                break
+        if maxs[i+1] > arr[i]:
+            uf.union(maxs[i+1]-1,arr[i]-1)
+    for j in range(1,n):
+        if mins[n-1-j] > arr[n-1]:
+            break
+        if not uf.judge(mins[n-1-j]-1,arr[n-1]-1):
+            uf.union(mins[n-1-j]-1,arr[n-1]-1)
+            break
+    ans = 1
+    for i in range(1,n):
+        if not uf.judge(0,i):
+            ans = 0
+            break
+    print("YES" if ans else "NO")
+```
+
+
+
+
+
 ## 2171 D&F. Rae Taylor and Trees（easy & hard）
 
 binary search, constructive algorithms, data structures, dp, dsu, greedy, implementation, 1600,
@@ -16099,6 +16361,327 @@ def main():
 
 if __name__ == "__main__":
     main()
+```
+
+
+
+## 2171E. Anisphia Wynn Palettia and Good Permutations
+
+constructive algorithms,greedy,number theory,*2000
+
+https://codeforces.com/problemset/problem/2171/E
+
+*I've always loved the word magic. It has a way of making people happy, of putting a smile on their faces.*
+
+— Anisphia Wynn Palettia
+
+*Anis and her new assistant Euphie are improving the Witch's Broom! Magicology requires great precision and care — in order to fly, the construction of the broom must have sufficiently few imperfections.*
+
+For an arbitrary array 𝑎 of length 𝑚, call an index 𝑖 (1≤𝑖≤𝑚−2) *bad* if 𝑎𝑖, 𝑎𝑖+1, and 𝑎𝑖+2 are all pairwise coprime. More formally, 𝑖 is a bad index if and only if gcd(𝑎𝑖,𝑎𝑖+1)=gcd(𝑎𝑖,𝑎𝑖+2)=gcd(𝑎𝑖+1,𝑎𝑖+2)=1∗. Furthermore, call 𝑎 *good* if it has at most 6 bad indices.
+
+You are given an integer 𝑛. Construct a good permutation† 𝑝 of length 𝑛. It can be shown that such a permutation always exists.
+
+Note that you do not have to minimize the number of bad indices.
+
+∗gcd(𝑥,𝑦) denotes the [greatest common divisor](https://en.wikipedia.org/wiki/Greatest_common_divisor) of 𝑥 and 𝑦
+
+† A permutation of length 𝑛 is an array that contains every integer from 1 to 𝑛 exactly once, in any order.
+
+**Input**
+
+The first line contains a single integer 𝑡 (1≤𝑡≤10^4)  — the number of test cases.
+
+The only line of each test case contains a single integer 𝑛 (3≤𝑛≤2⋅10^5).
+
+It is guaranteed that the sum of 𝑛 over all test cases does not exceed 2⋅10^5.
+
+**Output**
+
+For each test case, output on a single line 𝑛 integers 𝑝1,𝑝2,…,𝑝𝑛, an example of a good permutation of length 𝑛. If there are multiple good permutations, you may output any of them.
+
+Example
+
+Input
+
+```
+4
+3
+6
+8
+9
+```
+
+Output
+
+```
+2 1 3
+4 1 6 3 5 2
+4 1 6 3 5 2 8 7
+5 4 8 1 9 3 6 2 7
+```
+
+Note
+
+For 𝑛=9, we have
+
+| 𝑖    | 𝑝𝑖   | 𝑝𝑖+1 | 𝑝𝑖+2 | gcd(𝑝𝑖,𝑝𝑖+1) | gcd(𝑝𝑖,𝑝𝑖+2) | gcd(𝑝𝑖+1,𝑝𝑖+2) |
+| ---- | ---- | ---- | ---- | ------------ | ------------ | -------------- |
+| 1    | 5    | 4    | 8    | 1            | 1            | 4              |
+| 2    | 4    | 8    | 1    | 4            | 1            | 1              |
+| 3    | 8    | 1    | 9    | 1            | 1            | 1              |
+| 4    | 1    | 9    | 3    | 1            | 1            | 3              |
+| 5    | 9    | 3    | 6    | 3            | 3            | 3              |
+| 6    | 3    | 6    | 2    | 3            | 1            | 2              |
+| 7    | 6    | 2    | 7    | 2            | 1            | 1              |
+
+
+
+The only bad index is 3. Since 1≤6, 𝑝 is a good permutation.
+
+
+
+【尹显齐 25物理学院】幽默题目，看着难实则很简单。我们先把所有数中能被 $2$ 整除但不能被 $3$ 整除的数找出来，存在第一个数组里，把这些数记为 $a_{1i}$，再把所有能被 $3$ 整除的数存在第二个数组里，把这些数记作 $a_{2i}$ 。剩下数存在第三个数组里，把这些数记为 $a_{3i}$。然后我们按照如下方式填数：
+
+$$
+a_{11},a_{21},a_{12},a_{13},a_{22},a_{14},\dots,
+$$
+
+直到把 $a_{1i}$ 填完，接下来：
+
+$$
+a_{31},a_{2m},a_{32},a_{33},a_{2(m+1)},a_{34},\dots
+$$
+
+由于三种数的数量大致相等，可以证明在两种填充方式的交界处会出现两个坏位置，末尾至多出现一个坏位置，总共至多出现三个坏位置。
+
+```python
+for _ in range(int(input())):
+    n = int(input())
+    ans = []
+    even = []
+    threes = []
+    last = []
+    l1,l2,l3 = 0,0,0
+    for i in range(1,n+1):
+        if i % 3 == 0:
+            threes.append(i)
+            l3 += 1
+        elif i % 2 == 0:
+            even.append(i)
+            l2 += 1
+        else:
+            last.append(i)
+            l1 += 1
+    j = 0
+    for i in range(l2):
+        ans.append(even[i])
+        if i%2 == 0:
+            ans.append(last[j])
+            j += 1
+    for i in range(l3):
+        ans.append(threes[i])
+        if i%2 == 0 and j < l1:
+            ans.append(last[j])
+            j += 1
+    while j < l1:
+        ans.append(last[j])
+        j += 1
+    print(*ans)
+```
+
+
+
+## 2171F. Rae Taylor and Trees (hard version)
+
+binary search,constructive algorithms,data structures,dp,dsu,greedy,implementation,trees,*1600
+
+https://codeforces.com/problemset/problem/2171/F
+
+*"To think a commoner would even fathom sitting next to me. Know your place!"*
+
+— Claire François
+
+**This is the hard version of the problem. The only difference between the easy and hard versions is that the hard version asks you to construct an example of a satisfactory tree.**
+
+*As an Earth mage, Rae has mastered the spell of growing trees! But Manaria brags that she can grow a more impressive species of trees. Rae remembers that the most rare type of tree can be grown using a formula represented by a certain permutation — please help her construct it!*
+
+You are given a permutation∗ 𝑝 of length 𝑛.
+
+Determine if there exists an undirected tree with 𝑛 vertices labeled 1,2,…,𝑛, satisfying the following condition:
+
+- Let 𝑢 and 𝑣 (1≤𝑢<𝑣≤𝑛) be any two vertices connected by an edge. Then 𝑢 appears before 𝑣 in 𝑝.
+
+Additionally, if there exists such a tree, output any of them.
+
+∗A permutation of length 𝑛 is an array that contains every integer from 1 to 𝑛 exactly once, in any order.
+
+**Input**
+
+The first line contains a single integer 𝑡 (1≤𝑡≤104)  — the number of test cases.
+
+The first line of each test case contains a single integer 𝑛 (2≤𝑛≤2⋅105).
+
+The second line of each test case contains 𝑛 integers, 𝑝1,𝑝2,…,𝑝𝑛 (1≤𝑝𝑖≤𝑛). It is guaranteed that all 𝑝𝑖 are distinct.
+
+It is guaranteed that the sum of 𝑛 over all test cases does not exceed 2⋅105.
+
+**Output**
+
+For each test case, output on a single line "Yes" if there exists a tree satisfying the given condition, and "No" otherwise.
+
+Then, if the answer is "Yes", output 𝑛−1 lines. The 𝑖-th of these lines should contain two integers 𝑢 and 𝑣, denoting an edge connecting vertices 𝑢 and 𝑣.
+
+You may output the answer in any case (upper or lower). For example, the strings "yEs", "yes", "YES", and "yeS" will be recognized as "Yes".
+
+Example
+
+Input
+
+```
+9
+6
+1 3 4 5 2 6
+4
+3 4 1 2
+5
+4 3 5 1 2
+4
+1 2 3 4
+7
+4 3 5 7 6 2 1
+6
+2 4 6 1 3 5
+3
+2 1 3
+4
+2 4 1 3
+6
+4 2 6 5 1 3
+```
+
+Output
+
+```
+Yes
+3 1
+4 1
+6 5
+6 2
+6 1
+No
+No
+Yes
+2 1
+4 3
+4 1
+No
+Yes
+4 2
+6 2
+3 1
+5 1
+5 2
+Yes
+3 2
+3 1
+Yes
+4 2
+3 1
+3 2
+Yes
+6 4
+6 2
+3 1
+5 4
+2 3
+```
+
+Note
+
+In the first example, we can construct the tree given in the sample output. We have that
+
+- 1<3, and 1 appears before 3 in 𝑝,
+- 1<4, and 1 appears before 4 in 𝑝,
+- 5<6, and 5 appears before 6 in 𝑝,
+- 2<6, and 2 appears before 6 in 𝑝,
+- 1<6, and 1 appears before 6 in 𝑝.
+
+In the second example, it can be shown that there does not exist a tree satisfying the given constraints.
+
+
+
+【尹显齐 25物理学院】有了上一问的经验，这个题就很简单了。只用把上一问连接的边都收集起来，然后构造一棵树即可。
+
+```python
+class UnionFind:
+    def __init__(self,n):
+        self.p = list(range(n))
+        self.rank = [0]*n
+    def find(self,x):
+        if self.p[x] != x:
+            self.p[x] = self.find(self.p[x])
+        return self.p[x]
+    def union(self,x,y):
+        rx,ry = self.find(x),self.find(y)
+        if rx == ry:
+            return False
+        if self.rank[rx] < self.rank[ry]:
+            self.p[rx] = ry
+        elif self.rank[rx] > self.rank[ry]:
+            self.p[ry] = rx
+        else:
+            self.p[ry] = rx
+            self.rank[rx] += 1
+        return True
+    def judge(self,x,y):
+        return self.find(x) == self.find(y)
+for _ in range(int(input())):
+    n = int(input())
+    arr = list(map(int,input().split()))
+    mins = [arr[0]]
+    for i in range(1,n):
+        mins.append(min(arr[i],mins[-1]))
+    maxs = [arr[-1]]
+    for i in range(n-2,-1,-1):
+        maxs.append(max(arr[i],maxs[-1]))
+    maxs = maxs[::-1]
+    uf = UnionFind(n)
+    edges = set()
+    if maxs[1] > arr[0]:
+        uf.union(maxs[1]-1,arr[0]-1)
+        edges.add((maxs[1]-1,arr[0]-1))
+    for i in range(1,n-1):
+        for j in range(1,i+1):
+            if mins[i-j] > arr[i]:
+                break
+            if not uf.judge(mins[i-j]-1,arr[i]-1):
+                uf.union(mins[i-j]-1,arr[i]-1)
+                edges.add((mins[i-j]-1,arr[i]-1))
+                break
+        if maxs[i+1] > arr[i]:
+            uf.union(maxs[i+1]-1,arr[i]-1)
+            edges.add((maxs[i+1]-1,arr[i]-1))
+    for j in range(1,n):
+        if mins[n-1-j] > arr[n-1]:
+            break
+        if not uf.judge(mins[n-1-j]-1,arr[n-1]-1):
+            uf.union(mins[n-1-j]-1,arr[n-1]-1)
+            edges.add((mins[n-1-j]-1,arr[n-1]-1))
+            break
+    ans = 1
+    # 判断是否是连通图
+    for i in range(1,n):
+        if not uf.judge(0,i):
+            ans = 0
+            break
+    print("YES" if ans else "NO")
+    if ans:
+        uf1 = UnionFind(n)
+        edges = list(edges)# 所有连接的边
+        for x,y in edges:
+            if not uf1.judge(x,y):# 如果两个端点还没有联通
+                uf1.union(x,y)
+                print(x+1,y+1)# 连接它们
 ```
 
 
