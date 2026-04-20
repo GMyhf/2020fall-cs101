@@ -10741,7 +10741,7 @@ The first line contains an integer 𝑡 (1≤𝑡≤5) — the number of test ca
 
 The first line of each test case contains 2 integers 𝑛 and 𝑥 (1≤𝑛≤10^5^, 1≤𝑥≤10^4^) — the number of elements in the array 𝑎 and the number that Ehab hates.
 
-The second line contains 𝑛 space-separated integers `𝑎1, 𝑎2, ……, 𝑎𝑛` `(0≤𝑎𝑖≤10^4)` — the elements of the array 𝑎.
+The second line contains 𝑛 space-separated integers $a_1, a_2, \dots, a_n (0 \le a_i \le 10^4)$ — the elements of the array 𝑎.
 
 **Output**
 
