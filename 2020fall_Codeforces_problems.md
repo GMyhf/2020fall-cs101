@@ -1,6 +1,6 @@
 # Problems in Codeforces.com
 
-*Updated 2026-04-30 16:35 GMT+8*
+*Updated 2026-05-01 16:23 GMT+8*
  *Compiled by Hongfei Yan (2020 Fall)*
 
 
@@ -21213,6 +21213,388 @@ for _ in range(int(input())):
             judge = 0
             break
     print("YES" if ans1.count(0) == ans2.count(0) and judge else 'NO') 
+```
+
+
+
+
+
+## Codeforces Round 1096
+
+> 【汤立祥，物理学院】参加了昨晚刚刚结束的 Codeforces Round 1096，考试的时候 AC6，但是被 _@KinaRight(尹显齐)_ hack 了一题。这里强力推荐 E, F, H 三道题。
+
+### [2227A. Koshary](https://codeforces.com/contest/2227/problem/A)
+
+思路：简单数学题，由于你每一步走的步长都是 $2$，因此在行进过程中有 $x \mod 2$ 和 $y \mod 2$ 的不变性。注意到这个就简单了
+
+```python
+r = lambda : list(map(int, input().split()))
+
+def solve():
+    a, b = r()
+    if a % 2 == 1 and b % 2 == 1:
+        print("NO")
+    else:
+        print("YES")
+    
+def main():
+    t = int(input())
+    for _ in range(t):
+        solve()
+        
+if __name__ == "__main__":
+    main()
+```
+
+
+### [2227B. Party Monster](https://codeforces.com/contest/2227/problem/B)
+
+思路：检查括号序列是否平衡，即左括号和右括号数量相等，且长度为偶数。
+
+```python
+from collections import Counter
+
+def solve():
+    l = int(input())
+    seq = input()
+    if l % 2 == 1:
+        print("NO")
+        return
+    seq_counter = Counter(seq)
+    l_num = seq_counter.get("(", 0)
+    r_num = seq_counter.get(")", 0)
+    if l_num != r_num:
+        print("NO")
+    else:
+        print("YES")            
+    
+def main():
+    t = int(input())
+    for _ in range(t):
+        solve()
+        
+if __name__ == "__main__":
+    main()
+```
+
+
+### [2227C. Snowfall](https://codeforces.com/contest/2227/problem/C)
+
+思路：重新排列数组，使得6的倍数在前，2的倍数其次，其他数再次，3的倍数最后。
+
+代码：
+
+```python
+r = lambda : list(map(int, input().split()))
+
+def solve():
+    n = int(input())
+    arr = r()
+    six_count = 0
+    three_count = 0
+    two_count = 0
+    sixes = []
+    threes = []
+    twos = []
+    nobody = []
+    for i in arr:
+        if i % 6 == 0:
+            six_count += 1
+            sixes.append(i)
+        elif i % 3 == 0:
+            three_count += 1
+            threes.append(i)
+        elif i % 2 == 0:
+            two_count += 1
+            twos.append(i)
+        else:
+            nobody.append(i)
+            
+    final = sixes + twos + nobody + threes
+    print(*final)
+def main():
+    t = int(input())
+    for _ in range(t):
+        solve()
+        
+if __name__ == "__main__":
+    main()
+```
+
+
+### [2227D. Palindromex](https://codeforces.com/contest/2227/problem/D)
+
+思路：找到数组中两个0的位置，计算以这些位置为中心的最长回文子数组的MEX。具体来说，一共有三种回文序列：
+
+1. `xxx0xxx`：以第一个0为中心的回文序列。
+2. `xxx0xxx`：以第二个0为中心的回文序列
+3. `xxx0xxx0xxx`：以两个0为中心的回文序列。
+
+如果你不用 0 作为回文序列的内容，那么直接 MEX = 0，显然不是最大的。
+
+代码：
+
+```python
+r = lambda : list(map(int, input().split()))
+
+def get_max_palin_and_mex(arr, left, right, n):
+
+    l, r = left, right
+    while l < r:
+        if arr[l] != arr[r]:
+            return 0 
+        l += 1
+        r -= 1
+    
+    while l > 0 and r < len(arr) - 1 and arr[l-1] == arr[r+1]:
+        l -= 1
+        r += 1
+        
+    s = set(arr[l : r+1])
+    curr_mex = 0
+    while curr_mex in s:
+        curr_mex += 1
+    return curr_mex    
+
+def solve():
+    n = int(input())
+    arr = r()
+    
+    zero1 = -1
+    zero2 = -1
+    for i in range(2*n):
+        if arr[i] == 0 and zero1 == -1:
+            zero1 = i
+            
+        elif arr[i] == 0 and zero2 == -1:
+            zero2 = i
+            break
+    mex1 = get_max_palin_and_mex(arr, zero1, zero1, n)
+    mex2 = get_max_palin_and_mex(arr, zero1, zero2, n)
+    mex3 = get_max_palin_and_mex(arr, zero2, zero2, n)
+    print(max(mex1, mex2, mex3))
+    
+
+def main():
+    t = int(input())
+    for _ in range(t):
+        solve()
+        
+if __name__ == "__main__":
+    main()
+```
+
+
+### [2227E. It All Went Sideways](https://codeforces.com/contest/2227/problem/E)
+
+思路：重力向右后，每个高度 $h$ 的立方体会滑到右边第一个高度>=h的位置。`suffix_min[i]`表示从 $i$ 到 $n-1 $的最小高度，对于 $i$ 处的立方体，其在 `suffix_min[i]` 以上都能滑动。所以 `curr_movable = sum(arr) - sum(suffix_min)` 计算可移动的立方体数量（总立方体减去固定在原地的）。
+
+当我们移除一个立方体时，其所在的 `suffix_min` 平台上的立方体全都能额外移动。计算suffix相等时的最长连续段长度，而 `max(platforms) - 1` 表示通过移除一个立方体能额外移动的数量。答案是 `curr_movable + max(platforms) - 1`。
+
+整个过程复杂度是 $\mathcal{O}(n)$，主要来自于计算 `suffix_min` 和 `platforms`。
+
+代码：
+
+```python
+r = lambda : list(map(int, input().split()))
+
+def suffix_min(arr):
+    final = [arr[-1]] * len(arr)
+    for i in reversed(range(len(arr)-1)):
+        final[i] = min(final[i+1], arr[i])
+    return final
+
+def solve():
+    n = int(input())
+    arr = r()
+    suffix = suffix_min(arr)
+    curr_movable = sum(arr) - sum(suffix)
+    platforms = [1]
+    for i in range(1, n):
+        if suffix[i] == suffix[i-1]:
+            platforms[-1] += 1
+        else:
+            platforms.append(1)
+    # print(suffix)
+    # print(platforms)
+    print(curr_movable + max(platforms) - 1)
+
+
+def main():
+    t = int(input())
+    for _ in range(t):
+        solve()
+        
+if __name__ == "__main__":
+    main()
+```
+
+
+### [2227F. It Just Keeps Going Sideways](https://codeforces.com/contest/2227/problem/F)
+
+思路：计算初始和最终的重力势能，找到最大差异。对于一个列表排布，其重力势能为 $$ \sum_{i=0}^{n-1} (-i) a_i $$
+在初始状态下，重力势能为， $$ \sum_{i=0}^{n-1} (-i) \texttt{arr}[i] $$
+在最终状态下，重力势能为， $$ \sum_{i=0}^{n-1} (-i) \texttt{sortted\_arr}[i] $$
+若在 $i$ 处移除一个立方体，那么初始状态重力势能增加 $i$。在排序后，原先高度为 $\texttt{arr}[i]$ 的地方会有一个矮下去一格。那么是在哪里矮下去呢？实际上就是排序后列表高度为 $\texttt{arr}[i]$ 的第一个位置。我们可以遍历所有可能的 $i$，计算出最大的差异。
+
+整个过程的时间复杂度是 $\mathcal{O}(n \log n)$，主要来自于排序。
+
+代码：
+
+```python
+from bisect import bisect_left
+
+r = lambda : list(map(int, input().split()))
+
+def suffix_min(arr):
+    final = [arr[-1]] * len(arr)
+    for i in reversed(range(len(arr)-1)):
+        final[i] = min(final[i+1], arr[i])
+    return final
+
+def solve():
+    n = int(input())
+    arr = r()
+    suffix = suffix_min(arr)
+    sortted_arr = sorted(arr)
+    inital_gra = sum(map(lambda i: -i * arr[i], range(n)))
+    final_gra = sum(map(lambda i: -i * sortted_arr[i], range(n)))
+    height_to_index = [None] * (n+1)
+    for i, h in enumerate(sortted_arr):
+        if height_to_index[h] is None:
+            height_to_index[h] = i
+    
+    possible_index = [n-1]
+    for i in range(1, n):
+        if suffix[i] != suffix[i-1]:
+            possible_index.append(i - 1)
+    # print(sortted_arr)
+    # print(height_to_index)
+    # print(possible_index)
+    max_diff = 0
+    for i in possible_index:
+        diff = i - height_to_index[arr[i]]
+        if diff > max_diff:
+            max_diff = diff
+    
+    # if choose i
+    # initial_gra += i
+    # final_gra -> find last column of height[i]
+    
+    # print(dp)
+    print(inital_gra - final_gra + max_diff)
+
+
+def main():
+    t = int(input())
+    for _ in range(t):
+        solve()
+        
+if __name__ == "__main__":
+    main()
+```
+
+代码运行截图 <mark>（至少包含有"Accepted"）</mark>
+
+### [2227H. Fallen Leaves](https://codeforces.com/contest/2227/problem/H)
+
+思路：首先我们需要构建树的结构，并且记录每个节点的深度、父节点以及子节点。我们可以通过 BFS 来完成这个过程。值得注意的是，这里答案的最后结果和根节点的选取无关，只需要我们选取一个非叶子节点作为根节点即可。
+
+接下来，让我们思考究竟哪一些边会对最后的结果有贡献。如果一颗子树有偶数个叶子节点，那么这些叶子就可以**内部消化**，这个子树与其父节点的连接边不会对结果有贡献。如果一颗子树有奇数个叶子节点，那么这些叶子只能**外部消化**，这个子树与其父节点的连接边就会对结果有贡献。
+
+我们可以使用 dp 来记录以每个节点为根的子树中叶子节点的数量。对于一个节点，如果它的子树中有偶数个叶子节点，那么它就不需要外部消化；如果它的子树中有奇数个叶子节点，那么它就需要外部消化。即计算 $$ \texttt{leaf}[i] = \sum_{j \in \texttt{children}[i]} \texttt{leaf}[j] $$
+
+由此我们可以得到最后的结果为 $$ \sum_{i \neq \text{root}} \texttt{leaf}[i] \bmod 2 $$
+
+当叶子数为偶数时，所有叶子都能消除干净，上述结果自然是正确的。当叶子数为奇数时，我们需要移除一个叶子。那么移除一个叶子对结果的影响有多少呢？注意到移除一个叶子会导致所有包含它子树的节点奇偶性翻转。对于一个奇数节点，会导致贡献 $-1$，对于一个偶数节点，会导致贡献 $+1$。
+
+我们现在只需要再用一个 dp 计算出每个节点的贡献值。对于一个节点，如果它的子树中有偶数个叶子节点，那么它的贡献值和父节点相同；如果它的子树中有奇数个叶子节点，那么它的贡献值和父节点相反。即计算 $$ \texttt{even\_odd\_sum}[i] = \texttt{even\_odd\_sum}[\texttt{parent}[i]] + (-1)^{\texttt{leaf}[i]} $$
+
+由此，我们只需要找到 $\min \{\texttt{even\_odd\_sum}[i] \mid i \in \texttt{leafs}\}$，加上原先的结果，就得到了最终的答案。
+
+代码：
+
+```python
+from collections import defaultdict, deque
+import sys
+
+def build_tree(n, edges):
+    degree = [0] * n
+    neighbours = [set() for _ in range(n)]
+    for i, j in edges:
+        degree[i] += 1
+        degree[j] += 1
+        neighbours[i].add(j)
+        neighbours[j].add(i)
+    leafs = [i for i in range(n) if degree[i] == 1]
+    root = 0
+    for i in range(n):
+        if degree[i] > 1:
+            root = i
+            break
+    
+    bfs_seq = [root]
+    queue = deque([root])
+    visited = [False] * n
+    visited[root] = True
+    depth = [0] * n
+    tree_arr = [[] for _ in range(n)] 
+    parent_arr = [[] for _ in range(n)]
+    
+    while queue:
+        curr = queue.popleft()
+        bfs_seq.append(curr)
+        for nei in neighbours[curr]:
+            if not visited[nei]:
+                visited[nei] = True
+                queue.append(nei)
+                tree_arr[curr].append(nei)
+                depth[nei] = depth[curr] + 1
+                parent_arr[nei] = curr
+    # print(tree_arr)
+    leaf_amount = [0] * n
+    even_odd_sum = [0] * n
+    
+    for index in reversed(bfs_seq):
+        if tree_arr[index]:
+            leaf_amount[index] = sum(leaf_amount[i] for i in tree_arr[index])
+        else:
+            leaf_amount[index] = 1
+            
+    for index in bfs_seq:
+        if index != root:
+            if leaf_amount[index] % 2 == 1:
+                even_odd_sum[index] = even_odd_sum[parent_arr[index]] - 1
+            else:
+                even_odd_sum[index] = even_odd_sum[parent_arr[index]] + 1
+        
+    # print(leaf_amount)
+    return root, leaf_amount, leafs, even_odd_sum
+
+def main():
+    lines = list(map(int, sys.stdin.read().split()))
+    inputs = iter(lines)
+    t = next(inputs)
+    
+    def solve():
+        n = next(inputs)
+        edges = [(next(inputs)-1, next(inputs)-1) for _ in range(n-1)]
+        root, leaf_amount, leafs, even_odd_sum = build_tree(n, edges)
+        cnt = 0
+        for i in range(n):
+            if i != root and leaf_amount[i] % 2 == 1:
+                cnt += 1
+        if len(leafs) % 2 == 0:
+            print(cnt)
+        else:
+            min_diff = min(map(lambda i: even_odd_sum[i], leafs))
+            print(cnt + min_diff)
+        
+    for _ in range(t):
+        solve()
+                    
+if __name__ == "__main__":
+    main()
 ```
 
 
