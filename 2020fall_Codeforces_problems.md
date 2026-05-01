@@ -21219,7 +21219,7 @@ for _ in range(int(input())):
 
 
 
-## Codeforces Round 1096
+## Codeforces Round 1096 div3 TANG
 
 > 【汤立祥，物理学院】参加了昨晚刚刚结束的 Codeforces Round 1096，考试的时候 AC6，但是被 _@KinaRight(尹显齐)_ hack 了一题。这里强力推荐 E, F, H 三道题。
 
@@ -21494,7 +21494,7 @@ if __name__ == "__main__":
     main()
 ```
 
-代码运行截图 <mark>（至少包含有"Accepted"）</mark>
+
 
 ### [2227H. Fallen Leaves](https://codeforces.com/contest/2227/problem/H)
 
@@ -21596,6 +21596,286 @@ def main():
 if __name__ == "__main__":
     main()
 ```
+
+
+
+## Codeforces Round 1096 div3 YIN
+
+【尹显齐 物理学院】
+
+征战Div.3，一个半小时AC6。
+
+制裁lxgg
+
+### 2227A. Koshary
+
+很明显，只有 $x$ 和 $y$ 都是奇数时，不可到达。
+
+```python
+for _ in range(int(input())):
+    x,y = map(int,input().split())
+    print("No" if x*y%2 else "Yes")
+```
+
+### 2227B. Party Monster
+
+根据题目描述，我们可以任意重排所有字符的顺序，只需要判断左括号和右括号的数量是否一样。
+
+```python
+for _ in range(int(input())):
+    n = int(input())
+    s = input()
+    a,b = 0,0
+    for i in range(n):
+        if s[i] == "(":
+            a += 1
+        else:
+            b += 1
+    if a == b:
+        print("YES")
+    else:
+        print("NO")
+```
+
+### 2227C. Snowfall
+
+我们要让总乘积能被 $6$ 整除的子数组数量最小化，先考虑所有能被 $6$ 整除的数，子数组只要含有这些数，乘积就会被 $6$ 整除，所以我们先要让不含有这些数的子数组数量最大化，显然应该把所有不能被 $6$ 整除的数连续的排在一起，为方便，我们把这些数都放在末尾。
+
+接下来考虑只能被 $2$ 整除的数和只能被 $3$ 整除的数，由于子数组中只有同时含有这两种数时乘积才能被 $6$ 整除，所以我们可看出要把它们两组数分别放在一头一尾，你如果在这基础上任意交换两个数，总的数组数都会增加。
+
+```python
+for _ in range(int(input())):
+    n = int(input())
+    arr = list(map(int,input().split()))
+    ans = []
+    for ai in arr:
+        if ai%6 == 0:
+            ans.append(ai)
+    for ai in arr:
+        if ai%6 and ai%2 == 0:
+            ans.append(ai)
+    for ai in arr:
+        if ai%2 and ai%3:
+            ans.append(ai)
+    for ai in arr:
+        if ai%6 and ai%3 == 0:
+            ans.append(ai)
+    print(*ans)
+```
+
+### 2227D. Palindromex
+
+明白一件事，没有 $0$ 的数组的 mex 值都是 $0$ ，所以回文串里一定要有 $0$ ，分别讨论单个 $0$ 作为中心点时形成的回文串和两个 $0$ 位于对称的位置形成的回文串，分别计算 mex 值即可。
+
+```python
+def mex(l,r,arr,n):
+    s = set()
+    for i in range(l,r):
+        s.add(arr[i])
+    for i in range(n+1):
+        if i not in s:
+            return i
+for _ in range(int(input())):
+    n = int(input())
+    arr = list(map(int,input().split()))
+    l,r = -1,-1
+    ans = 1
+    for i,ai in enumerate(arr):
+        if ai == 0:
+            if l == -1:
+                l = i
+            else:
+                r = i
+    le,ri = l,r
+    check = 1
+    while le <= ri:
+        le += 1
+        ri -= 1
+        if le > ri:
+            break
+        if arr[le] != arr[ri]:
+            check = 0
+            break
+    if check:
+        le,ri = l,r
+        while 1:
+            le -= 1
+            ri += 1
+            if le < 0 or ri > 2*n-1:
+                le += 1
+                ri -= 1
+                break
+            if arr[le] != arr[ri]:
+                le += 1
+                ri -= 1
+                break
+        ans = max(ans,mex(le,ri,arr,n))
+    le,ri = l,l
+    while 1:
+        le -= 1
+        ri += 1
+        if le < 0 or ri > 2*n-1:
+            le += 1
+            ri -= 1
+            break
+        if arr[le] != arr[ri]:
+            le += 1
+            ri -= 1
+            break
+    ans = max(ans,mex(le,ri,arr,n))
+    le,ri = r,r
+    while 1:
+        le -= 1
+        ri += 1
+        if le < 0 or ri > 2*n-1:
+            le += 1
+            ri -= 1
+            break
+        if arr[le] != arr[ri]:
+            le += 1
+            ri -= 1
+            break
+    ans = max(ans,mex(le,ri,arr,n))
+    print(ans)
+```
+
+这样的话，代码量未免也太大了吧！
+
+我们可以发现，上述代码并没有良好的运用**每个数**都只有两个这一性质，而在回文序列中，除了中心对称点以外，每个数也正好出现两次。这是否启发我们：可以直接从每个点出发延展回文序列然后进行判断呢？
+
+下面我们将证明：序列中所有长度大于 $1$ 的回文子数组是互不相交的。
+
+反证法：如果它们相交，假设相交的子数组中含有某个元素 $a$ ，根据对称性，如果该元素不是这两个回文子数组中某一个的对称中心，那么这两个回文子数组中将总共含有 $3$ 个 $a$ ，与“每个数字只有两个”矛盾。所以相交的子数组中只能含有某一个回文子数组的对称中心，也就意味着这个回文子数组的长度实际上是 $1$ ，矛盾。
+
+所以我们发现：序列中所有长度大于 $1$ 的回文子数组的总长度不超过 $2n$ ，所以如果我们采用“从所有点向左右扩展找最长回文子数组”的方式，实际的时间复杂度其实是 $O(n)$ ！直接使用这个方法就可以了
+
+```python
+def mex(l,r,arr,n):
+    s = set()
+    for i in range(l,r):
+        s.add(arr[i])
+    for i in range(n+1):
+        if i not in s:
+            return i
+for _ in range(int(input())):
+    n = int(input())
+    arr = list(map(int,input().split()))
+    l,r = -1,-1
+    ans = 1
+    # 分一个中心点和两个中心点讨论
+    for l in range(2*n):
+        le,ri = l,l
+        while 1:
+            le -= 1
+            ri += 1
+            if le < 0 or ri > 2*n-1:
+                le += 1
+                ri -= 1
+                break
+            if arr[le] != arr[ri]:
+                le += 1
+                ri -= 1
+                break
+        ans = max(ans,mex(le,ri,arr,n))
+    for l in range(2*n-1):
+        le,ri = l,l+1
+        if arr[le] != arr[ri]:
+            continue
+        while 1:
+            le -= 1
+            ri += 1
+            if le < 0 or ri > 2*n-1:
+                le += 1
+                ri -= 1
+                break
+            if arr[le] != arr[ri]:
+                le += 1
+                ri -= 1
+                break
+        ans = max(ans,mex(le,ri,arr,n))
+    print(ans)
+```
+
+### 2227E. It All Went Sideways
+
+这一问，我们要让移动的方块数最大，我们可以反向考虑：哪些方块不会移动呢？我们从右向左看，每一列不动的方块数量都肯定要少于等于他，于是我们可以从右向左遍历得出不会移动的方块数。（如图中红线以下的方块所示），接下来考虑移走一个方块，我们发现可能影响的方块只是涂成灰色的这些方块，也自然能发现应该移走同一高度连续灰色方块数最多的一行的最右边一个方块。
+
+
+![666](https://raw.githubusercontent.com/GMyhf/img/main/img/gDmXSe1.png)
+
+
+```python
+for _ in range(int(input())):
+    n = int(input())
+    arr = list(map(int,input().split()))
+    ans = sum(arr)-arr[-1]
+    cur = arr[-1]
+    idx = n-1
+    leng = 0
+    for i in range(n-2,-1,-1):
+        if arr[i] < cur:# 单调不增
+            cur = arr[i]
+            leng = max(leng,idx-i-1)# 最大连续灰色方块长度
+            idx = i
+        ans -= cur# 减去无法移动的方块
+    leng = max(leng,idx)
+    print(ans+leng)
+```
+
+### 2227F. It Just Keeps Going Sideways
+
+现在，我们要让所有方块的移动距离最大化。   
+我们先计算不移走方块时所有方块移动距离。我们可以将所有位置的高度从高到低排序，然后从 $n$ 到 $1$遍历每一个高度的所有方块，对于每一个高度 $h$ ，我们添加上所有方块数为 $h$ 的位置。如果在某一高度处有 $n$ 个方块，分别位于 $x_{1},\dots,x_{n}$ 处，那么总移动距离就是 $$\left(\sum_{{i=1}}^nn-x_{i}\right)-\frac{n(n+1)}{2}$$于是我们可以计算每一层的贡献，然后求和。   
+接下来我们考虑去掉一个方块时的情况，容易发现，在某一位置去掉一个方块会让总距离增加：在这一位置左边，并且方块数量不小于这一位置方块数量的位置数。这就和求逆序对数差不多了，直接使用树状数组处理。
+
+```python
+class Fenwick:
+    def __init__(self,n):
+        self.n = n
+        self.bit = [0]*(n+1)
+    def update(self,idx,delta):
+        i = idx + 1
+        while i <= self.n:
+            self.bit[i] += delta
+            i += i & -i
+    def query(self,idx):
+        i = idx + 1
+        s = 0
+        while i > 0:
+            s += self.bit[i]
+            i -= i & -i
+        return s
+for _ in range(int(input())):
+    n = int(input())
+    arr = list(map(int,input().split()))
+    ans = 0
+    bars = sorted([(arr[i],i) for i in range(n)],reverse=True)
+    count = 0
+    j = 0
+    s = 0
+    for i in range(n,0,-1):
+        while j < n and bars[j][0] == i:
+            count += 1
+            s += n - bars[j][1]
+            j += 1
+        ans += s - count*(count+1)//2
+    st_arr = sorted(set(arr))
+    dic = {v:i for i,v in enumerate(st_arr)}
+    m = len(st_arr)
+    bit = Fenwick(m)
+    res = 0
+    for x in arr:
+        idx = dic[x]
+        if idx > 0:
+            less = bit.query(idx-1)
+        else:
+            less = 0
+        res = max(res,bit.query(m-1)-less)
+        bit.update(idx,1)
+    print(ans+res)
+```
+
+
 
 
 
