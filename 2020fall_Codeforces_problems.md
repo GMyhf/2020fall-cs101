@@ -21859,13 +21859,13 @@ for _ in range(int(input())):
             s += n - bars[j][1]
             j += 1
         ans += s - count*(count+1)//2
-    st_arr = sorted(set(arr))
-    dic = {v:i for i,v in enumerate(st_arr)}
+    st_arr = sorted(list(map(int,set(map(str,arr)))))
+    dic = {str(v):i for i,v in enumerate(st_arr)}
     m = len(st_arr)
     bit = Fenwick(m)
     res = 0
     for x in arr:
-        idx = dic[x]
+        idx = dic[str(x)]
         if idx > 0:
             less = bit.query(idx-1)
         else:
@@ -21874,6 +21874,8 @@ for _ in range(int(input())):
         bit.update(idx,1)
     print(ans+res)
 ```
+
+
 
 
 
