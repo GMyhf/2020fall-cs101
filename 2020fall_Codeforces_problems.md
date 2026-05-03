@@ -1,6 +1,6 @@
 # Problems in Codeforces.com
 
-*Updated 2026-05-01 16:23 GMT+8*
+*Updated 2026-05-03 11:16 GMT+8*
  *Compiled by Hongfei Yan (2020 Fall)*
 
 
@@ -19899,13 +19899,13 @@ $$dp_i=\max_{t\in\{a_{i,j}\mid j\in\mathbb Z_+,a_{i,j}>0\}}\{dp_{i-t}+1\}.$$
 
 
 
-# 同学打CF比赛题目
+# 同学CF Round比赛题目
 
-
+## April Fools 2026 YIN
 
 【尹显齐 25物院】知周所众，这次考试是在愚人节考的，所以肯定要严肃学习愚人节题目。(考试只做出来3道，输麻了)
 
-## 2214A. Odd One Out
+### 2214A. Odd One Out
 
 tags:brute force
 
@@ -19919,7 +19919,7 @@ print("C2")
 
 
 
-## 2214C. And?
+### 2214C. And?
 
 【尹显齐 25物院】这个题不是很好想，我最开始想的是将字母转换成某一种进制，然后和 $20260401$ 做与运算，最后转化成字母，但是这样出现的字母没有多少，不像是能出题的样子。然后我想能不能不动字母把 $20260401$ 转化一下，由于与运算的存在，我想到把他转化成二进制，然后得到了 $1001101010010011000110001$ 然后我发现它的长度恰好和字母串的长度一样，可以进行与运算，就是保留所有 $1$ 位置对应的字母，我们得到 "READ THE REST" ，也就是让我们读剩下的字母，得到 “XOR MINUS MEDIAN” ，就是用三个数的xor值减去中位数。
 
@@ -19931,7 +19931,7 @@ for _ in range(int(input())):
 
 
 
-## 2214D. Neural Feud
+### 2214D. Neural Feud
 
 【尹显齐 25物院】本关的来源是一档节目"考验你的装AI能力！
 
@@ -19944,7 +19944,7 @@ print(ans[int(input())-1])
 
 
 
-## 2214E. Shortest Paths
+### 2214E. Shortest Paths
 
 【尹显齐 25物院】看到这个题先点一下Shortest Path，发现很正常。那么这个题就真的是要求最短路径了。但是我定睛一看，发现它要求用的是 D**ikj**stra's algorithm ，而不是 D**ijk**stra 算法，说明这个题肯定有骚操作，要把某个三重嵌套循环的索引顺序改成 $i,k,j$。问题是狄克斯特拉算法里也没有 $i,j,k$ 的出现啊，堆的方法不说了，就连 $O(n^{2})$ 的方法都只有二重循环，哪来的三重循环？
 
@@ -19978,7 +19978,7 @@ for j in range(2,n+1):
 
 
 
-## 2214I. You Are a Robot
+### 2214I. You Are a Robot
 
 【尹显齐 25物院】**记住！你是一个机器人！**
 
@@ -20023,7 +20023,7 @@ for _ in range(int(input())):
 
 
 
-## 2214J. Special Problem
+### 2214J. Special Problem
 
 【尹显齐 25物院】**省流：还有第 $\boldsymbol{n}$ 关！**
 
@@ -20057,7 +20057,7 @@ else:
 
 
 
-## 附录：Floyd-Warshall算法
+### 附录：Floyd-Warshall算法
 
 【尹显齐 25物院】我们知道，Dijkstra算法可以解决从单个点到任一点的最小权路径问题，现在我要求从任意点到任意点的路径，应当如何做呢？Floyd-Warshall算法由此产生。
 
@@ -20073,7 +20073,7 @@ else:
 
 **既然是愚人节考试，那么就做一些 April Fools 专属的题目吧！**
 
-## April Fools 2025
+## April Fools 2025 TANG
 
 ### 2095 A.Piecing It Together
 
@@ -20418,7 +20418,7 @@ print(write(sumation))
 
 
 
-## April Fools 2026
+## April Fools 2026 TANG
 
 2026 年是我实时参与的一届比赛。考试的时候，成功 AC5。考试后又再做了一题，很有意思的一届比赛！
 
@@ -20572,7 +20572,7 @@ print("YU5zV2VS")
 
 
 
-## CF Round 1090 (Div. 4)-TANGLixiang
+## CF Round 1090 (Div. 4) TANG
 
 【汤立洋 物院】把 CF Round 1090 (Div. 4) 的题目都做了一下，其中前六道都是很简单的秒杀题，全都无伤通关，最后一道算法想出了一个 $\mathcal{O}(n)$ 的算法，但是竟然 TLE。和 G 老师交流之后了解到 Python 的一堆神秘耗时操作，从 2000ms+ 直接压到 125ms！
 
@@ -20933,9 +20933,9 @@ if __name__ == "__main__":
 
 
 
-## 征战（也许最后一场）1090 Div.4-YINXianqi
+## CF Round 1090 (Div.4) YIN
 
-【尹显齐 25 物理学院】怒砍AC5，后面一个多小时直接被寝室同学吵爆了，差10分钟做出G。E题没用pypy而是用的python，直接遗憾离场。最终 $\boldsymbol{67}$ 考试仅加 $\boldsymbol{78}$ 分。唯一进步是成功给一个人做局了。
+【尹显齐 25 物理学院】征战（也许最后一场）。怒砍AC5，后面一个多小时直接被寝室同学吵爆了，差10分钟做出G。E题没用pypy而是用的python，直接遗憾离场。最终 $\boldsymbol{67}$ 考试仅加 $\boldsymbol{78}$ 分。唯一进步是成功给一个人做局了。
 
 ![73d1a2eb655a827f308540454a33ed43](https://raw.githubusercontent.com/GMyhf/img/main/img/73d1a2eb655a827f308540454a33ed43.png)
 
@@ -21217,9 +21217,350 @@ for _ in range(int(input())):
 
 
 
+## CF Round 1072 (Div.3) YIN
+
+【尹显齐 物理学院】上周完全在准备期中考试。几乎没刷题。作业也不简单。
+
+依旧题解投稿：CF Round 1072(Div.3) 全题目题解（里面有一道简单的线段树）。
+
+### 2184A. Social Experiment
+
+分类讨论：当 $n$ 为偶数时，我们先看看答案能否为0。令 $n=2m$ ，答案为0时，相当于我们要寻找两个自然数 $k_{1},k_{2}$ 使得 $2k_{1}+3k_{2}=m$ ，这可以转化为 $2(k_{1}+k_{2})+k_{2}=m$ 。容易看出当 $m>1$ 时这个方程一定有解。   
+当 $n$ 为奇数时，我们先看看答案能否为1。令 $n=2m+1$ ，答案为0时，相当于我们要寻找两个自然数 $k_{1},k_{2}$ 使得 $2k_{1}+3k_{2}=m$ ，由之前结论，当 $m>1$ 时这个方程一定有解。   
+特殊情况：$n=2$ ，答案为 $2$；$n=3$ ，答案为 $3$。 
+
+```python
+for _ in range(int(input())):
+    n = int(input())
+    print(n if n < 4 else n%2)
+```
+
+### 2184B. Hourglass
+
+从最后一次翻转到现在，经过的时间分钟数为 $m$ 除以 $k$ 的余数，记为 $r$。  
+最后一次翻转后剩下的沙子能流的分钟数，记为 $t$ 。
+只有当 $k<s$ 且 总共翻转奇数次时，$t=k$；否则 $t=s$ 。
+答案为 $\max(t-r,0)$ 。
+
+```python
+for _ in range(int(input())):
+    s,k,m = map(int,input().split())
+    times = m // k
+    m %= k
+    t = k if k < s and times % 2 else s
+    print(max(t-m,0))
+```
+
+### 2184C. Huge Pile
+
+我们用反演的方法，对于一个数 $k$ ，它的上一步可能是 $[2k-1,2k+1]$ 中任意一个数，我们只需要维护每一步反演的左右端点即可。
+
+```python
+for _ in range(int(input())):
+    n,k = map(int,input().split())
+    left,right = k,k
+    i = 0
+    found = 0
+    while left <= n:# 当左端点小于n时
+        if left <= n <= right:#可以由n得到k
+            print(i)#步数
+            found = 1
+            break
+        i += 1
+        left = left*2-1#左端点
+        right = right*2+1#右端点
+    if found == 0:
+        print(-1)
+```
+
+### 2184D. Unfair Game
+
+我们发现，根据题目描述，Alice总是能够知道当前的这个数是奇数还是偶数，从而做出最优操作。接着分析，对于一个数，他的操作数等于他在二进制表示下的（位数+ $1$ 的个数- $1$ ），于是我们相当于求解对于每一个总位数固定的情况，有多少数的 $1$ 的数量大于某个值，再加起来。
+
+可以用dp算：（ $dp(i,j)$ 表示 $i$ 位的数，其中有 $j$ 个 $1$ 的数的数量）
+
+```python
+for _ in range(int(input())):
+    n,k = map(int,input().split())
+    d = len(bin(n))-3
+    dp = [[0]*d for _ in range(d)]
+    for i in range(d):
+        dp[i][0] = 1
+        dp[i][i] = 1
+    for i in range(1,d):
+        for j in range(1,d):
+            dp[i][j] = dp[i-1][j] + dp[i-1][j-1]
+    suf = [[0]*d for _ in range(d)]
+    for i in range(d):
+        suf[i][-1] = dp[i][-1]
+        for j in range(d-2,-1,-1):
+            suf[i][j] = suf[i][j+1]+dp[i][j]
+    ans = 0
+    for i in range(d):
+        if i<k+1 < 2*(i+1):
+            ans += suf[i][k-i]
+        elif k < i:
+            ans += suf[i][0]
+    ans += int(d>=k)
+    print(ans)
+```
+
+或者直接算
+
+```python
+from math import comb
+for _ in range(int(input())):
+    n,k = map(int,input().split())
+    d = len(bin(n))-3
+    ans = 0
+    for i in range(d):
+        if i >= k:# 所有位数为 i+1 的数都可以
+            ans += 2**i
+        elif 2*i >= k:
+            for j in range(k-i,i+1):
+                ans += comb(i,j) # 组合数
+    ans += int(d>=k)
+    print(ans)
+```
 
 
-## Codeforces Round 1096 div3 TANG
+### 2184E. Exquisite Array
+
+我们先定义数组 $diff$ 为原数组中相邻两数的差的绝对值，此时题目转化为：对于每个数 $k$ ，$diff$ 中有多少子数组使得其中每个数都不小于 $k$ ?
+
+我们可这样思考，当数组中某一个下标的值为子数组最小值时，有多少子数组满足条件？很简单：找到这个数左边和右边第一个小于他的数的下标 $l_{i}$ 和 $r_{i}$ ，则总子数组数就是 $(i-l_{i})(r_{i}-i)$ 。但是这样子会重复计数，比如下列数组：$$2,3,4,7,6,6,6,6$$ 对于每一个 $6$ 都会重复把含有一个，两个，三个，四个 $6$ 的数组计数一次，为了解决这一点，我们可以把右端点 $r_{i}$ 的条件改成：第一个不大于他的数。这样，我们就可以找到对于数组中某一个数 $diff(i)$ ，它为子数组最小值时的子数组数。这些子数组对最小值至少为 $1$ 到 $diff(i)$ 的子数组个数均有贡献。于是我们可以在最后处理一次前缀和即可。
+
+时间复杂度：$O(n)$
+
+
+```python
+for _ in range(int(input())):
+    n = int(input())
+    arr = list(map(int,input().split()))
+    diff = [abs(arr[i]-arr[i-1]) for i in range(1,n)]
+    n -= 1
+    left = [0]*n
+    right = [n]*n
+    stack = []
+    for i in range(n):
+        while stack and diff[stack[-1]] >= diff[i]:
+            stack.pop()
+        left[i] = stack[-1] if stack else -1
+        stack.append(i)
+    stack.clear()
+    for i in range(n-1,-1,-1):
+        while stack and diff[stack[-1]] > diff[i]:
+            stack.pop()
+        right[i] = stack[-1] if stack else n
+        stack.append(i)
+    f = [0]*(n+1)
+    for i in range(n):
+        v = diff[i]
+        cnt = (i - left[i])*(right[i] - i)
+        f[v] += cnt
+    ans = [0]*(n+1)
+    suf = 0
+    for k in range(n-1,0,-1):
+        suf += f[k]
+        ans[k] = suf
+    judge = n in diff
+    if judge:
+        for i in range(n+1):
+            ans[i] += 1
+    print(*ans[1:n],int(judge))
+```
+
+### 2184F. Cherry Tree
+
+很明显是树形dp，对于每一个节点，要么直接把自己的子树删除，要么就把每一个子节点的子树删除。通过dp的方式确定所有子树全部删除后哪些删除次数（对3的余数）是可能的。
+
+```python
+import sys
+sys.setrecursionlimit(2<<30-1)
+from collections import deque
+for _ in range(int(input())):
+    n = int(input())
+    # 下面正常建树
+    tree = {}
+    parent = {}
+    for __ in range(n-1):
+        a,b = map(int,input().split())
+        if a not in tree:
+            tree[a] = []
+        if b not in tree:
+            tree[b] = []
+        tree[a].append(b)
+        tree[b].append(a)
+    visited = [0]*n
+    q = deque([1])
+    visited[0] = 1
+    leaf = set()
+    while q:
+        node = q.popleft()
+        found = 0
+        for nei in tree[node]:
+            if not visited[nei-1]:
+                found = 1
+                visited[nei-1] = 1
+                parent[nei] = node
+                q.append(nei)
+        if found == 0:# 没有子孙
+            leaf.add(node)# 是叶子
+    dp = [[0,0,0] for _ in range(n)]
+    for node in leaf:
+        dp[node-1][1] = 1# 每个叶子都可以直接去掉自己，摇1次
+    def dfs(node):
+        if node in leaf:
+            return
+        cur = [1,0,0]# 还没开始摇，摇了0次，所以第一个数是1
+        for nei in tree[node]:# 所有连接节点
+            if nei != parent[node]:# 不是父节点
+                dfs(nei)
+                new = [0,0,0]
+                for i in range(3):
+                    for j in range(3):
+                        if cur[i] == 1 and dp[nei-1][j] == 1:# 合并新的子节点的子树
+                            new[(i+j)%3] = 1# 如果两部分分别可以摇i次和j次，则总共可以摇i+j次
+                cur = new
+        dp[node-1] = cur
+        dp[node-1][1] = 1# 可以只摇一次（选择节点本身）
+    dfs(1)
+    print("Yes" if dp[0][0] else "No")
+```
+
+### 2184G. Nastiness of Segments
+
+经过观察，我们可以发现随着 $d$ 的增长，$\min(a_{l},\dots,a_{l+d})$ 是单调不增的，而 $d$ 是单调递增的，所以至多有一个 $d$ 满足 $\min(a_{l},\dots,a_{l+d})=d$ ，并且可以用二分的方法找。
+
+由于这个题我们要同时进行多次的修改和查询两个操作，所以要选用线段树这一数据结构。当进行查询时，在 $[l,r]$ 上进行二分，找到 $\min(a_{l},\dots,a_{l+d})=d$ 的点（或者没有）。
+
+```python
+class NumArray():
+    def __init__(self, nums):
+        self.n = len(nums)
+        self.tree = [float("inf")]*(2*self.n)
+        for i,num in enumerate(nums):
+            self.tree[i+self.n] = num
+        for i in range(self.n-1,-1,-1):
+            self.tree[i] = min(self.tree[i<<1],self.tree[i<<1|1])
+    def update(self, index, val):
+        i = index + self.n
+        self.tree[i] = val
+        while i > 1:
+            self.tree[i>>1] = min(self.tree[i],self.tree[i^1])
+            i >>= 1
+    def query(self, left, right):
+        l,r = left+self.n,right+self.n+1
+        res = float("inf")
+        while l < r:
+            if l & 1:
+                res = min(res,self.tree[l])
+                l += 1
+            if r & 1:
+                r -= 1
+                res = min(res,self.tree[r])
+            l >>= 1
+            r >>= 1
+        return res
+for _ in range(int(input())):
+    n,q = map(int,input().split())
+    arr = list(map(int,input().split()))
+    st = NumArray(arr)
+    for _ in range(q):
+        t,a,b = map(int,input().split())
+        if t == 1:
+            st.update(a-1,b)# 更新值
+        else:
+            left,right = a-1,b-1
+            found = 0
+            while left <= right:
+                mid = (left+right) // 2
+                min_val = st.query(a-1,mid)
+                diff = min_val-mid+a-1
+                if not diff:
+                    found = 1
+                    break
+                elif diff > 0:# 零点在右边
+                    left = mid+1
+                else:# 零点在左边
+                    right = mid-1
+            print(found)
+```
+
+最后再来一个树状数组（这其实应该写在作业9里的，但是作业9已经交了）
+
+### 2227G. Drowning
+
+这个题可以作为期中考试题了。
+
+我们先考虑某一个区间 $a_{i},\dots,a_{r}$ 能被最终变成一个数的条件。我们容易看出两点：首先这个区间里数的个数一定是奇数（由于一次操作减少两个数）；其次，在变换过程中，如下式子 $$\sum_{i=l}^{r}(-1)^{i-l}a_{i}$$是一个不变量，那么如果能通过一系列变换得到一个数，那么上述式子的值一定大于 $0$。除了这两点，还需要哪些条件呢？
+
+答案是**不需要**其他条件！我们接下来证明对于一个$$\sum_{i=l}^{r}(-1)^{i-l}a_{i}>0$$且有奇数个数的序列一定满足题目要求。
+
+我们采用数学归纳法，当 $r-l = 2$ 时，明显成立，当 $r-l = 2k$ 及以下值成立时，考虑 $l-r = 2k+2$ 的序列，如果满足$$\sum_{i=l}^{r}(-1)^{i-l}a_{i}>0$$但是不满足题目要求，也就是说我们无法找到一个 $l<x<r$ 使得$$\sum_{i=x-1}^{x+1}(-1)^{i-l}a_{i}>0$$从而将该数组变成一个长度为 $2k+1$ 的数组。将上述式子对所有 $x-l$ 为奇数的 $x$ 求和可得$$\sum_{i=l}^{r}(-1)^{i-l}a_{i}+\sum_{i=0}^{(r-l)/2}a_{2i+l}\leq0$$而左边的第一项（题设）和第二项（所有数都是正数）都大于 $0$ ，矛盾。
+
+所以，对于一个数组，我们只需要判断如下式子$$\sum_{i=0}^l(-1)^ia_{i}$$的正负性即可。
+
+此时大家肯定想到了构造一个“前缀和”数组$$pre(i) = \sum_{j=0}^i(-1)^ja_{j}$$来方便的查询。此时任意一个子数组 $a[l,r]$ 的交错和的值可以写为$$(-1)^l\left[pre(r+1)-pre(l)\right]$$我们分奇偶讨论，当 $l$ 为偶数时，我们需要寻找所有奇偶性相同的 $l<r$ 使得 $$pre(r+1)-pre(l)>0$$这就和统计逆序对的数量非常像了。直接用树状数组处理。
+
+当 $l$ 为奇数时，我们需要寻找所有奇偶性相同的 $l<r$ 使得 $$pre(r+1)-pre(l)<0$$仍是用树状数组处理。
+
+```python
+class Fenwick:
+    def __init__(self,n):
+        self.n = n
+        self.arr = [0] * (n+1)
+    def update(self,idx,val):
+        i = idx + 1
+        while i <= self.n:
+            self.arr[i] += val
+            i += i & (-i)
+    def query(self,idx):
+        res = 0
+        i = idx + 1
+        while i > 0:
+            res += self.arr[i]
+            i -= i & (-i)
+        return res
+def solve(arr):
+    n = len(arr)
+    ans = n
+    pre = [0]
+    for i in range(n):
+        pre.append(pre[-1]+(-1)**i*arr[i])
+    # 离散化，注意使用集合和字典时的写法！
+    st = sorted(list(map(int,set(map(str,pre)))))
+    dic = {str(v):i for i,v in enumerate(st)}
+    m = len(st)
+    # 第一种情况，pre[r+1]<pre[l]
+    bit = Fenwick(m)
+    for i in range(n+1):
+        if i%2 == 0:# r+1为偶数
+            bit.update(dic[str(pre[i])],1)# 更新为1
+        else:
+            idx = dic[str(pre[i])]# l 为奇数
+            if idx > 0:
+                ans += bit.query(idx-1)# 查询有多少偶数对应的值比pre[l]小
+    # 第二种情况
+    bit = Fenwick(m)
+    for i in range(n+1):
+        if i%2:# r+1 为奇数
+            bit.update(dic[str(pre[i])],1)# 更新为1
+        else:
+            idx = dic[str(pre[i])]# l 为偶数
+            ans += bit.query(m-1) - bit.query(idx)# 查询有多少奇数对应的值比pre[l]大
+    return ans
+for _ in range(int(input())):
+    n = int(input())
+    arr = list(map(int,input().split()))
+    print(solve(arr)-n)
+```
+
+
+
+
+
+## CF Round 1096 (Div3) TANG
 
 > 【汤立祥，物理学院】参加了昨晚刚刚结束的 Codeforces Round 1096，考试的时候 AC6，但是被 _@KinaRight(尹显齐)_ hack 了一题。这里强力推荐 E, F, H 三道题。
 
@@ -21599,7 +21940,7 @@ if __name__ == "__main__":
 
 
 
-## Codeforces Round 1096 div3 YIN
+## CF Round 1096(Div3) YIN
 
 【尹显齐 物理学院】
 
