@@ -17849,7 +17849,7 @@ if __name__ == '__main__':
 
 
 
-## 2194E. The Turtle Strikes Back
+## T2194E. The Turtle Strikes Back
 
 dp, https://codeforces.com/problemset/problem/2194/E
 
@@ -20130,6 +20130,156 @@ $$dp_i=\max_{t\in\{a_{i,j}\mid j\in\mathbb Z_+,a_{i,j}>0\}}\{dp_{i-t}+1\}.$$
 
 
 # 同学CF Round比赛题目
+
+## CF Round 1062 (Div.4) YIN
+
+### 2167F. Tree, TREE!!!
+
+https://codeforces.com/problemset/problem/2167/F
+
+直接考虑每个节点作为根时有多少节点满足条件比较困难，我们可以换个角度考虑：对于每个节点，有多少个根节点使得它满足条件？首先，它自己作为根节点肯定满足要求。对于根节点不是自己的情况，我们考虑与它直接连接的每一个点的子树大小。如果某一个子树的大小小于等于 $n-k$ ，那么这个子树中所有点都可以作为根节点（因为剩下点的数量不少于 $k$ ，必定可以满足条件：在 $k$ 个节点中包含自己即可）；反之不能作为根节点。
+
+<img src="https://i.imgur.com/xehzsqx.png" alt="666" style="zoom:50%;" />
+（一个点与它的子树）
+
+统计每个点的子树大小，可以选一个点做根，然后dfs。
+
+```python
+import sys
+from collections import deque
+import bisect
+sys.setrecursionlimit(3*10**5)
+for _ in range(int(input())):
+    n,k = map(int,input().split())
+    ans = 0
+    cons = [[] for _ in range(n)]
+    visited = [0]*n
+    for _ in range(n-1):
+        a,b = map(int,input().split())
+        cons[a-1].append(b-1)
+        cons[b-1].append(a-1)
+    q = deque([0])
+    visited[0] = 1
+    child = [[] for _ in range(n)]
+    while q:
+        qi = q.popleft()
+        for ci in cons[qi]:
+            if not visited[ci]:
+                child[qi].append(ci)
+                visited[ci] = 1
+                q.append(ci)
+    def dfs(i):
+        global ans
+        tot = 0
+        cnt = []
+        for ci in child[i]:
+            cur = dfs(ci)
+            tot += cur
+            cnt.append(cur)
+        cnt.append(n-1-tot)# 剩下一个子树大小
+        for ci in cnt:
+            if ci <= n-k:
+                ans += ci
+        ans += 1
+        return tot+1
+    dfs(0)
+    print(ans)
+```
+
+
+
+### 2194E. The Turtle Strikes Back
+
+dp, https://codeforces.com/problemset/problem/2194/E
+
+这个题和2025年计概的期末考试题 http://cs101.openjudge.cn/practice/30220/ 很像，但是区别是你要在别人开始走路线**之前**将一个值变成相反数，使得他获得的最大值最小。这样就变难了。
+
+首先，我们明确：假设在所有数都不改变的情况下，路径 $l$ （经过了 $n+m-1$ 个数）可取得最大值，那么我们要改变的点一定在路径 $l$ 上；如果我们不这样做，对手仍可以走路径 $l$ 取得与刚才相同的最大值，我们的数值改变就没有意义了。
+
+接着，我们考虑改变路径 $l$ 上一个点 $(i,j)$ （图中红色方块）的值后，此时对手能取得的最大值的变化。对手有两种方式可以选择：继续走路径 $l$ （图中**青色**路径），或者走一条**不经过**点 $(i,j)$ 的新路径（图中**红色**路径）（所有经过点 $(i,j)$ 的路径中最优路径一定有 $l$ ）。
+
+<img src="https://raw.githubusercontent.com/GMyhf/img/main/img/msHkzyJ.png" alt="666" style="zoom:67%;" />
+
+对前者，我们可轻易计算；对于后者，我们可发现，这些路径一定都经过至少一个**绿色**格子 $(x<i,j+1)$ 或 $(i+1,y<j)$ 。对于每一个绿色格子 $(x,y)$，我们可计算从 $(0,0)$ 到 $(x,y)$ 的最大值（用数组 $f(x,y)$ 表示）和从 $(x,y)$ 到 $(n-1,m-1)$ 的最大值（用数组 $g(x,y)$ 表示）（两个数组都可以预计算）来计算出经过此点的路径能取得的最大值。记原数组值为 $a(x,y)$ ，则最大值为 
+
+$$
+f(x,y)+g(x,y)-a(x,y)
+$$
+
+但是，对路径中每个点分别枚举每一个绿色格子的时间复杂度是 $O(n+m)$ ，仍会超时。所以我们需要用前缀的思想预计算。定义 $row(i,j)$ 和 $col(i,j)$ 数组分别表示经过 $(x<i,j+1)$ 和 $(i+1,y<j)$ 中每个点的路径的最大值，可得到转移方程。
+
+$$
+row(i,j) = \max (row(i,j-1),f(i,j)+g(i,j)-a(i,j))
+$$
+
+$$
+col(i,j) =\max(col(i-1,j),f(i,j)+g(i,j)-a(i,j))
+$$
+
+我们最终可得到，改变 $a(i,j)$ 为它的相反数之后，对手可得到的最大值是 
+
+$$
+\max(f(n-1,m-1)-2a(i,j),row(i+1,j-1),col(i-1,j+1))
+$$
+
+我们只用遍历路径上所有点，找到所有最大值里面的最小值即可。
+
+
+```python
+import sys
+data = iter(sys.stdin.read().splitlines())
+for _ in range(int(next(data))):
+    n,m = map(int,next(data).split())
+    grid = [list(map(int,next(data).split())) for _ in range(n)]
+    # 对于只有一列或一行的情况特判，不然会超时
+    if n == 1:
+        print(sum(grid[0])-2*max(grid[0]))
+        continue
+    elif m == 1:
+        print(sum(grid[i][0] for i in range(n))-2*max(grid[i][0] for i in range(n)))
+        continue
+    f = [[-float("inf")]*(m+1) for _ in range(n+1)]
+    for i in range(1,n+1):
+        for j in range(1,m+1):
+            if i*j == 1:
+                f[i][j] = grid[0][0]
+            else:
+                f[i][j] = max(f[i][j-1],f[i-1][j]) + grid[i-1][j-1]
+    g = [[-float("inf")]*(m+1) for _ in range(n+1)]
+    for i in range(n-1,-1,-1):
+        for j in range(m-1,-1,-1):
+            if i == n-1 and j == m-1:
+                g[i][j] = grid[-1][-1]
+            else:
+                g[i][j] = max(g[i][j+1],g[i+1][j])+grid[i][j]
+    # 找到最大值对应路径
+    route = [(n-1,m-1)]
+    x,y = n-1,m-1
+    while x or y:
+        if f[x+1][y] >= f[x][y+1]:
+            route.append((x,y-1))
+            y -= 1
+        else:
+            route.append((x-1,y))
+            x -= 1
+    # 预处理 row 和 col ，注意数组大小
+    row = [[-float("inf")]*(m+2) for _ in range(n+2)]
+    for j in range(1,m+1):
+        for i in range(1,n+1):
+            row[i][j] = max(row[i-1][j],f[i][j]+g[i-1][j-1]-grid[i-1][j-1])
+    col = [[-float("inf")]*(m+2) for _ in range(n+2)]
+    for i in range(1,n+1):
+        for j in range(1,m+1):
+            col[i][j] = max(col[i][j-1],f[i][j]+g[i-1][j-1]-grid[i-1][j-1])
+    ans = f[-1][-1] # 如果最大值路径上的数都是负数，那么不能改变最大值路径上的点，此时答案不变
+    for rx,ry in route:
+        ans = min(ans,max(f[-1][-1]-2*grid[rx][ry],col[rx+2][ry],row[rx][ry+2]))
+    print(ans)
+```
+
+
+
+
 
 ## April Fools 2026 YIN
 
