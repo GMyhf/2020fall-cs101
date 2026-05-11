@@ -17849,6 +17849,236 @@ if __name__ == '__main__':
 
 
 
+## 2194E. The Turtle Strikes Back
+
+dp, https://codeforces.com/problemset/problem/2194/E
+
+> 30220:星际贸易航线, dp, http://cs101.openjudge.cn/practice/30220/
+>
+> 对于2194E，同学建议 星际贸易航线 II
+
+After a heavy training session, Michelangelo and Raphael decided to order pizza. Today, on the occasion of the holiday, the pizzeria is preparing rectangular pizzas made of 𝑛 rows and 𝑚 columns of slices. Each slice has its own unique recipe and flavor.
+
+Michelangelo was the first to open the box and roughly estimated the pleasure of eating each slice: the pleasure from the slice located in the 𝑖-th row and 𝑗-th column is equal to 𝑎𝑖,𝑗. It is guaranteed that there is at least one slice that Michelangelo liked, meaning that among 𝑎𝑖,𝑗 there is at least one non-negative number.
+
+The turtles agreed that Michelangelo would eat first. According to an ancient tradition, he must choose a route from the top left corner (1,1) to the bottom right corner (𝑛,𝑚) and eat **all** the slices on that route. In one step, he can move either to the adjacent slice on the right or to the adjacent slice below.
+
+Michelangelo aims to maximize the total pleasure from the eaten slices.
+
+However, Raphael decided to use sauce. **Before** Michelangelo chooses a route, Raphael decided to choose **exactly one** slice of pizza and apply his signature sauce to it. But due to the specifics of this sauce, the pleasure from that slice changes to the opposite: if it was previously 𝑎𝑖,𝑗, after applying the sauce it becomes −𝑎𝑖,𝑗.
+
+After that, knowing Raphael's choice, Michelangelo will choose the optimal route for himself and eat all the slices on it.
+
+Raphael became curious about what minimum pleasure Michelangelo could achieve. Help him calculate this number.
+
+**Input**
+
+Each test contains multiple test cases. The first line contains the number of test cases 𝑡 (1≤𝑡≤104). The description of the test cases follows.
+
+In the first line of each test case, two integers 𝑛,𝑚(1≤𝑛,𝑚≤106,1≤𝑛⋅𝑚≤106) are given — the number of rows and columns in the table, respectively.
+
+In each of the following 𝑛 lines of each test case, 𝑚 integers are provided, separated by spaces. The 𝑗-th number in the 𝑖-th of these lines corresponds to the value 𝑎𝑖,𝑗 (−109≤𝑎𝑖,𝑗≤109). It is guaranteed that there is at least one non-negative value among the 𝑎𝑖,𝑗.
+
+It is guaranteed that the sum of 𝑛⋅𝑚 across all test cases does not exceed 106
+
+**Output**
+
+For each test case, output a single integer — the minimum pleasure Michelangelo can achieve, which Raphael can guarantee.
+
+Example
+
+Input
+
+```
+2
+3 3
+1 -2 3
+4 -5 2
+1 6 -1
+2 4
+-1 -1 -1 1
+-1 -1 -1 -1
+```
+
+Output
+
+```
+3
+-5
+```
+
+Note
+
+If Raphael did not use the sauce, Michelangelo would choose the path
+
+(1,1)→(2,1)→(3,1)→(3,2)→(3,3)
+
+which gives a total pleasure of 1+4+1+6−1=11.
+
+
+
+However, if Raphael applies the sauce to the cell (3,2), the value 6 will turn into −6. Then the optimal path for Michelangelo will be
+
+(1,1)→(1,2)→(1,3)→(2,3)→(3,3)
+
+with a total pleasure of 1−2+3+2−1=3. Raphael cannot achieve a lower result in any cell
+
+
+
+这个问题可以通过动态规划和对网格路径性质的深入理解来解决。
+
+**解题思路**
+
+1.  **最大路径和（不考虑翻转）：**
+    首先，如果没有 Raphael 的干预，Michelangelo 会选择一条从 $(1,1)$ 到 $(n,m)$ 的路径，使得路径上的数字之和最大。
+    *   设 $f(i, j)$ 为从 $(1,1)$ 到 $(i,j)$ 的最大路径和。
+    *   设 $g(i, j)$ 为从 $(i,j)$ 到 $(n,m)$ 的最大路径和。
+    *   则经过单元格 $(i, j)$ 的所有路径中，最大路径和为 $S(i, j) = f(i, j) + g(i, j) - a_{i, j}$。
+
+2.  **Raphael 的干扰：**
+    Raphael 会选择一个单元格 $(r, c)$ 并将其值从 $a_{r,c}$ 变为 $-a_{r,c}$。这会改变 Michelangelo 的选择。
+    一旦 Raphael 翻转了 $(r, c)$，Michelangelo 有两个选择：
+    *   **方案 A：** 仍然走经过 $(r, c)$ 的路径。此时，该路径的最大值变为 $S(r, c) - 2 \cdot a_{r,c}$（因为 $a_{r,c}$ 减少了两次其原始值）。
+    *   **方案 B：** 走一条**不经过** $(r, c)$ 的路径。
+
+3.  **避开某个点的关键性质：**
+    在 $n \times m$ 的网格中，每一条从左上到右下的路径都**必须且仅会**经过对角线 $i+j = k$ 上的一个点。
+    因此，如果 Michelangelo 想要避开点 $(r, c)$，他必须经过同一条对角线（$i+j = r+c$）上的其他某个点 $(i, j)$。
+    不经过 $(r, c)$ 的所有路径中的最大值，就是该对角线上除 $(r, c)$ 以外的所有点的 $S(i, j)$ 的最大值。
+
+4.  **算法流程：**
+    *   使用 DP 计算所有 $f(i, j)$ 和 $g(i, j)$。
+    *   计算每个点的 $S(i, j) = f(i, j) + g(i, j) - a_{i, j}$。
+    *   对于每一条对角线 $k = i+j$，记录该对角线上 $S(i, j)$ 的**最大值 ($M1_k$)** 和**次大值 ($M2_k$)**。
+    *   对于每一个可能的翻转点 $(r, c)$（设其所在对角线为 $k$）：
+        *   如果不经过 $(r, c)$，Michelangelo 能得到的最大值是 $H = (S(r, c) == M1_k ? M2_k : M1_k)$。
+        *   如果经过 $(r, c)$，Michelangelo 能得到的最大值是 $P = S(r, c) - 2 \cdot a_{r, c}$。
+        *   Michelangelo 会在这两者中选最大的：$\text{score}(r, c) = \max(H, P)$。
+    *   Raphael 的目标是选择一个 $(r, c)$ 使得 $\text{score}(r, c)$ 最小。
+
+**Python 代码实现**
+
+```python
+import sys
+
+def solve():
+    # 使用生成器处理大数据输入
+    input_data = sys.stdin.read().split()
+    if not input_data:
+        return
+    it = iter(input_data)
+    
+    t = int(next(it))
+    inf = 4 * 10**18 # 足够大的值
+    
+    results = []
+    
+    for _ in range(t):
+        n = int(next(it))
+        m = int(next(it))
+        
+        # 读取矩阵并扁平化处理
+        a = []
+        for _ in range(n * m):
+            a.append(int(next(it)))
+            
+        # f[idx]: 从 (0,0) 到 (i,j) 的最大路径和
+        f = [0] * (n * m)
+        for i in range(n):
+            for j in range(m):
+                idx = i * m + j
+                val = a[idx]
+                if i == 0 and j == 0:
+                    f[idx] = val
+                elif i == 0:
+                    f[idx] = val + f[idx - 1]
+                elif j == 0:
+                    f[idx] = val + f[idx - m]
+                else:
+                    up = f[idx - m]
+                    left = f[idx - 1]
+                    f[idx] = val + (up if up > left else left)
+        
+        # g[idx]: 从 (i,j) 到 (n-1,m-1) 的最大路径和
+        g = [0] * (n * m)
+        for i in range(n - 1, -1, -1):
+            for j in range(m - 1, -1, -1):
+                idx = i * m + j
+                val = a[idx]
+                if i == n - 1 and j == m - 1:
+                    g[idx] = val
+                elif i == n - 1:
+                    g[idx] = val + g[idx + 1]
+                elif j == m - 1:
+                    g[idx] = val + g[idx + m]
+                else:
+                    down = g[idx + m]
+                    right = g[idx + 1]
+                    g[idx] = val + (down if down > right else right)
+        
+        # 计算每条对角线 (i+j) 上的最大值和次大值
+        # 对角线范围从 0 到 (n-1)+(m-1)
+        diag_len = n + m - 1
+        m1 = [-inf] * diag_len
+        m2 = [-inf] * diag_len
+        
+        s_values = [0] * (n * m)
+        for i in range(n):
+            for j in range(m):
+                idx = i * m + j
+                # S(i,j) 是经过 (i,j) 的全局最大路径和
+                s = f[idx] + g[idx] - a[idx]
+                s_values[idx] = s
+                
+                d = i + j
+                if s > m1[d]:
+                    m2[d] = m1[d]
+                    m1[d] = s
+                elif s > m2[d]:
+                    m2[d] = s
+        
+        # Raphael 尝试翻转每一个格子，取结果的最小值
+        min_max_pleasure = inf
+        
+        for i in range(n):
+            for j in range(m):
+                idx = i * m + j
+                d = i + j
+                s_cur = s_values[idx]
+                
+                # 如果 Michelangelo 避开当前格子，他能获得的最大值
+                # 就是同对角线上其他格子的最大 S 值
+                best_without_me = m2[d] if s_cur == m1[d] else m1[d]
+                
+                # 如果 Michelangelo 经过被翻转的当前格子
+                best_with_me_flipped = s_cur - 2 * a[idx]
+                
+                # Michelangelo 会在两种策略中选优
+                michel_res = max(best_without_me, best_with_me_flipped)
+                
+                # Raphael 想要这个结果最小
+                if michel_res < min_max_pleasure:
+                    min_max_pleasure = michel_res
+        
+        results.append(str(min_max_pleasure))
+    
+    sys.stdout.write("\n".join(results) + "\n")
+
+if __name__ == "__main__":
+    solve()
+```
+
+**复杂度分析**
+
+*   **时间复杂度：** $O(n \cdot m)$。我们需要遍历矩阵几次来计算 `f`、`g` 和对角线统计量，每次遍历都是线性的。
+*   **空间复杂度：** $O(n \cdot m)$。主要消耗在存储 `a`、`f`、`g` 和 `s_values` 数组上。对于 $10^6$ 的数据量，Python 的内存占用约在 100-200MB 左右，在题目限制内。
+
+**关键点总结**
+
+本题的难点在于理解“避开一个点”等价于“在同一条对角线上选择另一个点”。利用这个性质，我们可以将原本复杂的路径搜索问题简化为对角线上的极值问题。
+
+
+
 ## 2195E. Idiot First Search
 
 dfs and similar, dp, trees, https://codeforces.com/problemset/problem/2195/E 
