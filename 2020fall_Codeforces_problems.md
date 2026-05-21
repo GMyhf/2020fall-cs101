@@ -1,6 +1,6 @@
 # Problems in Codeforces.com
 
-*Updated 2026-05-03 11:16 GMT+8*
+*Updated 2026-05-21 21:16 GMT+8*
  *Compiled by Hongfei Yan (2020 Fall)*
 
 
@@ -20126,6 +20126,417 @@ $$dp_i=\max_{t\in\{a_{i,j}\mid j\in\mathbb Z_+,a_{i,j}>0\}}\{dp_{i-t}+1\}.$$
 冷静思考一下可以发现肯定最后面的越短越好。如不然，那考虑最后那一段可以拆成的 border，至少会贡献 2 个前缀，然而我只计入了 1 个，因而只保留当前的最短的 border，答案肯定不劣。因此我 KMP 预处理完成之后每个 `nxt` 数组直接跳到 `nxt` 数组的非零最短的地方就可以了（如果 `nxt` 非零）。
 
 看懂了上面的思路代码是容易的。
+
+
+
+## 2218E. The 67th XOR Problem
+
+binary search, bitmasks, brute force, *1200, https://codeforces.com/problemset/problem/2218/E
+
+> 与这个题目一样，
+>
+> M421.数组中两个数的最大异或值
+>
+> bit manipulation, trie, hash table, https://leetcode.cn/problems/maximum-xor-of-two-numbers-in-an-array/
+
+
+
+*The PMOI wasn't even that awful - word on the street was that the problems were decent, and even (heaven forbid) enjoyable! To Macaque's dismay, however, three unruly participants (Cloud, ChatGBT and Grook) started cheating using their perfect memory of the OEIS. What utter rapscallions! Suddenly, Macaque had to act fast, and devise a problem that these three could not feasibly cheat on. You, demoted from the rank of his companion to his wretched slave, have been enlisted to test.*
+
+You are given an array 𝑎, initially containing 𝑛 non-negative integers.
+
+You perform the following operation exactly 𝑛−1 times:
+
+1. Select an index 𝑖 of 𝑎 (1≤𝑖≤|𝑎|, where |𝑎| denotes the current length of 𝑎). Let 𝑥=𝑎𝑖.
+2. Set 𝑎𝑗=𝑎𝑗⊕𝑥 for all 1≤𝑗≤|𝑎|, where ⊕ denotes the [bitwise XOR operation](https://en.wikipedia.org/wiki/Bitwise_operation#XOR).
+3. Remove 𝑎𝑖 from the array.
+
+It can be shown that after 𝑛−1 operations, exactly one element remains in the array. Your task is to determine the maximum possible value of this final remaining element if you perform the operations optimally.
+
+**Input**
+
+Each test contains multiple test cases. The first line contains the number of test cases 𝑡 (1≤𝑡≤100). The description of the test cases follows.
+
+The first line of each test case contains a single integer 𝑛 (2≤𝑛≤3105) — the initial length of the array.
+
+The second line of each test case contains 𝑛 integers 𝑎1,𝑎2,…,𝑎𝑛 (0≤𝑎𝑖≤10^9) — the elements of the array.
+
+It is guaranteed that the sum of 𝑛 over all test cases does not exceed 3105.
+
+**Output**
+
+For each test case, output a single integer — the maximum possible value of the final element.
+
+Example
+
+Input
+
+```
+3
+2
+67 67
+3
+1 2 3
+10
+67 667 167 867 267 467 367 567 767 967
+```
+
+Output
+
+```
+0
+3
+1012
+```
+
+Note
+
+In the second test case, the array is [1,2,3]. One optimal sequence of operations is:
+
+1. Select the element 3. Remove it. The remaining elements become [1⊕3,2⊕3]=[2,1].
+2. Select the element 2. Remove it. The remaining element becomes [1⊕2]=[3].
+
+The final value is 3.
+
+
+
+### “哈希表+位运算”方法
+
+通过分析题目中的操作，我们可以发现其核心规律。
+
+**题目分析**
+
+每一次操作选取一个元素 $x=a_i$，将数组中所有元素 $a_j$ 更新为 $a_j \oplus x$，然后移除 $a_i$。我们需要在进行 $n-1$ 次操作后，使最后剩下的一个元素最大。
+
+1. **操作的本质**：
+   假设当前数组为 $\{a_1, a_2, \dots, a_k\}$，选取 $a_i$ 后，所有剩余元素变为 $a_j \oplus a_i$。
+
+   - 若 $n=2$：数组为 $[a_1, a_2]$。选取 $a_1$，最后剩下 $a_2 \oplus a_1$。
+   - 若 $n=3$：数组为 $[a_1, a_2, a_3]$。选取 $a_3$，数组变为 $[a_1 \oplus a_3, a_2 \oplus a_3]$。再选取 $a_1 \oplus a_3$，最后剩下 $(a_2 \oplus a_3) \oplus (a_1 \oplus a_3) = a_2 \oplus a_1$。
+
+2. **异或和的变化规律**：
+   令 $S$ 为当前数组的异或和，$k$ 为当前数组长度。选取 $x=a_i$ 后，新异或和 $S'$ 为：
+   $S' = \bigoplus_{j \neq i} (a_j \oplus x) = (S \oplus x) \oplus ((k-1) \pmod 2 \cdot x)$。
+
+   - 若 $k$ 为偶数，$S' = S$。
+   - 若 $k$ 为奇数，$S' = S \oplus x$。
+
+   通过追踪 $n$ 到 $1$ 的过程可以发现，无论操作顺序如何，最终剩下的元素必然是原始数组中某两个元素 $a_i$ 和 $a_j$ 的异或值（即 $a_i \oplus a_j$）。
+
+   - 对于任何 $n \ge 2$，最终结果都可以表示为 $a_i \oplus a_j$。
+   - 我们的目标即是找到数组中任意两个元素异或的最大值。
+
+**解题思路**
+
+给定一个数组，求其中两个元素异或的最大值。这是一个经典的位运算问题：
+
+1.  **贪心 + 字典树 (Trie)**：通过构建 0-1 Trie，在 $O(N \log(\max A))$ 时间内解决。
+2.  **贪心 + 哈希表 (Set)**：从高位到低位确定每一位。假设当前已经确定的最高位前缀为 `res`，我们希望下一位为 `1`，则检查是否存在两个数的前缀 $p_1, p_2$ 使得 $p_1 \oplus p_2 = (\text{res} | 1)$。由于异或性质，这等价于 $p_1 \oplus (\text{res} | 1) = p_2$。在哈希表中查找即可。
+
+在 Python 中，哈希表（Set）通常比手动实现 Trie 树更快。
+
+**代码实现**
+
+```python
+import sys
+
+def solve():
+    # 使用 fast I/O 读取所有数据
+    input_data = sys.stdin.read().split()
+    if not input_data:
+        return
+    
+    ptr = 0
+    t_str = input_data[ptr]
+    ptr += 1
+    t = int(t_str)
+    
+    results = []
+    for _ in range(t):
+        n = int(input_data[ptr])
+        ptr += 1
+        # 提取当前测试用例的数组
+        a = []
+        for i in range(n):
+            a.append(int(input_data[ptr]))
+            ptr += 1
+            
+        # 优化：只保留唯一的元素。如果唯一元素少于2个，结果为0（a_i ^ a_i = 0）
+        unique_a = list(set(a))
+        if len(unique_a) < 2:
+            results.append("0")
+            continue
+
+        # 求解最大异或对 (Max XOR Pair)
+        max_xor = 0
+        # 从最高位 (2^29) 到最低位 (2^0) 贪心构造结果
+        for i in range(29, -1, -1):
+            max_xor <<= 1
+            # 尝试将当前位置为 1
+            target = max_xor | 1
+            # 提取所有数的前缀（到当前位为止）
+            prefixes = {x >> i for x in unique_a}
+            
+            found = False
+            for p in prefixes:
+                # 利用性质：a ^ b = target => a ^ target = b
+                if (p ^ target) in prefixes:
+                    found = True
+                    break
+            
+            if found:
+                max_xor = target
+            # 如果没找到，当前位保持为 0，max_xor 已在循环开头左移
+            
+        results.append(str(max_xor))
+    
+    # 批量输出结果
+    sys.stdout.write("\n".join(results) + "\n")
+
+if __name__ == '__main__':
+    solve()
+```
+
+**复杂度分析**
+
+- **时间复杂度**：$O(T \times \log(\max A) \times N)$。对于每个测试用例，我们遍历 30 位，每位处理 $N$ 个元素。总操作数约 $30 \times 3 \cdot 10^5 \approx 9 \cdot 10^6$，在 Python 3 中利用高效的 `set` 可以在 2 秒内通过。
+- **空间复杂度**：$O(N)$，用于存储数组和前缀哈希表。
+
+> 把这个问题拆开，用最通俗易懂的方式来解释。
+>
+> 这个题目的核心其实就是一个“脑筋急转弯”加上一个“经典的算法模板”。
+>
+> ---
+>
+> **第一步：发现隐藏的规律（为什么是两个数异或？）**
+>
+> 题目说：选一个数 $x$，把其他所有数都异或 $x$，然后删掉 $x$。一直重复，直到剩下一个数。
+>
+> 我们来手动模拟一下：
+>
+> 1.  **如果有 2 个数**：$[a, b]$
+>     *   选 $a$，剩下的数变成：$b \oplus a$。
+>     *   **结果就是：$a \oplus b$**。
+>
+> 2.  **如果有 3 个数**：$[a, b, c]$
+>     *   第一步：选 $c$，剩下的数变成：$[a \oplus c, b \oplus c]$。
+>     *   第二步：现在变成了 2 个数的情况。根据上面的经验，最后的结果就是这两个数互相异或：
+>     *   $(a \oplus c) \oplus (b \oplus c)$
+>     *   注意：$c \oplus c = 0$，所以结果变成了：**$a \oplus b$**。
+>
+> 3.  **如果有 4 个数**：$[a, b, c, d]$
+>     *   第一步：选 $d$，剩下 $[a \oplus d, b \oplus d, c \oplus d]$。
+>     *   第二步：选其中一个，比如选 $(a \oplus d)$。剩下的两个数都异或它：
+>         $((b \oplus d) \oplus (a \oplus d))$ 和 $((c \oplus d) \oplus (a \oplus d))$
+>         简化后剩下：$[b \oplus a, c \oplus a]$。
+>     *   第三步：最后两个数互相异或：$(b \oplus a) \oplus (c \oplus a) = b \oplus c$。
+>     *   **结果还是：某两个原始数字的异或值**。
+>
+> **结论：** 无论 $n$ 有多大，无论你怎么选，最后剩下的那个数，**一定等于原数组中某两个数字的异或值 ($a_i \oplus a_j$)**。
+>
+> 所以，题目翻译成人话就是：**在数组中找两个数，让它们的异或值（XOR）最大。**
+>
+> ---
+>
+> **第二步：怎么快速找到最大的异或值？**
+>
+> 如果你用两层循环把所有两两组合都算一遍，时间复杂度是 $O(N^2)$。题目给的 $N$ 是 $3 \times 10^5$，这个方法会超时。
+>
+> 我们需要一个更聪明的办法：**从高位到低位，一位一位地猜。**
+>
+> 假设数字最大是 $10^9$，大约是 $2^{30}$。我们从第 29 位开始猜：
+>
+> 1.  **问：最后的结果第 29 位能不能是 1？**
+>     *   我们把所有数的前 29 位存进一个哈希表（Set）。
+>     *   如果我们希望结果 `res` 的第 29 位是 1，我们就检查：是否存在两个前缀 $A \oplus B = res$。
+>     *   根据异或的性质，这等价于检查：$A \oplus res = B$ 是否在表里。
+>     *   如果能找到，那这一位就是 1，否则就是 0。
+>
+> 2.  **继续猜第 28 位、27 位... 直到第 0 位。**
+>
+> ---
+>
+> **第三步：Python 代码实现**
+>
+> ```python
+> import sys
+> 
+> def solve():
+>     # 读取所有输入
+>     input_data = sys.stdin.read().split()
+>     if not input_data:
+>         return
+>     
+>     idx = 0
+>     t = int(input_data[idx]) # 测试用例数量
+>     idx += 1
+>     
+>     results = []
+>     for _ in range(t):
+>         n = int(input_data[idx])
+>         idx += 1
+>         a = []
+>         for i in range(n):
+>             a.append(int(input_data[idx]))
+>             idx += 1
+>         
+>         # 核心算法：求数组中两个数异或的最大值
+>         max_xor = 0
+>         mask = 0
+>         
+>         # 从最高位（第29位）开始往低位尝试
+>         for i in range(29, -1, -1):
+>             # mask 用来提取数字的前 i 位
+>             # 比如 i=2, mask可能是 1111111100
+>             mask |= (1 << i)
+>             
+>             # 假设当前能达到的最大值这一位是 1
+>             # 比如之前是 1010, 现在想试试能不能变成 1011
+>             target = max_xor | (1 << i)
+>             
+>             # 提取所有数字的前缀
+>             prefixes = set()
+>             for x in a:
+>                 prefixes.add(x & mask)
+>             
+>             # 检查 prefixes 里是否有两个数异或等于 target
+>             found = False
+>             for p in prefixes:
+>                 if (p ^ target) in prefixes:
+>                     found = True
+>                     break
+>             
+>             # 如果能凑出来，就更新 max_xor
+>             if found:
+>                 max_xor = target
+>         
+>         results.append(str(max_xor))
+>     
+>     # 一次性打印所有结果
+>     sys.stdout.write("\n".join(results) + "\n")
+> 
+> if __name__ == '__main__':
+>     solve()
+> ```
+>
+> 总结
+>
+> 1.  **题目本质**：求数组里哪两个数异或起来最大。
+> 2.  **为什么**：因为无论怎么操作，中间的异或都会成对抵消，最后只剩两个数的异或。
+> 3.  **怎么算**：从二进制的最高位到最低位“贪心”地去猜，利用哈希表快速判断能不能让这一位变成 1。
+
+
+
+### Trie思路
+
+虽然之前的“哈希表+位运算”方法在 Python 中通常最快，但 **Trie（字典树/前缀树）** 是解决“最大异或对”问题的最经典、最通用的算法。
+
+**Trie 方法的核心思想**
+
+1.  **构建树**：将数组中的每个数字看作一个长度为 30 的二进制字符串（从高位到低位），并把它们插入到一棵二叉树中。左子树代表位 `0`，右子树代表位 `1`。
+2.  **贪心搜索**：对于数组中的每个数字 $x$，我们在 Trie 树中尝试找一个“最合适”的伙伴 $y$。
+    *   为了让 $x \oplus y$ 最大，我们希望 $y$ 的每一位都尽量和 $x$ **相反**。
+    *   从最高位开始：如果 $x$ 的这一位是 `0`，我们优先去走 `1` 那条路；如果 $x$ 的这一位是 `1`，我们优先走 `0` 那条路。
+    *   如果想要的路不存在，就只能走另一条路。
+
+**Python 代码实现**
+
+为了在 Python 中提高运行效率，我们使用列表（List）来模拟 Trie 节点，而不是定义类。
+
+```python
+import sys
+
+# 增加递归深度，虽然这里用迭代实现，但养成习惯
+sys.setrecursionlimit(2000000)
+
+def solve():
+    # 快速读入
+    input_data = sys.stdin.read().split()
+    if not input_data:
+        return
+    
+    ptr = 0
+    t = int(input_data[ptr])
+    ptr += 1
+    
+    results = []
+    
+    for _ in range(t):
+        n = int(input_data[ptr])
+        ptr += 1
+        a = []
+        for _ in range(n):
+            a.append(int(input_data[ptr]))
+            ptr += 1
+            
+        # trie[node][0] 表示 0 分支，trie[node][1] 表示 1 分支
+        # 使用列表模拟 Trie，初始化根节点
+        trie = [[-1, -1]]
+        
+        def insert(val):
+            node_idx = 0
+            for i in range(29, -1, -1):
+                bit = (val >> i) & 1
+                if trie[node_idx][bit] == -1:
+                    # 创建新节点
+                    trie[node_idx][bit] = len(trie)
+                    trie.append([-1, -1])
+                node_idx = trie[node_idx][bit]
+        
+        def query(val):
+            node_idx = 0
+            res = 0
+            for i in range(29, -1, -1):
+                bit = (val >> i) & 1
+                target_bit = 1 - bit # 我们希望找相反的位
+                
+                if trie[node_idx][target_bit] != -1:
+                    # 如果相反的位存在，这一位异或结果就是 1
+                    res |= (1 << i)
+                    node_idx = trie[node_idx][target_bit]
+                else:
+                    # 否则只能走相同的位，这一位异或结果是 0
+                    node_idx = trie[node_idx][bit]
+            return res
+
+        # 1. 先把所有数存入 Trie
+        for x in a:
+            insert(x)
+        
+        # 2. 遍历每个数，在 Trie 中找能和它产生最大异或值的数
+        max_xor = 0
+        for x in a:
+            max_xor = max(max_xor, query(x))
+            
+        results.append(str(max_xor))
+        
+    # 打印结果
+    sys.stdout.write("\n".join(results) + "\n")
+
+if __name__ == "__main__":
+    solve()
+```
+
+**Trie 方法的优缺点**
+
+*   **优点**：
+    *   **逻辑直观**：它直接模拟了“每一位都想选相反的”这个贪心策略。
+    *   **通用性强**：不仅能求最大异或对，还可以通过稍微修改代码（比如在节点上记录计数）来解决“异或值小于 $K$ 的对数”等更复杂的问题。
+
+*   **缺点（针对 Python）**：
+    *   **内存消耗大**：Python 的列表和对象非常占内存。如果 $N=3 \cdot 10^5$，Trie 树可能会有上百万个节点，容易导致 Memory Limit Exceeded (MLE)。
+    *   **速度较慢**：频繁的列表索引操作和循环在 Python 中比原生的位运算（Set 方法）要慢很多。
+
+**为什么这个题可以套用这个模板？**
+
+再次强调，这道题的难点不在于 Trie，而在于理解操作规律：
+
+1.  操作 $N-1$ 次。
+2.  每次 XOR 一个选中的数并删除它。
+3.  通过手动推导 $N=2, 3, 4$ 的情况，你会发现无论中间怎么操作，**最后剩下的结果一定是原数组中某两个数 $a_i \oplus a_j$ 的值**。
+4.  所以问题变成了：求数组中的 **Maximum XOR Pair**。
+
+**注意**：在 Codeforces 上提交 Python 代码时，如果 Trie 方法超时，请换回我之前给出的 `set` 贪心方案，因为 `set` 在 Python 内部是高度优化的哈希表，效率更高。
 
 
 
