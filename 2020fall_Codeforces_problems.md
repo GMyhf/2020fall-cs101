@@ -1,6 +1,6 @@
 # Problems in Codeforces.com
 
-*Updated 2026-05-21 21:16 GMT+8*
+*Updated 2026-05-22 18:51 GMT+8*
  *Compiled by Hongfei Yan (2020 Fall)*
 
 
@@ -14079,7 +14079,386 @@ if __name__ == "__main__":
 
 
 
+## 1850H. The Third Letter
 
+dfs and similar, dsu, graphs, greedy, implementation, 1700*, https://codeforces.com/contest/1850/problem/H
+
+
+In order to win his toughest battle, Mircea came up with a great strategy for his army. He has 𝑛 soldiers and decided to arrange them in a certain way in camps. Each soldier has to belong to exactly one camp, and there is one camp at each integer point on the 𝑥-axis (at points ⋯,−2,−1,0,1,2,⋯).
+
+The strategy consists of 𝑚 conditions. Condition 𝑖 tells that soldier 𝑎𝑖 should belong to a camp that is situated 𝑑𝑖 meters in front of the camp that person 𝑏𝑖 belongs to. (If 𝑑𝑖<0, then 𝑎𝑖's camp should be −𝑑𝑖 meters behind 𝑏𝑖's camp.)
+
+Now, Mircea wonders if there exists a partition of soldiers that respects the condition and he asks for your help! Answer "YES" if there is a partition of the 𝑛 soldiers that satisfies **all** of the 𝑚 conditions and "NO" otherwise.
+
+Note that two different soldiers **may** be placed in the same camp.
+
+**Input**
+
+The first line contains a single integer 𝑡 (1≤𝑡≤100) — the number of test cases.
+
+The first line of each test case contains two positive integers 𝑛 and 𝑚 (2≤𝑛≤2⋅10^5; 1≤𝑚≤𝑛) — the number of soldiers, and the number of conditions respectively.
+
+Then 𝑚 lines follow, each of them containing 3 integers: 𝑎𝑖, 𝑏𝑖, 𝑑𝑖 (𝑎𝑖≠𝑏𝑖; 1≤𝑎𝑖,𝑏𝑖≤𝑛; −10^9 ≤ 𝑑𝑖 ≤ 10^9) — denoting the conditions explained in the statement. Note that if 𝑑𝑖 is positive, 𝑎𝑖 should be 𝑑𝑖 meters in front of 𝑏𝑖 and if it is negative, 𝑎𝑖 should be −𝑑𝑖 meters behind 𝑏𝑖.
+
+Note that the sum of 𝑛 over all test cases doesn't exceed 2⋅105.
+
+**Output**
+
+For each test case, output "YES" if there is an arrangement of the 𝑛 soldiers that satisfies **all** of the 𝑚 conditions and "NO" otherwise.
+
+Example
+
+input
+
+```
+4
+5 3
+1 2 2
+2 3 4
+4 2 -6
+6 5
+1 2 2
+2 3 4
+4 2 -6
+5 4 4
+3 5 100
+2 2
+1 2 5
+1 2 4
+4 1
+1 2 3
+```
+
+output
+
+```
+YES
+NO
+NO
+YES
+```
+
+Note
+
+For the first test case, we can partition the soldiers into camps in the following way: soldier:
+
+- Soldier 1 in the camp with the coordinate 𝑥=3. 
+- Soldier 2 in the camp with the coordinate 𝑥=5. 
+- Soldier 3 in the camp with the coordinate 𝑥=9. 
+- Soldier 4 in the camp with the coordinate 𝑥=11. 
+
+For the second test case, there is no partition that can satisfy all the constraints at the same time.
+
+For the third test case, there is no partition that satisfies all the constraints since we get contradictory information about the same pair.
+
+For the fourth test case, in order to satisfy the only condition, a possible partition is:
+
+- Soldier 1 in the camp with the coordinate 𝑥=10. 
+- Soldier 2 in the camp with the coordinate 𝑥=13. 
+- Soldier 3 in the camp with the coordinate 𝑥=−2023. 
+- Soldier 4 in the camp with the coordinate 𝑥=−2023.
+
+
+
+这道题可以使用 **图的遍历（BFS/DFS）** 或者 **带权并查集（Weighted DSU）** 来解决。
+
+**题目分析**
+
+每个条件指出：士兵 $a_i$ 应当在士兵 $b_i$ 前方 $d_i$ 米。
+用坐标表示即为：
+$$x_{a_i} - x_{b_i} = d_i \implies x_{a_i} = x_{b_i} + d_i$$
+
+我们可以将这 $n$ 个士兵看作图中的顶点，将每个限制条件看作一条带权的双向边：
+
+* 从 $b_i$ 指向 $a_i$ 的边，权值为 $d_i$，表示 $x_{a_i} = x_{b_i} + d_i$
+* 从 $a_i$ 指向 $b_i$ 的边，权值为 $-d_i$，表示 $x_{b_i} = x_{a_i} - d_i$
+
+对于图中的每一个连通分量，我们可以任选一个起点，将其坐标设为 $0$。然后通过广度优先搜索（BFS）或深度优先搜索（DFS）遍历该连通分量：
+
+1. 当遍历到未确定的节点时，根据边权计算并固定其坐标。
+2. 当遍历到已确定坐标的节点时，校验当前的计算坐标是否与已有坐标一致。若不一致，说明存在冲突，无法满足所有条件，输出 `NO`。
+3. 如果所有连通分量都遍历完毕且没有冲突，则输出 `YES`。
+
+由于 Python 的默认递归深度限制，使用**迭代式的 BFS** 可以避免递归栈溢出的问题。
+
+---
+
+### BFS 实现
+
+```python
+import sys
+from collections import deque
+
+def solve():
+    # 使用快速输入
+    input_data = sys.stdin.read().split()
+    if not input_data:
+        return
+    
+    t = int(input_data[0])
+    idx = 1
+    out = []
+    
+    for _ in range(t):
+        n = int(input_data[idx])
+        m = int(input_data[idx+1])
+        idx += 2
+        
+        # 构建邻接表
+        adj = [[] for _ in range(n + 1)]
+        for _ in range(m):
+            u = int(input_data[idx])
+            v = int(input_data[idx+1])
+            d = int(input_data[idx+2])
+            idx += 3
+            # x_u = x_v + d
+            adj[v].append((u, d))
+            adj[u].append((v, -d))
+            
+        pos = [None] * (n + 1)
+        possible = True
+        
+        # 遍历所有连通分量
+        for i in range(1, n + 1):
+            if pos[i] is not None:
+                continue
+            
+            # BFS 队列
+            queue = deque([i])
+            pos[i] = 0
+            
+            while queue:
+                curr = queue.popleft()
+                for neighbor, weight in adj[curr]:
+                    expected_pos = pos[curr] + weight
+                    if pos[neighbor] is None:
+                        pos[neighbor] = expected_pos
+                        queue.append(neighbor)
+                    elif pos[neighbor] != expected_pos:
+                        possible = False
+                        break
+                if not possible:
+                    break
+            if not possible:
+                break
+                
+        if possible:
+            out.append("YES")
+        else:
+            out.append("NO")
+            
+    print('\n'.join(out))
+
+if __name__ == '__main__':
+    solve()
+```
+
+**复杂度分析**
+
+- **时间复杂度**：$\mathcal{O}(N + M)$。每个节点和每条边在 BFS 过程中最多被访问两次，能够在线性时间内解决。
+- **空间复杂度**：$\mathcal{O}(N + M)$。主要消耗在存储图的邻接表 `adj` 和记录坐标的数组 `pos`。
+
+
+
+
+
+**解题思路**
+
+1. **模型转换**：每个士兵看作图中的一个节点，条件 $(a_i, b_i, d_i)$ 表示 $pos(a_i) = pos(b_i) + d_i$。这意味着如果我们将 $pos(b_i)$ 设为相对坐标 $0$，那么 $pos(a_i)$ 的相对坐标就是 $d_i$。
+2. **逻辑判断**：这是一个典型的“相对位置约束”问题。如果图中有环，我们需要检查环上的约束是否自洽。
+   - 例如，如果 $A$ 到 $B$ 是 $10$ 米，$B$ 到 $C$ 是 $5$ 米，$A$ 到 $C$ 应该是 $15$ 米。如果给出的条件是 $A$ 到 $C$ 为 $20$ 米，则矛盾。
+3. **实现方法**：
+   - 使用 **DFS**：对于每个尚未访问的连通分量，将其中的一个节点设为相对坐标 $0$，然后通过 DFS 遍历所有连接的节点，计算它们的相对坐标。
+   - 如果遇到一个已经访问过的节点，检查其当前的相对坐标是否与计算出的坐标一致。如果不一致，则说明存在矛盾，输出 "NO"。
+   - 如果所有连通分量都处理完毕且没有矛盾，输出 "YES"。
+
+### DFS 实现
+
+```python
+import sys
+
+# 增加递归深度，防止深度较大的图引发溢出
+sys.setrecursionlimit(300000)
+
+def solve():
+    # 读取 n 和 m
+    try:
+        line = sys.stdin.readline().split()
+        if not line: return
+        n, m = map(int, line)
+    except ValueError: return
+
+    adj = [[] for _ in range(n + 1)]
+    for _ in range(m):
+        u, v, d = map(int, sys.stdin.readline().split())
+        # u = v + d => pos[u] - pos[v] = d
+        adj[u].append((v, d))
+        adj[v].append((u, -d))
+
+    pos = {} # 存储每个节点的相对坐标
+    
+    def dfs(u, current_pos):
+        pos[u] = current_pos
+        for v, d in adj[u]:
+            if v in pos:
+                # 检查是否矛盾
+                if pos[v] != pos[u] + d:
+                    return False
+            else:
+                if not dfs(v, pos[u] + d):
+                    return False
+        return True
+
+    # 处理每个连通分量
+    for i in range(1, n + 1):
+        if i not in pos:
+            if not dfs(i, 0):
+                print("NO")
+                return
+
+    print("YES")
+
+def main():
+    line = sys.stdin.readline()
+    if not line: return
+    t = int(line)
+    for _ in range(t):
+        solve()
+
+if __name__ == '__main__':
+    main()
+```
+
+**代码要点解释：**
+
+1. **邻接表构建**：对于条件 $a_i, b_i, d_i$，我们建立两条边：
+   - $a_i \to b_i$ 的权重为 $-d_i$
+   - $b_i \to a_i$ 的权重为 $d_i$
+     这样可以保证无论从哪个节点开始遍历，都可以推导出其他节点的相对位置。
+2. **`pos` 字典**：用于记录访问过的节点及其坐标。如果节点已经在 `pos` 中，说明它是第二次被访问，此时必须校验：`当前计算的坐标 == 已存在的坐标`。
+3. **连通分量**：输入图可能不是连通的，因此循环检查 `1` 到 `n` 的所有节点，确保所有独立的群组都被检查过。
+4. **复杂度**：时间复杂度为 $O(N+M)$，空间复杂度为 $O(N+M)$，符合题目的数据规模要求 ($2 \cdot 10^5$)。
+
+
+
+### 带权并查集（Weighted DSU）
+
+是解决此类“相对关系/差分约束”问题的经典且高效的方法。
+
+在带权并查集中，我们不仅维护节点的父亲节点 `parent[i]`，还要维护一个权重数组 `weight[i]`，表示**当前节点与其父亲节点之间的相对距离（差值）**。
+
+**1. 核心原理**
+
+我们定义：
+$$\text{weight}[i] = x_i - x_{\text{parent}[i]}$$
+即：$i$ 的坐标比其父亲节点的坐标大 $\text{weight}[i]$。
+
+#### 路径压缩（Find 操作）
+
+当我们在寻找根节点并进行路径压缩时，需要更新节点到新父亲（根节点）的权重。
+假设路径为 $i \to p \to r$（其中 $r$ 是根节点）：
+
+* 已知 $x_i - x_p = \text{weight}[i]$
+* 已知 $x_p - x_r = \text{weight}[p]$
+* 压缩后 $i$ 的直接父亲变为 $r$，则新权重为：
+  $$x_i - x_r = (x_i - x_p) + (x_p - x_r) = \text{weight}[i] + \text{weight}[p]$$
+
+#### 合并集合（Union 操作）
+
+当有新条件“$a$ 在 $b$ 前方 $d$ 米”（即 $x_a - x_b = d$）时：
+
+1. 找到 $a$ 的根节点 $r_a$ 和 $b$ 的根节点 $r_b$。
+2. 如果 $r_a == r_b$（已经在同一集合中），检查已有关系是否冲突：
+   $$x_a - x_b = \text{weight}[a] - \text{weight}[b]$$
+   我们需要验证 $\text{weight}[a] - \text{weight}[b] == d$ 是否成立。如果不等，说明冲突。
+3. 如果 $r_a \neq r_b$，我们需要将这两个集合合并。不妨让 $r_b$ 成为 $r_a$ 的父亲（即 `parent[r_a] = r_b`）。
+   此时我们需要计算 $r_a$ 到 $r_b$ 的新权重 $\text{weight}[r_a] = x_{r_a} - x_{r_b}$：
+   * 因为 $x_a = x_{r_a} + \text{weight}[a] \implies x_{r_a} = x_a - \text{weight}[a]$
+   * 因为 $x_b = x_{r_b} + \text{weight}[b] \implies x_{r_b} = x_b - \text{weight}[b]$
+   * 代入 $x_a - x_b = d$，可得：
+     $$\text{weight}[r_a] = x_{r_a} - x_{r_b} = (x_a - x_b) - \text{weight}[a] + \text{weight}[b] = d - \text{weight}[a] + \text{weight}[b]$$
+
+---
+
+**2. Python 实现代码**
+
+由于数据范围较大，Python 的默认递归深度较小，我们需要使用 `sys.setrecursionlimit` 扩大递归栈。
+
+```python
+import sys
+
+# 设置递归深度以防栈溢出
+sys.setrecursionlimit(300000)
+
+def solve():
+    input_data = sys.stdin.read().split()
+    if not input_data:
+        return
+    
+    t = int(input_data[0])
+    idx = 1
+    out = []
+    
+    for _ in range(t):
+        n = int(input_data[idx])
+        m = int(input_data[idx+1])
+        idx += 2
+        
+        # 并查集初始化
+        parent = list(range(n + 1))
+        # weight[i] 表示 x_i - x_parent[i]
+        weight = [0] * (n + 1)
+        
+        def find(i):
+            if parent[i] == i:
+                return i
+            # 递归找到根节点
+            root = find(parent[i])
+            # 路径压缩：累加路径上的权值
+            weight[i] += weight[parent[i]]
+            parent[i] = root
+            return root
+        
+        def union(u, v, d):
+            root_u = find(u)
+            root_v = find(v)
+            
+            if root_u == root_v:
+                # 在同一个集合中，检查是否冲突
+                return weight[u] - weight[v] == d
+            else:
+                # 合并集合，令 root_v 成为 root_u 的父亲
+                parent[root_u] = root_v
+                weight[root_u] = d - weight[u] + weight[v]
+                return True
+
+        possible = True
+        for _ in range(m):
+            u = int(input_data[idx])
+            v = int(input_data[idx+1])
+            d = int(input_data[idx+2])
+            idx += 3
+            
+            if possible:
+                # u 在 v 前方 d 米 => x_u - x_v = d
+                if not union(u, v, d):
+                    possible = False
+                    
+        if possible:
+            out.append("YES")
+        else:
+            out.append("NO")
+            
+    print('\n'.join(out))
+
+if __name__ == '__main__':
+    solve()
+```
+
+**3. 带权并查集与 BFS/DFS 解法的对比**
+
+* **时间复杂度**：带权并查集单次操作的复杂度接近常数级 $\mathcal{O}(\alpha(N))$，整体复杂度约为 $\mathcal{O}(N + M \alpha(N))$。由于不需要像 BFS 那样先完整建图，它可以在线（Online）处理边，在某些需要动态加边并查询的场景中更有优势。
+* **空间复杂度**：$\mathcal{O}(N)$，只需要维护 `parent` 和 `weight` 数组，比 BFS/DFS 邻接表所使用的空间略小。
 
 
 
