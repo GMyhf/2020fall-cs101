@@ -1,6 +1,6 @@
 # Problems in Codeforces.com
 
-*Updated 2026-05-22 18:51 GMT+8*
+*Updated 2026-05-23 14:31 GMT+8*
  *Compiled by Hongfei Yan (2020 Fall)*
 
 
@@ -20919,9 +20919,370 @@ if __name__ == "__main__":
 
 
 
-# 同学CF Round比赛题目
+## 2228D. Sanae, Cross and Color
 
-## CF Round 1062 (Div.4) YIN
+binary search, data structures, implementation, https://codeforces.com/contest/2228/problem/D
+
+*Faith Is for the Transient People*
+
+— Mountain of Faith
+
+Upon the mountain, Sanae gazes at the stars. Faith, for her, is where winds encounter one another and choices diverge, and it is the point where all directions meet. For the glory of the Holy Cross, let us trace the sign of faith together.
+
+There are 𝑛 distinct integer points in the plane, where the 𝑖-th point is located at (𝑥𝑖,𝑦𝑖). To color the points, choose two integers 𝑘1 and 𝑘2 such that each of the four regions divided by the lines 𝑥=𝑘1+0.5 and 𝑦=𝑘2+0.5 contains **at least one point**. Each point (𝑥,𝑦) is colored according to the region it lies in:
+
+- Top-left (𝑥≤𝑘1 and 𝑦>𝑘2): the point is colored red.
+- Top-right (𝑥>𝑘1 and 𝑦>𝑘2): the point is colored green.
+- Bottom-left (𝑥≤𝑘1 and 𝑦≤𝑘2): the point is colored blue.
+- Bottom-right (𝑥>𝑘1 and 𝑦≤𝑘2): the point is colored yellow.
+
+<img src="https://raw.githubusercontent.com/GMyhf/img/main/img/c14fa777bd55929136b166c00b8db022.png" alt="c14fa777bd55929136b166c00b8db022" style="zoom: 25%;" />
+
+A valid coloring of the third test case, where 𝑘1=4 and 𝑘2=5.
+
+Find the number of distinct colorings, where two colorings are considered distinct if and only if there exists at least one point colored differently, **regardless of the choice of 𝑘1 and 𝑘2.**
+
+**Input**
+
+Each test contains multiple test cases. The first line contains the number of test cases 𝑡 (1≤𝑡≤104). The description of the test cases follows.
+
+The first line of each test case contains an integer 𝑛 (4≤𝑛≤2⋅106).
+
+The following 𝑛 lines each contain two integers 𝑥𝑖, 𝑦𝑖 (1≤𝑥𝑖,𝑦𝑖≤𝑛), representing the coordinates of the 𝑖-th point.
+
+It is guaranteed that the points are pairwise distinct in each test case.
+
+It is guaranteed that the sum of 𝑛 over all test cases does not exceed 2⋅106.
+
+**Output**
+
+For each test case, output the number of distinct colorings.
+
+Example
+
+Input
+
+```
+5
+4
+1 1
+2 2
+3 3
+4 4
+4
+1 4
+4 1
+1 1
+4 4
+8
+7 2
+5 7
+2 7
+1 3
+6 7
+3 6
+7 5
+1 6
+8
+6 1
+3 6
+1 4
+1 1
+4 2
+5 5
+3 4
+4 1
+6
+5 5
+5 4
+3 5
+1 5
+5 3
+2 2
+```
+
+Output
+
+```
+0
+1
+12
+8
+4
+```
+
+Note
+
+In the first test case, no valid cross exists.
+
+In the second test case, choosing 𝑥=𝑦=2 yields a valid coloring. It can be proved that this coloring is unique.
+
+In the third test case, a valid coloring is shown in the legend.
+
+
+
+高效 $O(N \log N)$ 解法及中文详细说明。
+
+### 算法思路
+
+题目要求统计不同的有效染色方案数。染色方案由两条分割线 $x = k_1 + 0.5$ 和 $y = k_2 + 0.5$ 决定，且必须满足分割出的四个象限（左上、右上、左下、右下）都至少包含一个点。
+
+由于只关注**不同的染色方案**（即点集被划分到四个象限的不同状态），我们可以通过**坐标离散化**来简化问题：
+
+1. 设 $a$ 为所有点中不同 $x$ 坐标的个数，$b$ 为不同 $y$ 坐标的个数。
+2. 将所有点的坐标映射到它们离散化后的排名 $1 \dots a$ 和 $1 \dots b$。
+3. 原图中任何一组有效的分割线 $(k_1, k_2)$，都唯一对应离散化后的一对分割点 $(j, k)$，其中 $1 \le j < a$ 且 $1 \le k < b$。
+4. 当我们固定垂直分割线 $j$ 时（即在 $x$ 排名为 $j$ 和 $j+1$ 的点之间进行分割），水平分割线 $k$ 的合法范围需要满足“四个象限均非空”的条件，这可以转化为以下区间限制：
+   $$\max(L_{min}(j), R_{min}(j)) \le k < \min(L_{max}(j), R_{max}(j))$$
+   其中：
+   - $L_{min}(j)$ 和 $L_{max}(j)$ 分别表示 $x$ 排名 $\le j$ 的所有点中，$y$ 排名的最小值和最大值。
+   - $R_{min}(j)$ 和 $R_{max}(j)$ 分别表示 $x$ 排名 $> j$ 的所有点中，$y$ 排名的最小值和最大值。
+
+通过预计算前缀和后缀的最小值与最大值，可以在 $O(a)$ 的时间内计算出所有 $j \in [1, a-1]$ 的合法 $k$ 的数量。由于点的坐标范围在 $1 \dots n$ 之间，可以利用桶排（布尔数组）在 $O(n)$ 时间内完成离散化，整体时间复杂度非常优秀。
+
+### Python 3 实现代码，提交超内存
+
+```python
+from itertools import accumulate
+import sys
+
+
+def solve():
+    # 快速读取所有输入
+    input_data = sys.stdin.read().split()
+    if not input_data:
+        return
+
+    # 一次性将所有输入转换为整数
+    data = list(map(int, input_data))
+
+    ptr = 0
+    num_test_cases = data[ptr]
+    ptr += 1
+
+    out = []
+    for _ in range(num_test_cases):
+        n = data[ptr]
+        ptr += 1
+
+        # 利用切片快速提取 X 和 Y 坐标
+        X = data[ptr : ptr + 2 * n : 2]
+        Y = data[ptr + 1 : ptr + 2 * n : 2]
+        ptr += 2 * n
+
+        # 利用布尔数组进行快速去重和排序（避免通用的 sorted 带来的常数开销）
+        has_x = [False] * (n + 1)
+        has_y = [False] * (n + 1)
+        for i in range(n):
+            has_x[X[i]] = True
+            has_y[Y[i]] = True
+
+        xs = [x for x in range(1, n + 1) if has_x[x]]
+        ys = [y for y in range(1, n + 1) if has_y[y]]
+
+        a = len(xs)
+        b = len(ys)
+
+        # 如果在某个维度上无法进行分割，则无法组成有效的十字划分，答案为 0
+        if a < 2 or b < 2:
+            out.append(0)
+            continue
+
+        # 映射原始坐标到离散化后的排名
+        x_rank = [0] * (n + 1)
+        for r, x in enumerate(xs, 1):
+            x_rank[x] = r
+
+        y_rank = [0] * (n + 1)
+        for r, y in enumerate(ys, 1):
+            y_rank[y] = r
+
+        # 初始化每个 x 排名对应的最小和最大 y 排名
+        min_yr = [b + 1] * (a + 1)
+        max_yr = [0] * (a + 1)
+
+        for x, y in zip(X, Y):
+            xr = x_rank[x]
+            yr = y_rank[y]
+            if yr < min_yr[xr]:
+                min_yr[xr] = yr
+            if yr > max_yr[xr]:
+                max_yr[xr] = yr
+
+        # 使用 itertools.accumulate 快速计算前缀和后缀的最值
+        pref_min = list(accumulate(min_yr[1:], min))
+        pref_max = list(accumulate(max_yr[1:], max))
+        suff_min = list(accumulate(min_yr[1:][::-1], min))[::-1]
+        suff_max = list(accumulate(max_yr[1:][::-1], max))[::-1]
+
+        ans = 0
+        # 遍历所有可能的垂直分割位置 j
+        for L_min, L_max, R_min, R_max in zip(
+            pref_min[:-1], pref_max[:-1], suff_min[1:], suff_max[1:]
+        ):
+            lower_bound = L_min if L_min > R_min else R_min
+            upper_bound = L_max if L_max < R_max else R_max
+
+            if lower_bound < upper_bound:
+                ans += upper_bound - lower_bound
+
+        out.append(ans)
+
+    # 统一输出答案
+    print("\n".join(map(str, out)))
+
+
+if __name__ == "__main__":
+    solve()
+```
+
+
+
+在测试点 19 中，由于 $N$ 接近 $1.75 \times 10^6$，标准的 Python 列表（`list`）会带来极大的内存开销。这是因为：
+
+1. Python 的标准列表存储的是指向对象的**指针**（每个指针 8 字节）。
+2. 列表中的每一个整数在 Python 中都是一个独立的**对象**（每个整数对象占用 28 字节）。
+   对于数百万级别的数据，这会导致内存轻松突破 256 MB。
+
+### 优化方案
+
+为了彻底解决内存超限的问题，我们引入了 Python 标准库中的 `array` 模块。
+
+* `array.array('i', ...)` 可以将数据直接存储为 **C 语言风格的 32 位紧凑整型数组**，每个元素仅占 4 字节，没有任何对象开销。
+* `array.array('b', ...)` 用于布尔标记，每个元素仅占 1 字节（8 位）。
+
+这样可以将内存占用从 300+ MB 直接降低到 **50 MB 以下**，同时依靠 PyPy 的底层优化，其运行速度也会非常快。
+
+### 优化版代码，pypy3提交通过。
+
+```python
+from itertools import accumulate
+import array
+import sys
+
+
+def solve():
+    input_line = sys.stdin.buffer.readline
+
+    # 读取测试用例数量
+    first_line = input_line()
+    if not first_line:
+        return
+    num_test_cases = int(first_line)
+
+    out = []
+    for _ in range(num_test_cases):
+        n_line = input_line()
+        while not n_line.strip():
+            n_line = input_line()
+        n = int(n_line)
+
+        # 使用 array.array 存储 32 位整型（'i'）和 8 位无符号字符（'b'）
+        # 这能彻底消除 Python 对象的内存开销
+        X = array.array("i", [0]) * n
+        Y = array.array("i", [0]) * n
+        has_x = array.array("b", [0]) * (n + 1)
+        has_y = array.array("b", [0]) * (n + 1)
+
+        # 逐行读取并解析
+        for i in range(n):
+            line = input_line()
+            parts = line.split()
+            x = int(parts[0])
+            y = int(parts[1])
+            X[i] = x
+            Y[i] = y
+            has_x[x] = 1
+            has_y[y] = 1
+
+        # 提取去重并排序后的坐标
+        xs = [x for x in range(1, n + 1) if has_x[x]]
+        ys = [y for y in range(1, n + 1) if has_y[y]]
+
+        del has_x
+        del has_y
+
+        a = len(xs)
+        b = len(ys)
+
+        if a < 2 or b < 2:
+            out.append(0)
+            del X
+            del Y
+            del xs
+            del ys
+            continue
+
+        # 建立排名映射数组
+        x_rank = array.array("i", [0]) * (n + 1)
+        for r, x in enumerate(xs, 1):
+            x_rank[x] = r
+        del xs
+
+        y_rank = array.array("i", [0]) * (n + 1)
+        for r, y in enumerate(ys, 1):
+            y_rank[y] = r
+        del ys
+
+        # 初始化最值数组
+        min_yr = array.array("i", [b + 1]) * (a + 1)
+        max_yr = array.array("i", [0]) * (a + 1)
+
+        for i in range(n):
+            xr = x_rank[X[i]]
+            yr = y_rank[Y[i]]
+            if yr < min_yr[xr]:
+                min_yr[xr] = yr
+            if yr > max_yr[xr]:
+                max_yr[xr] = yr
+
+        del X
+        del Y
+        del x_rank
+        del y_rank
+
+        # 利用前缀/后缀最值计算方案数，切片和累加同样保持紧凑格式
+        pref_min = array.array("i", accumulate(min_yr[1:], min))
+        pref_max = array.array("i", accumulate(max_yr[1:], max))
+        suff_min = array.array("i", accumulate(min_yr[1:][::-1], min))[::-1]
+        suff_max = array.array("i", accumulate(max_yr[1:][::-1], max))[::-1]
+
+        del min_yr
+        del max_yr
+
+        ans = 0
+        for L_min, L_max, R_min, R_max in zip(
+            pref_min[:-1], pref_max[:-1], suff_min[1:], suff_max[1:]
+        ):
+            lower_bound = L_min if L_min > R_min else R_min
+            upper_bound = L_max if L_max < R_max else R_max
+
+            if lower_bound < upper_bound:
+                ans += upper_bound - lower_bound
+
+        out.append(ans)
+
+        del pref_min
+        del pref_max
+        del suff_min
+        del suff_max
+
+    print("\n".join(map(str, out)))
+
+
+if __name__ == "__main__":
+    solve()
+```
+
+
+
+
+
+
+
+# CF Round比赛题目
+
+## 1062 (Div.4) YIN
 
 ### 2167F. Tree, TREE!!!
 
@@ -20929,7 +21290,7 @@ https://codeforces.com/problemset/problem/2167/F
 
 直接考虑每个节点作为根时有多少节点满足条件比较困难，我们可以换个角度考虑：对于每个节点，有多少个根节点使得它满足条件？首先，它自己作为根节点肯定满足要求。对于根节点不是自己的情况，我们考虑与它直接连接的每一个点的子树大小。如果某一个子树的大小小于等于 $n-k$ ，那么这个子树中所有点都可以作为根节点（因为剩下点的数量不少于 $k$ ，必定可以满足条件：在 $k$ 个节点中包含自己即可）；反之不能作为根节点。
 
-<img src="https://i.imgur.com/xehzsqx.png" alt="666" style="zoom:50%;" />
+<img src="https://i.imgur.com/xehzsqx.png" alt="666" style="zoom: 33%;" />
 （一个点与它的子树）
 
 统计每个点的子树大小，可以选一个点做根，然后dfs。
@@ -20988,7 +21349,7 @@ dp, https://codeforces.com/problemset/problem/2194/E
 
 接着，我们考虑改变路径 $l$ 上一个点 $(i,j)$ （图中红色方块）的值后，此时对手能取得的最大值的变化。对手有两种方式可以选择：继续走路径 $l$ （图中**青色**路径），或者走一条**不经过**点 $(i,j)$ 的新路径（图中**红色**路径）（所有经过点 $(i,j)$ 的路径中最优路径一定有 $l$ ）。
 
-<img src="https://raw.githubusercontent.com/GMyhf/img/main/img/msHkzyJ.png" alt="666" style="zoom:67%;" />
+<img src="https://raw.githubusercontent.com/GMyhf/img/main/img/msHkzyJ.png" alt="666" style="zoom: 50%;" />
 
 对前者，我们可轻易计算；对于后者，我们可发现，这些路径一定都经过至少一个**绿色**格子 $(x<i,j+1)$ 或 $(i+1,y<j)$ 。对于每一个绿色格子 $(x,y)$，我们可计算从 $(0,0)$ 到 $(x,y)$ 的最大值（用数组 $f(x,y)$ 表示）和从 $(x,y)$ 到 $(n-1,m-1)$ 的最大值（用数组 $g(x,y)$ 表示）（两个数组都可以预计算）来计算出经过此点的路径能取得的最大值。记原数组值为 $a(x,y)$ ，则最大值为 
 
@@ -21742,7 +22103,7 @@ print("YU5zV2VS")
 
 
 
-## CF Round 1090 (Div. 4) TANG
+## 1090 (Div. 4) TANG
 
 【汤立洋 物院】把 CF Round 1090 (Div. 4) 的题目都做了一下，其中前六道都是很简单的秒杀题，全都无伤通关，最后一道算法想出了一个 $\mathcal{O}(n)$ 的算法，但是竟然 TLE。和 G 老师交流之后了解到 Python 的一堆神秘耗时操作，从 2000ms+ 直接压到 125ms！
 
@@ -22103,7 +22464,7 @@ if __name__ == "__main__":
 
 
 
-## CF Round 1090 (Div.4) YIN
+## 1090 (Div.4) YIN
 
 【尹显齐 25 物理学院】征战（也许最后一场）。怒砍AC5，后面一个多小时直接被寝室同学吵爆了，差10分钟做出G。E题没用pypy而是用的python，直接遗憾离场。最终 $\boldsymbol{67}$ 考试仅加 $\boldsymbol{78}$ 分。唯一进步是成功给一个人做局了。
 
@@ -22387,7 +22748,7 @@ for _ in range(int(input())):
 
 
 
-## CF Round 1072 (Div.3) YIN
+## 1072 (Div.3) YIN
 
 【尹显齐 物理学院】上周完全在准备期中考试。几乎没刷题。作业也不简单。
 
@@ -22730,7 +23091,7 @@ for _ in range(int(input())):
 
 
 
-## CF Round 1096 (Div3) TANG
+## 1096 (Div3) TANG
 
 > 【汤立祥，物理学院】参加了昨晚刚刚结束的 Codeforces Round 1096，考试的时候 AC6，但是被 _@KinaRight(尹显齐)_ hack 了一题。这里强力推荐 E, F, H 三道题。
 
@@ -23110,7 +23471,7 @@ if __name__ == "__main__":
 
 
 
-## CF Round 1096(Div3) YIN
+## 1096(Div3) YIN
 
 【尹显齐 物理学院】
 
