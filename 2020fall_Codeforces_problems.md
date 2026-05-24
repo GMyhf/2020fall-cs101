@@ -1,6 +1,6 @@
 # Problems in Codeforces.com
 
-*Updated 2026-05-23 14:31 GMT+8*
+*Updated 2026-05-24 23:48 GMT+8*
  *Compiled by Hongfei Yan (2020 Fall)*
 
 
@@ -10150,6 +10150,302 @@ mi=min(dp)
 if mi <-1:print(out-mi-1)
 else:print(out)
 ```
+
+
+
+## 1000E. We Need More Bosses
+
+dfs and similar, graphs, trees, *2100, https://codeforces.com/problemset/problem/1000/e
+
+Your friend is developing a computer game. He has already decided how the game world should look like — it should consist of 𝑛 locations connected by 𝑚 **two-way** passages. The passages are designed in such a way that it should be possible to get from any location to any other location.
+
+Of course, some passages should be guarded by the monsters (if you just can go everywhere without any difficulties, then it's not fun, right?). Some crucial passages will be guarded by really fearsome monsters, requiring the hero to prepare for battle and designing his own tactics of defeating them (commonly these kinds of monsters are called **bosses**). And your friend wants you to help him place these bosses.
+
+The game will start in location 𝑠 and end in location 𝑡, but these locations are not chosen yet. After choosing these locations, your friend will place a boss in each passage such that it is impossible to get from 𝑠 to 𝑡 without using this passage. Your friend wants to place as much bosses as possible (because more challenges means more fun, right?), so he asks you to help him determine the maximum possible number of bosses, considering that any location can be chosen as 𝑠 or as 𝑡.
+
+**Input**
+
+The first line contains two integers 𝑛 and 𝑚 (2≤𝑛≤3⋅10^5, 𝑛−1≤𝑚≤3⋅10^5) — the number of locations and passages, respectively.
+
+Then 𝑚 lines follow, each containing two integers 𝑥 and 𝑦 (1≤𝑥,𝑦≤𝑛, 𝑥≠𝑦) describing the endpoints of one of the passages.
+
+It is guaranteed that there is no pair of locations directly connected by two or more passages, and that any location is reachable from any other location.
+
+**Output**
+
+Print one integer — the maximum number of bosses your friend can place, considering all possible choices for 𝑠 and 𝑡.
+
+Examples
+
+Input
+
+```
+5 5
+1 2
+2 3
+3 1
+4 1
+5 2
+```
+
+Output
+
+```
+2
+```
+
+Input
+
+```
+4 3
+1 2
+4 3
+3 2
+```
+
+Output
+
+```
+3
+```
+
+
+
+这道题的要求是：在一个连通的无向图中，选择两个点 $s$ 和 $t$，使得 $s$ 到 $t$ 的所有路径都必须经过的边（即桥）的数量最大。
+
+### 解题思路
+
+1. **桥与双连通分量**：
+   如果一条边被移除后，图的连通分支数增加，那么这条边就是**桥（Bridge）**。
+   如果我们把图中的所有**边双连通分量（2-Edge-Connected Components, 2ECC）**缩成一个点，那么剩下的桥就会将这些点连接成一棵**树**。这棵树被称为**桥-双连通分量树（Bridge-Block Tree）**。
+
+2. **问题转化**：
+   在缩点后的树中，任意两点 $s$ 和 $t$ 所在的连通分量，在树上对应着两个节点 $C_s$ 和 $C_t$。
+   因为缩点后的图是一棵树，所以 $C_s$ 到 $C_t$ 之间有且仅有一条简单路径。这条路径上的所有边（即原图中的桥）是 $s$ 到 $t$ 的必经之路。
+   因此，原图中 $s$ 到 $t$ 之间必须经过的“Boss”边数，就是树上 $C_s$ 到 $C_t$ 之间的距离。
+   要最大化这个距离，实际上就是求这棵**桥-双连通分量树的直径（Diameter）**。
+
+3. **具体步骤**：
+   - 使用 Tarjan 算法（或 DFS）找出所有的边双连通分量，并将每个节点标记它所属的分量编号。
+   - 遍历原图的所有边，如果某条边的两个端点属于不同的双连通分量，就在这两个分量之间建一条树边。
+   - 在建好的树上运行两次 BFS（或 DFS）来求树的直径：
+     - 第一次 BFS：从任意一个分量（例如分量 `0`）出发，找到距离它最远的分量 $u$。
+     - 第二次 BFS：从分量 $u$ 出发，找到距离 $u$ 最远的分量 $v$。
+     - $u$ 到 $v$ 的距离即为树的直径，也就是答案。
+
+---
+
+### Python 3 实现代码
+
+```python
+import sys
+
+# 提高 Python 的递归深度限制以应对深层 DFS
+sys.setrecursionlimit(500000)
+
+def solve():
+    # 使用快速 I/O 读取输入
+    input_data = sys.stdin.read().split()
+    if not input_data:
+        return
+    
+    n = int(input_data[0])
+    m = int(input_data[1])
+    
+    # 构建原图的邻接表
+    adj = [[] for _ in range(n + 1)]
+    idx = 2
+    for _ in range(m):
+        u = int(input_data[idx])
+        v = int(input_data[idx+1])
+        adj[u].append(v)
+        adj[v].append(u)
+        idx += 2
+        
+    # Tarjan 算法相关数组
+    tin = [-1] * (n + 1)
+    low = [-1] * (n + 1)
+    comp = [-1] * (n + 1)
+    stack = []
+    timer = 0
+    comp_cnt = 0
+    
+    # 寻找边双连通分量的 DFS
+    def dfs(u, p):
+        nonlocal timer, comp_cnt
+        tin[u] = low[u] = timer
+        timer += 1
+        stack.append(u)
+        
+        for v in adj[u]:
+            if v == p:
+                continue
+            if tin[v] != -1:
+                low[u] = min(low[u], tin[v])
+            else:
+                dfs(v, u)
+                low[u] = min(low[u], low[v])
+                
+        # 找到一个双连通分量的分界点
+        if low[u] == tin[u]:
+            while True:
+                v = stack.pop()
+                comp[v] = comp_cnt
+                if v == u:
+                    break
+            comp_cnt += 1
+
+    # 图是连通的，从节点 1 开始一次 DFS 即可
+    dfs(1, -1)
+    
+    # 建立缩点后的树
+    tree_adj = [[] for _ in range(comp_cnt)]
+    added_edges = set()
+    for u in range(1, n + 1):
+        for v in adj[u]:
+            cu = comp[u]
+            cv = comp[v]
+            if cu != cv:
+                # 保证无向边存储的唯一性
+                if cu > cv:
+                    cu, cv = cv, cu
+                if (cu, cv) not in added_edges:
+                    added_edges.add((cu, cv))
+                    tree_adj[cu].append(cv)
+                    tree_adj[cv].append(cu)
+                    
+    # BFS 用于寻找树的直径
+    def bfs(start):
+        dist = [-1] * comp_cnt
+        dist[start] = 0
+        queue = [start]
+        farthest_node = start
+        max_dist = 0
+        
+        head = 0
+        while head < len(queue):
+            u = queue[head]
+            head += 1
+            for v in tree_adj[u]:
+                if dist[v] == -1:
+                    dist[v] = dist[u] + 1
+                    queue.append(v)
+                    if dist[v] > max_dist:
+                        max_dist = dist[v]
+                        farthest_node = v
+        return farthest_node, max_dist
+
+    # 如果整个图本身就是一个边双连通分量，答案为 0
+    if comp_cnt <= 1:
+        print(0)
+        return
+
+    # 两次 BFS 求解树的直径
+    u, _ = bfs(0)
+    _, diameter = bfs(u)
+    print(diameter)
+
+if __name__ == '__main__':
+    solve()
+```
+
+### 复杂度分析
+
+* **时间复杂度**：
+  * Tarjan 算法找边双连通分量：$O(N + M)$。
+  * 构建缩点树：$O(N + M)$。
+  * 两次 BFS 寻找直径：$O(N)$（因为缩点后的节点数和边数均不超过原图节点数 $N$）。
+  * 整体时间复杂度为 $O(N + M)$，能够在该数据规模下快速通过。
+* **空间复杂度**：$O(N + M)$，主要用于存储图和树的邻接表以及 DFS 递归栈。
+
+
+
+> **树的直径（Tree Diameter）**是指一棵树中**任意两个节点之间最长简单路径的长度**（即路径上经过的边数，如果是带权树，则是路径上边权的最大和）。
+>
+> 在这道题中，我们通过缩点把原图转化成了一棵树。在这棵树上，两个节点（双连通分量）之间的距离就是它们之间“桥”的数量。为了让起点 $s$ 到终点 $t$ 之间的“桥”（Boss）最多，我们实际上就是要在缩点后的树中找到一条最长的路径，这条路径的长度就是树的直径。
+>
+> ---
+>
+> **如何求树的直径？**
+>
+> 最常用且最高效的方法是**两次 BFS（或 DFS）算法**。这个方法适用于所有边权非负的树，其具体步骤如下：
+>
+> 1. **第一次 BFS**：
+>    * 从树中**任意**选择一个节点 $u$ 出发，运行一次 BFS，找到距离 $u$ 最远的节点 $x$。
+> 2. **第二次 BFS**：
+>    * 从刚才找到的节点 $x$ 出发，再运行一次 BFS，找到距离 $x$ 最远的节点 $y$。
+> 3. **得出结果**：
+>    * 节点 $x$ 与节点 $y$ 之间的距离就是这棵树的直径，$x$ 和 $y$ 就是直径的两个端点。
+>
+> **为什么这个算法是正确的？**
+>
+> 这个算法基于一个经典的图论定理：
+>
+> > 对于树上的任意一个节点 $u$，距离 $u$ 最远的节点 $x$ 必然是这棵树的某一条直径的一个端点。
+>
+> **直观理解**：
+>
+> * 树的结构没有环，分支向外延伸。
+> * 当你从任意一个位置 $u$ 往最深处走，走得最远的那个尽头 $x$ 一定是这棵树“最长路径”的其中一个起点（端点）。
+> * 既然已经站在了最长路径的一个端点 $x$ 上，那么从 $x$ 出发能到达的最远点 $y$ 自然就是这条最长路径的另一个端点，它们之间的距离即为直径。
+
+
+
+> **边双连通分量（2-Edge-Connected Components, 简称 2ECC）**是图论中的一个重要概念。
+>
+> 简单来说，一个无向图的子图如果是“边双连通”的，意味着：**在这个子图中，任意删掉一条边，它依然是连通的（即没有孤立出任何部分）。**
+>
+> 而一个**极大**的边双连通子图，就被称为**边双连通分量（2ECC）**。
+>
+> ---
+>
+> **核心特征**
+>
+> 1. **无桥性**：边双连通分量的内部**没有任何“桥”**（Bridge）。
+> 2. **双路径性**：在同一个边双连通分量中，任意两个点 $u$ 和 $v$ 之间，至少存在**两条边不重复的路径**。
+> 3. **与“桥”的关系**：原图中所有的“桥”，都是连接不同边双连通分量的通道。如果把桥全部删掉，剩下的每一个连通块就是一个边双连通分量。
+>
+> ---
+>
+> **示例说明**
+>
+> 假设我们有以下一个无向图，包含 6 个顶点（1 到 6）和 7 条边：
+>
+> **图的结构**
+>
+> * **环 1**：顶点 $1, 2, 3$ 两两相连（边：`(1-2)`, `(2-3)`, `(3-1)`）
+> * **连接边**：顶点 $3$ 和 $4$ 相连（边：`(3-4)`）
+> * **环 2**：顶点 $4, 5, 6$ 两两相连（边：`(4-5)`, `(5-6)`, `(6-4)`）
+>
+> 可以用字符简单描绘如下：
+>
+> ```text
+>   1           5
+>  / \         / \
+> 2 - 3 ----- 4 - 6
+>      (桥)
+> ```
+>
+> **此时我们来分析这个图：**
+>
+> 1. **寻找“桥”**：
+>    * 如果我们删掉边 `(3-4)`，整个图就会分裂成 `{1, 2, 3}` 和 `{4, 5, 6}` 两个不连通的部分。因此，边 `(3-4)` 是一条**桥**。
+>    * 删掉其他任何一条边（比如 `(1-2)`），图依然是连通的（因为 $1$ 和 $2$ 可以通过 $1 \to 3 \to 2$ 连通）。所以其他边都不是桥。
+>
+> 2. **划分边双连通分量（2ECC）**：
+>    * 如果我们把唯一的桥 `(3-4)` 删掉，图会剩下两个连通块：
+>      * **分量 A**：`{1, 2, 3}`。在这个分量中，删去任意一条边，其余两点依然连通。
+>      * **分量 B**：`{4, 5, 6}`。同样，删去任意一条边，其余两点依然连通。
+>    * 因此，这个图共有 **2 个边双连通分量**：
+>      * $\text{2ECC}_1 = \{1, 2, 3\}$
+>      * $\text{2ECC}_2 = \{4, 5, 6\}$
+>
+> 3. **缩点建树（Bridge-Block Tree）**：
+>    * 如果我们将这两个分量分别看作一个整体（缩点）：
+>      * 分量 A 缩成一个点 `[A]`
+>      * 分量 B 缩成一个点 `[B]`
+>    * 原来的桥 `(3-4)` 就变成了连接 `[A]` 和 `[B]` 的边。
+>    * 缩点后的新图为：`[A] ----- [B]`，这是一棵只有一条边的树，树的直径为 1（也就是只需要经过 1 个 Boss）。
 
 
 
