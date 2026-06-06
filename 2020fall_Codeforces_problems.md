@@ -1,6 +1,6 @@
 # Problems in Codeforces.com
 
-*Updated 2026-05-24 23:48 GMT+8*
+*Updated 2026-06-06 12:13 GMT+8*
  *Compiled by Hongfei Yan (2020 Fall)*
 
 
@@ -9845,6 +9845,260 @@ for i in range(n + 1):
         ans += cs[i]
 print(ans)
 
+```
+
+
+
+## 894E. Ralph and Mushrooms
+
+dp, graphs, *2100, https://codeforces.com/problemset/problem/894/E
+
+Ralph is going to collect mushrooms in the Mushroom Forest. 
+
+There are *m* directed paths connecting *n* trees in the Mushroom Forest. On each path grow some mushrooms. When Ralph passes a path, he collects all the mushrooms on the path. The Mushroom Forest has a magical fertile ground where mushrooms grow at a fantastic speed. New mushrooms regrow as soon as Ralph finishes mushroom collection on a path. More specifically, after Ralph passes a path the *i*-th time, there regrow *i* mushrooms less than there was before this pass. That is, if there is initially *x* mushrooms on a path, then Ralph will collect *x* mushrooms for the first time, *x* - 1 mushrooms the second time, *x* - 1 - 2 mushrooms the third time, and so on. However, the number of mushrooms can never be less than 0.
+
+For example, let there be 9 mushrooms on a path initially. The number of mushrooms that can be collected from the path is 9, 8, 6 and 3when Ralph passes by from first to fourth time. From the fifth time and later Ralph can't collect any mushrooms from the path (but still can pass it).
+
+Ralph decided to start from the tree *s*. How many mushrooms can he collect using only described paths?
+
+**Input**
+
+The first line contains two integers *n* and *m* (1 ≤ *n* ≤ 106, 0 ≤ *m* ≤ 106), representing the number of trees and the number of directed paths in the Mushroom Forest, respectively.
+
+Each of the following *m* lines contains three integers *x*, *y* and *w* (1 ≤ *x*, *y* ≤ *n*, 0 ≤ *w* ≤ 108), denoting a path that leads from tree *x* to tree *y* with *w* mushrooms initially. There can be paths that lead from a tree to itself, and multiple paths between the same pair of trees.
+
+The last line contains a single integer *s* (1 ≤ *s* ≤ *n*) — the starting position of Ralph. 
+
+**Output**
+
+Print an integer denoting the maximum number of the mushrooms Ralph can collect during his route. 
+
+Examples
+
+input
+
+```
+2 2
+1 2 4
+2 1 4
+1
+```
+
+output
+
+```
+16
+```
+
+input
+
+```
+3 3
+1 2 4
+2 3 3
+1 3 8
+1
+```
+
+output
+
+```
+8
+```
+
+Note
+
+In the first sample Ralph can pass three times on the circle and collect 4 + 4 + 3 + 3 + 1 + 1 = 16 mushrooms. After that there will be no mushrooms for Ralph to collect.
+
+In the second sample, Ralph can go to tree 3 and collect 8 mushrooms on the path from tree 1 to tree 3.
+
+
+
+
+
+> 这2100难度的 猫猫逛公园，需要优化，pypy3才能通过。这里提供一个高效的 Python 3 实现。为了应对 $N, M \le 10^6$ 的数据量，我们采用 **CSR (Compressed Sparse Row)** 格式存储图，并使用**非递归（迭代版）Tarjan 算法**，以避免 Python 的递归栈溢出并最大化运行速度。
+>
+> **30913:猫猫逛公园**
+>
+> http://cs101.openjudge.cn/practice/30913/
+
+
+
+这是一个经典且有趣的图论与动态规划结合的问题。
+
+**解题思路**
+
+1. **单条边无限次采集的蘑菇总量计算**：
+   对于一条初始权值为 $w$ 的边，第 1 次通过获得 $w$，第 2 次获得 $w-1$，第 $k$ 次获得 $w - \frac{k(k-1)}{2}$。
+   当 $w - \frac{k(k-1)}{2} \le 0$ 时，后续再通过就无法获得蘑菇。
+
+   我们可以找出最大的正整数 $K$，使得 $\frac{K(K-1)}{2} \le w$。
+   此时可以采集到的蘑菇总量为：
+   $$\text{total}(w) = K \cdot w - \sum_{k=1}^{K} \frac{k(k-1)}{2} = K \cdot w - \frac{K(K-1)(K+1)}{6}$$
+   利用一元二次方程求根公式，我们可以通过 $O(1)$ 的数学计算求得 $K$：
+   $$K = \left\lfloor \frac{1 + \sqrt{1 + 8w}}{2} \right\rfloor$$
+   在 Python 中，可以使用 `math.isqrt` 来保证大整数开方的精确性。
+
+2. **强连通分量 (SCC) 缩点**：
+   如果图中存在环，即若干节点属于同一个强连通分量（SCC），那么在这个分量内部的所有边，我们都可以通过反复兜圈来“压榨”干净（采集到理论最大值 $\text{total}(w)$）。
+   然而，对于连接不同强连通分量的边（桥梁），因为只能单向通行且无法返回，所以我们最多只能经过它一次，即只能采集到初始权值 $w$。
+
+   因此，我们首先使用 **Tarjan 算法** 或 **Kosaraju 算法** 找出所有的强连通分量：
+
+   - 将每个强连通分量缩成一个“超级节点”。
+   - 超级节点的内部权值为：该分量内所有边（包括自环）的 $\text{total}(w)$ 之和。
+   - 缩点后，图变成了一个**有向无环图 (DAG)**。原先连接不同分量的边，现在连接着对应的超级节点，权值为其初始权值 $w$。
+
+3. **DAG 上的动态规划**：
+   缩点后，我们需要在 DAG 上寻找一条从起点 $s$ 所在的超级节点出发、能够收集到最多蘑菇的路径。
+
+   设 $dp[u]$ 表示从超级节点 $u$ 出发所能获得的最大蘑菇数：
+   $$dp[u] = \text{weight}[u] + \max_{v \in \text{children}(u)} (w(u \to v) + dp[v])$$
+   由于 Tarjan 算法在识别强连通分量时，其输出顺序正好是 **逆拓扑序**。因此，我们只需要按照 SCC 编号从小到大的顺序进行无脑 DP 转移，即可直接求出最优解，避免了额外的递归或显式拓扑排序。
+
+---
+
+**Python 实现**
+
+这里提供一个高效的 Python 3 实现。为了应对 $N, M \le 10^6$ 的数据量，我们采用 **CSR (Compressed Sparse Row)** 格式存储图，并使用**非递归（迭代版）Tarjan 算法**，以避免 Python 的递归栈溢出并最大化运行速度。
+
+```python
+import sys
+import math
+
+def solve():
+    # 读入所有数据
+    input_data = sys.stdin.read().split()
+    if not input_data:
+        return
+    
+    n = int(input_data[0])
+    m = int(input_data[1])
+    
+    if m == 0:
+        print(0)
+        return
+        
+    # 快速解析边信息
+    U = [int(x) - 1 for x in input_data[2 : 2 + 3 * m : 3]]
+    V = [int(x) - 1 for x in input_data[3 : 2 + 3 * m : 3]]
+    W = [int(x) for x in input_data[4 : 2 + 3 * m : 3]]
+    s = int(input_data[2 + 3 * m]) - 1
+
+    # CSR (Compressed Sparse Row) 构建有向图
+    deg = [0] * (n + 1)
+    for u in U:
+        deg[u] += 1
+        
+    pos = [0] * (n + 1)
+    current_sum = 0
+    for i in range(n):
+        current_sum += deg[i]
+        pos[i] = current_sum
+        
+    starts = [0] * n
+    for i in range(1, n):
+        starts[i] = pos[i-1]
+        
+    edge_to = [0] * m
+    edge_w = [0] * m
+    ptr = list(pos)
+    for i in range(m):
+        u = U[i]
+        ptr[u] -= 1
+        p = ptr[u]
+        edge_to[p] = V[i]
+        edge_w[p] = W[i]
+
+    # 迭代版 Tarjan 算法求强连通分量 (SCC)
+    dfn = [-1] * n
+    low = [-1] * n
+    in_stack = [False] * n
+    stack = []
+    scc = [-1] * n
+    scc_cnt = 0
+    timer = 0
+    
+    for start_node in range(n):
+        if dfn[start_node] != -1:
+            continue
+        
+        call_stack = [[start_node, starts[start_node]]]
+        while call_stack:
+            u, curr_idx = call_stack[-1]
+            end_idx = pos[u]
+            
+            if curr_idx == starts[u]:
+                dfn[u] = low[u] = timer
+                timer += 1
+                stack.append(u)
+                in_stack[u] = True
+            
+            # 遍历邻居
+            while curr_idx < end_idx:
+                v = edge_to[curr_idx]
+                curr_idx += 1
+                if dfn[v] == -1:
+                    call_stack[-1][1] = curr_idx
+                    call_stack.append([v, starts[v]])
+                    break
+                elif in_stack[v]:
+                    if dfn[v] < low[u]:
+                        low[u] = dfn[v]
+            else:
+                # 节点 u 的所有邻居已访问完毕
+                call_stack.pop()
+                if call_stack:
+                    p = call_stack[-1][0]
+                    if low[u] < low[p]:
+                        low[p] = low[u]
+                
+                # 找到一个 SCC
+                if low[u] == dfn[u]:
+                    while True:
+                        v = stack.pop()
+                        in_stack[v] = False
+                        scc[v] = scc_cnt
+                        if v == u:
+                            break
+                    scc_cnt += 1
+
+    # 计算边无限次通过所能收集到的蘑菇总量
+    def get_total(w):
+        if w <= 0:
+            return 0
+        K = (1 + math.isqrt(1 + 8 * w)) // 2
+        return K * w - K * (K - 1) * (K + 1) // 6
+
+    # 缩点与统计 SCC 内部权值
+    scc_weight = [0] * scc_cnt
+    cond_adj = [[] for _ in range(scc_cnt)]
+    
+    for i in range(m):
+        u = U[i]
+        v = V[i]
+        w = W[i]
+        su = scc[u]
+        sv = scc[v]
+        if su == sv:
+            scc_weight[su] += get_total(w)
+        else:
+            cond_adj[su].append((sv, w))
+
+    # DAG 上的动态规划 (由于 Tarjan 输出的 SCC 编号天然呈逆拓扑序，直接按顺序转移即可)
+    dp = [0] * scc_cnt
+    for u in range(scc_cnt):
+        best = 0
+        for v, w in cond_adj[u]:
+            val = w + dp[v]
+            if val > best:
+                best = val
+        dp[u] = scc_weight[u] + best
+        
+    print(dp[scc[s]])
+
+if __name__ == '__main__':
+    solve()
 ```
 
 
